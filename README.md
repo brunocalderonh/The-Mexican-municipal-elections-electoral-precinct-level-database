@@ -22,7 +22,7 @@ For each of the 32 states, execute the R script files in the following order:
    >
    > It calculates the state incumbent vote values, as well as the values for votes for MORENA, PAN, PRI, PRD.
    >
-   > **Important**: Run the `state_collapsed_edited` file to correctly execute the tasks in the script.
+   > **Important**: Run the corresponding `state_collapsed_edited` file to correctly execute the tasks in the script.
    >
    > The above-described files can be found in: **`Data -> collapsed database manual cases`**
    > 
