@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this data, please cite it as follows."
+title: "Precinct Level Municipal Incumbent and Runner-up Vote Data"
+authors:
+  - family-names: Larreguy Arbesu
+    given-names: Horacio Alejandro
+  - family-names: Perez Castellas
+    given-names: Jose Luis
+  - family-names: Calderon Hernandez
+    given-names: Bruno
+date-released: 2024-09-20
+url: "https://github.com/brunocalderonh/Electoral-Clientelism"
+version: 1.0.0
