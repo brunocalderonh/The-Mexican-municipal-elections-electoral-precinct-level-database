@@ -4,7 +4,7 @@
 For each of the 32 states, execute the R script files in the following order:
 
 1. **state_precint_manipulation.R**
-   > Takes elections from 2004 up until 2019 and manipulates and generates vote data in absolute terms.
+   > Takes elections from 1994 up until 2019 and manipulates and generates vote data in absolute terms.
    >
    > It identifies with a unique id each municipality from the state, aggregating and appending all elections.
 
