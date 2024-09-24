@@ -1,7 +1,7 @@
 
 
 
-For each of the 32 states, execute the R script files in the following order:
+For each of the 31 states (we exclude Mexico City), execute the R script files in the following order:
 
 This folder includes a series of R scripts, organized sequentially, that perform data cleaning, transformation, and analysis. The key scripts are:
 
@@ -22,7 +22,7 @@ This folder includes a series of R scripts, organized sequentially, that perform
 
 
 **                                                                                                                       **
-   **Only after executing the files from steps 1 through 5 for each of the 32 states, then execute the R script in step 6 below:**
+   **Only after executing the files from steps 1 through 5 for each of the 31 states, then execute the R script in step 6 below:**
 **                                                                                                                       **
 6. **`FINAL_db_formation.R`**  
    This is the final step that consolidates the electoral data for all 32 states into a single unified dataset. The script appends the data for each state, cleans it, and calculates key metrics such as voter turnout (the ratio of total votes to registered voters) and vote shares for the incumbent, runner-up, and major political parties (PRI, PAN, MORENA, PRD). The resulting dataset contains all necessary electoral information for further analysis at both the state and municipal levels across Mexico.
