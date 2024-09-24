@@ -13,7 +13,7 @@ base_path <- "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Docume
 # Define the state names
 states <- c("aguascalientes", "baja", "bajasur", "campeche", "chiapas", "chihuahua", 
             "coahuila", "colima", "durango", "guanajuato", "guerrero", "hidalgo", 
-            "jalisco", "cdmx", "mexico", "michoacan", "morelos", "nayarit", 
+            "jalisco", "mexico", "michoacan", "morelos", "nayarit", 
             "nuevoleon", "oaxaca", "puebla", "queretaro", "quintanaroo", 
             "sanluispotosi", "sinaloa", "sonora", "tabasco", "tamaulipas", 
             "tlaxcala","veracruz", "yucatan", "zacatecas")
