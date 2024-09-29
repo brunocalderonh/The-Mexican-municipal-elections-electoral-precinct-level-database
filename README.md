@@ -13,11 +13,14 @@ This script cleans the data originating from manipulation.R by selecting the rel
 
   2.1. **`correct_extra_elec_final.csv`**  
   This file contains the curated cases of extraordinary elections we want to remove, and for some states the execution of this file is needed when running the above *vote_manipulation.R* script.
+  
 3. **`incumbent_manipulation.R`**  
-This script processes and merges information at the municipal level about the identity and party or electoral coalition of the incumbents and runner-ups from several sources, including Magar (2023) [1] and the Sistema Nacional de Información Municipal (SNIM) [2]. Each dataset provides information about incumbents across various election years and states. The script keeps the relevant variables, standardizes the variable names across data sets, and then appends all the incumbent information into a single dataset. The resulting dataset is then merged into the electoral precinct-level dataset resulting from *vote_manipulation.R*. 
-4. **`incumbent_vote_calculator.R`**  
-This script computes the electoral precinct-level votes for incumbent and runner-up parties by linking the identity of such parties or their electoral coalitions to the precinct-level vote data.  The script first standardizes party names for variables capturing both individual party and coalition votes.  It then merges a dataset that includes detailed, manually sourced incumbent and runner-up party information for the subset of elections where the new incumbent or runner-up electoral coalitions were not a superset of their coalitions in the previous elections. It then creates a variable capturing the votes cast for the incumbent party or its new electoral coalition and an analogous variable for the runner-up party. 
-5. **`final.R`**  
+This script processes and merges information at the municipal level about the identity and party or electoral coalition of the incumbents and runner-ups from several sources, including Magar (2023) [1] and the Sistema Nacional de Información Municipal (SNIM) [2]. Each dataset provides information about incumbents across various election years and states. The script keeps the relevant variables, standardizes the variable names across data sets, and then appends all the incumbent information into a single dataset. The resulting dataset is then merged into the electoral precinct-level dataset resulting from *vote_manipulation.R*.
+
+5. **`incumbent_vote_calculator.R`**  
+This script computes the electoral precinct-level votes for incumbent and runner-up parties by linking the identity of such parties or their electoral coalitions to the precinct-level vote data.  The script first standardizes party names for variables capturing both individual party and coalition votes.  It then merges a dataset that includes detailed, manually sourced incumbent and runner-up party information for the subset of elections where the new incumbent or runner-up electoral coalitions were not a superset of their coalitions in the previous elections. It then creates a variable capturing the votes cast for the incumbent party or its new electoral coalition and an analogous variable for the runner-up party.
+
+7. **`final.R`**  
 This script generates the final version of the electoral dataset for each state. It computes the votes for the main political parties—PRI, PAN, MORENA, and PRD—or its electoral coalitions. The script also computes the votes for the state incumbent party or its municipal electoral coalitions. Furthermore, the script integrates manually researched incumbent information through the *state\_collapsed\_edited.csv* file explained below.
   
    
