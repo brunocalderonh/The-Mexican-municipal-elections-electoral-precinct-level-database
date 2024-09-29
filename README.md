@@ -10,7 +10,6 @@ This script uses municipal electoral precinct-level data for 31 states of Mexico
 2. **`vote_manipulation.R`**  
 This script cleans the data originating from manipulation.R by selecting the relevant variables. Specifically, it retains the following variables: municipality and state names (2-digit code for uniquely identifying municipalities), state code, municipality code (5-digit code for uniquely identifying municipalities), electoral precinct code (4-digit code for uniquely electoral precinct within each Mexican state), election year, valid votes cast, total votes cast, and registered voters. Furthermore, all votes cast for specific parties and electoral coalitions are kept. The script systematically excludes variables such as those related to state and municipality aggregated vote, winner identity, and rank-related metrics (first, second, third-place vote counts). These omitted variables are either redundant or not essential for this phase of data cleaning, where the focus is on retaining raw vote data for further processing. For some states this sript will include the execution of *correct\_extra\_elec\_final.csv* explained below, in order to handle extrarodinary elections.
 
-
   2.1. **`correct_extra_elec_final.csv`**  
   This file contains the curated cases of extraordinary elections we want to remove, and for some states the execution of this file is needed when running the above *vote_manipulation.R* script.
   
