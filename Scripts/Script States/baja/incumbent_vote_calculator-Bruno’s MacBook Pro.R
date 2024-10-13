@@ -26,12 +26,10 @@ replace_parties <- function(party_str) {
   return(party_str)
 }
 
-
 # Apply the replacement function to the incumbent_party_magar column
 finaldb <- finaldb %>%
   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
   mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
-
 
 assign_incumbent_vote <- function(data) {
   
@@ -58,7 +56,7 @@ assign_incumbent_vote <- function(data) {
             party %in% data$incumbent_party_Horacio[I] || 
             party %in% data$incumbent_party_inafed[I]) {
           individual_party_found <- TRUE
-          party_vars <- names(data)[str_detect(names(data), party)]
+          party_vars <- names(data)[str_detect(names(data), paste0("\\b", party, "\\b"))]
           
           for (party_var in party_vars) {
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
@@ -85,20 +83,33 @@ assign_incumbent_vote <- function(data) {
       }
     } else {
       # Handle single parties
-      party_vars <- names(data)[str_detect(names(data), incumbent_party)]
+      party_vars <- names(data)[str_detect(names(data), paste0("\\b", incumbent_party, "\\b"))]
       
       for (party_var in party_vars) {
-        # Ensure PAN is not confused with PANAL
-        if (str_detect(party_var, "^PAN$") || (!str_detect(party_var, "PANAL") && str_detect(party_var, "PAN"))) {
+        # Ensure PAN is not confused with PANAL by using word boundaries
+        if (str_detect(party_var, "\\bPAN\\b")) {
           if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[party_var]][I]
             data$party_component[I] <- party_var
             break
           }
-        } else if (!str_detect(party_var, "PAN") && !str_detect(party_var, "PANAL")) {
+        } else if (!str_detect(party_var, "\\bPANAL\\b") && !str_detect(party_var, "\\bPAN\\b")) {
           if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[party_var]][I]
             data$party_component[I] <- party_var
+            break
+          }
+        }
+      }
+      
+      # If no single party found, check coalitions containing the single party
+      if (is.na(data$incumbent_vote[I])) {
+        coalition_vars <- names(data)[sapply(names(data), function(x) incumbent_party %in% str_split(x, "_")[[1]])]
+        
+        for (coalition_var in coalition_vars) {
+          if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
+            data$incumbent_vote[I] <- data[[coalition_var]][I]
+            data$party_component[I] <- coalition_var
             break
           }
         }
@@ -158,7 +169,6 @@ assign_runnerup_vote <- function(data) {
   return(data)
 }
 finaldb <- assign_runnerup_vote(finaldb)
-
 
 check_mutual_exclusivity <- function(data) {
   
@@ -223,10 +233,8 @@ check_mutual_exclusivity <- function(data) {
   
   return(data)
 }
-
-
 finaldb <- check_mutual_exclusivity(finaldb)
-# Assuming your data frame is named 'df'
+
 finaldb <- finaldb %>%
   select(
     state,
@@ -254,47 +262,5 @@ finaldb <- finaldb %>%
     total,
     everything()
   )
-# Remove rows with NA or empty string in the section variable
-finaldb <- finaldb %>%
-  filter(!is.na(section) & section != "") %>%
-  filter(rowSums(!is.na(select(., incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed, incumbent_party_magar)) & 
-                   select(., incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed, incumbent_party_magar) != "") > 0)
 
 write.csv(finaldb, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/baja/baja_FINAL_draft.csv")
-
-
-
-#CLEAN DB
-  # Select only the desired columns
-  baja_finaldb <- finaldb %>% 
-  select(
-    state,
-    mun,
-    section,
-    uniqueid, 
-    year, 
-    incumbent_party_magar, 
-    incumbent_candidate_magar,
-    incumbent_vote,
-    party_component,
-    mutually_exclusive,
-    incumbent_party_JL, 
-    incumbent_candidate_JL,
-    incumbent_party_Horacio, 
-    incumbent_party_inafed,
-    incumbent_candidate_inafed,
-    runnerup_party_magar,
-    runnerup_candidate_magar,
-    runnerup_vote ,
-    runnerup_party_component,
-    margin,
-    listanominal,
-    valid,
-    total,
-  ) %>%
-    mutate(incumbent_vote = as.numeric(incumbent_vote))
-
-  
-
-  write.csv(baja_finaldb, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/baja/baja_FINAL.csv")
-  
