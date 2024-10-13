@@ -5,6 +5,7 @@ library(dplyr)
 library(haven)
 library(openxlsx)
 library(purrr)
+library(rstudioapi)
 library(readxl)
 
 # Get the path of the current script
