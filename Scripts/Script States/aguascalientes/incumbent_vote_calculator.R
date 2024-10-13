@@ -5,11 +5,16 @@ library(dplyr)
 library(writexl)
 library(haven)
 
-# Load the data
-finaldb <- read_dta( "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/aguascalientes/aguascalientes_merged_IncumbentVote.dta")
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, "../../../"))
+
+finaldb <- read_csv("Processed Data/aguascalientes/aguascalientes_merged_IncumbentVote.csv")
 
 finaldb <- finaldb %>%
-  select(-winner) %>%
   select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar,runnerup_candidate_magar, margin,everything())
 
 replace_parties <- function(party_str) {
@@ -266,9 +271,12 @@ finaldb <- finaldb %>%
     everything()
   )
 
-write.csv(finaldb, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/aguascalientes/aguascalientes_FINAL_draft.csv")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/aguascalientes")
+output_path <- file.path(output_dir, "aguascalientes_FINAL_draft.csv")
 
+# Use write_csv to save the file
+write_csv(finaldb, output_path)
 
-validation <- finaldb %>% 
-  group_by(uniqueid,year) %>% 
-  summarise(count = n_distinct(incumbent_party_magar))
+# Confirm file saved correctly
+cat("File saved at:", output_path)
