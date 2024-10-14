@@ -5,12 +5,17 @@ rm(list = ls())
 library(readxl)
 library(dplyr)
 
-# Set working directory
-setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/")
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, "../../../"))
 
 # Read the Excel files
-db <- read_excel("chihuahua/chihuahua_collapsed_edited.xlsx")
-og <- read.csv("chihuahua/chihuahua_FINAL_draft.csv")
+db <- read_excel("Data/collapsed database manual cases/chihuahua_collapsed_edited.xlsx")
+og <- read.csv("Processed Data/chihuahua/chihuahua_FINAL_draft.csv")
+
 
 # Select the relevant columns from the collapsed database
 db_subset <- db %>%
@@ -353,7 +358,14 @@ merged_data <- merged_data %>%
          everything()) %>% 
   select(-X)
 
-write.csv(merged_data, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/chihuahua/chihuahua_FINALV.csv")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/chihuahua")
+output_path <- file.path(output_dir, "chihuahua_FINALV.csv")
 
+# Use write_csv to save the file
+write_csv(merged_data, output_path)
+
+# Confirm file saved correctly
+cat("File saved at:", output_path)
 
 

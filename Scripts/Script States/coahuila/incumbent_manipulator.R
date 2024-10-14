@@ -5,12 +5,17 @@ library(haven)
 library(openxlsx)
 library(purrr)
 library(readxl)
+library(rstudioapi)
 
-#### Set Working Directory ####
-setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/Incumbents/")
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, "../../../"))
 
 ####MAGAR's incumbents ####
-mag_db <- read.csv("incumbents magar/aymu.incumbents-ags-jal.csv")
+mag_db <- read.csv("Data/incumbent data/incumbent magar/aymu.incumbents-ags-jal.csv")
 
 mag_db <- mag_db %>%
   filter(edon == 5)
@@ -63,13 +68,16 @@ mag_db <- mag_db %>%
   mutate(incumbent_party_magar = toupper(incumbent_party_magar)) %>% 
   mutate(runnerup_party_magar = toupper(runnerup_party_magar))
 
-write_dta(mag_db, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/coahuila/Incumbents/incumbent_magar.dta")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/coahuila/Incumbents")
+output_path <- file.path(output_dir, "incumbent_magar.csv")
 
+# Use write_csv to save the file
+write_csv(mag_db, output_path)
 
 #### INAFED incumbent ####
 # Read the Excel file
-inafed_db <- read_excel("incumbent INAFED/incumbents_coahuila_inafed.xlsx")
-
+inafed_db <- read_excel("Data/incumbent data/incumbent INAFED/incumbents_coahuila_inafed.xlsx")
 
 # Step 5: Convert the Municipio column to uppercase
 inafed_db <- inafed_db %>%
@@ -133,12 +141,18 @@ inafed_db <- inafed_db %>%
   ungroup()
 
 
-write_dta(inafed_db, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/coahuila/Incumbents/incumbent_inafed.dta")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/coahuila/Incumbents")
+output_path <- file.path(output_dir, "incumbent_inafed.csv")
+
+# Use write_csv to save the file
+write_csv(inafed_db, output_path)
+
 
 
 ####JL incumbent####
 # Read the CSV file
-jl_db <- read.csv("incumbent JL/incumbent_JL.csv")
+jl_db <- read.csv("Data/incumbent data/incumbent JL/incumbent_JL.csv")
 
 jl_db <- jl_db %>%
   filter(CVE_ENTIDAD == 5) %>%
@@ -156,11 +170,28 @@ jl_db<- jl_db %>%
   summarise(incumbent_party_JL = first(incumbent_party_JL),
             incumbent_candidate_JL = first(incumbent_candidate_JL))
 
-write_dta(jl_db, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/coahuila/Incumbents/incumbent_JL.dta")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/coahuila/Incumbents")
+output_path <- file.path(output_dir, "incumbent_JL.csv")
+
+# Use write_csv to save the file
+write_csv(jl_db, output_path)
+
 
 
 ####Horacio incumbent####
-horacio_db <- read_dta("incumbent Horacio/incumbent_Horacio.dta")
+# Path to the .zip file
+zip_file <- "Data/incumbent data/incumbent Horacio/incumbent_Horacio.dta.zip"
+
+# Unzip the file to a temporary directory
+temp_dir <- tempdir()  # Create a temporary directory
+unzip(zip_file, exdir = temp_dir)  # Extract the contents to the temp directory
+
+# Find the .dta file within the temp directory
+unzipped_file <- file.path(temp_dir, "incumbent_Horacio.dta")
+
+# Now read the unzipped .dta file from the temporary directory
+horacio_db <- read_dta(unzipped_file)
 horacio_db <- horacio_db  %>%
   filter(state == 5) 
 # Collapse the data by uniqueid and year, keeping the first occurrence of each combination
@@ -181,8 +212,12 @@ horacio_db <- horacio_db %>%
   summarize(incumbent_party_Horacio = first(incumbent_party_Horacio)) %>% 
   as.data.frame()
 
-write_dta(horacio_db, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/coahuila/Incumbents/incumbent_horacio.dta")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/coahuila/Incumbents")
+output_path <- file.path(output_dir, "incumbent_horacio.csv")
 
+# Use write_csv to save the file
+write_csv(horacio_db, output_path)
 
 #### MERGE INCUMBENT DATA ####
 
@@ -203,7 +238,7 @@ write_dta(merged_incumbent_data, "/Users/brunocalderon/Library/CloudStorage/OneD
 #### MERGE INTO FINAL DB - INCUMBENT + VOTE ####
 setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/coahuila/")
 
-vote_db <- read_dta("coahuila_vote.dta")
+vote_db <- read_csv("Processed Data/coahuila/coahuila_vote.csv")
 
 final_merged_data <- vote_db  %>%
   left_join(merged_incumbent_data, by = c("uniqueid", "year"))
@@ -224,6 +259,13 @@ final_merged_data <- final_merged_data %>%
   mutate(margin = lag(margin, 1)) %>%
   ungroup()
 
-write_dta(final_merged_data, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/coahuila/coahuila_merged_IncumbentVote.dta")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/coahuila")
+output_path <- file.path(output_dir, "coahuila_merged_IncumbentVote.csv")
 
+# Use write_csv to save the file
+write_csv(final_merged_data, output_path)
+
+# Confirm file saved correctly
+cat("File saved at:", output_path)
 
