@@ -41,7 +41,6 @@ assign_votes <- function(data) {
   for (I in 1:nrow(data)) {
     # Fill PRI_vote and PRI_vote_party_component
     pri_cols <- names(data)[str_detect(names(data), "PRI")]
-    
     for (pri_col in pri_cols) {
       if (!is.na(data[[pri_col]][I]) && data[[pri_col]][I] != 0 && data[[pri_col]][I] != "") {
         data$PRI_vote[I] <- data[[pri_col]][I]
@@ -50,9 +49,10 @@ assign_votes <- function(data) {
       }
     }
     
-    # Repeat the same logic for PAN_vote and PAN_vote_party_component
-    pan_cols <- names(data)[str_detect(names(data), "PAN")]
-    
+    # Adjusted logic for PAN detection
+    pan_cols <- names(data)[str_detect(names(data), "\\bPAN\\b") | 
+                              str_detect(names(data), "\\bPAN_") | 
+                              str_detect(names(data), "_PAN\\b")]
     for (pan_col in pan_cols) {
       if (!is.na(data[[pan_col]][I]) && data[[pan_col]][I] != 0 && data[[pan_col]][I] != "") {
         data$PAN_vote[I] <- data[[pan_col]][I]
@@ -61,9 +61,8 @@ assign_votes <- function(data) {
       }
     }
     
-    # Repeat the same logic for MORENA_vote and MORENA_vote_party_component
+    # Logic for MORENA
     morena_cols <- names(data)[str_detect(names(data), "MORENA")]
-    
     for (morena_col in morena_cols) {
       if (!is.na(data[[morena_col]][I]) && data[[morena_col]][I] != 0 && data[[morena_col]][I] != "") {
         data$MORENA_vote[I] <- data[[morena_col]][I]
@@ -72,9 +71,8 @@ assign_votes <- function(data) {
       }
     }
     
-    # Repeat the same logic for PRD_vote and PRD_vote_party_component
+    # Logic for PRD
     prd_cols <- names(data)[str_detect(names(data), "PRD")]
-    
     for (prd_col in prd_cols) {
       if (!is.na(data[[prd_col]][I]) && data[[prd_col]][I] != 0 && data[[prd_col]][I] != "") {
         data$PRD_vote[I] <- data[[prd_col]][I]
@@ -98,7 +96,8 @@ assign_votes <- function(data) {
         # Check if any individual party within the coalition is present in other columns
         individual_party_found <- FALSE
         for (party in parties) {
-          party_vars <- names(data)[str_detect(names(data), party)]
+          # Adjust the party_vars regex to detect only exact matches for PAN or PANAL
+          party_vars <- names(data)[str_detect(names(data), paste0("\\b", party, "\\b"))]
           
           for (party_var in party_vars) {
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
@@ -124,23 +123,14 @@ assign_votes <- function(data) {
           }
         }
       } else {
-        # Handle single parties
-        party_vars <- names(data)[str_detect(names(data), incumbent_party)]
+        # Handle single parties using word boundaries to ensure exact matches
+        party_vars <- names(data)[str_detect(names(data), paste0("\\b", incumbent_party, "\\b"))]
         
         for (party_var in party_vars) {
-          # Ensure PAN is not confused with PANAL
-          if (str_detect(party_var, "^PAN$") || (!str_detect(party_var, "PANAL") && str_detect(party_var, "PAN"))) {
-            if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
-              data$incumbent_vote[I] <- data[[party_var]][I]
-              data$party_component[I] <- party_var
-              break
-            }
-          } else if (!str_detect(party_var, "PAN") && !str_detect(party_var, "PANAL")) {
-            if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
-              data$incumbent_vote[I] <- data[[party_var]][I]
-              data$party_component[I] <- party_var
-              break
-            }
+          if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
+            data$incumbent_vote[I] <- data[[party_var]][I]
+            data$party_component[I] <- party_var
+            break
           }
         }
         
@@ -162,7 +152,6 @@ assign_votes <- function(data) {
   
   return(data)
 }
-
 
 merged_data <- assign_votes(merged_data)
 
@@ -263,6 +252,64 @@ assign_state_incumbent_vote <- function(data) {
 }
 
 merged_data <- assign_state_incumbent_vote(merged_data)
+
+correct_runnerup_vote <- function(data) {
+  
+  # Initialize columns for storing results
+  data <- data %>%
+    mutate(runnerup_vote = NA,
+           runnerup_party_component = NA)
+  
+  # Loop through each row of the data
+  for (I in 1:nrow(data)) {
+    runnerup_party <- data$runnerup_party_magar[I]
+    
+    # Skip processing for NA or empty runnerup_party
+    if (is.na(runnerup_party) || runnerup_party == "") next
+    
+    # List to collect all relevant columns
+    candidate_vars <- c()
+    
+    # Adjusted regex to differentiate between PAN and PANAL
+    # Use word boundaries for PAN and consider coalitions like PAN_PANAL
+    if (runnerup_party == "PAN") {
+      party_regex <- "\\bPAN\\b"  # Word boundary to match PAN exactly
+    } else {
+      party_regex <- paste0("(^|_)", runnerup_party, "($|_)") # Regex to capture exact party within coalitions
+    }
+    
+    # Find columns matching the party pattern
+    candidate_vars <- names(data)[grepl(party_regex, names(data))]
+    
+    # Check each potential column for a valid vote
+    valid_found <- FALSE
+    for (var in candidate_vars) {
+      if (!is.na(data[[var]][I]) && data[[var]][I] != 0 && data[[var]][I] != "") {
+        data$runnerup_vote[I] <- data[[var]][I]
+        data$runnerup_party_component[I] <- var
+        valid_found <- TRUE
+        break
+      }
+    }
+    
+    # If no valid entry is found in direct or coalition matches, check for broader coalitions
+    if (!valid_found && !str_detect(runnerup_party, "_")) {
+      broader_coalition_vars <- names(data)[grepl(paste0("\\b", runnerup_party, "\\b"), names(data)) & grepl("_", names(data))]
+      for (var in broader_coalition_vars) {
+        if (!is.na(data[[var]][I]) && data[[var]][I] != 0 && data[[var]][I] != "") {
+          data$runnerup_vote[I] <- data[[var]][I]
+          data$runnerup_party_component[I] <- var
+          break
+        }
+      }
+    }
+  }
+  
+  return(data)
+}
+
+merged_data <- correct_runnerup_vote (merged_data)
+
 
 merged_data <- merged_data %>%
   select(uniqueid,

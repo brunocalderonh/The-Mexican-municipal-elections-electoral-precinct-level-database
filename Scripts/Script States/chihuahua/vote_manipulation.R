@@ -9,7 +9,7 @@ library(haven)
 setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/chihuahua/chihuahua_updated/")
 
 db <- read_dta("chihuahua_ALL_SALVADOR.dta")
-extra_correction <- read.csv("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/correct_extra_elec.csv")
+extra_correction <- read.csv("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/correct_extra_elec_final.csv")
 
 extra_correction <- extra_correction %>%
   select(-X)

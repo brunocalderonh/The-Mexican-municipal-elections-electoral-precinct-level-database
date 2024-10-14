@@ -4,13 +4,18 @@ rm(list = ls())
 # Load necessary libraries
 library(readxl)
 library(dplyr)
+library(rstudioapi)
 
-# Set working directory
-setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/")
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, "../../../"))
 
 # Read the Excel files
-db <- read_excel("chiapas/chiapas_collapsed_edited.xlsx")
-og <- read.csv("chiapas/chiapas_FINAL_draft.csv")
+db <- read_excel("Data/collapsed database manual cases/chiapas_collapsed_edited.xlsx")
+og <- read.csv("Processed Data/chiapas/chiapas_FINAL_draft.csv")
 
 # Select the relevant columns from the collapsed database
 db_subset <- db %>%
@@ -41,7 +46,6 @@ assign_votes <- function(data) {
   for (I in 1:nrow(data)) {
     # Fill PRI_vote and PRI_vote_party_component
     pri_cols <- names(data)[str_detect(names(data), "PRI")]
-    
     for (pri_col in pri_cols) {
       if (!is.na(data[[pri_col]][I]) && data[[pri_col]][I] != 0 && data[[pri_col]][I] != "") {
         data$PRI_vote[I] <- data[[pri_col]][I]
@@ -50,9 +54,10 @@ assign_votes <- function(data) {
       }
     }
     
-    # Repeat the same logic for PAN_vote and PAN_vote_party_component
-    pan_cols <- names(data)[str_detect(names(data), "PAN")]
-    
+    # Adjusted logic for PAN detection
+    pan_cols <- names(data)[str_detect(names(data), "\\bPAN\\b") | 
+                              str_detect(names(data), "\\bPAN_") | 
+                              str_detect(names(data), "_PAN\\b")]
     for (pan_col in pan_cols) {
       if (!is.na(data[[pan_col]][I]) && data[[pan_col]][I] != 0 && data[[pan_col]][I] != "") {
         data$PAN_vote[I] <- data[[pan_col]][I]
@@ -61,9 +66,8 @@ assign_votes <- function(data) {
       }
     }
     
-    # Repeat the same logic for MORENA_vote and MORENA_vote_party_component
+    # Logic for MORENA
     morena_cols <- names(data)[str_detect(names(data), "MORENA")]
-    
     for (morena_col in morena_cols) {
       if (!is.na(data[[morena_col]][I]) && data[[morena_col]][I] != 0 && data[[morena_col]][I] != "") {
         data$MORENA_vote[I] <- data[[morena_col]][I]
@@ -72,9 +76,8 @@ assign_votes <- function(data) {
       }
     }
     
-    # Repeat the same logic for PRD_vote and PRD_vote_party_component
+    # Logic for PRD
     prd_cols <- names(data)[str_detect(names(data), "PRD")]
-    
     for (prd_col in prd_cols) {
       if (!is.na(data[[prd_col]][I]) && data[[prd_col]][I] != 0 && data[[prd_col]][I] != "") {
         data$PRD_vote[I] <- data[[prd_col]][I]
@@ -98,7 +101,8 @@ assign_votes <- function(data) {
         # Check if any individual party within the coalition is present in other columns
         individual_party_found <- FALSE
         for (party in parties) {
-          party_vars <- names(data)[str_detect(names(data), party)]
+          # Adjust the party_vars regex to detect only exact matches for PAN or PANAL
+          party_vars <- names(data)[str_detect(names(data), paste0("\\b", party, "\\b"))]
           
           for (party_var in party_vars) {
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
@@ -124,23 +128,14 @@ assign_votes <- function(data) {
           }
         }
       } else {
-        # Handle single parties
-        party_vars <- names(data)[str_detect(names(data), incumbent_party)]
+        # Handle single parties using word boundaries to ensure exact matches
+        party_vars <- names(data)[str_detect(names(data), paste0("\\b", incumbent_party, "\\b"))]
         
         for (party_var in party_vars) {
-          # Ensure PAN is not confused with PANAL
-          if (str_detect(party_var, "^PAN$") || (!str_detect(party_var, "PANAL") && str_detect(party_var, "PAN"))) {
-            if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
-              data$incumbent_vote[I] <- data[[party_var]][I]
-              data$party_component[I] <- party_var
-              break
-            }
-          } else if (!str_detect(party_var, "PAN") && !str_detect(party_var, "PANAL")) {
-            if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
-              data$incumbent_vote[I] <- data[[party_var]][I]
-              data$party_component[I] <- party_var
-              break
-            }
+          if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
+            data$incumbent_vote[I] <- data[[party_var]][I]
+            data$party_component[I] <- party_var
+            break
           }
         }
         
@@ -165,6 +160,104 @@ assign_votes <- function(data) {
 
 merged_data <- assign_votes(merged_data)
 
+assign_incumbent_vote_with_anomalies <- function(data) {
+  
+  # Define the specific year and uniqueid combinations to work on
+  target_rows <- data %>%
+    filter((year == 1998 & uniqueid == 7052) |
+             (year == 1998 & uniqueid == 7096))
+  
+  # Loop through the target cases
+  for (i in 1:nrow(target_rows)) {
+    row <- target_rows[i, ]
+    id <- row$uniqueid
+    yr <- row$year
+    
+    # Extract the subset of the data corresponding to the current row's uniqueid and year
+    subset_data <- data %>%
+      filter(uniqueid == id & year == yr)
+    
+    # Determine the most common party component
+    most_common_party <- names(sort(table(subset_data$party_component), decreasing = TRUE))[1]
+    
+    # Update the party_component to the most common party for all rows in the subset
+    data <- data %>%
+      mutate(
+        party_component = ifelse(uniqueid == id & year == yr, most_common_party, party_component)
+      )
+    
+    # Now assign incumbent_vote using the majority party logic
+    for (j in 1:nrow(subset_data)) {
+      incumbent_party <- most_common_party
+      row_idx <- which(data$uniqueid == id & data$year == yr)[j]
+      
+      # Skip if incumbent_party is NA or empty
+      if (is.na(incumbent_party) || incumbent_party == "") next
+      
+      # Check if it is a coalition
+      if (str_detect(incumbent_party, "_")) {
+        parties <- unlist(str_split(incumbent_party, "_"))
+        
+        # Check if any individual party within the coalition is present in other columns
+        individual_party_found <- FALSE
+        for (party in parties) {
+          if (party %in% data$incumbent_party_JL[row_idx] || 
+              party %in% data$incumbent_party_Horacio[row_idx] || 
+              party %in% data$incumbent_party_inafed[row_idx]) {
+            individual_party_found <- TRUE
+            party_vars <- names(data)[str_detect(names(data), party)]
+            
+            for (party_var in party_vars) {
+              if (!is.na(data[[party_var]][row_idx]) && data[[party_var]][row_idx] != 0) {
+                data$incumbent_vote[row_idx] <- data[[party_var]][row_idx]
+                data$party_component[row_idx] <- party_var
+                break
+              }
+            }
+            if (!is.na(data$incumbent_vote[row_idx])) break
+          }
+        }
+        
+        # Proceed with coalition logic if no individual party is found
+        if (!individual_party_found) {
+          coalition_vars <- names(data)[sapply(names(data), function(x) all(parties %in% str_split(x, "_")[[1]]))]
+          
+          for (coalition_var in coalition_vars) {
+            if (!is.na(data[[coalition_var]][row_idx]) && data[[coalition_var]][row_idx] != 0) {
+              data$incumbent_vote[row_idx] <- data[[coalition_var]][row_idx]
+              data$party_component[row_idx] <- coalition_var
+              break
+            }
+          }
+        }
+      } else {
+        # Handle single parties
+        party_vars <- names(data)[str_detect(names(data), incumbent_party)]
+        
+        for (party_var in party_vars) {
+          # Ensure PAN is not confused with PANAL
+          if (str_detect(party_var, "^PAN$") || (!str_detect(party_var, "PANAL") && str_detect(party_var, "PAN"))) {
+            if (!is.na(data[[party_var]][row_idx]) && data[[party_var]][row_idx] != 0) {
+              data$incumbent_vote[row_idx] <- data[[party_var]][row_idx]
+              data$party_component[row_idx] <- party_var
+              break
+            }
+          } else if (!str_detect(party_var, "PAN") && !str_detect(party_var, "PANAL")) {
+            if (!is.na(data[[party_var]][row_idx]) && data[[party_var]][row_idx] != 0) {
+              data$incumbent_vote[row_idx] <- data[[party_var]][row_idx]
+              data$party_component[row_idx] <- party_var
+              break
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  return(data)
+}
+
+merged_data <- assign_incumbent_vote_with_anomalies(merged_data)
 
 assign_state_incumbent_vote <- function(data) {
   
@@ -264,6 +357,63 @@ assign_state_incumbent_vote <- function(data) {
 
 merged_data <- assign_state_incumbent_vote(merged_data)
 
+correct_runnerup_vote <- function(data) {
+  
+  # Initialize columns for storing results
+  data <- data %>%
+    mutate(runnerup_vote = NA,
+           runnerup_party_component = NA)
+  
+  # Loop through each row of the data
+  for (I in 1:nrow(data)) {
+    runnerup_party <- data$runnerup_party_magar[I]
+    
+    # Skip processing for NA or empty runnerup_party
+    if (is.na(runnerup_party) || runnerup_party == "") next
+    
+    # List to collect all relevant columns
+    candidate_vars <- c()
+    
+    # Adjusted regex to differentiate between PAN and PANAL
+    # Use word boundaries for PAN and consider coalitions like PAN_PANAL
+    if (runnerup_party == "PAN") {
+      party_regex <- "\\bPAN\\b"  # Word boundary to match PAN exactly
+    } else {
+      party_regex <- paste0("(^|_)", runnerup_party, "($|_)") # Regex to capture exact party within coalitions
+    }
+    
+    # Find columns matching the party pattern
+    candidate_vars <- names(data)[grepl(party_regex, names(data))]
+    
+    # Check each potential column for a valid vote
+    valid_found <- FALSE
+    for (var in candidate_vars) {
+      if (!is.na(data[[var]][I]) && data[[var]][I] != 0 && data[[var]][I] != "") {
+        data$runnerup_vote[I] <- data[[var]][I]
+        data$runnerup_party_component[I] <- var
+        valid_found <- TRUE
+        break
+      }
+    }
+    
+    # If no valid entry is found in direct or coalition matches, check for broader coalitions
+    if (!valid_found && !str_detect(runnerup_party, "_")) {
+      broader_coalition_vars <- names(data)[grepl(paste0("\\b", runnerup_party, "\\b"), names(data)) & grepl("_", names(data))]
+      for (var in broader_coalition_vars) {
+        if (!is.na(data[[var]][I]) && data[[var]][I] != 0 && data[[var]][I] != "") {
+          data$runnerup_vote[I] <- data[[var]][I]
+          data$runnerup_party_component[I] <- var
+          break
+        }
+      }
+    }
+  }
+  
+  return(data)
+}
+
+merged_data <- correct_runnerup_vote (merged_data)
+
 merged_data <- merged_data %>%
   select(uniqueid,
          year,
@@ -306,7 +456,15 @@ merged_data <- merged_data %>%
          everything()) %>% 
   select(-X) 
 
-write.csv(merged_data, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/chiapas/chiapas_FINALV.csv")
 
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/chiapas")
+output_path <- file.path(output_dir, "chiapas_FINALV.csv")
+
+# Use write_csv to save the file
+write_csv(merged_data, output_path)
+
+# Confirm file saved correctly
+cat("File saved at:", output_path)
 
 
