@@ -15,7 +15,6 @@ setwd(file.path(script_dir, "../../../"))
 
 finaldb <- read_csv("Processed Data/bajasur/bajasur_merged_IncumbentVote.csv")
 finaldb <- finaldb %>%
-  select(-winner) %>%
   select(state,mun, section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed,everything())
 
 

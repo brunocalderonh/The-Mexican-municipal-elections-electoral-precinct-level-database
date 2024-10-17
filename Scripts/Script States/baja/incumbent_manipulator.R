@@ -55,7 +55,7 @@ write_csv(mag_db, output_path)
 
 #### INAFED incumbent ####
 # Read the Excel file
-inafed_db <- read_excel("Data/incumbent data/incumbent INAFED/incumbents_baja_inafed.xlsx")
+inafed_db <- read_excel("Data/incumbent data/incumbent INAFED/incumbents_baja_inafed.xlsm")
 
 inafed_db <- inafed_db %>%
   mutate(Municipio = toupper(Municipio))
@@ -203,7 +203,6 @@ write_csv(horacio_db, output_path)
 
 
 #### MERGE INTO FINAL DB - INCUMBENT + VOTE ####
-setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/baja/")
 mag_db <- mag_db %>%
   group_by(uniqueid) %>%
   arrange(year) %>%

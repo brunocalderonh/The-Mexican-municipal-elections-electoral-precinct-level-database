@@ -355,9 +355,7 @@ merged_data <- merged_data %>%
          valid,
          total,
          everything(),
-         -municipality,
-         -seccionestatal,
-         -X)
+         -municipality)
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/baja")

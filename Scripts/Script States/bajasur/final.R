@@ -448,8 +448,7 @@ merged_data <- merged_data %>%
          listanominal,
          valid,
          total,
-         everything())%>% 
-  select(-X)
+         everything())
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/bajasur")
