@@ -10,12 +10,11 @@ library(rstudioapi)
 # Get the path of the current script
 script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
-# Set the working directory to the root of the repository
-# Assuming your script is in 'Scripts/Script States/', go two levels up
-setwd(file.path(script_dir, "../../../"))
+setwd(file.path(script_dir, "/Script States"))
+
 
 # Define the base path relative to the current working directory
-base_path <- file.path(getwd(), "Processed Data/")
+base_path <- file.path(getwd())
 
 # Define the state names
 states <- c("aguascalientes", "baja", "bajasur", "campeche", "chiapas", "chihuahua", 
@@ -91,10 +90,6 @@ for (state in states) {
 final_df <- bind_rows(df_list)
 
 ####### Manipulate the previously created database in order to obtain a cleaned final database
-
-# Define the base path 
-setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/final")
-
 final_df <- final_df %>% 
   select(-X)
 
@@ -241,5 +236,13 @@ final_df <- final_df %>%
          valid,
          total) 
 
-# Optionally, you can export the updated dataset to CSV
-write.csv(final_df, "Cleaned_final_db.csv", row.names = FALSE)
+# Set the path to save the CSV file relative to the repository's root
+setwd(file.path(script_dir, "../"))
+output_dir <- file.path(getwd(), "Processed Data/FINAL")
+output_path <- file.path(output_dir, "/all_states_final.csv")
+
+# Use write_csv to save the file
+write_csv(final_df, output_path)
+
+# Confirm file saved correctly
+cat("File saved at:", output_path)
