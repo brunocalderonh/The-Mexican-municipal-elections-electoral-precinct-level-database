@@ -4,10 +4,16 @@ library(stringr)
 library(dplyr)
 library(writexl)
 library(haven)
- 
-# Load the data
-finaldb <- read_dta( "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/oaxaca/oaxaca_merged_IncumbentVote.dta")
+library(rstudioapi)
 
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, "../../../"))
+
+finaldb <- read_csv("Processed Data/oaxaca/oaxaca_merged_IncumbentVote.csv")
 finaldb <- finaldb %>%
   select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
 
@@ -28,7 +34,6 @@ replace_parties <- function(party_str) {
 finaldb <- finaldb %>%
   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
   mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
-
 
   
 assign_incumbent_vote <- function(data) {
@@ -56,40 +61,16 @@ assign_incumbent_vote <- function(data) {
             party %in% data$incumbent_party_Horacio[I] || 
             party %in% data$incumbent_party_inafed[I]) {
           individual_party_found <- TRUE
-          
-          # Handle single parties within coalition correctly
-          party_vars <- names(data)[str_detect(names(data), party)]
+          party_vars <- names(data)[str_detect(names(data), paste0("\\b", party, "\\b"))]
           
           for (party_var in party_vars) {
-            # Ensure PAN is not confused with PANAL
-            if (party == "PAN" && !str_detect(party_var, "PANAL")) {
-              if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
-                data$incumbent_vote[I] <- data[[party_var]][I]
-                data$party_component[I] <- party_var
-                break
-              }
-            } else if (party != "PAN" || (!str_detect(party_var, "PANAL") && str_detect(party_var, party))) {
-              if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
-                data$incumbent_vote[I] <- data[[party_var]][I]
-                data$party_component[I] <- party_var
-                break
-              }
+            if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
+              data$incumbent_vote[I] <- data[[party_var]][I]
+              data$party_component[I] <- party_var
+              break
             }
           }
           if (!is.na(data$incumbent_vote[I])) break
-        }
-      }
-      
-      # If no single party found, check coalitions containing the single party
-      if (is.na(data$incumbent_vote[I])) {
-        coalition_vars <- names(data)[sapply(names(data), function(x) any(parties %in% str_split(x, "_")[[1]]))]
-        
-        for (coalition_var in coalition_vars) {
-          if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
-            data$incumbent_vote[I] <- data[[coalition_var]][I]
-            data$party_component[I] <- coalition_var
-            break
-          }
         }
       }
       
@@ -107,17 +88,17 @@ assign_incumbent_vote <- function(data) {
       }
     } else {
       # Handle single parties
-      party_vars <- names(data)[str_detect(names(data), incumbent_party)]
+      party_vars <- names(data)[str_detect(names(data), paste0("\\b", incumbent_party, "\\b"))]
       
       for (party_var in party_vars) {
-        # Ensure PAN is not confused with PANAL
-        if (incumbent_party == "PAN" && !str_detect(party_var, "PANAL")) {
+        # Ensure PAN is not confused with PANAL by using word boundaries
+        if (str_detect(party_var, "\\bPAN\\b")) {
           if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[party_var]][I]
             data$party_component[I] <- party_var
             break
           }
-        } else if (incumbent_party != "PAN" || (!str_detect(party_var, "PANAL") && str_detect(party_var, incumbent_party))) {
+        } else if (!str_detect(party_var, "\\bPANAL\\b") && !str_detect(party_var, "\\bPAN\\b")) {
           if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[party_var]][I]
             data$party_component[I] <- party_var
@@ -258,9 +239,8 @@ check_mutual_exclusivity <- function(data) {
   return(data)
 }
 
-
 finaldb <- check_mutual_exclusivity(finaldb)
-# Assuming your data frame is named 'df'
+
 finaldb <- finaldb %>%
   select(
     state,
@@ -288,48 +268,14 @@ finaldb <- finaldb %>%
     total,
     everything()
   )
-# Remove rows with NA or empty string in the section variable
-finaldb <- finaldb %>%
-  filter(!is.na(section) & section != "") %>%
-  filter(rowSums(!is.na(select(., incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed, incumbent_party_magar)) & 
-                   select(., incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed, incumbent_party_magar) != "") > 0)
 
 
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/oaxaca")
+output_path <- file.path(output_dir, "oaxaca_FINAL_draft.csv")
 
-write.csv(finaldb, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/oaxaca/oaxaca_FINAL_draft.csv")
+# Use write_csv to save the file
+write_csv(finaldb, output_path)
 
-
-#CLEAN DB
-  # Select only the desired columns
-  oaxaca_finaldb <- finaldb %>% 
-  select(
-    state,
-    mun,
-    section,
-    uniqueid, 
-    year, 
-    incumbent_party_magar, 
-    incumbent_candidate_magar,
-    incumbent_vote,
-    party_component,
-    mutually_exclusive,
-    incumbent_party_JL, 
-    incumbent_candidate_JL,
-    incumbent_party_Horacio, 
-    incumbent_party_inafed,
-    incumbent_candidate_inafed,
-    runnerup_party_magar,
-    runnerup_candidate_magar,
-    runnerup_vote ,
-    runnerup_party_component,
-    margin,
-    listanominal,
-    valid,
-    total,
-  ) %>%
-    mutate(incumbent_vote = as.numeric(incumbent_vote))
-
-  
-
-  write.csv(oaxaca_finaldb, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/oaxaca/oaxaca_FINAL.csv")
-  
+# Confirm file saved correctly
+cat("File saved at:", output_path)
