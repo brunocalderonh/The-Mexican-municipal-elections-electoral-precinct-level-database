@@ -4,11 +4,17 @@ library(stringr)
 library(dplyr)
 library(writexl)
 library(haven)
+library(rstudioapi)
 
-# Load the data
-setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/colima/colima_updated/")
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
-db <- read_dta("colima_ALL_SALVADOR.dta")
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, "../../../"))
+
+# Now set the path to the CSV file relative to the root of the repository
+db <- read_csv("Data/vote data/colima_vote_all.csv")
 
 db <- db %>%
   select(-matches("^(coalition|.*incumbent|.*winner_counter|.*STATE|.*.winner_|.*mun_|.*_winner.*|.*first.*|.*second.*|.*third.*|.*turnout.*|.*month.*)"))
@@ -20,4 +26,12 @@ db <- db %>%
   select(mun, state, uniqueid, section, year, everything()) 
 
 
-write_dta(db,"/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/colima/colima_vote.dta")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/colima")
+output_path <- file.path(output_dir, "colima_vote.csv")
+
+# Use write_csv to save the file
+write_csv(db, output_path)
+
+# Confirm file saved correctly
+cat("File saved at:", output_path)

@@ -4,12 +4,18 @@ library(stringr)
 library(dplyr)
 library(writexl)
 library(haven)
+library(rstudioapi)
  
-# Load the data
-finaldb <- read_dta( "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/colima/colima_merged_IncumbentVote.dta")
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, "../../../"))
+
+finaldb <- read_csv("Processed Data/colima/colima_merged_IncumbentVote.csv")
 
 finaldb <- finaldb %>%
-  #select(-winner) %>%
   select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
 replace_parties <- function(party_str) {
   replacements <- c( "PNA" = "PANAL", 
@@ -23,14 +29,11 @@ replace_parties <- function(party_str) {
   return(party_str)
 }
 
-
 # Apply the replacement function to the incumbent_party_magar column
 finaldb <- finaldb %>%
   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
   mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
 
-
-  
 assign_incumbent_vote <- function(data) {
   
   # Initialize columns
@@ -56,7 +59,7 @@ assign_incumbent_vote <- function(data) {
             party %in% data$incumbent_party_Horacio[I] || 
             party %in% data$incumbent_party_inafed[I]) {
           individual_party_found <- TRUE
-          party_vars <- names(data)[str_detect(names(data), party)]
+          party_vars <- names(data)[str_detect(names(data), paste0("\\b", party, "\\b"))]
           
           for (party_var in party_vars) {
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
@@ -83,17 +86,17 @@ assign_incumbent_vote <- function(data) {
       }
     } else {
       # Handle single parties
-      party_vars <- names(data)[str_detect(names(data), incumbent_party)]
+      party_vars <- names(data)[str_detect(names(data), paste0("\\b", incumbent_party, "\\b"))]
       
       for (party_var in party_vars) {
-        # Ensure PAN is not confused with PANAL
-        if (str_detect(party_var, "^PAN$") || (!str_detect(party_var, "PANAL") && str_detect(party_var, "PAN"))) {
+        # Ensure PAN is not confused with PANAL by using word boundaries
+        if (str_detect(party_var, "\\bPAN\\b")) {
           if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[party_var]][I]
             data$party_component[I] <- party_var
             break
           }
-        } else if (!str_detect(party_var, "PAN") && !str_detect(party_var, "PANAL")) {
+        } else if (!str_detect(party_var, "\\bPANAL\\b") && !str_detect(party_var, "\\bPAN\\b")) {
           if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[party_var]][I]
             data$party_component[I] <- party_var
@@ -233,10 +236,8 @@ check_mutual_exclusivity <- function(data) {
   
   return(data)
 }
-
-
 finaldb <- check_mutual_exclusivity(finaldb)
-# Assuming your data frame is named 'df'
+
 finaldb <- finaldb %>%
   select(
     state,
@@ -264,46 +265,13 @@ finaldb <- finaldb %>%
     total,
     everything()
   )
-# Remove rows with NA or empty string in the section variable
-finaldb <- finaldb %>%
-  filter(!is.na(section) & section != "") %>%
-  filter(rowSums(!is.na(select(., incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed, incumbent_party_magar)) & 
-                   select(., incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed, incumbent_party_magar) != "") > 0)
 
-write.csv(finaldb, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/colima/colima_FINAL_draft.csv")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/colima")
+output_path <- file.path(output_dir, "colima_FINAL_draft.csv")
 
+# Use write_csv to save the file
+write_csv(finaldb, output_path)
 
-#CLEAN DB
-  # Select only the desired columns
-  colima_finaldb <- finaldb %>% 
-  select(
-    state,
-    mun,
-    section,
-    uniqueid, 
-    year, 
-    incumbent_party_magar, 
-    incumbent_candidate_magar,
-    incumbent_vote,
-    party_component,
-    mutually_exclusive,
-    incumbent_party_JL, 
-    incumbent_candidate_JL,
-    incumbent_party_Horacio, 
-    incumbent_party_inafed,
-    incumbent_candidate_inafed,
-    runnerup_party_magar,
-    runnerup_candidate_magar,
-    runnerup_vote ,
-    runnerup_party_component,
-    margin,
-    listanominal,
-    valid,
-    total,
-  ) %>%
-    mutate(incumbent_vote = as.numeric(incumbent_vote))
-
-  
-
-  write.csv(colima_finaldb, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/colima/colima_FINAL.csv")
-  
+# Confirm file saved correctly
+cat("File saved at:", output_path)
