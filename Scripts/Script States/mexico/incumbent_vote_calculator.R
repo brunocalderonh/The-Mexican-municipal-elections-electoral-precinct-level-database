@@ -4,10 +4,16 @@ library(stringr)
 library(dplyr)
 library(writexl)
 library(haven)
- 
-# Load the data
-finaldb <- read_dta( "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/mexico/mexico_merged_IncumbentVote.dta")
+ibrary(rstudioapi)
 
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, "../../../"))
+
+finaldb <- read_csv("Processed Data/mexico/mexico_merged_IncumbentVote.csv")
 finaldb <- finaldb %>%
 
   select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
@@ -239,7 +245,7 @@ check_mutual_exclusivity <- function(data) {
 
 
 finaldb <- check_mutual_exclusivity(finaldb)
-# Assuming your data frame is named 'df'
+
 finaldb <- finaldb %>%
   select(
     state,
@@ -267,46 +273,13 @@ finaldb <- finaldb %>%
     total,
     everything()
   )
-# Remove rows with NA or empty string in the section variable
-finaldb <- finaldb %>%
-  filter(!is.na(section) & section != "") %>%
-  filter(rowSums(!is.na(select(., incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed, incumbent_party_magar)) & 
-                   select(., incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed, incumbent_party_magar) != "") > 0)
 
-write.csv(finaldb, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/mexico/mexico_FINAL_draft.csv")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/mexico")
+output_path <- file.path(output_dir, "mexico_FINAL_draft.csv")
 
+# Use write_csv to save the file
+write_csv(finaldb, output_path)
 
-#CLEAN DB
-  # Select only the desired columns
-  mexico_finaldb <- finaldb %>% 
-  select(
-    state,
-    mun,
-    section,
-    uniqueid, 
-    year, 
-    incumbent_party_magar, 
-    incumbent_candidate_magar,
-    incumbent_vote,
-    party_component,
-    mutually_exclusive,
-    incumbent_party_JL, 
-    incumbent_candidate_JL,
-    incumbent_party_Horacio, 
-    incumbent_party_inafed,
-    incumbent_candidate_inafed,
-    runnerup_party_magar,
-    runnerup_candidate_magar,
-    runnerup_vote ,
-    runnerup_party_component,
-    margin,
-    listanominal,
-    valid,
-    total,
-  ) %>%
-    mutate(incumbent_vote = as.numeric(incumbent_vote))
-
-  
-
-  write.csv(mexico_finaldb, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/mexico/mexico_FINAL.csv")
-  
+# Confirm file saved correctly
+cat("File saved at:", output_path)
