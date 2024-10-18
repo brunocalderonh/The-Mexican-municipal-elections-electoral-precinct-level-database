@@ -5,11 +5,18 @@ library(dplyr)
 library(writexl)
 library(haven)
 library(openxlsx)
+library(rstudioapi)
 
-# Load the data
-setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/quintanaroo/quintanaroo_updated/")
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
-db <- read_dta("quintanaroo_ALL_SALVADOR.dta")
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, "../../../"))
+
+# Now set the path to the CSV file relative to the root of the repository
+db <- read_csv("Data/vote data/quintanaroo_vote_all.csv")
+
 
 # Select and remove unwanted variables
 db <- db %>%
@@ -23,4 +30,12 @@ db <- db %>%
   mutate(across(where(is.character), ~ iconv(., from = "", to = "UTF-8")))
 
 
-write_dta(db,"/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/quintanaroo/quintanaroo_vote.dta")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/quintanaroo")
+output_path <- file.path(output_dir, "quintanaroo_vote.csv")
+
+# Use write_csv to save the file
+write_csv(db, output_path)
+
+# Confirm file saved correctly
+cat("File saved at:", output_path)

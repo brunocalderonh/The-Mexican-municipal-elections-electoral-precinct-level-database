@@ -5,12 +5,17 @@ library(haven)
 library(openxlsx)
 library(purrr)
 library(readxl)
+library(rstudioapi)
 
-#### Set Working Directory ####
-setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/Incumbents/")
- 
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, "../../../"))
+
 ####MAGAR's incumbents ####
-mag_db <- read.csv("incumbents magar/aymu.incumbents-que-zac.csv")
+mag_db <- read.csv("Data/incumbent data/incumbent magar/aymu.incumbents-ags-jal.csv")
 
 mag_db <- mag_db %>%
   filter(edon == 29)
@@ -39,16 +44,22 @@ mag_db <- mag_db %>%
   rename( margin = mg) %>% 
   rename( year = yr) %>%
   rename(uniqueid = inegi)  %>%
+  mutate(uniqueid = as.numeric(uniqueid)) %>% 
   select(uniqueid, year, incumbent_party_magar, incumbent_candidate_magar, runnerup_party_magar, runnerup_candidate_magar, margin) %>%
   mutate(incumbent_party_magar = toupper(incumbent_party_magar)) %>% 
   mutate(runnerup_party_magar = toupper(runnerup_party_magar))
 
-write_dta(mag_db, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/tlaxcala/Incumbents/incumbent_magar.dta")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/tlaxcala/Incumbents")
+output_path <- file.path(output_dir, "incumbent_magar.csv")
+
+# Use write_csv to save the file
+write_csv(mag_db, output_path)
 
 
 #### INAFED incumbent ####
 # Read the Excel file
-inafed_db <- read_excel("incumbent INAFED/incumbents_tlaxcala_inafed.xlsx")
+inafed_db <- read_excel("Data/incumbent data/incumbent INAFED/incumbents_tlaxcala_inafed.xlsx")
 
 # Step 5: Convert the Municipio column to uppercase
 inafed_db <- inafed_db %>%
@@ -146,14 +157,22 @@ inafed_db <- inafed_db %>%
 inafed_db <- inafed_db %>%
   group_by(uniqueid, year) %>%
   summarize(across(everything(), ~first(.), .names = "{.col}")) %>%
+  mutate(uniqueid = as.numeric(uniqueid)) %>% 
+  mutate(year = as.numeric(year)) %>% 
   ungroup()
 
-write_dta(inafed_db, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/tlaxcala/Incumbents/incumbent_inafed.dta")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/tlaxcala/Incumbents")
+output_path <- file.path(output_dir, "incumbent_inafed.csv")
+
+# Use write_csv to save the file
+write_csv(inafed_db, output_path)
+
 
 
 ####JL incumbent####
 # Read the CSV file
-jl_db <- read.csv("incumbent JL/incumbent_JL.csv")
+jl_db <- read.csv("Data/incumbent data/incumbent JL/incumbent_JL.csv")
 
 
 jl_db <- jl_db %>%
@@ -161,12 +180,7 @@ jl_db <- jl_db %>%
   mutate(
     uniqueid = CVE_ENTIDAD * 1000 + CVE_MUNICIPIO,
     incumbent_candidate_JL = PRESIDENTE_MUNICIPAL,
-    year = case_when(
-      LAST_YEAR_PERIOD - FIRST_YEAR_PERIOD == 3 ~ LAST_YEAR_PERIOD - 3,
-      LAST_YEAR_PERIOD - FIRST_YEAR_PERIOD == 2 ~ LAST_YEAR_PERIOD - 3,
-      LAST_YEAR_PERIOD - FIRST_YEAR_PERIOD == 1 ~ LAST_YEAR_PERIOD - 3,
-      TRUE ~ NA_real_  # Handle other cases if necessary
-    )
+    year = YEAR,
   ) %>%
   select(uniqueid, year, PARTIDO, incumbent_candidate_JL, -PRESIDENTE_MUNICIPAL) %>%
   rename(incumbent_party_JL = PARTIDO)
@@ -177,23 +191,28 @@ jl_db<- jl_db %>%
   summarise(incumbent_party_JL = first(incumbent_party_JL),
             incumbent_candidate_JL = first(incumbent_candidate_JL))
 
-jl_db <- jl_db %>%
-  mutate(year = case_when(
-    year == 1999 ~ 1998,
-    year == 2002 ~ 2001,
-    year == 2005 ~ 2004,
-    year == 2008 ~ 2007,
-    year == 2011 ~ 2010,
-    year == 1992 ~ 1991,
-    TRUE ~ year  # This keeps all other values unchanged
-  ))
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/tlaxcala/Incumbents")
+output_path <- file.path(output_dir, "incumbent_JL.csv")
 
+# Use write_csv to save the file
+write_csv(jl_db, output_path)
 
-write_dta(jl_db, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/tlaxcala/Incumbents/incumbent_JL.dta")
 
 
 ####Horacio incumbent####
-horacio_db <- read_dta("incumbent Horacio/incumbent_Horacio.dta")
+# Path to the .zip file
+zip_file <- "Data/incumbent data/incumbent Horacio/incumbent_Horacio.dta.zip"
+
+# Unzip the file to a temporary directory
+temp_dir <- tempdir()  # Create a temporary directory
+unzip(zip_file, exdir = temp_dir)  # Extract the contents to the temp directory
+
+# Find the .dta file within the temp directory
+unzipped_file <- file.path(temp_dir, "incumbent_Horacio.dta")
+
+# Now read the unzipped .dta file from the temporary directory
+horacio_db <- read_dta(unzipped_file)
 horacio_db <- horacio_db  %>%
   filter(state == 29) 
 # Collapse the data by uniqueid and year, keeping the first occurrence of each combination
@@ -214,54 +233,65 @@ horacio_db <- horacio_db %>%
   summarize(incumbent_party_Horacio = first(incumbent_party_Horacio)) %>% 
   as.data.frame()
 
-write_dta(horacio_db, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/tlaxcala/Incumbents/incumbent_horacio.dta")
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/tlaxcala/Incumbents")
+output_path <- file.path(output_dir, "incumbent_horacio.csv")
+
+# Use write_csv to save the file
+write_csv(horacio_db, output_path)
 
 
 
-#### MERGE INCUMBENT DATA ####
 
-
-
-mag_db <- mag_db %>%
-  mutate(across(c(uniqueid, year), as.numeric))
-
-inafed_db <- inafed_db %>%
-  mutate(across(c(uniqueid, year), as.numeric))
-
-
-merged_incumbent_data <- mag_db %>%
- left_join(horacio_db, by = c("uniqueid", "year"), suffix = c("_magar","_Horacio" )) %>%
-  left_join(jl_db, by = c("uniqueid", "year"), suffix = c("", "_JL")) %>%
-  left_join(inafed_db, by = c("uniqueid", "year"), suffix = c("", "_inafed"))
-
-
-write_dta(merged_incumbent_data, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/tlaxcala/Incumbents/incumbent_data_merged.dta")
 
 #### MERGE INTO FINAL DB - INCUMBENT + VOTE ####
-setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/tlaxcala/")
-
-vote_db <- read_dta("tlaxcala_vote.dta")
-
-final_merged_data <- vote_db  %>%
-  left_join(merged_incumbent_data, by = c("uniqueid", "year"))
-
-#shift part values one period  foward
-final_merged_data <- final_merged_data %>%
-  group_by(section, uniqueid) %>%
+mag_db <- mag_db %>%
+  group_by(uniqueid) %>%
   arrange(year) %>%
-  mutate(incumbent_party_Horacio = lag(incumbent_party_Horacio, 1)) %>%
-  mutate(incumbent_party_JL = lag(incumbent_party_JL, 1)) %>%
   mutate(incumbent_party_magar = lag(incumbent_party_magar, 1)) %>%
   mutate(runnerup_party_magar = lag(runnerup_party_magar, 1)) %>%
-  mutate(incumbent_party_inafed = lag(incumbent_party_inafed, 1)) %>%
-  mutate(incumbent_candidate_JL = lag(incumbent_candidate_JL, 1)) %>%
   mutate(incumbent_candidate_magar = lag(incumbent_candidate_magar, 1)) %>%
   mutate(runnerup_candidate_magar = lag(runnerup_candidate_magar, 1)) %>%
-  mutate(incumbent_candidate_inafed = lag(incumbent_candidate_inafed, 1)) %>%
   mutate(margin = lag(margin, 1)) %>%
   ungroup()
 
+horacio_db <- horacio_db %>%
+  group_by(uniqueid) %>%
+  arrange(year) %>%
+  mutate(incumbent_party_Horacio = lag(incumbent_party_Horacio, 1)) %>%
+  ungroup()
 
-write_dta(final_merged_data, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/tlaxcala/tlaxcala_merged_IncumbentVote.dta")
+inafed_db <- inafed_db %>%
+  group_by(uniqueid) %>%
+  arrange(year) %>%
+  mutate(incumbent_party_inafed = lag(incumbent_party_inafed , 1)) %>%
+  mutate(incumbent_candidate_inafed  = lag(incumbent_candidate_inafed , 1)) %>%
+  ungroup()
 
+
+vote_db <- read_csv("Processed Data/tlaxcala/tlaxcala_vote.csv")
+
+final_merged_data <- vote_db  %>%
+  left_join(mag_db, by = c("uniqueid","year"))
+final_merged_data <- final_merged_data %>% 
+  left_join(jl_db, by = c("uniqueid","year")) 
+
+final_merged_data <- final_merged_data %>% 
+  left_join(inafed_db, by = c("uniqueid","year")) 
+final_merged_data <- final_merged_data %>% 
+  left_join(horacio_db, by = c("uniqueid","year"))
+
+final_merged_data <- final_merged_data %>% 
+  select(state,mun,uniqueid,section,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_JL,incumbent_candidate_JL,incumbent_party_inafed,incumbent_candidate_inafed,incumbent_party_Horacio,runnerup_party_magar,runnerup_candidate_magar,margin,everything())
+
+
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Processed Data/tlaxcala")
+output_path <- file.path(output_dir, "tlaxcala_merged_IncumbentVote.csv")
+
+# Use write_csv to save the file
+write_csv(final_merged_data, output_path)
+
+# Confirm file saved correctly
+cat("File saved at:", output_path)
 
