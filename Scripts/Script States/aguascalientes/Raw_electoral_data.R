@@ -469,7 +469,7 @@ for (x in 1:11) {
 combined_data <- combined_data %>%
   dplyr::filter(Casillas != "" & Casillas != "TOTAL") %>%
   separate(Casillas, into = c("section"), sep = " ", remove = FALSE) %>%
-  dplyr::mutate(across(everything(), as.numeric, .names = "clean_{col}"))
+  dplyr::mutate(across(everything(), as.numeric))
 
 names(combined_data)
 
