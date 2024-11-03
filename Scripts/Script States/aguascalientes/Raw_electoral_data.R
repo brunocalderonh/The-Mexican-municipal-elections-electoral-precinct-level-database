@@ -9,39 +9,12 @@ if (!require("pacman")) install.packages("pacman")  # load packages
 
 pacman::p_load (dplyr
                 , haven
-                , ggplot2
-                , ggpubr
-                , ggthemes  ## si quieren mas themes
                 , readstata13
                 , readxl
-                , sf
                 , tidyverse
                 , tidyr
-                , units
-                , viridis ## paleta de colores Viridis
-                , wesanderson## p/usar paleta de colores de Wes Anderson
-                , stringr
-                , RColorBrewer
-                , patchwork
-                , Rmisc
-                , lfe
-                , stargazer
-                , AER
-                , haven
-                , skimr
-                , modelsummary
-                , terra
-                , fixest
-                , vtable
-                , did
-                , cowplot
-                , grid
-                , psych
-                , pander
-                , knitr
-                , survey
-                , car
-                , xlsx)
+                , xlsx
+                , data.table)
 
 # Set working directory
 # Get the path of the current script
@@ -520,6 +493,7 @@ Aguascalientes_all <- bind_rows(collapsed_2004,
                                 collapsed_2013,
                                 collapsed_2016,
                                 collapsed_2019)
-summary(Aguascalientes_all)
+
+data.table::fwrite(Aguascalientes_all,"../../../Data/vote data/aguascalientes_vote_all.csv")
 
 
