@@ -494,6 +494,6 @@ Aguascalientes_all <- bind_rows(collapsed_2004,
                                 collapsed_2016,
                                 collapsed_2019)
 
-data.table::fwrite(Aguascalientes_all,"../../../Data/vote data/aguascalientes_vote_all.csv")
+data.table::fwrite(Aguascalientes_all,"../../../Processed Data/aguascalientes/aguascalientes_process_raw_data.csv")
 
 
