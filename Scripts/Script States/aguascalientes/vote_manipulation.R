@@ -15,8 +15,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, "../../../"))
 
 # Now set the path to the CSV file relative to the root of the repository
-db <- read_csv("Data/Processed Data/aguascalientes/aguascalientes_process_vote_data.csv")
-
+db <- read_csv("Processed Data/aguascalientes/aguascalientes_process_raw_data.csv")
 # Perform your data transformations
 db <- db %>%
   select(-matches("^(.*STATE|.*winner_counter|.*winner_|.*mun_|.*_winner.*|.*first.*|.*second.*|.*third.*|.*turnout.*|.*month.*)"))
