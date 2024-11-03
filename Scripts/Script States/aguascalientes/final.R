@@ -17,7 +17,7 @@ setwd(file.path(script_dir, "../../../"))
 
 # Read the Excel files
 db <- read_excel("Data/collapsed database manual cases/aguascalientes_collapsed_edited.xlsx")
-og <- read.csv("Processed Data/aguascalientes/aguascalientes_FINAL_draft.csv")
+og <- read.csv("Processed Data/aguascalientes/aguascalientes_vote_calculator.csv")
 
 # Select the relevant columns from the collapsed database
 db_subset <- db %>%
@@ -358,7 +358,7 @@ merged_data <- merged_data %>%
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/aguascalientes")
-output_path <- file.path(output_dir, "aguascalientes_FINALV.csv")
+output_path <- file.path(output_dir, "aguascalientes_final.csv")
 
 # Use write_csv to save the file
 write_csv(merged_data, output_path)
