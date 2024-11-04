@@ -47,15 +47,14 @@ if(nrow(invalid_turnout) > 0) {
 
 
 #### NA values #####
-
 #1.
 # Columns to include after incumbent_vote
 incumbent_related_columns <- c("party_component", "incumbent_party_magar", "incumbent_party_JL", "incumbent_party_Horacio", "incumbent_party_inafed")
 
-# Filter rows with NA in incumbent_vote
+# Filter rows with NA in incumbent_vote, excluding other _vote columns
 na_incumbent_vote <- db %>%
   filter(is.na(incumbent_vote)) %>%
-  select(incumbent_vote, all_of(incumbent_related_columns), everything())
+  select(incumbent_vote, all_of(incumbent_related_columns), -matches("_vote$"), everything())
 
 print("Rows with NA in 'incumbent_vote':")
 print(na_incumbent_vote)
@@ -63,62 +62,68 @@ print(na_incumbent_vote)
 
 #2. 
 # Columns to include after state_incumbent_vote
-state_incumbent_related_columns <- c("state_incumbent_vote_party_component", "state_incumbent_party")
+state_incumbent_related_columns <- c("state_year", "state_incumbent_vote_party_component", "state_incumbent_party")
 
-# Filter rows with NA in state_incumbent_vote
+# Filter rows with NA in state_incumbent_vote, excluding other _vote columns
 na_state_incumbent_vote <- db %>%
   filter(is.na(state_incumbent_vote)) %>%
-  select(state_incumbent_vote, all_of(state_incumbent_related_columns), everything())
+  select(state_incumbent_vote, all_of(state_incumbent_related_columns), -matches("_vote$"), everything())
 
 print("Rows with NA in 'state_incumbent_vote':")
 print(na_state_incumbent_vote)
+
+
+state_validation <- db %>% 
+  select(uniqueid,year,section,state_year, state_incumbent_vote, state_incumbent_vote_party_component, state_incumbent_party,)
 
 
 #3. 
 # Column to include after PRI_vote
 pri_related_column <- "PRI_vote_party_component"
 
-# Filter rows with NA in PRI_vote
+# Filter rows with NA in PRI_vote, excluding other _vote columns
 na_PRI_vote <- db %>%
   filter(is.na(PRI_vote)) %>%
-  select(PRI_vote, pri_related_column, everything())
+  select(PRI_vote, pri_related_column, -matches("_vote$"), everything())
 
 print("Rows with NA in 'PRI_vote':")
 print(na_PRI_vote)
+
 
 #4.
 # Column to include after PRD_vote
 prd_related_column <- "PRD_vote_party_component"
 
-# Filter rows with NA in PRD_vote
+# Filter rows with NA in PRD_vote, excluding other _vote columns
 na_PRD_vote <- db %>%
   filter(is.na(PRD_vote)) %>%
-  select(PRD_vote, prd_related_column, everything())
+  select(PRD_vote, prd_related_column, -matches("_vote$"), everything())
 
 print("Rows with NA in 'PRD_vote':")
 print(na_PRD_vote)
+
 
 #5.
 # Column to include after PAN_vote
 pan_related_column <- "PAN_vote_party_component"
 
-
-# Filter rows with NA in PAN_vote
+# Filter rows with NA in PAN_vote, excluding other _vote columns
 na_PAN_vote <- db %>%
   filter(is.na(PAN_vote)) %>%
-  select(PAN_vote, pan_related_column, everything())
+  select(PAN_vote, pan_related_column, -matches("_vote$"), everything())
 
 print("Rows with NA in 'PAN_vote':")
 print(na_PAN_vote)
+
 
 #6.
 # Column to include after MORENA_vote
 morena_related_column <- "MORENA_vote_party_component"
 
-# Filter rows with NA in MORENA_vote
+# Filter rows with NA in MORENA_vote, excluding other _vote columns
 na_MORENA_vote <- db %>%
   filter(is.na(MORENA_vote)) %>%
-  select(MORENA_vote, morena_related_column, everything())
+  select(MORENA_vote, morena_related_column, -matches("_vote$"), everything())
 
 print("Rows with NA in 'MORENA_vote':")
 print(na_MORENA_vote)
@@ -129,14 +134,13 @@ print(na_MORENA_vote)
 # Columns to include after runnerup_vote
 runnerup_related_columns <- c("runnerup_party_magar", "runnerup_party_component")
 
-# Filter rows with NA in runnerup_vote
+# Filter rows with NA in runnerup_vote, excluding other _vote columns
 na_runnerup_vote <- db %>%
   filter(is.na(runnerup_vote)) %>%
-  select(runnerup_vote, all_of(runnerup_related_columns), everything())
+  select(runnerup_vote, all_of(runnerup_related_columns), -matches("_vote$"), everything())
 
 print("Rows with NA in 'runnerup_vote':")
 print(na_runnerup_vote)
-
 #### Coalitions ####
 coalition_parties <- list(
   PRI_PT_PVEM = c("PRI", "PT", "PVEM"),
