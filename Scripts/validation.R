@@ -102,6 +102,7 @@ print(na_PRD_vote)
 # Column to include after PAN_vote
 pan_related_column <- "PAN_vote_party_component"
 
+
 # Filter rows with NA in PAN_vote
 na_PAN_vote <- db %>%
   filter(is.na(PAN_vote)) %>%
@@ -135,3 +136,61 @@ na_runnerup_vote <- db %>%
 
 print("Rows with NA in 'runnerup_vote':")
 print(na_runnerup_vote)
+
+#### Coalitions ####
+coalition_parties <- list(
+  PRI_PT_PVEM = c("PRI", "PT", "PVEM"),
+  PRI_PVEM = c("PRI", "PVEM"),
+  PAN_PANAL = c("PAN", "PANAL"),
+  PRI_PVEM_PANAL = c("PRI", "PVEM", "PANAL"),
+  PRD_PC = c("PRD", "PC"),
+  PAN_PRD = c("PAN", "PRD"),
+  PRI_PT_PANAL = c("PRI", "PT", "PANAL")
+)
+
+#### Validations Coalitions ####
+validate_coalitions <- function(data, coalition_name, individual_parties) {
+  issue_rows <- data %>%
+    group_by(year, section) %>%
+    filter(!is.na(!!sym(coalition_name)) & !!sym(coalition_name) != 0) %>%
+    filter(rowSums(across(all_of(individual_parties), ~ . != 0)) > 0) %>%
+    ungroup()
+  
+  if (nrow(issue_rows) > 0) {
+    cat(paste("Validation issue: Coalition", coalition_name, "has non-zero values, but individual party columns are not zero in the same year and section.\n"))
+    print(issue_rows)
+  } else {
+    cat(paste("Validation passed for coalition:", coalition_name, "\n"))
+  }
+}
+# Apply validation function for each coalition
+for (coalition in names(coalition_parties)) {
+  validate_coalitions(db, coalition, coalition_parties[[coalition]])
+}
+
+# 1. Check consistency in the number of unique precincts across years
+precinct_counts <- db %>%
+  group_by(year) %>%
+  summarize(unique_sections = n_distinct(section)) %>%
+  ungroup()
+
+# Find years with inconsistent precinct counts
+expected_precincts <- mode(precinct_counts$unique_sections) # Mode gives the most frequent count
+
+inconsistent_precincts <- precinct_counts %>%
+  filter(unique_sections != expected_precincts)
+
+inconsistent_precincts
+
+
+# 1. Check consistency in the number of unique municipalities across years
+municipality_counts <- db %>%
+  group_by(year) %>%
+  summarize(unique_municipalities = n_distinct(uniqueid)) %>%
+  ungroup()
+
+municipality_counts
+
+
+
+
