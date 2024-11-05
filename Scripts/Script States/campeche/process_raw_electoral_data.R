@@ -543,7 +543,7 @@ rm(data_2018)
 
 
 # Combine the dataframes, handling different columns by filling with NA
-Campeche_all <- bind_rows(collapsed_1997,
+campeche_all <- bind_rows(collapsed_1997,
                           collapsed_2000,
                           collapsed_2003,
                           collapsed_2006,
@@ -551,7 +551,6 @@ Campeche_all <- bind_rows(collapsed_1997,
                           collapsed_2012,
                           collapsed_2015,
                           collapsed_2018)
-summary(Campeche_all)
 
 data.table::fwrite(campeche_all,"../../../Processed Data/campeche/campeche_process_raw_data.csv")
 

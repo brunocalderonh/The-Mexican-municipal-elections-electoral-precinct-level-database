@@ -357,9 +357,7 @@ merged_data <- merged_data %>%
          incumbent_party_Horacio,
          incumbent_party_inafed,
          incumbent_candidate_inafed,
-         state_year,
          state_incumbent_party,
-         state_incumbent_candidate,
          state_incumbent_vote,
          state_incumbent_vote_party_component,
          PRI_vote,
@@ -378,8 +376,7 @@ merged_data <- merged_data %>%
          listanominal,
          valid,
          total,
-         everything()) %>% 
-  select(-X) 
+         everything()) 
 
          
 

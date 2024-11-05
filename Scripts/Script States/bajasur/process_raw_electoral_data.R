@@ -415,7 +415,7 @@ rm(ln_data_2018)
 summary(collapsed_2018)
 
 # Combine all processed years into one dataset
-Baja_California_Sur_ALL <- bind_rows(collapsed_1999, 
+bajasur_all <- bind_rows(collapsed_1999, 
                                      collapsed_2002, 
                                      collapsed_2005, 
                                      collapsed_2008, 
@@ -423,7 +423,7 @@ Baja_California_Sur_ALL <- bind_rows(collapsed_1999,
                                      collapsed_2015, 
                                      collapsed_2018)
 
-summary(Baja_California_Sur_ALL)
+
 
 data.table::fwrite(bajasur_all,"../../../Processed Data/bajasur/bajasur_process_raw_data.csv")
 

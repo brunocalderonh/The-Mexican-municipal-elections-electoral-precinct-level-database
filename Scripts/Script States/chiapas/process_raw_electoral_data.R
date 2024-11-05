@@ -1940,7 +1940,7 @@ collapsed_2018 <- collapsed_2018 %>%
 
 
 # Combine the dataframes, handling different columns by filling with NA
-CHIAPAS_all <- bind_rows(collapsed_1995,
+chiapas_all <- bind_rows(collapsed_1995,
                          collapsed_1998,
                          collapsed_2001,
                          collapsed_2004,
@@ -1949,7 +1949,7 @@ CHIAPAS_all <- bind_rows(collapsed_1995,
                          collapsed_2012,
                          collapsed_2015,
                          collapsed_2018)
-summary(CHIAPAS_all)
+
 
 data.table::fwrite(chiapas_all,"../../../Processed Data/chiapas/chiapas_process_raw_data.csv")
 

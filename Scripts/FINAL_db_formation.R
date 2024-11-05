@@ -10,11 +10,12 @@ library(rstudioapi)
 # Get the path of the current script
 script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
-setwd(file.path(script_dir, "/Script States"))
-
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, "../"))
 
 # Define the base path relative to the current working directory
-base_path <- file.path(getwd())
+base_path <- file.path(getwd(), "Processed Data")
 
 # Define the state names
 states <- c("aguascalientes", "baja", "bajasur", "campeche", "chiapas", "chihuahua", 
@@ -30,7 +31,7 @@ df_list <- list()
 # Loop through each state, read the data, and append the relevant variables
 for (state in states) {
   # Construct the file path with the correct naming convention
-  file_path <- paste0(base_path, state, "/", state, "_FINALV.csv")
+  file_path <- paste0(base_path, "/", state, "/", state, "_final.csv")
   
   # Check if the file exists before attempting to read it
   if (file.exists(file_path)) {

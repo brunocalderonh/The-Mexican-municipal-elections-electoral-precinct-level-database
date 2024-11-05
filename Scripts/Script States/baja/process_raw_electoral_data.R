@@ -567,7 +567,7 @@ final_data <- bind_rows(
   collapsed_2019
 )
 
-data.table::fwrite(Aguascalientes_all,"../../../Processed Data/baja/baja_process_raw_data.csv")
+data.table::fwrite(final_data,"../../../Processed Data/baja/baja_process_raw_data.csv")
 
 
 
