@@ -238,9 +238,8 @@ final_df <- final_df %>%
          total) 
 
 # Set the path to save the CSV file relative to the repository's root
-setwd(file.path(script_dir, "../"))
-output_dir <- file.path(getwd(), "Processed Data/FINAL")
-output_path <- file.path(output_dir, "/all_states_final.csv")
+output_dir <- file.path(getwd(), "Final Data")
+output_path <- file.path(output_dir, "all_states_final.csv")
 
 # Use write_csv to save the file
 write_csv(final_df, output_path)
