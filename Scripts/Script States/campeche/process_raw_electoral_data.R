@@ -9,39 +9,12 @@ if (!require("pacman")) install.packages("pacman")  # load packages
 
 pacman::p_load (dplyr
                 , haven
-                , ggplot2
-                , ggpubr
-                , ggthemes  ## si quieren mas themes
                 , readstata13
                 , readxl
-                , sf
                 , tidyverse
                 , tidyr
-                , units
-                , viridis ## paleta de colores Viridis
-                , wesanderson## p/usar paleta de colores de Wes Anderson
-                , stringr
-                , RColorBrewer
-                , patchwork
-                , Rmisc
-                , lfe
-                , stargazer
-                , AER
-                , haven
-                , skimr
-                , modelsummary
-                , terra
-                , fixest
-                , vtable
-                , did
-                , cowplot
-                , grid
-                , psych
-                , pander
-                , knitr
-                , survey
-                , car
-                , xlsx)
+                , openxlsx
+                , data.table)
 
 # Set working directory
 # Get the path of the current script
@@ -579,3 +552,6 @@ Campeche_all <- bind_rows(collapsed_1997,
                           collapsed_2015,
                           collapsed_2018)
 summary(Campeche_all)
+
+data.table::fwrite(campeche_all,"../../../Processed Data/campeche/campeche_process_raw_data.csv")
+

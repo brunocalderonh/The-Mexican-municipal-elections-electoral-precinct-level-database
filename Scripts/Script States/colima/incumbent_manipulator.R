@@ -242,7 +242,7 @@ inafed_db <- inafed_db %>%
   mutate(incumbent_candidate_inafed  = lag(incumbent_candidate_inafed , 1)) %>%
   ungroup()
 
-vote_db <- read_csv("Processed Data/colima/colima_vote.csv")
+vote_db <- read_csv("Processed Data/colima/colima_vote_manipulation.csv")
 
 
 final_merged_data <- vote_db  %>%
@@ -264,7 +264,7 @@ validation <- final_merged_data %>%
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/colima")
-output_path <- file.path(output_dir, "colima_merged_IncumbentVote.csv")
+output_path <- file.path(output_dir, "colima_incumbent_manipulator.csv")
 
 # Use write_csv to save the file
 write_csv(final_merged_data, output_path)

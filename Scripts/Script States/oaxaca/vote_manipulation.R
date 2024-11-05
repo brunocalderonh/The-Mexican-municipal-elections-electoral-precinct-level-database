@@ -14,7 +14,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, "../../../"))
 
 # Now set the path to the CSV file relative to the root of the repository
-db <- read_csv("Data/vote data/oaxaca_vote_all.csv")
+db <- read_csv("Processed Data/oaxaca/oaxaca_process_raw_data.csv")
 
 
 
@@ -38,10 +38,9 @@ db <- db %>%
 db <- db %>%
   anti_join(extra_correction, by = c("section","mun","year", "uniqueid"))
 
-
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/oaxaca")
-output_path <- file.path(output_dir, "oaxaca_vote.csv")
+output_path <- file.path(output_dir, "oaxaca_vote_manipulation.csv")
 
 # Use write_csv to save the file
 write_csv(db, output_path)

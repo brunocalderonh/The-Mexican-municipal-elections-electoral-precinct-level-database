@@ -106,8 +106,6 @@ write_csv(inafed_db, output_path)
 # Read the CSV file
 jl_db <- read.csv("Data/incumbent data/incumbent JL/incumbent_JL.csv")
 
-# List of valid election years
-valid_election_years <- c(1986, 1989, 1992, 1995, 1998, 2001, 2004, 2007, 2010, 2013, 2016, 2019, 2021, 2024)
 
 # Filter rows where CVE_ENTIDAD == 1, mutate inegi and election_year, and rename PATIDO
 jl_db <- jl_db %>%
@@ -119,13 +117,7 @@ jl_db <- jl_db %>%
   ) %>%
   select(uniqueid, year, PARTIDO, incumbent_candidate_JL, -PRESIDENTE_MUNICIPAL) %>%
   rename(incumbent_party_JL = PARTIDO)
-# Change the values of year 2020 to 2021 and 2018 to 2019
-jl_db <- jl_db %>%
-  mutate(year = case_when(
-    year == 2020 ~ 2021,
-    year == 2018 ~ 2019,
-    TRUE ~ year
-  ))
+
 
 jl_db <- jl_db %>%
   group_by(uniqueid, year) %>%
@@ -154,8 +146,6 @@ unzipped_file <- file.path(temp_dir, "incumbent_Horacio.dta")
 
 # Now read the unzipped .dta file from the temporary directory
 horacio_db <- read_dta(unzipped_file)
-
-#horacio_db <- read_dta("Data/incumbent data/incumbent Horacio/incumbent_Horacio.dta")
 horacio_db <- horacio_db  %>%
   filter(state == 1) 
 # Collapse the data by uniqueid and year, keeping the first occurrence of each combination

@@ -265,7 +265,7 @@ inafed_db <- inafed_db %>%
   mutate(incumbent_candidate_inafed  = lag(incumbent_candidate_inafed , 1)) %>%
   ungroup()
 
-vote_db <- read_csv("Processed Data/veracruz/veracruz_vote.csv")
+vote_db <- read_csv("Processed Data/veracruz/veracruz_vote_manipulation.csv")
 
 final_merged_data <- vote_db  %>%
   left_join(mag_db, by = c("uniqueid","year"))
@@ -283,7 +283,7 @@ final_merged_data <- final_merged_data %>%
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/veracruz")
-output_path <- file.path(output_dir, "veracruz_merged_IncumbentVote.csv")
+output_path <- file.path(output_dir, "veracruz_incumbent_manipulator.csv")
 
 # Use write_csv to save the file
 write_csv(final_merged_data, output_path)

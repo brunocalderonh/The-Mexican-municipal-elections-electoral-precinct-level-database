@@ -154,12 +154,13 @@ write_csv(inafed_db, output_path)
 # Read the CSV file
 jl_db <- read.csv("Data/incumbent data/incumbent JL/incumbent_JL.csv")
 
+# Filter rows where CVE_ENTIDAD == 1, mutate inegi and election_year, and rename PATIDO
 jl_db <- jl_db %>%
   filter(CVE_ENTIDAD == 5) %>%
   mutate(
     uniqueid = CVE_ENTIDAD * 1000 + CVE_MUNICIPIO,
+    year = YEAR,
     incumbent_candidate_JL = PRESIDENTE_MUNICIPAL,
-    year = FIRST_YEAR_PERIOD - 1
   ) %>%
   select(uniqueid, year, PARTIDO, incumbent_candidate_JL, -PRESIDENTE_MUNICIPAL) %>%
   rename(incumbent_party_JL = PARTIDO)
@@ -207,65 +208,60 @@ horacio_db <- horacio_db %>%
   mutate(incumbent_party_Horacio = lead(incumbent_party_Horacio, 1)) %>%
   ungroup()
 
-horacio_db <- horacio_db %>%
-  group_by(uniqueid, year) %>%
-  summarize(incumbent_party_Horacio = first(incumbent_party_Horacio)) %>% 
-  as.data.frame()
-
 # Set the path to save the CSV file relative to the repository's root
-output_dir <- file.path(getwd(), "Processed Data/coahuila/Incumbents")
+output_dir <- file.path(getwd(), "Processed Data/aguascalientes/Incumbents")
 output_path <- file.path(output_dir, "incumbent_horacio.csv")
 
 # Use write_csv to save the file
 write_csv(horacio_db, output_path)
 
-#### MERGE INCUMBENT DATA ####
-
-mag_db <- mag_db %>%
-  mutate(across(c(uniqueid, year), as.numeric))
-
-inafed_db <- inafed_db %>%
-  mutate(across(c(uniqueid, year), as.numeric))
-
-merged_incumbent_data <- mag_db %>%
- left_join(horacio_db, by = c("uniqueid", "year"), suffix = c("_magar","_Horacio" )) %>%
-  left_join(jl_db, by = c("uniqueid", "year"), suffix = c("", "_JL")) %>%
-  left_join(inafed_db, by = c("uniqueid", "year"), suffix = c("", "_inafed"))
-
-
-write_dta(merged_incumbent_data, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/coahuila/Incumbents/incumbent_data_merged.dta")
 
 #### MERGE INTO FINAL DB - INCUMBENT + VOTE ####
-setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/States/coahuila/")
-
-vote_db <- read_csv("Processed Data/coahuila/coahuila_vote.csv")
-
-final_merged_data <- vote_db  %>%
-  left_join(merged_incumbent_data, by = c("uniqueid", "year"))
-
-#shift part values one period foward
-final_merged_data <- final_merged_data %>%
-  group_by(section, uniqueid) %>%
+mag_db <- mag_db %>%
+  group_by(uniqueid) %>%
   arrange(year) %>%
-  mutate(incumbent_party_Horacio = lag(incumbent_party_Horacio, 1)) %>%
-  mutate(incumbent_party_JL = lag(incumbent_party_JL, 1)) %>%
   mutate(incumbent_party_magar = lag(incumbent_party_magar, 1)) %>%
   mutate(runnerup_party_magar = lag(runnerup_party_magar, 1)) %>%
-  mutate(incumbent_party_inafed = lag(incumbent_party_inafed, 1)) %>%
-  mutate(incumbent_candidate_JL = lag(incumbent_candidate_JL, 1)) %>%
   mutate(incumbent_candidate_magar = lag(incumbent_candidate_magar, 1)) %>%
   mutate(runnerup_candidate_magar = lag(runnerup_candidate_magar, 1)) %>%
-  mutate(incumbent_candidate_inafed = lag(incumbent_candidate_inafed, 1)) %>%
   mutate(margin = lag(margin, 1)) %>%
   ungroup()
 
+horacio_db <- horacio_db %>%
+  group_by(uniqueid) %>%
+  arrange(year) %>%
+  mutate(incumbent_party_Horacio = lag(incumbent_party_Horacio, 1)) %>%
+  ungroup()
+
+inafed_db <- inafed_db %>%
+  group_by(uniqueid) %>%
+  arrange(year) %>%
+  mutate(incumbent_party_inafed = lag(incumbent_party_inafed , 1)) %>%
+  mutate(incumbent_candidate_inafed  = lag(incumbent_candidate_inafed , 1)) %>%
+  ungroup()
+
+vote_db <- read_csv("Processed Data/coahuila/coahuila_vote_manipulation.csv")
+
+
+final_merged_data <- vote_db  %>%
+  left_join(mag_db, by = c("uniqueid","year"))
+final_merged_data <- final_merged_data %>% 
+  left_join(jl_db, by = c("uniqueid","year")) 
+
+final_merged_data <- final_merged_data %>% 
+  left_join(inafed_db, by = c("uniqueid","year")) 
+final_merged_data <- final_merged_data %>% 
+  left_join(horacio_db, by = c("uniqueid","year")) 
+
+final_merged_data <- final_merged_data %>% 
+  select(state,mun,uniqueid,section,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_JL,incumbent_candidate_JL,incumbent_party_inafed,incumbent_candidate_inafed,incumbent_party_Horacio,runnerup_party_magar,runnerup_candidate_magar,margin,everything())
+
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/coahuila")
-output_path <- file.path(output_dir, "coahuila_merged_IncumbentVote.csv")
+output_path <- file.path(output_dir, "coahuila_incumbent_manipulator.csv")
 
 # Use write_csv to save the file
 write_csv(final_merged_data, output_path)
 
 # Confirm file saved correctly
 cat("File saved at:", output_path)
-

@@ -13,7 +13,8 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 # Assuming your script is in 'Scripts/Script States/', go two levels up
 setwd(file.path(script_dir, "../../../"))
 
-finaldb <- read_csv("Processed Data/nuevoleon/nuevoleon_merged_IncumbentVote.csv")
+finaldb <- read_csv("Processed Data/nuevoleon/nuevoleon_incumbent_manipulator.csv")
+
 finaldb <- finaldb %>%
   select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
 replace_parties <- function(party_str) {
@@ -270,7 +271,7 @@ finaldb <- finaldb %>%
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/nuevoleon")
-output_path <- file.path(output_dir, "nuevoleon_FINAL_draft.csv")
+output_path <- file.path(output_dir, "nuevoleon_vote_calculator.csv")
 
 # Use write_csv to save the file
 write_csv(finaldb, output_path)
