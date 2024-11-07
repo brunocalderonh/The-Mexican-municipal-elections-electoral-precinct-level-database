@@ -470,12 +470,12 @@ data_2016 <- data_2016 %>%
 collapsed_2016 <- data_2016 %>%
   dplyr::group_by(uniqueid, section) %>%
   dplyr::summarise(across(c(PAN,PRD,PBC,PES,MORENA,PPC,MUNICIPALISTA,
-                            HUMANISTA,PRI_PVEM_PT_PANAL,MOVCIUD,starts_with("ind"), total,nulo), sum, na.rm = TRUE))%>% 
+                            HUMANISTA,PRI_PVEM_PT_PANAL,MC,starts_with("ind"), total,nulo), sum, na.rm = TRUE))%>% 
   dplyr::rename(nulos=nulo)
 # Generate valid votes and apply ranking logic
 collapsed_2016 <- collapsed_2016 %>%
   dplyr::mutate(valid = rowSums(across(c(PAN,PRD,PBC,PES,MORENA,PPC,MUNICIPALISTA,
-                                         HUMANISTA,PRI_PVEM_PT_PANAL,MOVCIUD,starts_with("ind"))),
+                                         HUMANISTA,PRI_PVEM_PT_PANAL,MC,starts_with("ind"))),
                                 na.rm = TRUE))
 
 
