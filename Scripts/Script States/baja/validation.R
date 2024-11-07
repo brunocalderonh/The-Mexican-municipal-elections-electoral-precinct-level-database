@@ -62,7 +62,7 @@ print(na_incumbent_vote)
 
 #2. 
 # Columns to include after state_incumbent_vote
-state_incumbent_related_columns <- c("state_year", "state_incumbent_vote_party_component", "state_incumbent_party")
+state_incumbent_related_columns <- c( "state_incumbent_vote_party_component", "state_incumbent_party")
 
 # Filter rows with NA in state_incumbent_vote, excluding other _vote columns
 na_state_incumbent_vote <- db %>%
@@ -74,7 +74,7 @@ print(na_state_incumbent_vote)
 
 
 state_validation <- db %>% 
-  select(uniqueid,year,section,state_year, state_incumbent_vote, state_incumbent_vote_party_component, state_incumbent_party,)
+  select(uniqueid,year,section, state_incumbent_vote, state_incumbent_vote_party_component, state_incumbent_party,)
 
 
 #3. 
@@ -141,16 +141,32 @@ na_runnerup_vote <- db %>%
 
 print("Rows with NA in 'runnerup_vote':")
 print(na_runnerup_vote)
+
 #### Coalitions ####
-coalition_parties <- list(
-  PRI_PT_PVEM = c("PRI", "PT", "PVEM"),
-  PRI_PVEM = c("PRI", "PVEM"),
-  PAN_PANAL = c("PAN", "PANAL"),
-  PRI_PVEM_PANAL = c("PRI", "PVEM", "PANAL"),
-  PRD_PC = c("PRD", "PC"),
-  PAN_PRD = c("PAN", "PRD"),
-  PRI_PT_PANAL = c("PRI", "PT", "PANAL")
-)
+# Dynamic coalition detector
+detect_coalitions <- function(db) {
+  # Filter column names based on the specified rules for coalition variables
+  coalition_vars <- names(db)[
+    grepl("_", names(db)) &                   # Rule 1: Has underscore in the name
+      !grepl("vote|party|runnerup|state|incumbent|mutually_exclusive|Partido_Cardenista", names(db))  # Rules 2-7
+  ]
+  
+  # Create a list of coalitions where each entry is the coalition name and constituent parties
+  coalition_parties <- lapply(coalition_vars, function(coalition) {
+    unlist(strsplit(coalition, "_"))  # Split coalition name by "_" to get constituent parties
+  })
+  
+  # Set coalition variable names as the list names for easy reference
+  names(coalition_parties) <- coalition_vars
+  
+  return(coalition_parties)
+}
+
+# Detect coalitions dynamically from the dataset `db`
+coalition_parties <- detect_coalitions(db)
+
+# Print the detected coalitions
+print(coalition_parties)
 
 #### Validations Coalitions ####
 validate_coalitions <- function(data, coalition_name, individual_parties) {
