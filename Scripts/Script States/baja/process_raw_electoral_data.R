@@ -452,7 +452,7 @@ names(data_2016)
 data_2016 <- data_2016 %>%
   dplyr::mutate(
     PRI_PVEM_PT_PANAL = PRI + PVEM + PT + `NA` + C1 + C2 + C3 + C4 + C5 + C6 + C7 + C8 + C9 + C10 + C11,
-    MOVCIUD = `MOV. CIUD.`,
+    MC = `MOV. CIUD.`,
     listanominal = lista_nominal
   ) %>%
   dplyr::select(-c(PRI, PVEM, PT, `NA`, starts_with("C"),`MOV. CIUD.`,lista_nominal))
@@ -460,7 +460,7 @@ data_2016 <- data_2016 %>%
 # Compute total votes
 data_2016 <- data_2016 %>%
   dplyr::mutate(total = rowSums(across(c(PAN,PRD,PBC,PES,MORENA,PPC,MUNICIPALISTA,
-                                         HUMANISTA,PRI_PVEM_PT_PANAL,MOVCIUD,starts_with("ind"), nulo)), na.rm = TRUE))
+                                         HUMANISTA,PRI_PVEM_PT_PANAL,MC,starts_with("ind"), nulo)), na.rm = TRUE))
 
 # Filter out invalid rows
 data_2016 <- data_2016 %>%
