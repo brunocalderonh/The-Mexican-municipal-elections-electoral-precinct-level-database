@@ -190,8 +190,6 @@ if (length(validation_issues) > 0) {
 }
 
 
-
-
 # 1. Check consistency in the number of unique precincts across years
 precinct_counts <- db %>%
   group_by(year) %>%
@@ -214,6 +212,10 @@ municipality_counts <- db %>%
   ungroup()
 
 municipality_counts
+
+
+
+
 
 
 
