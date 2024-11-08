@@ -2,7 +2,7 @@ rm(list=ls())
 
 library(readr)
 library(stringr)
-library(dplyr)
+library(tidyverse)
 library(writexl)
 library(rstudioapi)
 library(haven)
@@ -15,7 +15,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, "../../../"))
 
 db <- read_csv("Processed Data/baja/baja_final.csv")
-
+coalitions <- read_csv("Processed Data/coalition_dic.csv")
 
 #### duplicate values #####
 # Check for duplicates
@@ -143,49 +143,57 @@ print("Rows with NA in 'runnerup_vote':")
 print(na_runnerup_vote)
 
 #### Coalitions ####
-# Dynamic coalition detector
-detect_coalitions <- function(db) {
-  # Filter column names based on the specified rules for coalition variables
-  coalition_vars <- names(db)[
-    grepl("_", names(db)) &                   # Rule 1: Has underscore in the name
-      !grepl("vote|party|runnerup|state|incumbent|mutually_exclusive|Partido_Cardenista", names(db))  # Rules 2-7
-  ]
-  
-  # Create a list of coalitions where each entry is the coalition name and constituent parties
-  coalition_parties <- lapply(coalition_vars, function(coalition) {
-    unlist(strsplit(coalition, "_"))  # Split coalition name by "_" to get constituent parties
-  })
-  
-  # Set coalition variable names as the list names for easy reference
-  names(coalition_parties) <- coalition_vars
-  
-  return(coalition_parties)
-}
+# Transform coal data to create a list where each coalition name maps to its components
+coalition_parties <- coalitions %>%
+  rowwise() %>%
+  mutate(components = list(na.omit(c(components_1, components_2, components_3, components_4, components_5, components_6, components_7)))) %>%
+  select(coalitions, components) %>%
+  deframe()
 
-# Detect coalitions dynamically from the dataset `db`
-coalition_parties <- detect_coalitions(db)
-
-# Print the detected coalitions
-print(coalition_parties)
-
-#### Validations Coalitions ####
+# Define the validation function
 validate_coalitions <- function(data, coalition_name, individual_parties) {
+  # Check if the coalition column exists in db; silently skip if not found
+  if (!coalition_name %in% colnames(data)) {
+    return(NULL)
+  }
+  
+  # Filter out any individual parties that are not present in the data
+  existing_parties <- individual_parties[individual_parties %in% colnames(data)]
+  
+  # Skip validation if none of the individual party columns exist in the data
+  if (length(existing_parties) == 0) {
+    return(NULL)
+  }
+  
+  # Perform validation
   issue_rows <- data %>%
-    group_by(year, section) %>%
     filter(!is.na(!!sym(coalition_name)) & !!sym(coalition_name) != 0) %>%
-    filter(rowSums(across(all_of(individual_parties), ~ . != 0)) > 0) %>%
-    ungroup()
+    filter(rowSums(across(all_of(existing_parties), ~ . != 0)) > 0)
   
   if (nrow(issue_rows) > 0) {
-    cat(paste("Validation issue: Coalition", coalition_name, "has non-zero values, but individual party columns are not zero in the same year and section.\n"))
-    print(issue_rows)
+    message(paste("Validation issue for coalition:", coalition_name))
+    return(issue_rows %>% select(year, section, coalition_name, all_of(existing_parties)))
   } else {
-    cat(paste("Validation passed for coalition:", coalition_name, "\n"))
+    message(paste("Validation passed for coalition:", coalition_name))
+    return(NULL)
   }
 }
-# Apply validation function for each coalition
+
+# Run the validation for each coalition and collect issues in a list
+validation_issues <- list()
 for (coalition in names(coalition_parties)) {
-  validate_coalitions(db, coalition, coalition_parties[[coalition]])
+  test <- validate_coalitions(db, coalition, coalition_parties[[coalition]])
+  if (!is.null(test)) {
+    validation_issues[[coalition]] <- test
+  }
+}
+
+# Check if there were any issues
+if (length(validation_issues) > 0) {
+  message("Validation completed with issues in some coalitions.")
+  # You can inspect the validation_issues list for details
+} else {
+  message("All coalitions passed validation.")
 }
 
 # 1. Check consistency in the number of unique precincts across years
@@ -210,6 +218,10 @@ municipality_counts <- db %>%
   ungroup()
 
 municipality_counts
+
+
+
+
 
 
 

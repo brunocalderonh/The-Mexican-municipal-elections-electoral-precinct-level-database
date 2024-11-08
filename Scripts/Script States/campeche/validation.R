@@ -15,7 +15,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, "../../../"))
 
 db <- read_csv("Processed Data/campeche/campeche_final.csv")
-
+coalitions <- read_csv("Processed Data/coalition_dic.csv")
 
 #### duplicate values #####
 # Check for duplicates
@@ -62,7 +62,7 @@ print(na_incumbent_vote)
 
 #2. 
 # Columns to include after state_incumbent_vote
-state_incumbent_related_columns <- c("state_year", "state_incumbent_vote_party_component", "state_incumbent_party")
+state_incumbent_related_columns <- c( "state_incumbent_vote_party_component", "state_incumbent_party")
 
 # Filter rows with NA in state_incumbent_vote, excluding other _vote columns
 na_state_incumbent_vote <- db %>%
@@ -74,7 +74,7 @@ print(na_state_incumbent_vote)
 
 
 state_validation <- db %>% 
-  select(uniqueid,year,section,state_year, state_incumbent_vote, state_incumbent_vote_party_component, state_incumbent_party,)
+  select(uniqueid,year,section, state_incumbent_vote, state_incumbent_vote_party_component, state_incumbent_party,)
 
 
 #3. 
@@ -141,36 +141,54 @@ na_runnerup_vote <- db %>%
 
 print("Rows with NA in 'runnerup_vote':")
 print(na_runnerup_vote)
-#### Coalitions ####
-coalition_parties <- list(
-  PRI_PT_PVEM = c("PRI", "PT", "PVEM"),
-  PRI_PVEM = c("PRI", "PVEM"),
-  PAN_PANAL = c("PAN", "PANAL"),
-  PRI_PVEM_PANAL = c("PRI", "PVEM", "PANAL"),
-  PRD_PC = c("PRD", "PC"),
-  PAN_PRD = c("PAN", "PRD"),
-  PRI_PT_PANAL = c("PRI", "PT", "PANAL")
-)
 
-#### Validations Coalitions ####
+#### Coalitions ####
+# Transform the coal data to create a list where each coalition name maps to its components
+coalition_parties <- coalitions %>%
+  rowwise() %>%
+  mutate(components = list(na.omit(c(components_1, components_2, components_3, components_4, components_5, components_6, components_7)))) %>%
+  select(coalitions, components) %>%
+  deframe()
+
+# Define the validation function
 validate_coalitions <- function(data, coalition_name, individual_parties) {
+  # Check if the coalition column exists in db
+  if (!coalition_name %in% colnames(data)) {
+    message(paste("Skipping validation for", coalition_name, "- column not found in db."))
+    return(NULL)
+  }
+  
+  # Filter rows where coalition is non-zero and check individual party columns
   issue_rows <- data %>%
-    group_by(year, section) %>%
     filter(!is.na(!!sym(coalition_name)) & !!sym(coalition_name) != 0) %>%
-    filter(rowSums(across(all_of(individual_parties), ~ . != 0)) > 0) %>%
-    ungroup()
+    filter(rowSums(across(all_of(individual_parties), ~ . != 0)) > 0)
   
   if (nrow(issue_rows) > 0) {
-    cat(paste("Validation issue: Coalition", coalition_name, "has non-zero values, but individual party columns are not zero in the same year and section.\n"))
-    print(issue_rows)
+    message(paste("Validation issue for coalition:", coalition_name))
+    return(issue_rows %>% select(year, section, coalition_name, all_of(individual_parties)))
   } else {
-    cat(paste("Validation passed for coalition:", coalition_name, "\n"))
+    message(paste("Validation passed for coalition:", coalition_name))
+    return(NULL)
   }
 }
-# Apply validation function for each coalition
+
+# Run the validation for each coalition and collect issues in a list
+validation_issues <- list()
 for (coalition in names(coalition_parties)) {
-  validate_coalitions(db, coalition, coalition_parties[[coalition]])
+  test <- validate_coalitions(db, coalition, coalition_parties[[coalition]])
+  if (!is.null(test)) {
+    validation_issues[[coalition]] <- test
+  }
 }
+
+# Check if there were any issues
+if (length(validation_issues) > 0) {
+  message("Validation completed with issues in some coalitions.")
+  # You can inspect the validation_issues list for details
+} else {
+  message("All coalitions passed validation.")
+}
+
 
 # 1. Check consistency in the number of unique precincts across years
 precinct_counts <- db %>%
@@ -194,6 +212,10 @@ municipality_counts <- db %>%
   ungroup()
 
 municipality_counts
+
+
+
+
 
 
 
