@@ -51,15 +51,43 @@ if(nrow(invalid_turnout) > 0) {
 # Columns to include after incumbent_vote
 incumbent_related_columns <- c("party_component", "incumbent_party_magar", "incumbent_party_JL", "incumbent_party_Horacio", "incumbent_party_inafed")
 
-# Filter rows with NA in incumbent_vote, excluding other _vote columns
+# Filter rows with NA in incumbent_vote, excluding other _vote columns, and get distinct values of incumbent_party_magar
 na_incumbent_vote <- db %>%
-  filter(is.na(incumbent_vote)) %>%
-  select(incumbent_vote, all_of(incumbent_related_columns), -matches("_vote$"), everything())
+  filter(is.na(incumbent_vote)) %>% 
+  select(incumbent_vote, all_of(incumbent_related_columns), -matches("_vote$"), everything()) %>%
+  group_by(uniqueid, year) %>%
+  distinct(incumbent_party_magar, .keep_all = TRUE) %>%
+  ungroup()
 
-print("Rows with NA in 'incumbent_vote':")
-print(na_incumbent_vote)
+# Get distinct, non-NA values of incumbent_party_magar from na_incumbent_vote
+distinct_parties <- na_incumbent_vote %>%
+  filter(!is.na(incumbent_party_magar)) %>%
+  distinct(incumbent_party_magar) %>%
+  pull(incumbent_party_magar)
 
+# Function to check if a coalition (string of parties) matches any column in db
+check_match <- function(coalition_string, columns) {
+  # Split the coalition string by "_" and sort the parties
+  coalition_parts <- sort(strsplit(coalition_string, "_")[[1]])
+  
+  # Iterate over columns to find a match
+  for (col in columns) {
+    col_parts <- sort(strsplit(col, "_")[[1]])
+    if (all(coalition_parts %in% col_parts) && all(col_parts %in% coalition_parts)) {
+      return(TRUE)  # Match found
+    }
+  }
+  return(FALSE)  # No match found
+}
 
+# Check each distinct, non-NA incumbent_party_magar value against columns in db
+for (party in distinct_parties) {
+  if (check_match(party, colnames(db))) {
+    message(paste("Match passed for:", party))
+  } else {
+    message(paste("No match found for:", party))
+  }
+}
 #2. 
 # Columns to include after state_incumbent_vote
 state_incumbent_related_columns <- c( "state_incumbent_vote_party_component", "state_incumbent_party")
@@ -72,10 +100,8 @@ na_state_incumbent_vote <- db %>%
 print("Rows with NA in 'state_incumbent_vote':")
 print(na_state_incumbent_vote)
 
-
 state_validation <- db %>% 
   select(uniqueid,year,section, state_incumbent_vote, state_incumbent_vote_party_component, state_incumbent_party,)
-
 
 #3. 
 # Column to include after PRI_vote
@@ -131,7 +157,7 @@ print(na_MORENA_vote)
 
 #7.
 
-# Columns to include after runnerup_vote
+# Define columns to include after runnerup_vote
 runnerup_related_columns <- c("runnerup_party_magar", "runnerup_party_component")
 
 # Filter rows with NA in runnerup_vote, excluding other _vote columns
@@ -139,9 +165,24 @@ na_runnerup_vote <- db %>%
   filter(is.na(runnerup_vote)) %>%
   select(runnerup_vote, all_of(runnerup_related_columns), -matches("_vote$"), everything())
 
+# Get distinct, non-NA values of runnerup_party_magar from na_runnerup_vote
+distinct_runnerup_parties <- na_runnerup_vote %>%
+  filter(!is.na(runnerup_party_magar)) %>%
+  distinct(runnerup_party_magar) %>%
+  pull(runnerup_party_magar)
+
+# Check each distinct, non-NA runnerup_party_magar value against columns in db
+for (party in distinct_runnerup_parties) {
+  if (check_match(party, colnames(db))) {
+    message(paste("Match passed for:", party))
+  } else {
+    message(paste("No match found for:", party))
+  }
+}
+
+# Print result
 print("Rows with NA in 'runnerup_vote':")
 print(na_runnerup_vote)
-
 #### Coalitions ####
 # Transform coal data to create a list where each coalition name maps to its components
 coalition_parties <- coalitions %>%
