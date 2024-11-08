@@ -661,6 +661,19 @@ data_2007 <- read.csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 20
   dplyr::filter(municipality != "" & !is.na(section)) %>%
   dplyr::filter(!is.na(total), total != 0)
 
+# Update PAN_PVEM to include the sum of PAN and PVEM where PAN_PVEM != 0
+data_2007 <- data_2007 %>%
+  mutate(PAN_PVEM = ifelse(PAN_PVEM != 0, PAN_PVEM + PAN + PVEM, PAN_PVEM))
+
+# Set PAN to 0 where PAN_PVEM != 0
+data_2007 <- data_2007 %>%
+  mutate(PAN = ifelse(PAN_PVEM != 0, 0, PAN))
+
+# Set PVEM to 0 where PAN_PVEM != 0
+data_2007 <- data_2007 %>%
+  mutate(PVEM = ifelse(PAN_PVEM != 0, 0, PVEM))
+
+
 collapsed_2007 <-data_2007 %>%
   dplyr::group_by(municipality, section) %>%
   dplyr::summarise(across(c(nulos:total,listanominal), sum, na.rm = TRUE)) %>%
