@@ -1,5 +1,5 @@
 # Basic setup
-rm(list = ls())          # clear all objects in memory
+rm(list = ls())        # clear all objects in memory
 #dev.off()                  # reload graphic device
 cat("\014")                # clear console
 options(max.print = 5000)  # expand display
@@ -374,6 +374,26 @@ data_2018 <- data_2018 %>%
                 total = TOTAL,
                 CI_1 = ind1)
 
+# Add a new column `MORENA_PES` by summing `MORENA`, `PES`, and `MORENA_PES` where municipality is not "LORETO"
+data_2018 <- data_2018 %>%
+  dplyr::mutate(MORENA_PES = ifelse(municipality != "LORETO", MORENA + PES + MORENA_PES, MORENA_PES))
+
+# Set `MORENA` to NA where municipality is not "LORETO"
+data_2018 <- data_2018 %>%
+  dplyr::mutate(MORENA = ifelse(municipality != "LORETO", NA, MORENA))
+
+# Set `PES` to NA where municipality is not "LORETO"
+data_2018 <- data_2018 %>%
+  dplyr::mutate(PES = ifelse(municipality != "LORETO", NA, PES))
+
+# Set `MORENA_PES` to NA where municipality is "LORETO"
+data_2018 <- data_2018 %>%
+  dplyr::mutate(MORENA_PES = ifelse(municipality == "LORETO", NA, MORENA_PES))
+
+# Rename columns: `ind1` to `CI_1`, `PNA` to `PANAL`, and `TOTAL` to `total`
+data_2018 <- data_2018 %>%
+  dplyr::rename(PANAL = PNA)
+
 # Collapse by municipality and section
 collapsed_2018 <- data_2018 %>%
   dplyr::group_by(municipality, section) %>%
@@ -389,8 +409,7 @@ ln_data_2018 <- ln_data_2018 %>%
 
 collapsed_2018 <- collapsed_2018 %>%
   dplyr::left_join(ln_data_2018, by = c("section")) %>% 
-  dplyr::rename(listanominal=lista,
-                PANAL=PNA)
+  dplyr::rename(listanominal=lista)
 
 # Generate uniqueid, turnout, and valid votes
 collapsed_2018 <- collapsed_2018 %>%
@@ -409,6 +428,7 @@ collapsed_2018 <- collapsed_2018 %>%
 collapsed_2018 <- collapsed_2018 %>%
   dplyr::mutate(year = 2018,
                 month = "July")
+
 
 rm(data_2018)
 rm(ln_data_2018)
