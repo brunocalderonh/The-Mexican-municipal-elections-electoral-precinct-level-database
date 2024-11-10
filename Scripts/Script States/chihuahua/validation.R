@@ -20,7 +20,7 @@ coalitions <- read_csv("Processed Data/coalition_dic.csv")
 #### duplicate values #####
 # Check for duplicates
 duplicates <- db %>%
-  group_by(year, section) %>%
+  group_by(year, uniqueid,section) %>%
   filter(n() > 1)
 
 if(nrow(duplicates) > 0) {
