@@ -290,7 +290,6 @@ collapsed_1998 <- collapsed_1998 %>%
 rm(data_1998)
 rm(ln_all_months_years)
 
-table(validation$municipality)
 #####################################
 ### PROCESSING DATA FOR 2001
 #####################################
@@ -1607,7 +1606,7 @@ names(data_2015)
 # Collapse the data by municipality and section, summing the variables
 collapsed_2015 <- data_2015 %>%
   dplyr::rename(nulos = "VOTOS NULOS") %>% 
-  dplyr::group_by(municipality, uniqueid, section) %>%
+  dplyr::group_by(uniqueid, section) %>%
   dplyr::summarise(across(c(PAN:"C I",nulos,total,PRI_PVEM_PANAL_PCU,PRI_PVEM_PANAL,PVEM_PANAL,PT_MC,valid), sum)) %>%
   dplyr::mutate(year = 2015, month = "October") %>% 
   dplyr::rename(CI_1 = "C I")
@@ -1965,8 +1964,6 @@ collapsed_2018 <- collapsed_2018 %>%
                 year = 2018, 
                 month = "August")
 
-
-View(collapsed_2018 %>% dplyr::filter(is.na(uniqueid)))
 # Combine the dataframes, handling different columns by filling with NA
 chiapas_all <- bind_rows(collapsed_1995,
                          collapsed_1998,
@@ -1978,7 +1975,7 @@ chiapas_all <- bind_rows(collapsed_1995,
                          collapsed_2015,
                          collapsed_2018)
 
-table(validation$year,validation$municipality)
-
 data.table::fwrite(chiapas_all,"../../../Processed Data/chiapas/chiapas_process_raw_data.csv")
+
+
 
