@@ -185,7 +185,7 @@ collapsed_1995 <- collapsed_1995 %>%
   dplyr::mutate(year = 1995, month = "October") %>% 
   dplyr::select(-municipality)
 
-names(collapsed_1995)
+summary(collapsed_1995)
 
 #####################################
 ### PROCESSING DATA FOR 1998
@@ -251,7 +251,16 @@ collapsed_1998 <- collapsed_1998 %>%
     municipality == "TRINITARIA, LA" ~ 7099, municipality == "TUMBALA" ~ 7100, municipality == "TUXTLA CHICO" ~ 7102,
     municipality == "TUXTLA GUTIERREZ" ~ 7101, municipality == "TUZANTAN" ~ 7103, municipality == "TZIMOL" ~ 7104,
     municipality == "UNION JUAREZ" ~ 7105, municipality == "VENUSTIANO CARRANZA" ~ 7106, municipality == "VILLACORZO" ~ 7107,
-    municipality == "VILLAFLORES" ~ 7108, municipality == "YAJALON" ~ 7109, municipality == "ZINACANTAN" ~ 7111)) %>%
+    municipality == "VILLAFLORES" ~ 7108, municipality == "YAJALON" ~ 7109, municipality == "ZINACANTAN" ~ 7111,
+    municipality == "CHAMULA" ~ 7023,
+    municipality == "EBLO NVO. SOLISTAHUAC" ~ 7072,
+    municipality == "ESCUINTLA" ~ 7032,
+    municipality == "HUIXTLA" ~ 7040,
+    municipality == "MAPASTEPEC" ~ 7051,
+    municipality == "MOTOZINTLA" ~ 7057,
+    municipality == "PIJIJIAPAN" ~ 7069,
+    municipality == "SILTEPEC" ~ 7080,
+    municipality == "VILLA COMALTITLAN" ~ 7071)) %>%
   dplyr::mutate(valid = sum(c_across(PAN:Alianza_Justa), na.rm = TRUE))
 
 # Load and merge Lista Nominal data
@@ -281,6 +290,7 @@ collapsed_1998 <- collapsed_1998 %>%
 rm(data_1998)
 rm(ln_all_months_years)
 
+table(validation$municipality)
 #####################################
 ### PROCESSING DATA FOR 2001
 #####################################
@@ -333,6 +343,7 @@ data_2001 <- data_2001 %>%
                           rowSums(across(c(PRD , PVEM , COALICION)), na.rm = TRUE), 0)) %>% 
   dplyr::ungroup()
 
+table(data_2001$CVE)
 
 
 collapsed_2001 <- data_2001 %>%
@@ -452,7 +463,14 @@ collapsed_2001 <- data_2001 %>%
     CVE == 108 ~ 7108,
     CVE == 109 ~ 7109,
     CVE == 110 ~ 7110,
-    CVE == 111 ~ 7111)) %>% 
+    CVE == 111 ~ 7111,
+    CVE == 112 ~ 7112,
+    CVE == 113 ~ 7113,
+    CVE == 114 ~ 7114,
+    CVE == 115 ~ 7115,
+    CVE == 116 ~ 7116,
+    CVE == 117 ~ 7117,
+    CVE == 118 ~ 7118)) %>% 
   dplyr::select(-CVE)
 
 collapsed_2001 <- collapsed_2001 %>%
@@ -478,9 +496,6 @@ collapsed_2001 <- collapsed_2001 %>%
 # Add year and month variables
 collapsed_2001 <- collapsed_2001 %>%
   dplyr::mutate(year = 2001, month = "June")
-
-rm(data_2001)
-
 #####################################
 ### PROCESSING DATA FOR 2004
 #####################################
@@ -648,6 +663,7 @@ collapsed_2004 <- collapsed_2004 %>%
       TRUE ~ NA_real_ )) # Default case for municipalities that are not in the list
 
 rm(data_2004)
+
 #####################################
 ### PROCESSING DATA FOR 2007
 #####################################
@@ -860,7 +876,6 @@ collapsed_2007 <- collapsed_2007 %>%
       TRUE ~ NA_real_  # Default case for municipalities that are not in the list
     ))
 
-rm(data_2007)
 #####################################
 ### PROCESSING DATA FOR 2010
 #####################################
@@ -1318,7 +1333,7 @@ collapsed_2012 <- collapsed_2012 %>%
                                          PVEM_POP)), na.rm = TRUE))
 rm(ln_2012)
 rm(data_2012)
-
+View(collapsed_2012 %>% dplyr::filter(is.na(uniqueid)))
 #####################################
 ### PROCESSING DATA FOR 2015
 #####################################
@@ -1588,7 +1603,6 @@ data_2015 <- data_2015 %>%
   dplyr::rename(PANAL = `NA`, 
                 MORENA = MOR)
 names(data_2015)
-
 
 # Collapse the data by municipality and section, summing the variables
 collapsed_2015 <- data_2015 %>%
@@ -1952,6 +1966,7 @@ collapsed_2018 <- collapsed_2018 %>%
                 month = "August")
 
 
+View(collapsed_2018 %>% dplyr::filter(is.na(uniqueid)))
 # Combine the dataframes, handling different columns by filling with NA
 chiapas_all <- bind_rows(collapsed_1995,
                          collapsed_1998,
@@ -1963,6 +1978,7 @@ chiapas_all <- bind_rows(collapsed_1995,
                          collapsed_2015,
                          collapsed_2018)
 
+table(validation$year,validation$municipality)
 
 data.table::fwrite(chiapas_all,"../../../Processed Data/chiapas/chiapas_process_raw_data.csv")
 
