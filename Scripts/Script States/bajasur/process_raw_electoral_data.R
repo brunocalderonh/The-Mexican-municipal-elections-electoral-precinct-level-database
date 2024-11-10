@@ -334,7 +334,7 @@ collapsed_2015 <- data_2015 %>%
   dplyr::group_by(municipality, section) %>%
   dplyr::summarise(across(c(PAN:CI_1, total, nulos), sum, na.rm = TRUE))
 
-collapsed_2015 <- data_2015 %>%
+collapsed_2015 <- collapsed_2015 %>%
   dplyr::left_join(ln_data_2015, by = c("section")) %>% 
   dplyr::rename(listanominal=lista)
 
@@ -443,7 +443,9 @@ bajasur_all <- bind_rows(collapsed_1999,
                                      collapsed_2015, 
                                      collapsed_2018)
 
-
+validation <- bajasur_all %>% 
+  dplyr::group_by(year,uniqueid,section) %>% 
+  dplyr::summarise(Count = n())
 
 data.table::fwrite(bajasur_all,"../../../Processed Data/bajasur/bajasur_process_raw_data.csv")
 
