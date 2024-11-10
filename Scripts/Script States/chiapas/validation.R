@@ -20,7 +20,7 @@ coalitions <- read_csv("Processed Data/coalition_dic.csv")
 #### duplicate values #####
 # Check for duplicates
 duplicates <- db %>%
-  group_by(year, section) %>%
+  group_by(year, uniqueid, section) %>%
   filter(n() > 1)
 
 if(nrow(duplicates) > 0) {
@@ -29,6 +29,7 @@ if(nrow(duplicates) > 0) {
 } else {
   print("No duplicates found.")
 }
+
 
 
 #### turnout values #####
@@ -45,10 +46,9 @@ if(nrow(invalid_turnout) > 0) {
   print("All turnout values are within a reasonable range.")
 }
 
-
 #### NA values #####
-#1.
-# Columns to include after incumbent_vote
+#1. incumebent & runnerup
+# incumbent
 incumbent_related_columns <- c("party_component", "incumbent_party_magar", "incumbent_party_JL", "incumbent_party_Horacio", "incumbent_party_inafed")
 
 # Filter rows with NA in incumbent_vote, excluding other _vote columns, and get distinct values of incumbent_party_magar
@@ -80,14 +80,62 @@ check_match <- function(coalition_string, columns) {
   return(FALSE)  # No match found
 }
 
+# Initialize a flag to track if all parties found a match
+all_matched <- TRUE
+
 # Check each distinct, non-NA incumbent_party_magar value against columns in db
 for (party in distinct_parties) {
   if (check_match(party, colnames(db))) {
     message(paste("Match passed for:", party))
   } else {
     message(paste("No match found for:", party))
+    all_matched <- FALSE  # Set flag to FALSE if a match was not found
   }
 }
+
+# Print final message based on the value of all_matched
+if (all_matched) {
+  message("All found a match")
+} else {
+  message("At least one did not find a match")
+}
+
+#runnerup
+
+# Define columns to include after runnerup_vote
+runnerup_related_columns <- c("runnerup_party_magar", "runnerup_party_component")
+
+# Filter rows with NA in runnerup_vote, excluding other _vote columns
+na_runnerup_vote <- db %>%
+  filter(is.na(runnerup_vote)) %>%
+  select(runnerup_vote, all_of(runnerup_related_columns), -matches("_vote$"), everything())
+
+# Get distinct, non-NA values of runnerup_party_magar from na_runnerup_vote
+distinct_runnerup_parties <- na_runnerup_vote %>%
+  filter(!is.na(runnerup_party_magar)) %>%
+  distinct(runnerup_party_magar) %>%
+  pull(runnerup_party_magar)
+
+# Initialize a flag to track if all parties found a match
+all_matched <- TRUE
+
+# Loop through each party in distinct_runnerup_parties
+for (party in distinct_runnerup_parties) {
+  if (check_match(party, colnames(db))) {
+    message(paste("Match passed for:", party))
+  } else {
+    message(paste("No match found for:", party))
+    all_matched <- FALSE  # Set flag to FALSE if a match was not found
+  }
+}
+
+# Print final message based on the value of all_matched
+if (all_matched) {
+  message("All found a match")
+} else {
+  message("At least one did not find a match")
+}
+
 #2. 
 # Columns to include after state_incumbent_vote
 state_incumbent_related_columns <- c( "state_incumbent_vote_party_component", "state_incumbent_party")
@@ -114,7 +162,6 @@ na_PRI_vote <- db %>%
 
 print("Rows with NA in 'PRI_vote':")
 print(na_PRI_vote)
-
 
 #4.
 # Column to include after PRD_vote
@@ -154,35 +201,6 @@ na_MORENA_vote <- db %>%
 print("Rows with NA in 'MORENA_vote':")
 print(na_MORENA_vote)
 
-
-#7.
-
-# Define columns to include after runnerup_vote
-runnerup_related_columns <- c("runnerup_party_magar", "runnerup_party_component")
-
-# Filter rows with NA in runnerup_vote, excluding other _vote columns
-na_runnerup_vote <- db %>%
-  filter(is.na(runnerup_vote)) %>%
-  select(runnerup_vote, all_of(runnerup_related_columns), -matches("_vote$"), everything())
-
-# Get distinct, non-NA values of runnerup_party_magar from na_runnerup_vote
-distinct_runnerup_parties <- na_runnerup_vote %>%
-  filter(!is.na(runnerup_party_magar)) %>%
-  distinct(runnerup_party_magar) %>%
-  pull(runnerup_party_magar)
-
-# Check each distinct, non-NA runnerup_party_magar value against columns in db
-for (party in distinct_runnerup_parties) {
-  if (check_match(party, colnames(db))) {
-    message(paste("Match passed for:", party))
-  } else {
-    message(paste("No match found for:", party))
-  }
-}
-
-# Print result
-print("Rows with NA in 'runnerup_vote':")
-print(na_runnerup_vote)
 #### Coalitions ####
 # Transform coal data to create a list where each coalition name maps to its components
 coalition_parties <- coalitions %>%
@@ -237,6 +255,8 @@ if (length(validation_issues) > 0) {
   message("All coalitions passed validation.")
 }
 
+validation_issues  <- as.data.frame(validation_issues )
+
 # 1. Check consistency in the number of unique precincts across years
 precinct_counts <- db %>%
   group_by(year) %>%
@@ -251,7 +271,6 @@ inconsistent_precincts <- precinct_counts %>%
 
 inconsistent_precincts
 
-
 # 1. Check consistency in the number of unique municipalities across years
 municipality_counts <- db %>%
   group_by(year) %>%
@@ -259,7 +278,6 @@ municipality_counts <- db %>%
   ungroup()
 
 municipality_counts
-
 
 
 

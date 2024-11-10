@@ -17,10 +17,12 @@ finaldb <- read_csv("Processed Data/campeche/campeche_incumbent_manipulator.csv"
 
 finaldb <- finaldb %>%
   select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
+
 replace_parties <- function(party_str) {
   replacements <- c( "PNA" = "PANAL", 
                     "INDEP" = "CI_1",
-                    "CONVE" = "PC")
+                    "CONVE" = "PC",
+                    "CRC" = "PSN")
   
   for (replacement in names(replacements)) {
     party_str <- str_replace_all(party_str, replacements[replacement], replacement)

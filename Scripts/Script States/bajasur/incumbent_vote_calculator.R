@@ -16,21 +16,20 @@ setwd(file.path(script_dir, "../../../"))
 finaldb <- read_csv("Processed Data/bajasur/bajasur_incumbent_manipulator.csv")
 
 finaldb <- finaldb %>%
-  select(state,mun, section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed,everything())
+  select(state,mun, section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed,everything()) 
 
-
+# Define the functions as provided
 replace_parties1 <- function(party_str) {
   replacements <- c("PNA" = "PANAL",
                     "INDEP" = "CI_1",
                     "CONVE" = "MC")
-
+  
   for (replacement in names(replacements)) {
     party_str <- str_replace_all(party_str, replacements[replacement], replacement)
   }
-
+  
   return(party_str)
 }
-
 
 replace_parties <- function(party_str, year) {
   replacements <- c("PNA" = "PANAL", 
@@ -50,12 +49,26 @@ replace_parties <- function(party_str, year) {
   return(party_str)
 }
 
-# Apply the replacement function to the incumbent_party_magar column
-finaldb <- finaldb %>%
-  mutate(incumbent_party_magar = mapply(replace_parties, incumbent_party_magar, year))
+replace_prd_mc <- function(party_str) {
+  # Punctual replacement: Only replace "PRD_MC" when it is the entire string
+  if (party_str == "PRD_MC") {
+    party_str <- "PRD_PC"
+  }
+  
+  return(party_str)
+}
 
+# Apply the functions to incumbent_party_magar and runnerup_party_magar
 finaldb <- finaldb %>%
-  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties1))
+  mutate(
+    incumbent_party_magar = sapply(incumbent_party_magar, replace_parties1),
+    incumbent_party_magar = mapply(replace_parties, incumbent_party_magar, year),
+    incumbent_party_magar = sapply(incumbent_party_magar, replace_prd_mc),
+    
+    runnerup_party_magar = sapply(runnerup_party_magar, replace_parties1),
+    runnerup_party_magar = mapply(replace_parties, runnerup_party_magar, year),
+    runnerup_party_magar = sapply(runnerup_party_magar, replace_prd_mc)
+  )
 
 assign_incumbent_vote <- function(data) {
   

@@ -16,9 +16,7 @@ setwd(file.path(script_dir, "../../../"))
 # Now set the path to the CSV file relative to the root of the repository
 db <- read_csv("Processed Data/bajasur/bajasur_process_raw_data.csv")
 
-# db <- db %>%
-#   select(uniqueid, section, year, winner, PAN, PRI, PRD_PT, PVEM, MRPS, PPS, PSN, PC,PAS,PRS,PRI_PVEM, PRD_PC,PT,PAN_PVEM, PRI_PMRPS,PRD_PT_PC,PMRPS,PANAL,PAN_PRS,PRD_PT_MC,MORENA,PH,PES,CI_1,PAN_PRD_PH_PRS,MC,BCSC,MORENA_PES)
-# Select and remove unwanted variables
+
 db <- db %>%
   select(-matches("^(coalition|.*incumbent|.*winner_counter|.*STATE|.*.winner_|.*mun_|.*_winner.*|.*first.*|.*second.*|.*third.*|.*turnout.*|.*month.*)"))
 
