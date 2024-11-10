@@ -546,8 +546,6 @@ data_2018_collapsed <- data_2018_collapsed %>%
   dplyr::select(-no_reg)%>% 
   dplyr::mutate(year = 2018, month = "July")
 
-summary(Chihuahua_all)
-
 Chihuahua_all <- bind_rows(
                          data_1998_collapsed,
                          data_2001_collapsed,
