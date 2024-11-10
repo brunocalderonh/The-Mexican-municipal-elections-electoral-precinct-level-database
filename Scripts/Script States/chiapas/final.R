@@ -26,7 +26,8 @@ og <- og %>%
 
 # Select the relevant columns from the collapsed database
 db_subset <- db %>%
-  select(uniqueid, year, PRI_vote, researched_incumbent, source_researched_incumbent)
+  select(uniqueid, year, researched_incumbent, source_researched_incumbent) %>% 
+  filter(!is.na(researched_incumbent))
 
 # Merge the datasets based on uniqueid and year
 merged_data <- og %>%
@@ -472,7 +473,6 @@ merged_data <- merged_data %>%
          valid,
          total,
          everything()) 
-
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/chiapas")

@@ -19,13 +19,19 @@ finaldb <- read_csv("Processed Data/chiapas/chiapas_incumbent_manipulator.csv")
 finaldb <- finaldb %>%
   select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
 replace_parties <- function(party_str) {
-  replacements <- c( "PNA" = "PANAL", 
-                     "PMCH" = "PDCH",
+  replacements <- c( 
+    #PPS no tenemos
+    #PARM no tenemos
+    # FUECIUD 2010
+    #"PMCH" partido mover a chiapas, 2018
+    "PNA" = "PANAL", 
+    "POC" = "POP", #"POC"  Partido Orgullo Chiapas 2015 
                      "PCHU" = "PCU",
-                     "POC" = "POP",
                     "INDEP" = "CI_1",
-                    "CONVE" = "PC")
-  
+                    "CONVE" = "PC",
+                    "JUSTA" = "Alianza_Justa",
+                    "PFCRN" = "PartCardenista")
+
   for (replacement in names(replacements)) {
     party_str <- str_replace_all(party_str, replacements[replacement], replacement)
   }
@@ -33,10 +39,23 @@ replace_parties <- function(party_str) {
   return(party_str)
 }
 
+# replace1 <- function(party_str) {
+#   # Punctual replacement: Only replace "PRD_MC" when it is the entire string
+#   if (party_str == "PRF") {
+#     party_str <- "PartCardenista"
+#   }
+#   
+#   return(party_str)
+# }
+
 # Apply the replacement function to the incumbent_party_magar column
 finaldb <- finaldb %>%
   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
   mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
+  # mutate(incumbent_party_magar = sapply(runnerup_party_magar, replace1))%>%
+  # mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace1))
+
+
 
 assign_incumbent_vote <- function(data) {
   
@@ -387,4 +406,7 @@ write_csv(finaldb, output_path)
 
 # Confirm file saved correctly
 cat("File saved at:", output_path)
+
+
+
 

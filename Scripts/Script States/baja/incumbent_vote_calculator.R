@@ -25,7 +25,8 @@ replace_parties <- function(party_str) {
                     "INDEP2" = "CI_2",
                     "INDEP3" = "CI_3",
                     "INDEP4" = "CI_4",
-                    "TRANS" = "TRA")
+                    "TRANS" = "TRA",
+                    "CONVE" = "PC")
   
   for (replacement in names(replacements)) {
     party_str <- str_replace_all(party_str, replacements[replacement], replacement)
