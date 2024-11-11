@@ -667,6 +667,9 @@ collapsed_2015 <- collapsed_2015 %>%
   ) %>%
   arrange(section)
 
+# Step 5: Clean up temporary files
+file.remove(file_list)
+
 #######################-------------------2018---------------###############################
 
 # Step 1: Load the Excel file
