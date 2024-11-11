@@ -424,7 +424,8 @@ data_2013_collapsed <- data_2013_collapsed %>%
 
 # Add year and month variables
 data_2013_collapsed <- data_2013_collapsed %>%
-  dplyr::mutate(year = 2013, month = ifelse(municipality == "COYAME DEL SOTOL EXTRAORDINARIO", "November", "July"))
+  dplyr::mutate(year = 2013, 
+                month = ifelse(municipality == "COYAME DEL SOTOL EXTRAORDINARIO", "November", "July"))
 
 
 #####################################
