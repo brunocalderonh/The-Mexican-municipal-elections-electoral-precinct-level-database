@@ -64,6 +64,7 @@ mag_db <- mag_db %>%
   rename( margin = mg) %>% 
   rename( year = yr) %>%
   rename(uniqueid = inegi)  %>%
+  mutate(uniqueid = as.numeric(uniqueid)) %>% 
   select(uniqueid, year, incumbent_party_magar, incumbent_candidate_magar, runnerup_party_magar, runnerup_candidate_magar, margin) %>%
   mutate(incumbent_party_magar = toupper(incumbent_party_magar)) %>% 
   mutate(runnerup_party_magar = toupper(runnerup_party_magar))
@@ -138,6 +139,8 @@ inafed_db <- inafed_db %>%
 inafed_db <- inafed_db %>%
   group_by(uniqueid, year) %>%
   summarize(across(everything(), ~first(.), .names = "{.col}")) %>%
+  mutate(uniqueid = as.numeric(uniqueid)) %>% 
+  mutate(year = as.numeric(year)) %>% 
   ungroup()
 
 
@@ -207,6 +210,12 @@ horacio_db <- horacio_db %>%
   arrange(year) %>%
   mutate(incumbent_party_Horacio = lead(incumbent_party_Horacio, 1)) %>%
   ungroup()
+
+horacio_db <- horacio_db %>%
+  group_by(uniqueid, year) %>%
+  summarize(incumbent_party_Horacio = first(incumbent_party_Horacio)) %>% 
+  as.data.frame()
+
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/aguascalientes/Incumbents")

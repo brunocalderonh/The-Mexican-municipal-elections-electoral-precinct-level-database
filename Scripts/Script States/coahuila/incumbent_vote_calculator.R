@@ -18,11 +18,12 @@
   finaldb <- finaldb %>%
     #select(-winner) %>%
     select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())  
-  replace_parties <- function(party_str) {
+  replace_parties1 <- function(party_str) {
     replacements <- c( "PNA" = "PANAL", 
                       "CONVE" = "PC",
                       "PASD" = "PASDC",
-                      "PRI_PSDC" = "PRI_PSD"
+                      "INDEP" = "CI_1",
+                      "PJ1" = "PJ"
                       )
     
     for (replacement in names(replacements)) {
@@ -34,37 +35,42 @@
   
   # Apply the replacement function to the incumbent_party_magar column
   finaldb <- finaldb %>%
-    mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
-    mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
+    mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties1)) %>%
+    mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties1))
   
-  
+
   #SECOND REPLACEMENT
   replace_parties <- function(party_str) {
-  replacements <- c(   "PRI_PVEM_PASDC" = "PRI_PVEM_PSDC",
-                                        "PRI_PASD" = "PRI_PSD",
-                                        "PRI_PANAL_PASDC" = "PRI_PANAL_PSDC",
-                                        "PRI_PVEM_PANAL_PASDC"= "PRI_PVEM_PANAL_PSDC",
-                                        "PRI_PNA_PASDC" = "PRI_PNA_PSDC",
-                                        "PRI_PVEM_PANAL_PASDC"= "PRI_PVEM_PANAL_PSDC",
-                                        "PRI_PVEM_PASDC"  = "PRI_PVEM_PSDC",
-                                        "PRI_PVEM_PANAL_PASDC" = "PRI_PVEM_PANAL_PSDC",
-                                        "PJ1" = "PJ",
-                                        "PRD_UDC"= "PRD_PUDC",
-                                        "PRD_PT_UDC" = "PRD_PT_PUDC")
-  for (replacement in names(replacements)) {
-    party_str <- str_replace_all(party_str, replacements[replacement], replacement)
+    if (!is.na(party_str)) {
+      if (party_str == "PRI_PVEM_PASDC") {
+        party_str <- "PRI_PVEM_PSDC"
+      } else if (party_str == "PRI_PASD") {
+        party_str <- "PRI_PSD"
+      } else if (party_str == "PRI_PANAL_PASDC") {
+        party_str <- "PRI_PANAL_PSDC"
+      } else if (party_str == "PRI_PVEM_PANAL_PASDC") {
+        party_str <- "PRI_PVEM_PANAL_PSDC"
+      } else if (party_str == "PRI_PNA_PASDC") {
+        party_str <- "PRI_PNA_PSDC"
+      } else if (party_str == "PRI_PVEM_PASDC") {
+        party_str <- "PRI_PVEM_PSDC"
+      } else if (party_str == "PRI_PSDC") {
+        party_str <- "PRI_PSD"
+      } else if (party_str == "PRD_UDC") {
+        party_str <- "PRD_PUDC"
+      } else if (party_str == "PRD_PT_UDC") {
+        party_str <- "PRD_PT_PUDC"
+      }else if (party_str == "PRD_UDC_PCC_PL") {
+        party_str <- "PRD_PUDC_PCC_PL"
+      }
+    }
+    return(party_str)
   }
   
-  return(party_str)
-  }
-  
-  # Apply the replacement function to the incumbent_party_magar column
+  # Apply the replacement function to the incumbent_party_magar and runnerup_party_magar columns
   finaldb <- finaldb %>%
     mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
     mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
-  
-  
-    
   
   assign_incumbent_vote <- function(data) {
     
@@ -272,7 +278,7 @@
     
     return(data)
   }
-  
+  finaldb <- check_mutual_exclusivity(finaldb)
   
   finaldb <- finaldb %>%
     select(
