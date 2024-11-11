@@ -27,13 +27,14 @@ og <- og %>%
 
 # Select the relevant columns from the collapsed database
 db_subset <- db %>%
-  select(uniqueid, year, PRI_vote, researched_incumbent, source_researched_incumbent)
+  select(uniqueid, year, PRI_vote, researched_incumbent, source_researched_incumbent) %>% 
+  filter(!is.na(researched_incumbent))
 
 #db_subset <- db_subset[!duplicated(db_subset), ]
 
 # Merge the datasets based on uniqueid and year
 merged_data <- og %>%
-  left_join(db_subset, by = c("uniqueid", "year"))
+  left_join(db_subset, by = c("uniqueid", "year")) 
 
 # Select the relevant columns from the collapsed database
 state_subset <- state %>%

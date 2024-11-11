@@ -17,12 +17,14 @@ finaldb <- read_csv("Processed Data/jalisco/jalisco_incumbent_manipulator.csv")
 
 finaldb <- finaldb %>%
   select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
-
+db$PAS
 replace_parties <- function(party_str) {
   replacements <- c( "PNA" = "PANAL", 
                     "CONVE" = "PC",
                     "PD1" ="PD",
-                    "INDEP" = "CI_1")
+                    "INDEP" = "CI_1",
+                    "PFCRN" = "PartCardenista",
+                    "PASD" = "PAS")
   
   for (replacement in names(replacements)) {
     party_str <- str_replace_all(party_str, replacements[replacement], replacement)

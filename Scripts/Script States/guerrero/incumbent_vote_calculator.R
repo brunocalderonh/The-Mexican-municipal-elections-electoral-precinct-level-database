@@ -22,7 +22,8 @@ replace_parties <- function(party_str) {
                     "CONVE" = "PC",
                     "PD1" ="PD",
                     "INDEP" = "CI_1",
-                    "PASD" = "PAS")
+                    "PASD" = "PAS",
+                    "PFCRN" = "PartCardenista")
   
   for (replacement in names(replacements)) {
     party_str <- str_replace_all(party_str, replacements[replacement], replacement)
@@ -266,7 +267,7 @@ finaldb <- finaldb %>%
     incumbent_candidate_inafed,
     runnerup_party_magar,
     runnerup_candidate_magar,
-    runnerup_vote ,
+    runnerup_vote,
     runnerup_party_component,
     margin,
     listanominal,
