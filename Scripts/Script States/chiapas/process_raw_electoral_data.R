@@ -209,7 +209,7 @@ data_1998 <- data_1998 %>%
 
 # Collapse the data by municipality and section, summing the variables
 collapsed_1998 <- data_1998 %>%
-  dplyr::group_by(municipality, section) %>%
+  dplyr::group_by(municipality, section, month) %>%
   dplyr::summarise(across(c(PAN:JUSTA, nulos, total), sum, na.rm = TRUE))
 
 collapsed_1998 <- collapsed_1998 %>%
@@ -267,7 +267,9 @@ collapsed_1998 <- collapsed_1998 %>%
 ln_all_months_years <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta")
 
 ln_all_months_years <- ln_all_months_years %>%
-  dplyr::filter(month == "June" & year == 1998 & state == "CHIAPAS") %>%
+  dplyr::filter(year == 1998 & 
+                  state == "CHIAPAS" &
+                  month == "December") %>%
   dplyr::select(section, lista)
 
 collapsed_1998 <- collapsed_1998 %>%
@@ -281,15 +283,20 @@ collapsed_1998 <- collapsed_1998 %>%
   dplyr::rowwise() %>%
   dplyr::mutate(valid = sum(c_across(PAN:Alianza_Justa), na.rm = TRUE))
 
+table(collapsed_1998$month)
+
+collapsed_1998 <- collapsed_1998 %>%
+  mutate(municipality = if_else(month == "December", 
+                                paste0(municipality, " EXTRAORDINARIO"), 
+                                municipality))
+
 # Calculate 'turnout'
 collapsed_1998 <- collapsed_1998 %>%
   dplyr::mutate(turnout = total / listanominal,
-                month = "June", 
                 year = 1998)
 
 rm(data_1998)
 rm(ln_all_months_years)
-
 #####################################
 ### PROCESSING DATA FOR 2001
 #####################################
