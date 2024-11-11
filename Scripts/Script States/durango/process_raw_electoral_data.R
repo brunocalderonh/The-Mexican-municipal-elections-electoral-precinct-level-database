@@ -681,9 +681,7 @@ collapsed_2010 <- collapsed_2010 %>%
   arrange(section)
 
 # Step 1: Import and clean the data
-Ayu_Seccion_2013 <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Ayu_Seccion_2013.csv", 
-                             stringsAsFactors = FALSE, 
-                             fileEncoding = "UTF-8")
+Ayu_Seccion_2013 <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Ayu_Seccion_2013.csv")
 
 colnames(Ayu_Seccion_2013) <- tolower(colnames(Ayu_Seccion_2013))
 
@@ -783,7 +781,7 @@ collapsed_2013 <- collapsed_2013 %>%
     month = "July"
   ) %>%
   arrange(section)
-
+summary(collapsed_2013)
 # Step 1: Import and process sheets from the Excel file
 file_path <- "../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Ayuntamientos Municipio_2016.xlsx"
 sheet_names <- excel_sheets(file_path)
