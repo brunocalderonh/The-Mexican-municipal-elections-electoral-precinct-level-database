@@ -280,7 +280,7 @@ municipality_counts <- db %>%
 municipality_counts
 
 
-db$PRD_UDC
+
 
 
 
