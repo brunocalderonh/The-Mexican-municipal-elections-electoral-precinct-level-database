@@ -27,7 +27,8 @@ og <- og %>%
 
 # Select the relevant columns from the collapsed database
 db_subset <- db %>%
-  select(uniqueid, year, PRI_vote, researched_incumbent, source_researched_incumbent)
+  select(uniqueid, year, PRI_vote, researched_incumbent, source_researched_incumbent)%>% 
+  filter(!is.na(researched_incumbent))
 
 #db_subset <- db_subset[!duplicated(db_subset), ]
 
@@ -49,10 +50,6 @@ state_subset <- state %>%
 merged_data <- merged_data %>%
   left_join(state_subset, by = c("stateid", "year")) %>% 
   select(-stateid)
-
-# Merge the datasets based on uniqueid and year
-merged_data <- og %>%
-  left_join(db_subset, by = c("uniqueid", "year"))
 
 assign_votes <- function(data) {
   
@@ -282,8 +279,8 @@ assign_state_incumbent_vote <- function(data) {
   
   return(data)
 }
-
 merged_data <- assign_state_incumbent_vote(merged_data)
+
 
 correct_runnerup_vote <- function(data) {
   
