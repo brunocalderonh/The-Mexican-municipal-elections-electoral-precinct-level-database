@@ -23,7 +23,7 @@ replace_parties <- function(party_str) {
     #PPS no tenemos
     #PARM no tenemos
     # FUECIUD 2010
-    #"PMCH" partido mover a chiapas, 2018
+    "PMCH" = "MVC",
     "PNA" = "PANAL", 
     "POC" = "POP", #"POC"  Partido Orgullo Chiapas 2015 
                      "PCHU" = "PCU",
@@ -39,22 +39,20 @@ replace_parties <- function(party_str) {
   return(party_str)
 }
 
-# replace1 <- function(party_str) {
-#   # Punctual replacement: Only replace "PRD_MC" when it is the entire string
-#   if (party_str == "PRF") {
-#     party_str <- "PartCardenista"
-#   }
-#   
-#   return(party_str)
-# }
-
+replace1 <- function(party_str) {
+  # Check for NA and replace "PRF" or "PFC" with "PartCardenista"
+  if (!is.na(party_str) && (party_str == "PRF" || party_str == "PFC")) {
+    party_str <- "PartCardenista"
+  }
+  return(party_str)
+}
 # Apply the replacement function to the incumbent_party_magar column
+
 finaldb <- finaldb %>%
   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
-  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
-  # mutate(incumbent_party_magar = sapply(runnerup_party_magar, replace1))%>%
-  # mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace1))
-
+  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties)) %>%
+  mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace1)) %>%
+  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace1))
 
 
 assign_incumbent_vote <- function(data) {
