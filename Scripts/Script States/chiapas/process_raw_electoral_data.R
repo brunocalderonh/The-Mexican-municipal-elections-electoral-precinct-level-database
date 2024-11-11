@@ -1608,14 +1608,15 @@ data_2015 <- data_2015 %>%
 data_2015 <- data_2015 %>%
   dplyr::rename(PANAL = `NA`, 
                 MORENA = MOR)
-names(data_2015)
 
 # Collapse the data by municipality and section, summing the variables
 collapsed_2015 <- data_2015 %>%
   dplyr::rename(nulos = "VOTOS NULOS") %>% 
-  dplyr::group_by(uniqueid, section) %>%
+  dplyr::group_by(uniqueid, municipality, section) %>%
   dplyr::summarise(across(c(PAN:"C I",nulos,total,PRI_PVEM_PANAL_PCU,PRI_PVEM_PANAL,PVEM_PANAL,PT_MC,valid), sum)) %>%
-  dplyr::mutate(year = 2015, month = "October") %>% 
+  dplyr::mutate(year = 2015, 
+                month = "July",
+                month = ifelse(municipality=="TAPILULA EXTRAORDINARIO", "December", month)) %>% 
   dplyr::rename(CI_1 = "C I")
 
 # Load and merge Lista Nominal data
@@ -1635,7 +1636,7 @@ collapsed_2015 <- collapsed_2015 %>%
 collapsed_2015 <- collapsed_2015 %>%
   dplyr::mutate(turnout = total / listanominal)
 
-summary(collapsed_2015)
+View(collapsed_2015 %>% dplyr::filter(is.na(turnout)))
 rm(data_2015)
 rm(ln_data_2015)
 
