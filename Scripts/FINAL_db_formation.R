@@ -58,9 +58,7 @@ for (state in states) {
         incumbent_party_Horacio,
         incumbent_party_inafed,
         incumbent_candidate_inafed,
-        state_year,
         state_incumbent_party,
-        state_incumbent_candidate,
         state_incumbent_vote,
         state_incumbent_vote_party_component,
         PRI_vote,
@@ -91,10 +89,8 @@ for (state in states) {
 final_df <- bind_rows(df_list)
 
 ####### Manipulate the previously created database in order to obtain a cleaned final database
-final_df <- final_df %>% 
-  select(-X)
 
-# Define the function to determine final incumbent, excluding certain parties
+
 determine_final_incumbent <- function(researched_incumbent, incumbent_party_magar, incumbent_party_JL,
                                       incumbent_party_Horacio, incumbent_party_inafed) {
   
@@ -119,26 +115,38 @@ determine_final_incumbent <- function(researched_incumbent, incumbent_party_maga
   # Step 2: Create a list of incumbent parties
   incumbents <- c(incumbent_party_magar, incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed)
   
-  # Step 3: Exclude values in the list of excluded parties
+  # Step 3: Check for CI_# patterns first
+  ci_matches <- incumbents[grepl("^CI_\\w+", incumbents)]
+  if (length(ci_matches) > 0) {
+    return(ci_matches[1])  # Return the first match containing "CI_"
+  }
+  
+  # Step 4: Exclude values in the list of excluded parties
   valid_incumbents <- incumbents[!incumbents %in% excluded_parties & incumbents != "" & !is.na(incumbents)]
   
-  # Step 4: Count the occurrences of each unique individual party (not coalitions)
+  # Step 5: Count the occurrences of each unique individual party (not coalitions)
   individual_parties <- valid_incumbents[!grepl("_", valid_incumbents)]
   
   if (length(individual_parties) > 0) {
     party_counts <- table(individual_parties)
-    most_common_party <- names(party_counts)[which.max(party_counts)]
+    max_count <- max(party_counts)
     
-    # Return the most common individual party if one exists
-    if (!is.null(most_common_party)) {
+    # If there's a clear majority, return the most common individual party
+    if (sum(party_counts == max_count) == 1) {
+      most_common_party <- names(party_counts)[which.max(party_counts)]
       return(most_common_party)
     }
   }
   
-  # Step 5: Handle coalitions (values with underscores)
+  # Step 6: If no clear majority, prioritize incumbent_party_magar if it is among valid incumbents
+  if (incumbent_party_magar %in% valid_incumbents) {
+    return(incumbent_party_magar)
+  }
+  
+  # Step 7: Handle coalitions (values with underscores)
   coalitions <- valid_incumbents[grepl("_", valid_incumbents)]
   
-  # Step 6: Check if individual parties from coalitions match any other party
+  # Step 8: Check if individual parties from coalitions match any other party
   if (length(coalitions) > 0) {
     for (coalition in coalitions) {
       # Split the coalition into individual parties
@@ -161,7 +169,6 @@ determine_final_incumbent <- function(researched_incumbent, incumbent_party_maga
 
 
 
-
 # Apply the function to your dataset
 final_df <- final_df %>%
   rowwise() %>%
@@ -174,15 +181,17 @@ final_df <- final_df %>%
 
 final_df <- final_df %>%
   mutate(runnerup_party = runnerup_party_magar) %>% 
-  mutate(runnerup_candidate = runnerup_party_magar)
-
-final_df <- final_df %>%
-  mutate(incumbent_party = case_when(
-    incumbent_party %in% c("PCARDE", "PartCardenista", "PFCRN") ~ "PartCarden",
-    incumbent_party %in% c("PI", "CI_1", "CI", "C.I.", "Independent") ~ "Independent",
-    TRUE ~ incumbent_party
-  )) %>% 
+  mutate(runnerup_candidate = runnerup_party_magar) %>% 
   mutate( incumbent_candidate = incumbent_candidate_magar)
+
+# 
+# final_df <- final_df %>%
+#   mutate(incumbent_party = case_when(
+#     incumbent_party %in% c("PCARDE", "PartCardenista", "PFCRN") ~ "PartCarden",
+#     incumbent_party %in% c("PI", "CI_1", "CI", "C.I.", "Independent") ~ "Independent",
+#     TRUE ~ incumbent_party
+#   )) %>%
+# mutate( incumbent_candidate = incumbent_candidate_magar)
 
 final_df <- final_df %>% 
   mutate(turnout = total/listanominal)

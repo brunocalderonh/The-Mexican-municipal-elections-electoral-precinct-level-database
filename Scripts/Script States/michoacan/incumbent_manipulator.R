@@ -15,7 +15,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, "../../../"))
 
 ####MAGAR's incumbents ####
-mag_db <- read.csv("Data/incumbent data/incumbent magar/aymu.incumbents-ags-jal.csv")
+mag_db <- read.csv("Data/incumbent data/incumbent magar/aymu.incumbents-mex-pue.csv")
 
 mag_db <- mag_db %>%
   filter(edon == 16)
