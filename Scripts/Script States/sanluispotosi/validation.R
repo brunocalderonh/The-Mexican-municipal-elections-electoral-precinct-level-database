@@ -283,9 +283,9 @@ municipality_counts
 # test1 <- db %>%
 #   filter(PAN_PRD_PT_PANAL_PH> 0 & (PAN > 0 | PRD > 0 |PT > 0 |PANAL > 0|PH > 0 ))
 
-test <- db %>%
-  filter(PVEM_PCP > 0 & (PCP > 0 | PVEM > 0 ))
-
-
-
+# test <- db %>%
+#   filter(PVEM_PCP > 0 & (PCP > 0 | PVEM > 0 ))
+# 
+# 
+# 
 

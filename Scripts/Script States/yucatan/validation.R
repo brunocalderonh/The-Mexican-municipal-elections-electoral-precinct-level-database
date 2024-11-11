@@ -283,8 +283,8 @@ municipality_counts
 # test1 <- db %>%
 #   filter(PAN_PRD_PT_PANAL_PH> 0 & (PAN > 0 | PRD > 0 |PT > 0 |PANAL > 0|PH > 0 ))
 
-test <- db %>%
-  filter(PT_MORENA > 0 & (PT > 0 | MORENA > 0 ))
+# test <- db %>%
+#   filter(PT_MORENA > 0 & (PT > 0 | MORENA > 0 ))
 
 # 
 
