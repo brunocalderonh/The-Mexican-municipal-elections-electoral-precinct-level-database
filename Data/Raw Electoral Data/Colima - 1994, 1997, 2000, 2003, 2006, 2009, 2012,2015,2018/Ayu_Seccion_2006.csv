@@ -1,0 +1,751 @@
+id_entidad_electoral,fecha_jornada,id_cargo,nombre_cargo,id_estado,id_distrito,id_casilla,tipo_casilla,descripcion,ext_contigua,cabecera,clave_circunscripcion,id_municipio,nombre_municipio,lista nominal,estatus_casilla,descripcion,resultados_obtenidos,tipo_urna,descripcion,seccion,PAN,PRI-PVEM,PRD-ADC,PT-PC,Coalicion,NULOS,TOTAL
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,IXTLAHUACAN,,6,IXTLAHUACAN,471,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,192,13,134,18,164,0,15,344
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,IXTLAHUACAN,,6,IXTLAHUACAN,473,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,199,11,168,21,60,0,16,276
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,581,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,208,155,166,15,4,1,3,344
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,739,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,210,172,188,13,9,2,8,392
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,583,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,211,130,143,25,7,2,6,313
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,387,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,218,117,100,15,13,1,4,250
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,528,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,225,134,124,9,1,0,19,287
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,150,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,231,59,35,4,0,0,4,102
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,612,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,232,186,181,13,8,2,10,400
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,512,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,235,115,117,22,0,2,12,268
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,594,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,170,77,146,135,0,0,9,367
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,425,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,172,35,123,82,0,0,7,247
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,455,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,179,48,99,85,0,0,7,239
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,421,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,180,76,97,49,0,0,0,222
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,590,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,182,32,124,58,0,0,0,214
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,590,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,182,37,101,74,0,0,8,220
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,408,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,183,71,62,55,0,0,9,197
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,662,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,1,257,192,49,8,6,0,512
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COLIMA,,2,COLIMA,663,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,1,270,163,40,3,7,4,487
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,COLIMA,,2,COLIMA,663,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,1,266,177,43,3,8,5,502
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,468,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,7,155,129,19,10,10,5,328
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,511,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,9,190,162,21,1,4,7,385
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,610,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,13,302,135,27,2,0,3,469
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,577,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,19,178,199,40,5,0,2,424
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,440,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,22,127,103,22,11,3,4,270
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,579,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,31,209,157,22,3,0,6,397
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,579,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,31,174,195,18,5,2,5,399
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COLIMA,,2,COLIMA,528,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,33,170,172,29,6,0,3,380
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,659,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,35,190,190,41,9,2,9,441
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MINATITLAN,,8,MINATITLAN,130,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,274,20,49,2,4,0,3,78
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,517,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,84,56,226,11,3,0,20,316
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,MANZANILLO,,7,MANZANILLO,739,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,236,189,175,34,2,4,14,418
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,700,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,237,175,151,23,3,1,9,362
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,466,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,239,120,131,17,4,2,1,275
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,508,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,243,110,156,24,2,0,7,299
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,626,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,245,181,137,16,5,1,5,345
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,621,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,246,210,148,16,0,2,3,379
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,250,195,185,38,11,5,4,438
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,MANZANILLO,,7,MANZANILLO,651,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,251,176,206,29,8,4,6,429
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,367,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,255,114,91,23,3,4,1,236
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,505,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,261,141,114,28,4,1,8,296
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,611,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,267,175,137,22,5,1,6,346
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,412,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,89,60,133,6,3,0,6,208
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COMALA,,3,COMALA,532,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,92,179,140,28,35,0,3,385
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COMALA,,3,COMALA,541,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,100,184,133,24,3,0,8,352
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COMALA,,3,COMALA,59,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,101,27,19,5,0,0,2,53
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,742,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,107,175,216,28,37,0,12,468
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COQUIMATLAN,,4,COQUIMATLAN,527,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,111,115,176,14,24,0,5,334
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,411,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,119,33,149,13,20,0,8,223
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,491,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,121,44,57,23,180,2,27,333
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,502,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,122,70,84,23,122,2,11,312
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,556,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,130,85,115,27,120,3,7,357
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,638,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,277,120,174,23,6,0,13,336
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,646,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,279,137,164,36,4,0,10,351
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,535,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,281,145,171,15,3,0,8,342
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,535,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,281,176,147,16,2,0,3,344
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,670,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,283,169,154,22,4,0,10,359
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,457,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,284,119,104,19,3,0,3,248
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,458,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,296,82,152,25,8,0,6,273
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,455,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,300,111,166,15,1,0,5,298
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,733,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,312,150,194,40,9,0,7,400
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,546,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,314,142,148,15,4,0,7,316
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,695,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,321,147,193,51,5,0,6,402
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,536,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,324,132,159,21,1,0,8,321
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,205,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,331,37,61,4,1,0,7,110
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,648,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,334,138,119,43,6,0,13,319
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,648,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,334,140,125,42,1,0,13,321
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,659,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,138,152,178,29,29,0,12,400
+6,2/7/2006,12,Ayuntamientos,6,0,4,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,659,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,138,154,178,35,20,0,12,399
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,626,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,140,188,134,29,55,0,7,413
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,627,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,140,165,160,16,43,0,4,388
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,449,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,141,171,102,22,31,0,0,326
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,743,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,145,190,227,34,45,0,8,504
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,731,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,147,214,155,29,53,0,4,455
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,576,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,148,179,138,20,75,0,4,416
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,627,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,150,167,103,25,45,0,14,354
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,648,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,153,128,106,29,98,0,8,369
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,711,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,155,190,179,18,52,0,8,447
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,545,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,157,150,118,26,63,0,2,359
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,700,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,159,182,187,36,25,0,4,434
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,678,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,161,160,145,45,64,0,2,416
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,679,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,161,182,147,38,71,0,8,446
+6,2/7/2006,12,Ayuntamientos,6,0,5,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,704,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,196,159,58,52,0,4,469
+6,2/7/2006,12,Ayuntamientos,6,0,6,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,704,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,208,169,36,48,0,2,463
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,2,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,727,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,209,175,33,53,0,2,472
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,453,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,135,85,103,44,29,1,7,269
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,466,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,137,72,65,40,88,3,9,277
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,605,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,165,159,164,28,68,0,6,425
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,212,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,169,71,62,5,8,0,3,149
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,656,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,47,215,209,40,4,2,11,481
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,695,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,54,215,191,31,8,3,5,453
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,584,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,65,164,152,34,5,6,6,367
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,628,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,66,185,191,31,10,7,9,433
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,606,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,67,167,203,29,14,3,9,425
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,607,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,67,153,215,28,8,3,5,412
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,591,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,69,196,123,21,11,4,4,359
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,705,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,73,205,197,35,6,3,4,450
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,737,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,74,199,165,36,15,2,19,436
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,499,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,75,146,114,34,4,3,5,306
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,467,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,137,46,66,22,83,1,13,231
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,IXTLAHUACAN,,6,IXTLAHUACAN,554,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,191,38,132,27,176,0,28,401
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,IXTLAHUACAN,,6,IXTLAHUACAN,612,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,195,21,81,64,103,0,26,295
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,728,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,204,209,139,40,8,2,11,409
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,714,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,207,217,220,23,12,0,5,477
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,750,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,209,190,199,21,1,3,9,423
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,678,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,214,219,183,23,6,6,5,442
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,109,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,223,48,19,1,2,1,0,71
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,511,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,230,142,127,21,4,1,7,302
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,511,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,230,130,160,15,6,0,9,320
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,218,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,232,40,75,8,6,0,3,132
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,385,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,233,110,122,12,3,2,4,253
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,667,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,175,93,216,114,0,0,5,428
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COLIMA,,2,COLIMA,574,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,3,185,128,40,3,1,7,364
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,618,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,12,234,189,31,1,6,1,462
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,610,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,13,248,161,28,3,2,2,444
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,552,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,18,175,151,28,4,2,5,365
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,643,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,21,235,184,38,7,3,2,469
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,590,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,23,162,150,20,10,4,13,359
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,534,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,26,141,160,37,7,2,3,350
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,438,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,29,144,122,28,2,4,4,304
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MINATITLAN,,8,MINATITLAN,550,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,271,69,173,19,65,0,11,337
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MINATITLAN,,8,MINATITLAN,472,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,272,80,124,12,51,0,7,274
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MINATITLAN,,8,MINATITLAN,80,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,276,22,42,0,1,0,0,65
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,578,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,79,166,193,30,6,0,5,400
+6,2/7/2006,12,Ayuntamientos,6,0,3,E,Extraordinaria,0,COLIMA,,2,COLIMA,270,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,85,65,84,2,0,1,9,161
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,415,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,86,120,115,17,3,2,10,267
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,746,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,238,169,191,31,5,3,7,406
+6,2/7/2006,12,Ayuntamientos,6,0,4,C,Contigua,0,MANZANILLO,,7,MANZANILLO,746,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,238,192,172,26,4,6,4,404
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,740,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,248,265,172,30,6,4,4,481
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,741,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,248,261,163,26,11,2,5,468
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,717,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,256,121,140,45,5,6,2,319
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,522,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,257,149,141,17,1,4,3,315
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,505,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,261,123,123,29,0,1,10,286
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,724,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,95,236,171,27,19,0,8,461
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COMALA,,3,COMALA,520,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,96,148,145,31,12,0,7,343
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,304,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,97,104,54,16,1,0,5,180
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COQUIMATLAN,,4,COQUIMATLAN,505,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,105,79,200,19,17,0,8,323
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,526,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,111,99,203,10,19,0,7,338
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,419,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,128,65,79,22,93,3,12,274
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,685,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,131,163,128,46,73,2,15,427
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,638,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,277,125,128,44,2,0,6,305
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,643,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,278,135,159,31,6,0,12,343
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,456,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,284,100,101,20,1,0,4,226
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,380,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,285,100,102,10,2,0,9,223
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,463,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,286,119,129,15,4,0,3,270
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,583,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,289,144,149,22,0,0,10,325
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,750,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,291,183,181,28,4,0,9,405
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,467,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,293,102,115,16,3,0,9,245
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,623,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,294,184,200,17,3,0,6,410
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,611,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,298,139,159,13,2,0,9,322
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,394,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,309,97,166,15,1,0,1,280
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,640,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,311,148,146,26,3,0,8,331
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,TECOMAN,,9,TECOMAN,734,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,312,164,192,37,1,0,10,404
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,508,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,315,124,159,11,0,0,9,303
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,511,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,323,102,140,24,5,0,10,281
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,307,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,332,106,47,6,0,0,5,164
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,627,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,140,185,137,33,35,0,7,397
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,478,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,142,119,112,53,19,0,10,313
+6,2/7/2006,12,Ayuntamientos,6,0,4,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,743,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,145,213,213,36,38,0,5,505
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,481,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,146,129,82,26,43,0,4,284
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,642,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,152,148,143,36,47,0,5,379
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,569,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,154,123,84,32,57,0,9,305
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,503,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,156,116,110,24,46,0,5,301
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,504,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,156,123,102,28,43,0,5,301
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,603,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,160,138,112,32,81,0,10,373
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,643,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,133,35,152,24,136,1,18,366
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,501,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,134,66,122,29,55,2,9,283
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,606,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,165,177,143,37,54,0,2,413
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,105,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,167,9,57,2,4,0,5,77
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,519,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,38,149,128,27,3,3,8,318
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,534,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,41,195,151,19,7,5,3,380
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,605,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,43,165,190,25,6,0,7,393
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,498,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,44,105,100,33,12,3,0,253
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,593,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,48,181,179,39,1,9,3,412
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,593,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,48,190,182,23,6,0,1,402
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,573,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,50,156,156,37,6,1,6,362
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,499,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,51,145,141,19,11,1,7,324
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,635,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,52,174,210,32,12,4,9,441
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,559,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,58,179,137,22,6,3,3,350
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COLIMA,,2,COLIMA,676,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,60,175,159,39,10,4,7,394
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,650,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,61,151,164,29,9,2,9,364
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,691,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,62,168,210,25,11,4,8,426
+6,2/7/2006,12,Ayuntamientos,6,0,4,C,Contigua,0,COLIMA,,2,COLIMA,692,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,62,178,193,29,4,1,5,410
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,599,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,63,144,145,32,6,1,6,334
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,584,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,65,177,144,31,7,2,3,364
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,737,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,74,188,174,40,8,3,7,420
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,594,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,77,166,164,26,2,0,3,361
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,IXTLAHUACAN,,6,IXTLAHUACAN,163,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,193,4,45,24,15,0,3,91
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,479,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,200,147,104,13,6,0,1,271
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,713,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,202,220,159,37,10,3,4,433
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,509,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,206,151,121,19,7,0,7,305
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,574,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,217,198,134,10,6,2,7,357
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,387,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,218,117,83,29,5,1,6,241
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,646,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,219,195,174,21,6,0,4,400
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,646,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,219,169,193,20,6,2,6,396
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,228,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,227,94,34,4,0,0,1,133
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,203,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,229,64,38,12,0,1,3,118
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,458,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,230,124,126,8,4,1,3,266
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,230,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,231,32,87,5,1,0,2,127
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,750,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,234,212,225,11,7,5,11,471
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,518,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,174,67,141,91,0,0,9,308
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,651,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,177,84,134,104,0,0,12,334
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,456,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,179,51,109,83,0,0,3,246
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,662,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,1,244,209,45,4,3,4,509
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,698,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,6,282,175,28,7,5,2,499
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,699,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,6,259,217,26,1,6,1,510
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,616,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,8,185,228,42,6,0,3,464
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,585,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,24,144,138,43,4,3,12,344
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,605,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,28,191,170,36,3,2,5,407
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,721,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,32,183,239,32,4,2,7,467
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,527,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,33,176,145,31,7,3,3,365
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,632,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,34,199,243,27,4,4,6,483
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MINATITLAN,,8,MINATITLAN,550,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,271,59,203,19,68,0,9,358
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MINATITLAN,,8,MINATITLAN,248,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,273,13,83,8,31,0,11,146
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,0,MINATITLAN,,8,MINATITLAN,184,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,273,14,89,11,3,0,1,118
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,656,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,80,210,160,39,13,3,2,427
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,519,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,82,100,169,28,8,4,5,314
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COLIMA,,2,COLIMA,275,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,82,42,89,14,1,0,4,150
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COLIMA,,2,COLIMA,155,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,83,31,74,0,1,0,3,109
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COLIMA,,2,COLIMA,175,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,84,36,82,1,0,0,2,121
+6,2/7/2006,12,Ayuntamientos,6,0,5,C,Contigua,0,MANZANILLO,,7,MANZANILLO,746,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,238,222,182,33,2,3,2,444
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,508,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,243,115,156,16,3,3,13,306
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,627,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,245,158,180,26,5,4,10,383
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,694,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,249,206,227,20,5,2,2,462
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,250,214,175,37,10,5,6,447
+6,2/7/2006,12,Ayuntamientos,6,0,7,C,Contigua,0,MANZANILLO,,7,MANZANILLO,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,250,202,198,38,8,5,7,458
+6,2/7/2006,12,Ayuntamientos,6,0,8,C,Contigua,0,MANZANILLO,,7,MANZANILLO,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,250,213,202,30,8,3,4,460
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,651,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,251,201,185,24,7,5,9,431
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,663,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,253,192,162,33,13,3,14,417
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,717,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,256,121,130,52,6,3,2,314
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,745,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,260,206,172,37,3,0,14,432
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,505,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,261,144,120,31,2,1,10,308
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,576,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,264,134,119,13,2,1,5,274
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COMALA,,3,COMALA,259,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,96,70,104,20,4,0,0,198
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COMALA,,3,COMALA,305,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,99,75,87,33,1,0,2,198
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,541,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,100,157,177,11,2,0,14,361
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,669,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,103,105,313,27,5,0,9,459
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COQUIMATLAN,,4,COQUIMATLAN,196,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,112,27,57,4,34,0,1,123
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,263,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,115,53,92,7,7,0,6,165
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,636,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,116,131,165,16,12,0,11,335
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COQUIMATLAN,,4,COQUIMATLAN,104,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,119,11,41,5,7,0,4,68
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,556,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,120,51,106,29,156,1,18,361
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,645,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,123,59,99,24,215,4,17,418
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,620,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,124,56,115,21,204,3,17,416
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,653,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,126,113,151,29,122,6,16,437
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,674,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,132,82,278,10,77,3,14,464
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,704,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,282,184,157,35,4,0,9,389
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,464,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,286,114,138,17,2,0,7,278
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,701,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,290,187,228,17,6,0,4,442
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,701,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,290,217,201,22,4,0,4,448
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,607,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,292,138,167,19,3,0,8,335
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,458,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,296,93,148,17,0,0,7,265
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,526,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,297,113,144,29,10,0,9,305
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,576,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,302,82,249,23,4,0,4,362
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,487,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,303,106,126,12,1,0,14,259
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,514,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,304,109,154,22,5,0,7,297
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,541,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,307,105,153,15,3,0,3,279
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,395,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,309,90,144,10,2,0,5,251
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,573,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,316,112,137,33,3,0,11,296
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,TECOMAN,,9,TECOMAN,574,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,316,117,121,31,6,0,12,287
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,234,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,327,48,61,5,1,0,4,119
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,256,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,333,73,88,3,0,0,3,167
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,553,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,336,70,139,36,,0,12,257
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,658,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,138,135,183,31,28,0,10,387
+6,2/7/2006,12,Ayuntamientos,6,0,5,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,677,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,139,192,183,48,37,0,3,463
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,558,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,144,161,153,40,27,0,1,382
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,558,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,144,181,133,42,26,0,3,385
+6,2/7/2006,12,Ayuntamientos,6,0,5,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,743,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,145,203,209,47,36,0,8,503
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,731,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,147,224,148,31,71,0,6,480
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,643,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,152,150,130,37,45,0,5,367
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,710,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,155,207,195,22,43,0,3,470
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,586,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,162,164,127,36,59,0,3,389
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,480,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,136,121,75,19,66,0,18,299
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,91,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,166,10,43,4,10,0,,67
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,161,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,167,15,85,5,9,0,5,119
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,249,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,167,75,55,7,6,0,6,149
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,662,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,40,170,195,28,11,2,7,413
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,504,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,46,153,171,26,2,1,3,356
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COLIMA,,2,COLIMA,542,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,53,140,174,29,10,3,4,360
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,695,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,54,228,198,45,6,5,2,484
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,737,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,68,223,225,44,1,4,9,506
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,513,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,71,134,137,26,3,3,9,312
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,415,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,72,91,115,26,3,2,3,240
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,435,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,76,92,122,8,1,5,5,233
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,108,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,78,46,30,4,3,0,0,83
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,IXTLAHUACAN,,6,IXTLAHUACAN,554,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,191,39,152,17,189,0,21,418
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,IXTLAHUACAN,,6,IXTLAHUACAN,244,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,197,55,44,3,27,0,5,134
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,644,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,203,185,147,23,11,2,4,372
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,728,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,204,187,163,34,14,2,7,407
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,509,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,206,146,120,14,5,1,5,291
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,667,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,213,192,167,19,16,1,14,409
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,677,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,214,214,171,30,4,3,15,437
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,517,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,216,154,103,16,5,0,13,291
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,176,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,226,82,31,8,2,0,3,126
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,212,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,228,82,48,3,0,0,4,137
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,738,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,236,178,165,43,0,2,7,395
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,662,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,171,121,145,143,0,0,0,409
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,651,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,177,96,155,88,0,0,2,341
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,421,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,180,36,124,61,0,0,13,234
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,557,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,181,50,99,75,0,0,8,232
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,460,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,184,60,113,72,0,0,10,255
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,416,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,185,26,82,98,0,0,6,212
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,599,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,186,26,142,129,0,0,5,302
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,600,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,186,32,126,114,0,0,6,278
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,423,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,17,139,131,26,7,2,1,306
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,577,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,19,191,201,28,5,2,5,432
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,643,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,21,229,198,28,3,5,5,468
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,552,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,25,172,147,25,7,4,2,357
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,461,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,27,121,142,35,3,5,2,308
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,627,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,36,135,161,43,9,3,14,365
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MINATITLAN,,8,MINATITLAN,83,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,272,13,25,0,18,0,2,58
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MINATITLAN,,8,MINATITLAN,242,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,273,17,84,22,10,0,7,140
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,296,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,83,61,93,21,0,2,5,182
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,517,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,84,55,223,26,0,0,16,320
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,476,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,88,96,135,12,1,2,5,251
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,553,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,244,167,159,14,3,2,4,349
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,201,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,247,48,36,5,3,1,2,95
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,MANZANILLO,,7,MANZANILLO,741,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,248,238,179,36,10,2,8,473
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,650,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,251,174,208,21,11,3,9,426
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,658,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,252,203,171,20,9,3,6,412
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,745,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,260,215,186,29,2,1,11,444
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,411,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,263,109,108,9,2,0,6,234
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,576,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,264,130,134,17,3,1,7,292
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,501,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,269,154,154,16,1,2,5,332
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,431,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,90,39,187,11,1,0,12,250
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,351,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,91,47,119,12,1,0,5,184
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,532,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,92,177,129,31,22,0,6,365
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,693,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,93,208,204,38,15,0,3,468
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COMALA,,3,COMALA,716,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,94,210,201,50,15,0,4,480
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,100,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,98,47,17,8,0,0,0,72
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,594,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,101,108,254,7,2,0,14,385
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COMALA,,3,COMALA,595,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,101,119,238,14,0,0,8,379
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,554,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,102,170,104,45,3,0,11,333
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COQUIMATLAN,,4,COQUIMATLAN,544,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,106,99,206,15,24,0,12,356
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,566,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,108,123,194,14,33,0,5,369
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,500,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,109,97,167,19,54,0,4,341
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COQUIMATLAN,,4,COQUIMATLAN,637,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,116,133,159,10,11,0,12,325
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COQUIMATLAN,,4,COQUIMATLAN,97,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,116,23,22,1,2,0,2,50
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,675,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,132,76,281,22,80,1,9,469
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,380,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,285,104,115,9,1,0,1,230
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,711,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,287,170,211,18,5,0,9,413
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,620,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,288,166,213,11,1,0,12,403
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,700,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,290,183,230,14,5,0,3,435
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,440,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,295,129,147,4,3,0,1,284
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,610,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,298,159,155,13,2,0,4,333
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,720,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,305,158,237,15,1,0,10,421
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,733,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,312,140,188,30,7,0,13,378
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,508,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,315,108,147,21,4,0,4,284
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,476,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,319,83,122,46,0,0,9,260
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,536,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,324,88,189,32,0,0,7,316
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,591,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,325,154,149,19,4,0,8,334
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,720,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,335,118,166,59,1,0,14,358
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,676,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,139,187,159,56,47,0,4,453
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,558,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,144,167,141,39,28,0,4,379
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,743,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,145,191,246,32,41,0,5,515
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,576,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,148,160,153,22,68,0,3,406
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,504,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,149,169,105,16,35,0,17,342
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,647,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,153,128,109,19,99,0,12,367
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,396,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,158,112,90,11,30,0,4,247
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,208,159,43,40,0,3,453
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,185,164,37,59,0,4,449
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,1,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,727,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,230,153,26,50,0,2,461
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,CUAUHTEMOC,,5,CUAUHTEMOC,306,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,135,87,112,7,40,1,11,258
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,5,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,727,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,207,172,43,51,0,3,476
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,596,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,164,156,150,40,35,0,4,385
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,531,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,37,111,132,47,6,1,9,306
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,377,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,42,95,139,18,3,0,4,259
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,606,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,43,156,199,29,4,3,2,393
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COLIMA,,2,COLIMA,624,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,45,192,163,29,10,1,8,403
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,657,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,47,241,176,30,11,1,5,464
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,523,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,56,163,170,29,5,3,1,371
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,738,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,68,231,214,35,4,5,9,498
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,671,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,70,236,192,30,4,6,7,475
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,512,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,71,111,138,23,6,2,5,285
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,IXTLAHUACAN,,6,IXTLAHUACAN,168,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,193,4,114,2,17,0,6,143
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,IXTLAHUACAN,,6,IXTLAHUACAN,295,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,194,7,115,15,64,0,12,213
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,IXTLAHUACAN,,6,IXTLAHUACAN,98,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,198,3,28,3,19,0,3,56
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,IXTLAHUACAN,,6,IXTLAHUACAN,91,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,199,0,22,4,33,0,3,62
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,429,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,205,99,132,13,12,2,12,270
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,739,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,210,162,168,7,0,1,6,344
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,582,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,211,153,122,25,7,1,12,320
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,412,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,212,136,111,13,5,2,3,270
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,517,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,216,161,91,13,9,2,3,279
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,564,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,221,167,174,18,6,3,10,378
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,565,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,221,151,188,11,7,0,10,367
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,310,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,222,92,73,4,1,1,6,177
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,579,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,223,121,185,17,1,3,12,339
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,529,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,225,141,104,5,0,1,7,258
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,546,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,226,146,109,6,3,1,12,277
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,313,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,226,89,93,6,1,0,6,195
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,1,MANZANILLO,,7,MANZANILLO,459,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,230,142,101,11,3,3,3,263
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,529,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,233,185,83,30,6,2,9,315
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,750,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,234,238,201,14,2,2,10,467
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,425,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,172,55,94,85,0,0,2,236
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,552,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,178,75,99,115,0,0,4,293
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,407,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,183,72,84,49,0,0,5,210
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,553,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,187,29,105,122,0,0,5,261
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,426,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,4,166,110,21,4,3,1,305
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,653,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,10,174,192,25,5,1,3,400
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,620,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,15,179,187,37,5,2,4,414
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,585,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,24,167,140,34,11,5,9,366
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,COLIMA,,2,COLIMA,586,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,24,168,118,44,8,2,8,348
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,533,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,26,167,145,21,1,0,3,337
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,621,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,30,207,166,31,6,4,2,416
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,722,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,32,165,220,32,8,3,16,444
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,527,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,33,142,190,29,4,3,3,371
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,633,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,34,183,242,42,11,1,2,481
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MINATITLAN,,8,MINATITLAN,590,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,275,90,221,15,52,0,8,386
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,518,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,82,110,129,41,10,11,8,309
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COLIMA,,2,COLIMA,519,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,82,112,150,29,5,2,13,311
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,299,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,85,77,96,9,3,0,2,187
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COLIMA,,2,COLIMA,338,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,87,77,101,20,4,0,10,212
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,738,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,236,185,174,28,6,2,18,413
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,700,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,237,167,155,27,6,0,13,368
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,701,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,237,171,154,33,5,0,16,379
+6,2/7/2006,12,Ayuntamientos,6,0,6,C,Contigua,0,MANZANILLO,,7,MANZANILLO,746,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,238,202,169,34,7,5,4,421
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,442,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,241,113,150,6,3,1,6,279
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,442,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,241,98,150,18,5,0,5,276
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,497,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,242,120,143,14,2,3,1,283
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,508,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,243,100,171,16,3,1,8,299
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,621,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,246,193,159,18,1,4,3,378
+6,2/7/2006,12,Ayuntamientos,6,0,4,C,Contigua,0,MANZANILLO,,7,MANZANILLO,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,250,224,199,31,7,10,2,473
+6,2/7/2006,12,Ayuntamientos,6,0,9,C,Contigua,0,MANZANILLO,,7,MANZANILLO,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,250,190,200,31,21,4,6,452
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,522,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,257,139,150,16,4,2,3,314
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,678,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,258,213,151,19,4,0,8,395
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,477,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,267,106,117,31,0,1,7,262
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,384,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,268,167,82,9,6,2,4,270
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,384,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,268,132,100,30,5,2,1,270
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MINATITLAN,,8,MINATITLAN,604,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,270,138,141,15,68,0,20,382
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,477,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,88,97,111,13,1,0,11,233
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,412,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,89,49,119,11,1,2,7,189
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COMALA,,3,COMALA,724,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,95,236,185,27,25,0,6,479
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,653,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,104,177,241,20,2,0,11,451
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,500,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,110,94,135,8,43,0,6,286
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COQUIMATLAN,,4,COQUIMATLAN,527,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,111,119,214,7,36,0,6,382
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,556,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,120,86,81,17,160,1,16,361
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,644,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,123,75,115,29,183,2,15,419
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,393,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,125,52,117,20,70,0,6,265
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,654,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,126,103,160,29,121,1,16,430
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,480,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,127,72,98,32,123,2,11,338
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,557,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,130,76,149,24,108,0,17,374
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,708,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,280,179,197,45,6,0,8,435
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,708,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,280,139,184,44,12,0,16,395
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,TECOMAN,,9,TECOMAN,708,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,280,164,191,30,4,0,13,402
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,583,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,289,154,155,20,4,0,2,335
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,750,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,291,136,178,50,6,0,12,382
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,750,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,291,173,181,32,3,1,14,404
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,467,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,293,118,117,16,3,0,9,263
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,526,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,297,119,148,18,4,0,7,296
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,584,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,299,131,155,21,3,0,4,314
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,513,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,301,110,198,16,1,0,1,326
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,576,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,302,107,212,25,4,0,10,358
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,515,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,304,111,140,26,6,0,13,296
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,719,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,305,139,232,35,3,0,9,418
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,443,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,306,107,143,13,3,0,13,279
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,455,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,310,123,132,14,5,0,8,282
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,640,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,311,129,198,16,2,0,5,350
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,471,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,317,79,137,23,2,0,5,246
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,488,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,318,56,108,43,2,0,12,221
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,415,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,320,103,111,7,0,1,5,227
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,695,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,321,176,172,70,1,0,8,427
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,476,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,322,113,110,22,0,0,3,248
+6,2/7/2006,12,Ayuntamientos,6,0,4,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,677,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,139,207,158,53,23,0,3,444
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,626,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,140,153,131,28,49,0,6,367
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,742,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,145,199,199,43,37,0,5,483
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,504,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,149,152,100,16,53,0,10,331
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,504,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,149,134,101,31,40,0,11,317
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,193,154,45,52,0,4,448
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,1,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,650,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,194,149,51,32,0,3,429
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,2,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,650,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,184,149,46,47,0,6,432
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,501,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,134,83,127,38,44,0,15,307
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,501,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,134,71,127,45,51,2,16,312
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,595,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,164,185,183,32,35,0,8,443
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,596,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,164,156,157,26,52,0,3,394
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,531,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,37,121,123,55,12,5,3,319
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COLIMA,,2,COLIMA,531,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,37,114,125,44,9,6,11,309
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,616,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,39,156,203,33,3,4,13,412
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,377,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,42,109,119,12,2,1,2,245
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,440,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,49,123,146,13,10,2,2,296
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,573,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,50,149,167,24,8,1,4,353
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,500,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,51,132,139,22,7,2,7,309
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,542,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,53,132,171,28,8,2,6,347
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,661,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,55,127,202,32,9,4,15,389
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,671,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,59,146,170,39,9,7,12,383
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,676,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,60,164,175,35,8,3,7,392
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COLIMA,,2,COLIMA,692,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,62,154,208,32,11,1,11,417
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,599,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,63,160,169,36,8,3,7,383
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,708,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,64,220,145,39,9,5,10,428
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,714,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,202,228,147,47,10,1,8,441
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,508,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,206,156,129,18,7,2,6,318
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,582,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,208,143,129,16,10,3,7,308
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,412,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,212,109,119,6,9,0,4,247
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,519,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,215,114,108,22,14,1,20,279
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,519,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,215,124,130,27,3,0,6,290
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,710,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,220,246,198,19,38,7,2,510
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,245,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,222,43,64,16,1,0,4,128
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,502,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,227,98,144,10,9,1,10,272
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,649,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,228,228,109,20,4,2,12,375
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,512,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,235,125,124,20,0,4,14,287
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,662,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,171,98,171,107,0,0,7,383
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,609,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,173,47,194,120,0,0,6,367
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,609,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,173,76,165,132,0,0,6,379
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,559,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,176,44,150,94,0,0,7,295
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,416,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,185,27,67,62,0,0,7,163
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,554,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,187,32,120,113,0,0,0,265
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,663,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,2,254,199,34,3,2,3,495
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,574,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,3,187,142,39,6,6,5,385
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,468,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,7,147,139,24,8,3,4,325
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,737,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,11,286,237,31,4,5,3,566
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,724,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,16,242,210,43,2,6,1,504
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,552,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,25,189,136,21,8,0,4,358
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,462,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,27,149,109,42,5,3,4,312
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,628,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,36,145,153,30,7,2,9,346
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,554,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,81,148,157,14,7,2,11,339
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COLIMA,,2,COLIMA,554,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,81,162,167,24,10,2,5,370
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COLIMA,,2,COLIMA,195,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,85,57,62,2,0,0,4,125
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,417,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,87,72,130,21,1,0,5,229
+6,2/7/2006,12,Ayuntamientos,6,0,4,C,Contigua,0,MANZANILLO,,7,MANZANILLO,739,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,236,206,148,15,5,2,9,385
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,466,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,239,135,125,18,3,0,9,290
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,250,205,212,24,10,9,10,470
+6,2/7/2006,12,Ayuntamientos,6,0,4,C,Contigua,0,MANZANILLO,,7,MANZANILLO,651,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,251,181,198,30,16,5,3,433
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,664,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,253,199,174,22,8,5,9,417
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,717,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,256,105,146,52,3,3,2,311
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,618,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,262,168,160,22,8,1,5,364
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,618,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,262,145,176,25,3,2,12,363
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,438,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,265,160,106,10,1,1,5,283
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,662,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,266,200,151,15,2,0,6,374
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,505,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,267,109,134,19,2,0,11,275
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COLIMA,,2,COLIMA,176,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,91,36,64,10,0,0,5,115
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COMALA,,3,COMALA,693,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,93,203,207,45,16,0,6,477
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,715,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,94,210,216,58,8,0,14,506
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,519,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,96,160,167,24,11,0,4,366
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COQUIMATLAN,,4,COQUIMATLAN,313,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,105,57,126,14,14,0,3,214
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COQUIMATLAN,,4,COQUIMATLAN,743,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,107,184,227,32,38,0,7,488
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COQUIMATLAN,,4,COQUIMATLAN,501,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,110,89,134,16,58,0,9,306
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,345,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,113,36,150,12,10,0,5,213
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COQUIMATLAN,,4,COQUIMATLAN,397,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,117,76,130,8,7,0,6,227
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COQUIMATLAN,,4,COQUIMATLAN,77,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,118,7,13,4,16,0,2,42
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,503,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,122,78,79,28,114,3,10,312
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,619,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,124,55,116,15,214,4,15,419
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,CUAUHTEMOC,,5,CUAUHTEMOC,447,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,131,72,105,31,56,2,12,278
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,638,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,277,148,147,28,0,0,12,335
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,708,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,280,169,188,44,4,0,8,413
+6,2/7/2006,12,Ayuntamientos,6,0,4,C,Contigua,0,TECOMAN,,9,TECOMAN,709,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,280,145,193,37,6,0,13,394
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,282,180,175,28,8,0,8,399
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,670,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,283,162,176,26,7,0,7,378
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,584,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,299,141,157,16,2,0,6,322
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,456,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,300,117,161,11,2,0,2,293
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,513,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,301,113,191,19,3,0,4,330
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,442,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,306,97,134,13,3,0,8,255
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,637,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,308,158,152,39,0,0,3,352
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,573,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,316,89,147,38,3,0,7,284
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,135,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,330,43,38,2,0,0,3,86
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,553,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,336,90,142,41,4,0,13,290
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,554,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,336,103,129,32,3,0,11,278
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,659,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,138,140,171,35,32,0,16,394
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,676,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,139,199,136,55,48,0,6,444
+6,2/7/2006,12,Ayuntamientos,6,0,6,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,677,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,139,204,166,39,34,0,7,450
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,478,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,142,113,126,44,24,0,4,311
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,562,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,143,129,160,42,39,0,6,376
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,563,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,143,151,148,39,29,0,4,371
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,743,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,145,191,226,35,38,0,6,496
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,480,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,146,122,87,39,35,0,6,289
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,568,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,154,154,83,32,53,0,9,331
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,546,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,157,140,101,20,50,0,11,322
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,395,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,158,122,77,10,35,0,3,247
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,585,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,162,165,151,30,43,0,4,393
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,207,157,36,49,0,4,453
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,397,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,168,84,119,15,5,0,9,232
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,624,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,45,195,169,36,6,4,6,416
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,624,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,45,205,167,23,13,3,3,414
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,636,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,52,196,215,15,14,4,3,447
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,542,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,53,118,192,22,2,3,4,341
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,661,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,55,118,211,30,8,5,14,386
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,671,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,59,167,162,42,6,3,15,395
+6,2/7/2006,12,Ayuntamientos,6,0,4,C,Contigua,0,COLIMA,,2,COLIMA,676,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,60,177,162,34,5,4,4,386
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,592,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,69,179,116,33,5,3,4,340
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,671,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,70,236,207,17,6,3,5,474
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,706,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,73,206,167,33,0,3,5,414
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,498,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,75,119,137,26,7,0,8,297
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,578,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,79,161,165,30,5,0,3,364
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,IXTLAHUACAN,,6,IXTLAHUACAN,471,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,192,14,139,14,165,0,13,345
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,480,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,200,161,92,14,4,1,5,277
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,184,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,201,39,51,4,3,0,2,99
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,429,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,205,125,113,21,18,2,8,287
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,583,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,211,151,132,13,10,1,12,319
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,518,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,216,123,101,23,9,9,9,274
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,574,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,217,180,133,20,7,2,13,355
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,439,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,228,129,130,8,0,0,1,268
+6,2/7/2006,12,Ayuntamientos,6,0,3,E,Extraordinaria,0,MANZANILLO,,7,MANZANILLO,204,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,228,79,53,3,0,0,0,135
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,595,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,170,60,151,121,0,0,6,338
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,519,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,174,89,107,84,0,0,8,288
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,558,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,176,61,130,97,0,0,5,293
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,557,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,181,38,118,64,0,0,3,223
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,648,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,5,243,176,41,3,2,5,470
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,615,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,8,183,227,33,7,2,4,456
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,424,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,17,117,149,19,3,2,4,294
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,571,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,20,211,173,23,1,4,3,415
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,571,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,20,208,189,23,5,0,1,426
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,441,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,22,105,128,36,4,3,6,282
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,591,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,23,162,135,30,12,1,11,351
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COLIMA,,2,COLIMA,586,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,24,168,123,47,8,4,9,359
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MINATITLAN,,8,MINATITLAN,100,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,274,14,40,4,11,0,5,74
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,0,MINATITLAN,,8,MINATITLAN,136,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,274,14,60,1,1,0,2,78
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,MINATITLAN,,8,MINATITLAN,158,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,275,37,37,6,10,0,3,93
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MINATITLAN,,8,MINATITLAN,500,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,276,187,106,1,11,0,10,315
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,553,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,81,148,190,18,6,2,7,371
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,746,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,238,196,182,31,3,1,8,421
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,721,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,240,180,211,18,1,4,16,430
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,552,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,244,151,145,19,4,1,5,325
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,553,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,244,140,159,34,3,2,7,345
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,621,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,246,189,150,18,1,3,5,366
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,741,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,248,237,173,34,7,2,1,454
+6,2/7/2006,12,Ayuntamientos,6,0,5,C,Contigua,0,MANZANILLO,,7,MANZANILLO,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,250,199,200,27,15,5,4,450
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,657,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,252,175,170,24,8,1,3,381
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,641,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,254,193,179,21,2,5,6,406
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,679,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,258,194,200,20,9,1,5,429
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,668,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,259,155,156,30,3,3,12,359
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,668,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,259,170,142,38,3,0,11,364
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,500,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,269,150,137,8,3,1,9,308
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MINATITLAN,,8,MINATITLAN,604,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,270,108,155,13,85,0,17,378
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COMALA,,3,COMALA,533,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,92,178,134,26,28,0,4,370
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COMALA,,3,COMALA,310,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,99,74,102,4,0,0,5,185
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,COMALA,,3,COMALA,156,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,100,77,21,7,0,0,2,107
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COMALA,,3,COMALA,669,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,103,165,250,35,9,0,7,466
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,504,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,105,73,216,8,24,0,9,330
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COQUIMATLAN,,4,COQUIMATLAN,544,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,106,122,169,21,28,0,9,349
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COQUIMATLAN,,4,COQUIMATLAN,500,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,109,108,143,13,54,0,4,322
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,197,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,114,34,50,16,12,0,4,116
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,490,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,121,51,82,26,141,5,11,316
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,491,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,129,70,112,33,90,2,15,322
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,643,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,278,112,154,39,2,0,5,312
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,440,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,295,93,190,17,0,0,2,302
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,527,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,297,115,164,16,2,0,9,306
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,541,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,307,93,157,17,6,0,8,281
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,639,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,311,131,166,15,0,0,11,323
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,565,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,313,154,126,19,2,0,6,307
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,566,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,313,117,168,17,4,0,9,315
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,547,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,314,138,153,10,4,0,5,310
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,573,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,316,97,143,33,6,0,7,286
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,475,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,319,72,127,44,5,0,4,252
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,510,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,328,85,150,46,26,0,12,319
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,563,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,329,86,146,43,3,0,4,282
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,563,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,329,78,153,49,3,0,4,287
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,720,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,335,133,156,58,3,0,9,359
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,676,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,139,177,167,54,33,0,1,432
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,449,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,141,159,100,24,34,0,3,320
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,731,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,147,196,159,23,54,0,9,441
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,643,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,152,144,141,38,70,0,5,398
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,701,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,159,176,173,37,21,0,6,413
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,701,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,159,180,141,29,38,0,6,394
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,3,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,727,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,207,164,38,47,0,1,457
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,4,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,727,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,198,176,40,52,0,8,474
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,177,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,166,34,65,2,9,0,2,112
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,497,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,44,102,119,31,6,3,4,265
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,COLIMA,,2,COLIMA,636,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,52,184,215,25,15,1,7,447
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,460,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,57,111,136,20,6,2,2,277
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,461,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,57,127,114,13,4,1,6,265
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,675,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,60,137,203,40,9,4,8,401
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,COLIMA,,2,COLIMA,676,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,60,174,177,43,4,2,9,409
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,650,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,61,161,186,35,14,5,13,414
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,691,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,62,132,234,27,12,2,10,417
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,414,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,72,112,98,25,4,0,6,245
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,IXTLAHUACAN,,6,IXTLAHUACAN,367,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,196,18,51,17,97,0,16,199
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,714,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,202,222,166,35,1,3,9,436
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,643,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,203,179,162,29,9,3,10,392
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,749,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,209,197,226,21,6,1,11,462
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,666,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,213,202,181,22,2,1,12,420
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,519,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,215,115,126,24,9,1,7,282
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,358,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,224,134,89,11,1,0,8,243
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,386,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,233,110,132,12,7,0,3,264
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,551,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,178,68,124,101,0,0,7,300
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,669,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,188,45,115,107,0,0,0,267
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,ARMERIA,,1,ARMERIA,669,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,188,45,148,123,0,0,7,323
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,293,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,189,67,91,41,0,0,5,204
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,ARMERIA,,1,ARMERIA,414,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,190,43,174,63,0,0,5,285
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,574,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,3,183,147,46,3,5,9,393
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,426,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,4,150,134,21,6,5,0,316
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,511,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,9,204,145,24,1,2,3,379
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,654,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,10,166,188,44,2,4,1,405
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,460,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,14,151,137,25,6,1,6,326
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,461,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,14,140,133,24,7,3,5,312
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,553,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,18,180,166,29,6,1,9,391
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,439,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,29,148,146,35,3,1,5,338
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,659,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,35,176,182,41,5,6,9,419
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MINATITLAN,,8,MINATITLAN,473,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,272,67,139,14,51,0,20,291
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,0,COLIMA,,2,COLIMA,229,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,85,63,40,5,3,0,4,115
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,MANZANILLO,,7,MANZANILLO,739,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,236,179,171,36,5,0,14,405
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,746,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,238,190,201,24,4,6,8,433
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,MANZANILLO,,7,MANZANILLO,746,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,238,184,173,30,2,7,3,399
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,722,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,240,198,216,13,6,1,7,441
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,626,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,245,173,138,19,4,2,11,347
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,MANZANILLO,,7,MANZANILLO,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,250,181,209,28,14,4,3,439
+6,2/7/2006,12,Ayuntamientos,6,0,6,C,Contigua,0,MANZANILLO,,7,MANZANILLO,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,250,208,234,21,3,10,4,480
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,651,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,251,183,180,34,9,7,1,414
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,679,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,258,207,174,21,5,1,7,415
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,MANZANILLO,,7,MANZANILLO,679,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,258,186,186,15,5,4,13,409
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,744,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,260,212,153,30,3,1,12,411
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,MANZANILLO,,7,MANZANILLO,410,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,263,101,100,19,4,4,5,233
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,MANZANILLO,,7,MANZANILLO,501,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,269,141,160,18,7,1,4,331
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,0,COMALA,,3,COMALA,58,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,101,13,27,0,1,0,2,43
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COMALA,,3,COMALA,654,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,104,168,199,30,4,0,18,419
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,543,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,106,91,194,32,25,0,15,357
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COQUIMATLAN,,4,COQUIMATLAN,566,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,108,141,172,9,38,0,5,365
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,127,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,112,19,49,3,14,0,3,88
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,396,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,117,98,130,5,15,0,6,254
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COQUIMATLAN,,4,COQUIMATLAN,483,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,118,40,178,14,39,0,10,281
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,556,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,120,71,109,21,144,1,16,362
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,392,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,125,60,97,12,82,1,13,265
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,CUAUHTEMOC,,5,CUAUHTEMOC,121,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,125,34,38,5,4,1,5,87
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,CUAUHTEMOC,,5,CUAUHTEMOC,480,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,127,75,102,22,106,4,12,321
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,419,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,128,65,100,15,100,1,7,288
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,491,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,129,69,135,22,91,2,12,331
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,0,MINATITLAN,,8,MINATITLAN,125,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,276,16,49,2,17,0,3,87
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,TECOMAN,,9,TECOMAN,638,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,277,117,162,33,5,0,16,333
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,282,174,163,25,3,0,15,380
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,670,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,283,187,140,32,2,0,6,367
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,607,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,292,129,158,22,2,0,7,318
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,486,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,303,134,128,14,6,0,3,285
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,637,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,308,126,163,23,5,0,9,326
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,455,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,310,104,145,11,0,0,6,266
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,733,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,312,150,164,54,5,0,16,389
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,TECOMAN,,9,TECOMAN,508,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,315,111,156,16,6,0,7,296
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,472,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,317,61,149,23,2,0,0,235
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,487,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,318,68,106,56,2,0,11,243
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,415,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,320,94,120,10,3,0,3,230
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,TECOMAN,,9,TECOMAN,719,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,326,185,167,33,1,0,15,401
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,TECOMAN,,9,TECOMAN,563,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,329,104,145,40,4,0,14,307
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,659,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,138,131,160,39,25,0,10,365
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,676,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,139,211,148,52,32,0,2,445
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,575,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,148,211,128,17,42,0,5,403
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,627,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,150,153,126,22,42,0,9,352
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,521,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,151,154,115,10,36,0,7,322
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,521,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,151,202,104,15,27,0,5,353
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,602,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,160,125,158,27,71,0,13,394
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,603,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,160,133,136,32,77,0,7,385
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,679,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,161,173,163,49,67,0,6,458
+6,2/7/2006,12,Ayuntamientos,6,0,2,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,679,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,161,144,188,39,86,0,8,465
+6,2/7/2006,12,Ayuntamientos,6,0,4,C,Contigua,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,703,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,167,177,36,67,0,4,451
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,649,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,193,162,52,41,0,2,450
+6,2/7/2006,12,Ayuntamientos,6,0,2,E,Extraordinaria,0,VILLA DE ALVAREZ,,10,VILLA DE ALVAREZ,727,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,163,188,172,57,64,0,5,486
+6,2/7/2006,12,Ayuntamientos,6,0,1,E,Extraordinaria,0,CUAUHTEMOC,,5,CUAUHTEMOC,141,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,133,20,39,5,25,0,6,95
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,CUAUHTEMOC,,5,CUAUHTEMOC,453,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,135,51,124,42,41,0,7,265
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,520,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,38,147,115,28,3,2,6,301
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,504,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,46,180,149,30,7,1,1,368
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,558,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,58,158,145,24,6,3,4,340
+6,2/7/2006,12,Ayuntamientos,6,0,3,C,Contigua,0,COLIMA,,2,COLIMA,692,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,62,154,188,28,10,0,9,389
+6,2/7/2006,12,Ayuntamientos,6,0,1,C,Contigua,0,COLIMA,,2,COLIMA,708,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,64,243,159,39,5,0,6,452
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,628,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,66,189,171,24,7,2,9,402
+6,2/7/2006,12,Ayuntamientos,6,0,1,B,Basica,0,COLIMA,,2,COLIMA,434,EC,Casilla con resultados de acta de escrutinio y computo,P,T,Urna tradicional,76,86,123,14,5,2,5,235

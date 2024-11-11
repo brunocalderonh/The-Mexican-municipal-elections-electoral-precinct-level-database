@@ -1349,9 +1349,9 @@ computos_2018 <- computos_2018 %>%
       PT + MORENA + PES + PT_MORENA_ES + PT_MORENA + PT_ES + MORENA_ES,
       NA
     ),
-    PT = ifelse(municipality != "VILLA UNION", NA, PT),
-    MORENA = ifelse(municipality != "VILLA UNION", NA, MORENA),
-    PES = ifelse(municipality != "VILLA UNION", NA, PES)
+    PT = ifelse(municipality == "VILLA UNION", NA, PT),
+    MORENA = ifelse(municipality == "VILLA UNION", NA, MORENA),
+    PES = ifelse(municipality == "VILLA UNION", NA, PES)
   ) %>%
   select(-PT_MORENA, -PT_ES, -MORENA_ES, -PT_MORENA_ES)
 
