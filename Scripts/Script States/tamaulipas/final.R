@@ -4,7 +4,7 @@ rm(list = ls())
 # Load necessary libraries
 library(readxl)
 library(dplyr)
-ibrary(rstudioapi)
+library(rstudioapi)
 
 
 # Get the path of the current script

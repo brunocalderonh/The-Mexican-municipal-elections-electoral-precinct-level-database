@@ -3,7 +3,7 @@ rm(list = ls())
 
 # Load necessary libraries
 library(readxl)
-llibrary(rstudioapi)
+library(rstudioapi)
 
 
 # Get the path of the current script

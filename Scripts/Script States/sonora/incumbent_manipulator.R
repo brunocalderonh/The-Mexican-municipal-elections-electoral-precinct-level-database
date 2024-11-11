@@ -5,7 +5,7 @@ library(haven)
 library(openxlsx)
 library(purrr)
 library(readxl)
-ibrary(rstudioapi)
+library(rstudioapi)
 
 # Get the path of the current script
 script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
