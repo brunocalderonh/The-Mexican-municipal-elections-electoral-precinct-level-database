@@ -20,7 +20,8 @@ finaldb <- finaldb %>%
 replace_parties <- function(party_str) {
   replacements <- c( "PNA" = "PANAL", 
                     "INDEP" = "CI_1",
-                    "CONVE" = "PC")
+                    "CONVE" = "PC",
+                    "PFCRN" = "PartCardenista")
   
   for (replacement in names(replacements)) {
     party_str <- str_replace_all(party_str, replacements[replacement], replacement)
