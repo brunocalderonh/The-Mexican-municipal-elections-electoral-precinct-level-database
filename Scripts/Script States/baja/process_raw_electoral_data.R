@@ -14,7 +14,8 @@ pacman::p_load (dplyr
                 , tidyverse
                 , tidyr
                 , openxlsx
-                , data.table)
+                , data.table
+                , readr)
 
 
 # Set working directory

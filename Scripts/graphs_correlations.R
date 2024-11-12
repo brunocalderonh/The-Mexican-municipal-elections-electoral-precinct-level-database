@@ -7,6 +7,8 @@ library(openxlsx)
 library(purrr)
 library(readxl)
 library(rstudioapi)
+library(ti)
+
 
 # Get the path of the current script
 script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
@@ -29,78 +31,126 @@ unzipped_file <- file.path(temp_dir, "all_states_final.csv")
 
 #final db
 db <- read_csv(unzipped_file)  # Use read_csv for CSV files
-db <- db %>% 
-  mutate(turnout = listanominal/total) %>% 
-  filter(turnout <= 1)
+
 
 #ine
-ine_db <- read.csv("Correlation Data/ine_turnout_sec.csv") %>% 
-  mutate(uniqueid = as.numeric(uniqueid)) %>% 
-  select(-X) %>% 
-  rename (turnout_ine = turnout) %>% 
-  filter(turnout_ine <= 1)
+ine_db <- read.csv("Correlation Data/generated_data/ine_turnout.csv") %>% 
+  mutate(uniqueid = as.numeric(uniqueid))  %>% 
+   filter(turnout_ine != 0)
 
 #Magar 
-db_mun <- read.csv("States/final/mun_aggregated.csv") 
-magar_db <- read.csv("correlation/generated_data/magar_vote_turnout_mun.csv") %>% 
+magar_db <- read.csv("Correlation Data/generated_data/magar_turnout.csv") %>% 
   mutate(magar_listanominal_voteShare_PRI =ifelse(listanominal> 0, pri / listanominal, NA)) %>% 
   mutate(magar_listanominal_voteShare_PAN =ifelse(listanominal> 0, pan / listanominal, NA)) %>% 
   mutate(magar_listanominal_voteShare_PRD =ifelse(listanominal> 0, prd / listanominal, NA)) %>% 
-  mutate(magar_listanominal_voteShare_MORENA =ifelse(listanominal> 0, morena / listanominal, NA)) %>% 
-  rename(turnout_magar = turnout)
+  mutate(magar_listanominal_voteShare_MORENA =ifelse(listanominal> 0, morena / listanominal, NA)) 
 
-correlation_magar_mun <- db_mun %>%
-  left_join(magar_db %>% select(uniqueid, year, turnout_magar, magar_listanominal_voteShare_PRI, magar_listanominal_voteShare_PAN,magar_listanominal_voteShare_PRD,magar_listanominal_voteShare_MORENA), 
-            by = c("uniqueid", "year"))
+#aggregate to mun level for corr with magar 
+# Aggregating at the municipal level
+db_mun <- db %>%
+  group_by(uniqueid, year) %>%
+  summarise(
+    # Calculations with listanominal
+    listanominal_voteShare_incumbent = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
+                                              sum(incumbent_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
+    listanominal_voteShare_state_incumbent = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
+                                                    sum(state_incumbent_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
+    listanominal_voteShare_PRI = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
+                                        sum(PRI_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
+    listanominal_voteShare_PRD = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
+                                        sum(PRD_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
+    listanominal_voteShare_PAN = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
+                                        sum(PAN_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
+    listanominal_voteShare_MORENA = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
+                                           sum(MORENA_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
+    listanominal_voteShare_runnerup = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
+                                             sum(runnerup_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
+    
+    # New Calculations with valid
+    valid_voteShare_incumbent = ifelse(sum(valid, na.rm = TRUE) > 0, 
+                                       sum(incumbent_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
+    valid_voteShare_state_incumbent = ifelse(sum(valid, na.rm = TRUE) > 0, 
+                                             sum(state_incumbent_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
+    valid_voteShare_PRI = ifelse(sum(valid, na.rm = TRUE) > 0, 
+                                 sum(PRI_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
+    valid_voteShare_PRD = ifelse(sum(valid, na.rm = TRUE) > 0, 
+                                 sum(PRD_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
+    valid_voteShare_PAN = ifelse(sum(valid, na.rm = TRUE) > 0, 
+                                 sum(PAN_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
+    valid_voteShare_MORENA = ifelse(sum(valid, na.rm = TRUE) > 0, 
+                                    sum(MORENA_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
+    valid_voteShare_runnerup = ifelse(sum(valid, na.rm = TRUE) > 0, 
+                                      sum(runnerup_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
+    
+    # Turnout at municipal level
+    turnout = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
+                     sum(total, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA)
+  ) %>%
+  ungroup()
+
+
 
 ##### CORRELATION - INE #####
-#### INE
 
 # Left join `ine_db` to `db` on `year`, `uniqueid`, and `section`
 corr_test_ine <- db %>%
-  left_join(ine_db %>% select(year, uniqueid, section, turnout_ine), by = c("year", "uniqueid", "section"))
-
-# Calculate correlation between `turnout` and `turnout_ine` (only on complete cases)
-correlation <- cor(corr_test_ine$turnout, corr_test_ine$turnout_ine, use = "complete.obs")
-print(paste("Correlation between calculated turnout and INE turnout:", correlation))
+  left_join(ine_db %>% select(year, uniqueid, section, turnout_ine), by = c("year", "uniqueid", "section")) 
 
 # Run a linear regression with `turnout` as the dependent variable and `turnout_ine` as the independent variable
 regression_model <- lm(turnout ~ turnout_ine, data = corr_test_ine)
-summary(regression_model)
-
-
-
+stargazer::stargazer(regression_model, type = "text")
+correlation <- cor(corr_test_ine$turnout, corr_test_ine$turnout_ine, use = "complete.obs")
+correlation
 
 
 
 
 ##### Correlation Magar Municipal #####
 
+
+corr_test_magar_mun <- db_mun%>%
+  left_join(magar_db %>% select(uniqueid, year, magar_turnout, magar_listanominal_voteShare_PRI, magar_listanominal_voteShare_PAN,magar_listanominal_voteShare_PRD,magar_listanominal_voteShare_MORENA), 
+            by = c("uniqueid", "year"))
+
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(correlation_magar_mun$turnout_magar, correlation_magar_mun$turnout, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_turnout, corr_test_magar_mun$turnout, use = "complete.obs")
 # Print the correlation result
 correlation_result
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(correlation_magar_mun$magar_listanominal_voteShare_PRI, correlation_magar_mun$listanominal_voteShare_PRI, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_listanominal_voteShare_PRI, corr_test_magar_mun$listanominal_voteShare_PRI, use = "complete.obs")
 # Print the correlation result
 correlation_result
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(correlation_magar_mun$magar_listanominal_voteShare_PAN, correlation_magar_mun$listanominal_voteShare_PAN, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_listanominal_voteShare_PAN, corr_test_magar_mun$listanominal_voteShare_PAN, use = "complete.obs")
 # Print the correlation result
 correlation_result
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(correlation_magar_mun$magar_listanominal_voteShare_PRD, correlation_magar_mun$listanominal_voteShare_PRD, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_listanominal_voteShare_PRD, corr_test_magar_mun$listanominal_voteShare_PRD, use = "complete.obs")
 # Print the correlation result
 correlation_result
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(correlation_magar_mun$magar_listanominal_voteShare_MORENA, correlation_magar_mun$listanominal_voteShare_MORENA, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_listanominal_voteShare_MORENA, corr_test_magar_mun$listanominal_voteShare_MORENA, use = "complete.obs")
 # Print the correlation result
 correlation_result
 
+# Load the required package
+library(stargazer)
+
+# Create linear models to represent the correlations
+model_turnout <- lm(turnout ~ magar_turnout, data = corr_test_magar_mun)
+model_PRI <- lm(listanominal_voteShare_PRI ~ magar_listanominal_voteShare_PRI, data = corr_test_magar_mun)
+model_PAN <- lm(listanominal_voteShare_PAN ~ magar_listanominal_voteShare_PAN, data = corr_test_magar_mun)
+model_PRD <- lm(listanominal_voteShare_PRD ~ magar_listanominal_voteShare_PRD, data = corr_test_magar_mun)
+model_MORENA <- lm(listanominal_voteShare_MORENA ~ magar_listanominal_voteShare_MORENA, data = corr_test_magar_mun)
+
+# Use stargazer to display the correlations in a regression table format
+stargazer(model_turnout, model_PRI, model_PAN, model_PRD, model_MORENA, type = "text",
+          column.labels = c("Turnout", "PRI", "PAN", "PRD", "MORENA"),
+          dep.var.labels = "Correlation")
 
 ##### GRAPHS #####
 

@@ -4,6 +4,7 @@ rm(list = ls())
 # Load necessary libraries
 library(readxl)
 library(dplyr)
+library(readr)
 library(rstudioapi)
 
 # Get the path of the current script
@@ -429,6 +430,10 @@ assign_votes1 <- function(data) {
 }
 merged_data <- assign_votes1(merged_data)
 
+merged_data  <- merged_data  %>%
+     mutate(turnout = total/listanominal) 
+
+summary(merged_data$turnout)
 
 
 merged_data <- merged_data %>%
@@ -468,6 +473,7 @@ merged_data <- merged_data %>%
          listanominal,
          valid,
          total,
+         turnout,
          everything())
 
 # Set the path to save the CSV file relative to the repository's root

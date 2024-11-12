@@ -1,18 +1,27 @@
 rm(list = ls())
 
-# Load necessary packages
-library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(readr)  # Use readr for read_csv
+library(openxlsx)
+library(purrr)
+library(readxl)
+library(rstudioapi)
 
-# Set the working directory
-setwd("/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/correlation/turnout_magar")
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, "../../"))
 
 # Read the CSV files into individual data frames
-db70 <- read_csv("magar_1970.csv")
-db80 <- read_csv("magar_1980.csv")
-db90 <- read_csv("magar_1990.csv")
-db00 <- read_csv("magar_2000.csv")
-db10 <- read_csv("magar_2010.csv")
-db20 <- read_csv("magar_2020.csv")
+db70 <- read_csv("Correlation Data/turnout_magar/magar_1970.csv")
+db80 <- read_csv("Correlation Data/turnout_magar/magar_1980.csv")
+db90 <- read_csv("Correlation Data/turnout_magar/magar_1990.csv")
+db00 <- read_csv("Correlation Data/turnout_magar/magar_2000.csv")
+db10 <- read_csv("Correlation Data/turnout_magar/magar_2010.csv")
+db20 <- read_csv("Correlation Data/turnout_magar/magar_2020.csv")
 
 
 # Function to convert columns starting with "l" to character and "v" to numeric
@@ -87,7 +96,22 @@ db_party_wide <- db_party_votes %>%
     names_from = party,        # Create a column for each party
     values_from = votes,       # Fill with vote values
     values_fill = 0            # Fill missing values with 0
-  ) 
+  )
+
+db_party_wide <- db_party_wide %>%
+  # Step 3: Group by year, uniqueid, and mun to aggregate duplicate rows
+  group_by(year, uniqueid, mun) %>%
+  summarize(
+    turnout = first(turnout),       # Take the first value of turnout
+    total = first(total),           # Take the first value of total
+    pri = sum(pri, na.rm = TRUE),     # Sum votes for pri
+    pan = sum(pan, na.rm = TRUE),     # Sum votes for pan
+    morena = sum(morena, na.rm = TRUE), # Sum votes for morena
+    prd = sum(prd, na.rm = TRUE)        # Sum votes for prd
+  ) %>%
+  
+  # Step 4: Ungroup to finalize the data frame
+  ungroup()
 
 # Perform a left join to bring in the listanominal column from the original db
 db_party_wide <- db_party_wide %>%
@@ -102,14 +126,18 @@ db_final <- db_party_wide %>%
     prd = sum(prd, na.rm = TRUE),       # Sum votes for 'prd'
     pan = sum(pan, na.rm = TRUE),       # Sum votes for 'pan'
     .groups = "drop"
-  )
+  ) %>%
+  rename(magar_turnout = turnout) #%>%   # Rename turnout to magar_turnout
+  #filter(magar_turnout <= 1)            # Filter for magar_turnout <= 1
 
-# validation <- db_final  %>% 
-#   group_by(uniqueid, year) %>% 
-#   summarise(count = n())
-#   
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Correlation Data/generated_data")
+output_path <- file.path(output_dir, "magar_turnout.csv")
 
+# Use write_csv to save the file
+write_csv(db_final, output_path)
 
-write.csv(db_final, "/Users/brunocalderon/Library/CloudStorage/OneDrive-Personal/Documents/ITAM/RA - Horacio/Monitoring Brokers/Data/correlation/generated_data/magar_vote_turnout_mun.csv")
+# Confirm file saved correctly
+cat("File saved at:", output_path)
 
 

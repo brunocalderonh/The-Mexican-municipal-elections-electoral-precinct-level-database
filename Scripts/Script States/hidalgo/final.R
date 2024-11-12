@@ -5,6 +5,7 @@ rm(list = ls())
 library(readxl)
 library(dplyr)
 library(rstudioapi)
+library(readr)
 
 
 # Get the path of the current script
@@ -338,6 +339,11 @@ correct_runnerup_vote <- function(data) {
 
 merged_data <- correct_runnerup_vote (merged_data)
 
+merged_data <- merged_data %>%
+  mutate(turnout = ifelse(listanominal > 0, total / listanominal, NA)) 
+
+summary(merged_data$turnout)
+
 
 merged_data <- merged_data %>%
   select(uniqueid,
@@ -376,6 +382,7 @@ merged_data <- merged_data %>%
          listanominal,
          valid,
          total,
+         turnout,
          everything()) 
 
          

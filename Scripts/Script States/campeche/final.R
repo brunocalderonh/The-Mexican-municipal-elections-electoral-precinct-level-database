@@ -5,6 +5,7 @@ rm(list = ls())
 library(readxl)
 library(dplyr)
 library(rstudioapi)
+library(readr)
 
 # Get the path of the current script
 script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
@@ -337,6 +338,12 @@ correct_runnerup_vote <- function(data) {
 merged_data <- correct_runnerup_vote (merged_data)
 
 merged_data <- merged_data %>%
+  mutate(turnout = ifelse(listanominal > 0, total / listanominal, NA)) 
+
+
+
+
+merged_data <- merged_data %>%
   select(uniqueid,
          year,
          state, 
@@ -373,6 +380,7 @@ merged_data <- merged_data %>%
          listanominal,
          valid,
          total,
+         turnout,
          everything())
 
 

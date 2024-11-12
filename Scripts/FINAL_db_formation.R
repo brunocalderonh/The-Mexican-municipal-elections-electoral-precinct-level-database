@@ -28,6 +28,59 @@ states <- c("aguascalientes", "baja", "bajasur", "campeche", "chiapas", "chihuah
 # Initialize an empty list to store the data frames
 df_list <- list()
 
+
+# Initialize a list to store missing columns for each state
+missing_columns_log <- list()
+
+# Define the required columns
+required_columns <- c(
+  "uniqueid", "year", "state", "mun", "section",
+  "incumbent_party_magar", "incumbent_candidate_magar",
+  "incumbent_vote", "party_component", "mutually_exclusive",
+  "researched_incumbent", "source_researched_incumbent",
+  "incumbent_party_JL", "incumbent_candidate_JL",
+  "incumbent_party_Horacio", "incumbent_party_inafed",
+  "incumbent_candidate_inafed", "state_incumbent_party",
+  "state_incumbent_vote", "state_incumbent_vote_party_component",
+  "PRI_vote", "PRI_vote_party_component", "PRD_vote",
+  "PRD_vote_party_component", "PAN_vote", "PAN_vote_party_component",
+  "MORENA_vote", "MORENA_vote_party_component", "runnerup_party_magar",
+  "runnerup_candidate_magar", "runnerup_vote", "runnerup_party_component",
+  "margin", "listanominal", "valid", "total", "turnout"
+)
+
+# Loop through each state file to check for missing columns
+for (state in states) {
+  # Construct the file path
+  file_path <- paste0(base_path, "/", state, "/", state, "_final.csv")
+  
+  # Check if the file exists
+  if (file.exists(file_path)) {
+    # Read the CSV file
+    data <- read.csv(file_path)
+    
+    # Find missing columns by comparing required columns with actual columns
+    missing_columns <- setdiff(required_columns, names(data))
+    
+    # Log missing columns if there are any
+    if (length(missing_columns) > 0) {
+      missing_columns_log[[state]] <- missing_columns
+    }
+  } else {
+    warning(paste("File does not exist:", file_path))
+  }
+}
+
+# Display missing columns for each file
+if (length(missing_columns_log) > 0) {
+  for (state in names(missing_columns_log)) {
+    cat("The following columns are missing in", state, "file:", missing_columns_log[[state]], "\n")
+  }
+} else {
+  cat("All files contain the required columns.\n")
+}
+
+
 # Loop through each state, read the data, and append the relevant variables
 for (state in states) {
   # Construct the file path with the correct naming convention
@@ -76,7 +129,8 @@ for (state in states) {
         margin,
         listanominal,
         valid,
-        total)
+        total,
+        turnout)
     
     # Add the data to the list
     df_list[[state]] <- data_selected
@@ -193,8 +247,7 @@ final_df <- final_df %>%
 #   )) %>%
 # mutate( incumbent_candidate = incumbent_candidate_magar)
 
-final_df <- final_df %>% 
-  mutate(turnout = total/listanominal)
+
 final_df <- final_df %>% 
   mutate(valid_voteShare_incumbent_vote = ifelse(valid > 0, incumbent_vote / valid, NA),
          valid_voteShare_state_incumbent_vote = ifelse(valid > 0, state_incumbent_vote / valid, NA),
@@ -244,7 +297,8 @@ final_df <- final_df %>%
          margin,
          listanominal,
          valid,
-         total) 
+         total,
+         turnout) 
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Final Data")

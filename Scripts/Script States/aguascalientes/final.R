@@ -7,6 +7,7 @@ library(rstudioapi)
 library(dplyr)
 library(stringr)
 library(writexl)
+library(readr)
 
 # Get the path of the current script
 script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
@@ -339,6 +340,11 @@ correct_runnerup_vote <- function(data) {
 
 merged_data <- correct_runnerup_vote (merged_data)
 
+merged_data  <- merged_data  %>%
+  mutate(turnout = total/listanominal) 
+
+summary(merged_data$turnout)
+
 merged_data <- merged_data %>%
   select(uniqueid,
          year,
@@ -376,6 +382,7 @@ merged_data <- merged_data %>%
          listanominal,
          valid,
          total,
+         turnout,
          everything())
 
 # Set the path to save the CSV file relative to the repository's root
