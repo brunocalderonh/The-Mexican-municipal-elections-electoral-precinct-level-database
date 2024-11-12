@@ -1,0 +1,39 @@
+﻿ID_ESTADO,NOMBRE_ESTADO,ID_MUNICIPIO,MUNICIPIO,SECCIONES,CASILLAS,PAN_UDC_MC,PRI_PVEM_NA,PT_MORENA_ES,PRD,PT,MORENA,UDC,CAND_IND1,CAND_IND2,CAND_IND3,CAND_IND4,CAND_IND5,CAND_IND6,CAND_IND7,CAND_IND8,CAND_IND9,CAND_IND10,NUM_VOTOS_VALIDOS,NUM_VOTOS_CAN_NREG,NUM_VOTOS_NULOS,TOTAL_VOTOS,LISTA_NOMINAL,RUTA_ACTA
+5,COAHUILA,1,ABASOLO,2,2,476,426,,,,,,,,,,,,,,,,902,0,5,907,1085,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/ABASOLO.pdf
+5,COAHUILA,2,ACUÑA,64,182,25371,18902,6387,11554,,,,,,,,,,,,,,62214,1,1601,63816,110572,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/ACU%C3%91A.pdf
+5,COAHUILA,3,ALLENDE,15,31,6778,3550,905,,,,,,,,,,,,,,,11233,1,307,11541,17866,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/ALLENDE.pdf
+5,COAHUILA,4,ARTEAGA,21,37,2528,6745,1829,698,,,,,,,,,,,,,,11800,4,321,12125,18035,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/ARTEAGA.pdf
+5,COAHUILA,5,CANDELA,3,4,577,783,,,,,,,,,,,,,,,,1360,0,30,1390,1633,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/CANDELA.pdf
+5,COAHUILA,6,CASTAÑOS,23,43,4602,5763,1855,297,,,,,,,,,,,,,,12517,5,265,12787,20815,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/CASTANOS.pdf
+5,COAHUILA,7,CUATRO CIENEGAS,14,23,3003,2260,841,71,,,,,,,,,,,,,,6175,0,156,6331,9465,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/CUATROCIENEGAS.pdf
+5,COAHUILA,8,ESCOBEDO,4,6,,960,,788,,56,,,,,,,,,,,,1804,0,25,1829,2355,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/ESCOBEDO.pdf
+5,COAHUILA,9,FRANCISCO I. MADERO,42,78,4060,9279,14769,501,,,,,,,,,,,,,,28609,4,533,29146,42019,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/FRANCISCO%20I%20MADERO.pdf
+5,COAHUILA,10,FRONTERA,41,99,9958,14187,8829,3310,,,,,,,,,,,,,,36284,9,642,36935,59573,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/FRONTERA.pdf
+5,COAHUILA,11,GENERAL CEPEDA,16,20,4105,2139,398,95,,,,,,,,,,,,,,6737,1,142,6880,9144,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/GENERAL%20CEPEDA.pdf
+5,COAHUILA,12,GUERRERO,5,5,709,621,28,,,,,,,,,,,,,,,1358,0,33,1391,1780,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/GUERRERO.pdf
+5,COAHUILA,13,HIDALGO,2,3,,478,,,,,387,,,,,,,,,,,865,0,11,876,1109,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/HIDALGO.pdf
+5,COAHUILA,14,JIMENEZ,10,16,1442,2714,688,,,,,,,,,,,,,,,4844,0,167,5011,8129,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/JIMENEZ.pdf
+5,COAHUILA,15,JUAREZ,4,4,,423,11,592,,,,,,,,,,,,,,1026,0,23,1049,1334,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/JUAREZ.pdf
+5,COAHUILA,16,LAMADRID,2,3,656,621,55,,,,,,,,,,,,,,,1332,0,28,1360,1568,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/LAMADRID.pdf
+5,COAHUILA,17,MATAMOROS,62,137,3864,21700,27300,472,,,,,,,,,,,,,,53336,4,901,54241,80559,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/MATAMOROS.pdf
+5,COAHUILA,18,MONCLOVA,124,290,39781,31572,13292,4012,,,,11407,0,5713,907,,,,,,,106684,5,2195,108884,169719,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/MONCLOVA.pdf
+5,COAHUILA,19,MORELOS,6,12,1404,2505,417,54,,,,,,,,,,,,,,4380,1,127,4508,6652,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/MORELOS.pdf
+5,COAHUILA,20,MUZQUIZ,48,93,12404,12890,3809,478,,,,,,,,699,,,,,,30280,6,882,31168,53018,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/MUZQUIZ.pdf
+5,COAHUILA,21,NADADORES,8,12,1186,1351,1126,,,,,,,,,,,,,,,3663,0,59,3722,5008,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/NADADORES.pdf
+5,COAHUILA,22,NAVA,16,39,5182,5821,1402,,,,,,,,,,342,,,,,12747,12,325,13084,21637,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/NAVA.pdf
+5,COAHUILA,23,OCAMPO,13,20,308,2273,2062,,,,,,,,,,,,,,,4643,0,94,4737,7337,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/OCAMPO.pdf
+5,COAHUILA,24,PARRAS,34,67,968,8238,9284,1353,,,,,,,,,,,,,,19843,3,639,20485,33585,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/PARRAS.pdf
+5,COAHUILA,25,PIEDRAS NEGRAS,87,216,10786,22572,33007,465,,,,,,,,,,1405,,,,68235,47,1039,69321,126105,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/PIEDRAS%20NEGRAS.pdf
+5,COAHUILA,26,PROGRESO,6,6,54,1762,182,,,,,,,,,,,,,,,1998,0,46,2044,2845,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/PROGRESO.pdf
+5,COAHUILA,27,RAMOS ARIZPE,35,108,12708,15601,7201,341,,,,,,,,,,,,,,35851,5,794,36650,63919,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/RAMOS%20ARIZPE.pdf
+5,COAHUILA,28,SABINAS,37,88,16673,10454,1634,158,,,,,,,,,,,,,,28919,4,608,29531,49283,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/SABINAS.pdf
+5,COAHUILA,29,SACRAMENTO,2,4,835,769,19,,,,,,,,,,,,,,,1623,0,32,1655,1888,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/SACRAMENTO.pdf
+5,COAHUILA,30,SALTILLO,377,955,67868,174706,86029,4120,,,,,,,,,,,,4226,6837,343786,952,6976,351714,570465,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/SALTILLO.pdf
+5,COAHUILA,31,SAN BUENAVENTURA,17,31,2569,4778,3975,,,,,,,,,,,,,,,11322,0,201,11523,17812,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/SAN%20BUENAVENTURA.pdf
+5,COAHUILA,32,SAN JUAN DE SABINAS,33,63,13361,5795,957,,,,,,,,,,,,594,,,20707,2,436,21145,33112,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/SAN%20JUAN%20DE%20SABINAS.pdf
+5,COAHUILA,33,SAN PEDRO,75,141,18437,15696,12239,1842,,,,,,,,,,,,,,48214,0,1342,49556,72759,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/SAN%20PEDRO.pdf
+5,COAHUILA,34,SIERRA MOJADA,5,10,1174,914,270,,,,,,,,,,,,,,,2358,0,43,2401,3840,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/SIERRA%20MOJADA.pdf
+5,COAHUILA,35,TORREON,367,849,152035,95381,74487,2669,,,,,,,,,,,,,,324572,96,4711,329379,497356,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/TORREON.pdf
+5,COAHUILA,36,VIESCA,22,31,2132,4776,2555,250,,,,,,,,,,,,,,9713,1,319,10033,15114,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/VIESCA.pdf
+5,COAHUILA,37,VILLA UNION,8,11,1412,878,,148,265,474,,,,,,,,,,,,3177,0,81,3258,5131,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/VILLA%20UNION.pdf
+5,COAHUILA,38,ZARAGOZA,13,22,2815,3146,330,137,,,,,,,,,,,,,,6428,3,193,6624,10472,http://www.iec.org.mx/v1/images//procesoElectoral2018/actasComputo/ZARAGOZA.pdf

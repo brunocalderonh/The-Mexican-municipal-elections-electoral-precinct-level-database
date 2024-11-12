@@ -1,0 +1,114 @@
+﻿ID_ESTADO,NOMBRE_ESTADO,ID_MUNICIPIO,MUNICIPIO,SECCIONES,CASILLAS,PAN,PRI,PRD,PT,PVEM,MC,NA,MORENA,ES,CAND_IND1,CAND_IND2,CAND_IND3,CAND_IND4,CAND_IND5,CAND_IND6,CAND_IND7,CAND_IND8,CAND_IND9,CAND_IND10,CAND_IND11,CAND_IND12,CAND_IND13,CAND_IND14,CAND_IND15,CAND_IND16,CAND_IND17,CAND_IND18,CAND_IND19,CAND_IND20,CAND_IND21,CAND_IND22,CAND_IND23,CAND_IND24,CAND_IND25,CAND_IND26,CAND_IND27,CAND_IND28,CAND_IND29,CAND_IND30,CAND_IND31,CAND_IND32,CAND_IND33,CAND_IND34,CAND_IND35,NUM_VOTOS_VALIDOS,NUM_VOTOS_CAN_NREG,NUM_VOTOS_NULOS,TOTAL_VOTOS,LISTA_NOMINAL,RUTA_ACTA
+16,MICHOACAN,1,ACUITZIO,10,17,152,346,400,1605,156,26,789,224,112,1267,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,5077,2,402,5481,8549,http://iem.org.mx/actas_mpio/A4_ACUITZIO.pdf
+16,MICHOACAN,2,AGUILILLA,13,22,161,1668,1291,126,,88,,1166,,,346,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4846,0,620,5466,12272,http://iem.org.mx/actas_mpio/A4_AGUILILLA.pdf
+16,MICHOACAN,3,ÁLVARO OBREGÓN,12,30,0,3607,0,169,1958,0,,234,3548,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,9516,5,897,10418,16440,http://iem.org.mx/actas_mpio/A4_ÁLVARO OBREGÓN.pdf
+16,MICHOACAN,4,ANGAMACUTIRO,13,23,196,1935,3872,203,34,115,,1420,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,7775,4,224,8003,12431,http://iem.org.mx/actas_mpio/A4_ANGAMACUTIRO.pdf
+16,MICHOACAN,5,ANGANGUEO,6,12,94,716,1000,1633,1187,31,320,245,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,5226,0,296,5522,7764,http://iem.org.mx/actas_mpio/A4_ANGANGUEO.pdf
+16,MICHOACAN,6,APATZINGÁN,79,165,1929,8938,5866,2845,3652,874,4297,15144,385,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,43930,159,2202,46291,90067,http://iem.org.mx/actas_mpio/A4_APATZINGÁN.pdf
+16,MICHOACAN,7,ÁPORO,4,6,310,241,184,311,417,23,,643,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2129,0,67,2196,2698,http://iem.org.mx/actas_mpio/A4_ÁPORO.pdf
+16,MICHOACAN,8,AQUILA,13,31,704,2378,2730,546,5118,258,,2349,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,14083,0,469,14552,18813,http://iem.org.mx/actas_mpio/A4_AQUILA.pdf
+16,MICHOACAN,9,ARIO,21,47,6830,1056,633,286,5028,294,,1035,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,15162,21,752,15935,26009,http://iem.org.mx/actas_mpio/A4_ARIO.pdf
+16,MICHOACAN,10,ARTEAGA,14,36,642,1445,3425,62,326,45,2810,942,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,9697,2,885,10584,16210,http://iem.org.mx/actas_mpio/A4_ARTEAGA.pdf
+16,MICHOACAN,11,BRISEÑAS,6,11,35,1731,75,38,155,23,1794,195,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4046,0,267,4313,6266,http://iem.org.mx/actas_mpio/A4_BRISEÑAS.pdf
+16,MICHOACAN,12,BUENAVISTA,23,55,617,1963,4703,915,578,274,69,8039,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,17158,1,631,17790,31230,http://iem.org.mx/actas_mpio/A4_BUENAVISTA.pdf
+16,MICHOACAN,13,CARÁCUARO,12,16,804,1324,2477,30,38,12,,34,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4719,3,362,5084,7441,http://iem.org.mx/actas_mpio/A4_CARÁCUARO.pdf
+16,MICHOACAN,14,COAHUAYANA,12,20,162,396,1988,57,33,28,3116,364,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6144,0,518,6662,10578,http://iem.org.mx/actas_mpio/A4_COAHUAYANA.pdf
+16,MICHOACAN,15,COALCOMÁN DE VAZQUEZ PALLARES,17,30,274,4611,2991,110,,111,45,483,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,8625,1,452,9078,14274,http://iem.org.mx/actas_mpio/A4_COALCOMÁN DE VAZQUEZ PALLARES.pdf
+16,MICHOACAN,16,COENEO,29,42,288,3286,3038,211,,105,193,1308,1273,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,9702,17,601,10320,18795,http://iem.org.mx/actas_mpio/A4_COENEO.pdf
+16,MICHOACAN,17,CONTEPEC,13,39,188,6638,1104,1379,242,143,1007,3075,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,13776,0,834,14610,22656,http://iem.org.mx/actas_mpio/A4_CONTEPEC.pdf
+16,MICHOACAN,18,COPÁNDARO,6,12,168,1016,1264,1073,566,91,190,144,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4512,1,175,4688,7283,http://iem.org.mx/actas_mpio/A4_COPÁNDARO.pdf
+16,MICHOACAN,19,COTIJA,19,36,2644,1012,376,238,648,157,85,3486,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,8646,1,425,9072,16692,http://iem.org.mx/actas_mpio/A4_COTIJA.pdf
+16,MICHOACAN,20,CUITZEO,16,42,621,1885,1479,1833,204,880,3410,1298,,,,,413,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,12023,24,762,12809,22454,http://iem.org.mx/actas_mpio/A4_CUITZEO.pdf
+16,MICHOACAN,21,CHARAPAN,4,9,77,220,586,112,946,33,104,711,,,,652,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,3441,253,344,4038,5929,http://iem.org.mx/actas_mpio/A4_CHARAPAN.pdf
+16,MICHOACAN,22,CHARO,15,29,2640,686,365,165,2398,120,2194,1411,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,9979,1,462,10442,16105,http://iem.org.mx/actas_mpio/A4_CHARO.pdf
+16,MICHOACAN,23,CHAVINDA,11,18,1136,344,494,121,1590,109,,777,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4571,8,221,4800,8988,http://iem.org.mx/actas_mpio/A4_CHAVINDA.pdf
+16,MICHOACAN,24,CHERÁN,2,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1899,Sin dato
+16,MICHOACAN,25,CHILCHOTA,15,40,293,4114,3152,989,174,177,228,5812,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,14939,1,520,15460,23573,http://iem.org.mx/actas_mpio/A4_CHILCHOTA.pdf
+16,MICHOACAN,26,CHINICUILA,8,11,24,1010,1171,154,,13,,261,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2633,0,92,2725,3955,http://iem.org.mx/actas_mpio/A4_CHINICUILA.pdf
+16,MICHOACAN,27,CHUCÁNDIRO,6,11,58,1464,884,29,,25,,226,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2686,0,112,2798,4942,http://iem.org.mx/actas_mpio/A4_CHUCÁNDIRO.pdf
+16,MICHOACAN,28,CHURINTZIO,8,13,0,524,1380,76,22,0,,875,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2877,0,137,3014,6014,http://iem.org.mx/actas_mpio/A4_CHURINTZIO.pdf
+16,MICHOACAN,29,CHURUMUCO,13,22,6,4511,2073,34,512,19,,178,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,7333,0,349,7682,11076,http://iem.org.mx/actas_mpio/A4_CHURUMUCO.pdf
+16,MICHOACAN,30,ECUANDUREO,13,23,2811,1526,401,95,,130,,1240,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6203,0,224,6427,11343,http://iem.org.mx/actas_mpio/A4_ECUANDUREO.pdf
+16,MICHOACAN,31,EPITACIO HUERTA,11,21,94,1604,1417,113,1487,111,,2433,,,,,,325,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,7584,1,338,7923,11548,http://iem.org.mx/actas_mpio/A4_EPITACIO HUERTA.pdf
+16,MICHOACAN,32,ERONGARÍCUARO,10,19,109,3436,434,615,89,69,314,2288,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,7354,3,365,7722,11327,http://iem.org.mx/actas_mpio/A4_ERONGARÍCUARO.pdf
+16,MICHOACAN,33,GABRIEL ZAMORA,13,28,63,1622,3066,148,2116,68,43,2800,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,9926,3,483,10412,15944,http://iem.org.mx/actas_mpio/A4_GABRIEL ZAMORA.pdf
+16,MICHOACAN,34,HIDALGO,72,154,8987,11485,3178,10327,2456,859,409,6767,,,,,,,2114,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,46582,38,2586,49206,87283,http://iem.org.mx/actas_mpio/A4_HIDALGO.pdf
+16,MICHOACAN,35,LA HUACANA,28,50,248,8849,1366,450,499,197,,2546,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,14155,4,735,14894,24280,http://iem.org.mx/actas_mpio/A4_LA HUACANA.pdf
+16,MICHOACAN,36,HUANDACAREO,10,18,1681,1197,1194,155,38,100,172,1478,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6015,6,251,6272,9892,http://iem.org.mx/actas_mpio/A4_HUANDACAREO.pdf
+16,MICHOACAN,37,HUANÍQUEO,11,14,135,146,1941,518,15,20,73,1214,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4062,0,229,4291,7569,http://iem.org.mx/actas_mpio/A4_HUANÍQUEO.pdf
+16,MICHOACAN,38,HUETAMO,45,66,528,3136,10463,458,,193,204,2990,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,17972,7,840,18819,33021,http://iem.org.mx/actas_mpio/A4_HUETAMO.pdf
+16,MICHOACAN,39,HUIRAMBA,4,11,257,1311,1437,946,123,59,,173,75,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4381,4,196,4581,6406,http://iem.org.mx/actas_mpio/A4_HUIRAMBA.pdf
+16,MICHOACAN,40,INDAPARAPEO,13,25,223,3004,2749,192,701,87,299,1001,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,8256,0,384,8640,12979,http://iem.org.mx/actas_mpio/A4_INDAPARAPEO.pdf
+16,MICHOACAN,41,IRIMBO,8,20,566,2831,1726,101,54,51,,642,1185,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,7156,2,425,7583,11974,http://iem.org.mx/actas_mpio/A4_IRIMBO.pdf
+16,MICHOACAN,42,IXTLÁN,12,20,303,2642,2894,127,34,148,,722,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6870,1,272,7143,11174,http://iem.org.mx/actas_mpio/A4_IXTLÁN.pdf
+16,MICHOACAN,43,JACONA,27,80,1555,7512,1169,2180,6005,2588,163,4151,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,25323,16,987,26326,50757,http://iem.org.mx/actas_mpio/A4_JACONA.pdf
+16,MICHOACAN,44,JIMÉNEZ,14,24,68,2525,2745,254,217,97,17,241,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6164,3,406,6573,12099,http://iem.org.mx/actas_mpio/A4_JIMÉNEZ.pdf
+16,MICHOACAN,45,JIQUILPAN,30,63,561,3361,3594,612,733,324,469,5208,,,,,,,,884,232,,,,,,,,,,,,,,,,,,,,,,,,,,,,15978,44,706,16728,31681,http://iem.org.mx/actas_mpio/A4_JIQUILPAN.pdf
+16,MICHOACAN,46,JOSÉ SIXTO VERDUZCO,18,38,215,1564,3787,600,5592,159,232,760,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,12909,1,844,13754,20949,http://iem.org.mx/actas_mpio/A4_JOSÉ SIXTO VERDUZCO.pdf
+16,MICHOACAN,47,JUÁREZ,12,20,154,538,1058,144,3223,211,24,2180,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,7532,2,285,7819,10379,http://iem.org.mx/actas_mpio/A4_JUÁREZ.pdf
+16,MICHOACAN,48,JUNGAPEO,16,27,175,1245,3687,107,142,88,656,692,,,,,,,,,,1862,,,,,,,,,,,,,,,,,,,,,,,,,,,8654,2,591,9247,14335,http://iem.org.mx/actas_mpio/A4_JUNGAPEO.pdf
+16,MICHOACAN,49,LAGUNILLAS,4,9,1261,193,130,821,484,62,7,75,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,3033,0,183,3216,4954,http://iem.org.mx/actas_mpio/A4_LAGUNILLAS.pdf
+16,MICHOACAN,50,LÁZARO CÁRDENAS,65,225,2827,7399,17419,11784,750,836,395,21674,952,,,,,,,,,,,2172,9709,,,,,,,,,,,,,,,,,,,,,,,,75917,32,3687,79636,135477,http://iem.org.mx/actas_mpio/A4_LÁZARO CÁRDENAS.pdf
+16,MICHOACAN,51,MADERO,14,25,176,2649,1946,102,,64,3462,141,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,8540,6,566,9112,13492,http://iem.org.mx/actas_mpio/A4_MADERO.pdf
+16,MICHOACAN,52,MARAVATÍO,44,109,1746,1531,8928,478,7657,574,1813,4985,288,,,,,,,,,,,,,1314,,,,,,,,,,,,,,,,,,,,,,,29314,24,2223,31561,61435,http://iem.org.mx/actas_mpio/A4_MARAVATÍO.pdf
+16,MICHOACAN,53,MARCOS CASTELLANOS,11,19,890,3323,82,67,1148,58,12,597,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6177,5,238,6420,9578,http://iem.org.mx/actas_mpio/A4_MARCOS CASTELLANOS.pdf
+16,MICHOACAN,54,MORELIA,351,999,35128,55981,14201,10526,17672,6051,4187,73741,29880,,,,,,,,,,,,,,76869,,,,,,,,,,,,,,,,,,,,,,324236,518,15553,340307,601506,http://iem.org.mx/actas_mpio/A4_MORELIA.pdf
+16,MICHOACAN,55,MORELOS,9,16,302,1720,1817,162,99,60,,193,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4353,2,196,4551,7748,http://iem.org.mx/actas_mpio/A4_MORELOS.pdf
+16,MICHOACAN,56,MÚGICA,24,56,211,8314,2072,0,333,143,257,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,11330,1,6325,17656,32731,http://iem.org.mx/actas_mpio/A4_MÚGICA.pdf
+16,MICHOACAN,57,NAHUÁTZEN,9,21,287,1068,1561,131,344,168,,963,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4522,9,606,5137,10357,http://iem.org.mx/actas_mpio/A4_NAHUÁTZEN.pdf
+16,MICHOACAN,58,NOCUPÉTARO,13,17,605,2420,1582,37,,24,,457,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,5125,0,186,5311,7156,http://iem.org.mx/actas_mpio/A4_NOCUPÉTARO.pdf
+16,MICHOACAN,59,NUEVO PARANGARICUTIRO,11,26,1330,3952,3117,,,283,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,8682,1,757,9440,14078,http://iem.org.mx/actas_mpio/A4_NUEVO PARANGARICUTIRO.pdf
+16,MICHOACAN,60,NUEVO URECHO,9,13,43,257,2225,1509,22,0,11,100,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4167,1,234,4402,6025,http://iem.org.mx/actas_mpio/A4_NUEVO URECHO.pdf
+16,MICHOACAN,61,NUMARÁN,9,17,2187,906,1522,101,,0,270,596,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,5582,1,212,5795,9526,http://iem.org.mx/actas_mpio/A4_NUMARÁN.pdf
+16,MICHOACAN,62,OCAMPO,11,26,488,943,3070,2723,212,65,224,414,31,,,,,,,,,,,,,,,2411,,,,,,,,,,,,,,,,,,,,,10581,0,810,11391,15434,http://iem.org.mx/actas_mpio/A4_OCAMPO.pdf
+16,MICHOACAN,63,PAJACUARÁN,18,32,1827,2275,137,75,1427,939,369,2332,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,9381,0,280,9661,15020,http://iem.org.mx/actas_mpio/A4_PAJACUARÁN.pdf
+16,MICHOACAN,64,PANINDÍCUARO,19,29,114,431,2891,418,968,152,,2801,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,7775,82,356,8213,13795,http://iem.org.mx/actas_mpio/A4_PANINDÍCUARO.pdf
+16,MICHOACAN,65,PARÁCUARO,16,33,62,1396,3614,216,334,132,49,5553,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,11356,0,476,11832,18399,http://iem.org.mx/actas_mpio/A4_PARÁCUARO.pdf
+16,MICHOACAN,66,PARACHO,15,43,184,1793,3567,217,5275,152,67,2679,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,13934,9,728,14671,23970,http://iem.org.mx/actas_mpio/A4_PARACHO.pdf
+16,MICHOACAN,67,PÁTZCUARO,42,111,1497,6717,4430,3077,2833,720,458,10534,803,,,,,,,,,,,,,,,,1101,1927,,,,,,,,,,,,,,,,,,,34097,45,2260,36402,66653,http://iem.org.mx/actas_mpio/A4_PÁTZCUARO.pdf
+16,MICHOACAN,68,PENJAMILLO,19,31,105,3294,2795,663,240,90,,1652,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,8839,1,378,9218,15754,http://iem.org.mx/actas_mpio/A4_PENJAMILLO.pdf
+16,MICHOACAN,69,PERIBÁN,12,33,2114,192,446,248,2675,198,83,1791,,,,,,,,,,,,,,,,,,,2886,,,,,,,,,,,,,,,,,,10633,4,471,11108,19546,http://iem.org.mx/actas_mpio/A4_PERIBÁN.pdf
+16,MICHOACAN,70,LA PIEDAD,61,136,10213,7144,1966,1175,318,9376,261,5472,,,,,,,,,,,2074,,,,,,,,,,,,,,,,,,,,,,,,,,37999,43,1387,39429,78169,http://iem.org.mx/actas_mpio/A4_LA PIEDAD.pdf
+16,MICHOACAN,71,PURÉPERO,11,22,225,1578,389,95,567,228,2053,657,953,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6745,2,380,7127,12742,http://iem.org.mx/actas_mpio/A4_PURÉPERO.pdf
+16,MICHOACAN,72,PURUÁNDIRO,46,100,1931,8415,8354,2889,304,837,254,4914,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,27898,13,1469,29380,58090,http://iem.org.mx/actas_mpio/A4_PURUÁNDIRO.pdf
+16,MICHOACAN,73,QUERÉNDARO,14,22,1310,609,605,374,339,36,369,1175,,,,,,,,,,,,,,,,,,,,1675,,,,,,,,,,,,,,,,,6492,3,408,6903,10838,http://iem.org.mx/actas_mpio/A4_QUERÉNDARO.pdf
+16,MICHOACAN,74,QUIROGA,12,31,2162,2629,975,111,833,226,,747,2264,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,9947,4,495,10446,16608,http://iem.org.mx/actas_mpio/A4_QUIROGA.pdf
+16,MICHOACAN,75,COJUMATLÁN DE RÉGULES,9,18,57,1974,2441,307,,20,16,175,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4990,2,229,5221,8237,http://iem.org.mx/actas_mpio/A4_COJUMATLÁN DE RÉGULES.pdf
+16,MICHOACAN,76,LOS REYES,35,92,8540,4055,5006,862,221,415,2363,3962,1172,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,26596,4,1601,28201,52620,http://iem.org.mx/actas_mpio/A4_LOS REYES.pdf
+16,MICHOACAN,77,SAHUAYO,49,95,13989,7878,820,303,317,187,171,3016,,,,,,,,,,,,,,,,,,,,,2549,,,,,,,,,,,,,,,,29230,15,1178,30423,53202,http://iem.org.mx/actas_mpio/A4_SAHUAYO.pdf
+16,MICHOACAN,78,SAN LUCAS,20,29,74,4500,636,2611,25,0,,601,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,8447,0,490,8937,14222,http://iem.org.mx/actas_mpio/A4_SAN LUCAS.pdf
+16,MICHOACAN,79,SANTA ANA MAYA,11,18,511,790,411,584,27,1220,,961,1467,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,5971,3,240,6214,10891,http://iem.org.mx/actas_mpio/A4_SANTA ANA MAYA.pdf
+16,MICHOACAN,80,SALVADOR ESCALANTE,24,56,548,1488,4208,642,1068,293,,1746,3983,,,,,,,,,,,,,,,,,,,,,4756,,,,,,,,,,,,,,,18732,3,1585,20320,34040,http://iem.org.mx/actas_mpio/A4_SALVADOR ESCALANTE.pdf
+16,MICHOACAN,81,SENGUIO,11,26,1423,3069,1907,79,308,638,65,1283,282,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,9054,2,581,9637,14866,http://iem.org.mx/actas_mpio/A4_SENGUIO.pdf
+16,MICHOACAN,82,SUSUPUATO,10,15,22,1829,933,143,11,980,,1241,,,,,,,,,,,,,,,,,,,,,,,90,,,,,,,,,,,,,,5249,0,176,5425,6896,http://iem.org.mx/actas_mpio/A4_SUSUPUATO.pdf
+16,MICHOACAN,83,TACÁMBARO,38,94,3623,7730,7915,742,984,656,670,5644,,,,,,,,,,,,,,,,,,,,,,,,852,,,,,,,,,,,,,28816,10,1571,30397,53752,http://iem.org.mx/actas_mpio/A4_TACÁMBARO.pdf
+16,MICHOACAN,84,TANCÍTARO,15,35,2663,2835,2300,213,384,216,,849,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,9460,1,545,10006,20556,http://iem.org.mx/actas_mpio/A4_TANCÍTARO.pdf
+16,MICHOACAN,85,TANGAMANDAPIO,14,40,1573,3029,3632,155,1000,476,,1679,470,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,12014,2,673,12689,22328,http://iem.org.mx/actas_mpio/A4_TANGAMANDAPIO.pdf
+16,MICHOACAN,86,TANGANCÍCUARO,27,50,5171,3871,565,177,1000,273,331,1182,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,12570,5,531,13106,26744,http://iem.org.mx/actas_mpio/A4_TANGANCÍCUARO.pdf
+16,MICHOACAN,87,TANHUATO,11,22,233,108,1031,555,154,36,,290,,,,,,,,,,,,,,,,,,,,,,,,,4543,,,,,,,,,,,,6950,2,315,7267,11408,http://iem.org.mx/actas_mpio/A4_TANHUATO.pdf
+16,MICHOACAN,88,TARETAN,9,20,4589,1403,539,64,,131,26,405,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,7157,2,266,7425,11282,http://iem.org.mx/actas_mpio/A4_TARETAN.pdf
+16,MICHOACAN,89,TARÍMBARO,40,109,2554,6537,4320,7055,6595,2009,822,3979,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,33871,27,1621,35519,63149,http://iem.org.mx/actas_mpio/A4_TARÍMBARO.pdf
+16,MICHOACAN,90,TEPALCATEPEC,16,28,2305,2680,1808,151,74,103,34,1042,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,8197,1,626,8824,16605,http://iem.org.mx/actas_mpio/A4_TEPALCATEPEC.pdf
+16,MICHOACAN,91,TINGAMBATO,5,12,41,1617,2058,119,98,52,,1082,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,5067,6,200,5273,7186,http://iem.org.mx/actas_mpio/A4_TINGAMBATO.pdf
+16,MICHOACAN,92,TINGÜINDÍN,11,21,2432,1536,556,66,876,41,207,876,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6590,3,208,6801,11042,http://iem.org.mx/actas_mpio/A4_TINGÜINDÍN.pdf
+16,MICHOACAN,93,TIQUICHEO DE NICOLAS ROMERO,11,18,47,953,1169,60,1988,24,707,210,1283,,,,,,,,,,,,,,,,,,,,,,,,,113,,,,,,,,,,,6554,0,542,7096,10019,http://iem.org.mx/actas_mpio/A4_TIQUICHEO DE NICOLAS ROMERO.pdf
+16,MICHOACAN,94,TLALPUJAHUA,15,34,261,649,1368,381,1883,1798,2479,994,1704,,,,,,,,,,,,,,,,,,,,,,,,,,810,,,,,,,,,,12327,11,889,13227,19522,http://iem.org.mx/actas_mpio/A4_TLALPUJAHUA.pdf
+16,MICHOACAN,95,TLAZAZALCA,12,14,168,1094,1337,82,,48,149,678,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,3556,0,160,3716,7866,http://iem.org.mx/actas_mpio/A4_TLAZAZALCA.pdf
+16,MICHOACAN,96,TOCUMBO,12,19,13,489,125,92,2626,2172,14,246,,,,,,,,,,,,,,,,,,,,,,,,,,,,266,,,,,,,,,6043,0,396,6439,9663,http://iem.org.mx/actas_mpio/A4_TOCUMBO.pdf
+16,MICHOACAN,97,TUMBISCATIO,7,11,48,1271,462,50,11,1030,,775,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,3647,0,90,3737,5472,http://iem.org.mx/actas_mpio/A4_TUMBISCATIO.pdf
+16,MICHOACAN,98,TURICATO,35,49,393,322,8339,388,3642,258,,1259,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,14601,4,1010,15615,24434,http://iem.org.mx/actas_mpio/A4_TURICATO.pdf
+16,MICHOACAN,99,TUXPAN,17,35,230,555,4512,230,3815,145,50,2549,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1010,,,,,,,,13096,1,486,13583,19132,http://iem.org.mx/actas_mpio/A4_TUXPAN.pdf
+16,MICHOACAN,100,TUZANTLA,20,26,133,1417,3958,247,13,79,36,2992,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,8875,0,296,9171,12468,http://iem.org.mx/actas_mpio/A4_TUZANTLA.pdf
+16,MICHOACAN,101,TZINTZUNTZAN,9,19,133,2369,479,91,33,400,1306,1241,1268,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,7320,4,476,7800,10990,http://iem.org.mx/actas_mpio/A4_TZINTZUNTZAN.pdf
+16,MICHOACAN,102,TZITZIO,15,20,402,1696,1993,69,202,65,37,357,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4821,0,247,5068,7622,http://iem.org.mx/actas_mpio/A4_TZITZIO.pdf
+16,MICHOACAN,103,URUAPAN,142,402,16032,9712,44626,4900,2894,1444,1081,30423,2188,,,,,,,,,,,,,,,,,,,,,,,,,,,,,7187,,,,,,,120487,295,6003,126785,239846,http://iem.org.mx/actas_mpio/A4_URUAPAN.pdf
+16,MICHOACAN,104,VENUSTIANO CARRANZA,22,37,312,666,3578,114,47,4696,33,1236,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,10682,2,835,11519,18448,http://iem.org.mx/actas_mpio/A4_VENUSTIANO CARRANZA.pdf
+16,MICHOACAN,105,VILLAMAR,18,34,3122,382,1150,154,,230,69,1564,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6671,3,390,7064,15736,http://iem.org.mx/actas_mpio/A4_VILLAMAR.pdf
+16,MICHOACAN,106,VISTA HERMOSA,13,26,484,5553,176,100,640,65,159,1519,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,8696,3,308,9007,14798,http://iem.org.mx/actas_mpio/A4_VISTA HERMOSA.pdf
+16,MICHOACAN,107,YURÉCUARO,19,38,454,950,887,123,985,934,3845,2822,975,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,781,,,,,,12756,34,489,13279,21968,http://iem.org.mx/actas_mpio/A4_YURÉCUARO.pdf
+16,MICHOACAN,108,ZACAPU,47,101,1742,1377,2694,1223,11356,4458,320,6965,342,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1024,,,,,31501,224,1747,33472,58064,http://iem.org.mx/actas_mpio/A4_ZACAPU.pdf
+16,MICHOACAN,109,ZAMORA,96,250,8834,13161,1889,9403,5110,6854,,16739,1024,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6774,,,,69788,234,3294,73316,144445,http://iem.org.mx/actas_mpio/A4_ZAMORA.pdf
+16,MICHOACAN,110,ZINÁPARO,7,7,75,869,1006,15,,28,,32,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2025,0,102,2127,3597,http://iem.org.mx/actas_mpio/A4_ZINÁPARO.pdf
+16,MICHOACAN,111,ZINAPÉCUARO,32,70,1085,3520,5267,290,174,605,687,2538,124,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,5179,370,,19839,4,1443,21286,38035,http://iem.org.mx/actas_mpio/A4_ZINAPÉCUARO.pdf
+16,MICHOACAN,112,ZIRACUARETIRO,8,21,361,2709,1824,105,,145,49,1397,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1038,7628,2,337,7967,12333,http://iem.org.mx/actas_mpio/A4_ZIRACUARETIRO.pdf
+16,MICHOACAN,113,ZITÁCUARO,82,195,5334,8824,18820,4585,2529,1371,860,20775,982,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,64080,26,4618,68724,114030,http://iem.org.mx/actas_mpio/A4_ZITÁCUARO.pdf

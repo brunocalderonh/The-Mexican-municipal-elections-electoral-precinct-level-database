@@ -26,32 +26,22 @@ unzip(zip_file, exdir = temp_dir)  # Extract the contents to the temp directory
 unzipped_file <- file.path(temp_dir, "all_states_final.csv")
 
 # Now read the unzipped CSV file from the temporary directory
+
+#final db
 db <- read_csv(unzipped_file)  # Use read_csv for CSV files
+db <- db %>% 
+  mutate(turnout = listanominal/total) %>% 
+  filter(turnout <= 1)
 
-
-##### CORRELATION - INE #####
-#### INE
-ine_db <- read.csv("correlation/generated_data/ine_turnout_sec.csv") %>% 
+#ine
+ine_db <- read.csv("Correlation Data/ine_turnout_sec.csv") %>% 
   mutate(uniqueid = as.numeric(uniqueid)) %>% 
   select(-X) %>% 
-  rename (turnout_ine = turnout)
+  rename (turnout_ine = turnout) %>% 
+  filter(turnout_ine <= 1)
 
-
-# Filter out rows in final_db and ine_db that don't have matching 'section' values
-final_db_filtered <- final_db %>% filter(section %in% ine_db$section)
-ine_db_filtered <- ine_db %>% filter(section %in% final_db$section)
-# Perform the left join after filtering
-correlation_ine <- final_db_filtered %>%
-  left_join(ine_db_filtered %>% select(uniqueid, year, section, turnout_ine), 
-            by = c("uniqueid", "year", "section"))
-
-# Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(correlation_ine$turnout_ine, correlation_ine$turnout, use = "complete.obs")
-# Print the correlation result
-correlation_result
-
-##### Correlation Magar Municipal #####
-final_db_mun <- read.csv("States/final/mun_aggregated.csv") 
+#Magar 
+db_mun <- read.csv("States/final/mun_aggregated.csv") 
 magar_db <- read.csv("correlation/generated_data/magar_vote_turnout_mun.csv") %>% 
   mutate(magar_listanominal_voteShare_PRI =ifelse(listanominal> 0, pri / listanominal, NA)) %>% 
   mutate(magar_listanominal_voteShare_PAN =ifelse(listanominal> 0, pan / listanominal, NA)) %>% 
@@ -59,9 +49,32 @@ magar_db <- read.csv("correlation/generated_data/magar_vote_turnout_mun.csv") %>
   mutate(magar_listanominal_voteShare_MORENA =ifelse(listanominal> 0, morena / listanominal, NA)) %>% 
   rename(turnout_magar = turnout)
 
-correlation_magar_mun <- final_db_mun %>%
+correlation_magar_mun <- db_mun %>%
   left_join(magar_db %>% select(uniqueid, year, turnout_magar, magar_listanominal_voteShare_PRI, magar_listanominal_voteShare_PAN,magar_listanominal_voteShare_PRD,magar_listanominal_voteShare_MORENA), 
             by = c("uniqueid", "year"))
+
+##### CORRELATION - INE #####
+#### INE
+
+# Left join `ine_db` to `db` on `year`, `uniqueid`, and `section`
+corr_test_ine <- db %>%
+  left_join(ine_db %>% select(year, uniqueid, section, turnout_ine), by = c("year", "uniqueid", "section"))
+
+# Calculate correlation between `turnout` and `turnout_ine` (only on complete cases)
+correlation <- cor(corr_test_ine$turnout, corr_test_ine$turnout_ine, use = "complete.obs")
+print(paste("Correlation between calculated turnout and INE turnout:", correlation))
+
+# Run a linear regression with `turnout` as the dependent variable and `turnout_ine` as the independent variable
+regression_model <- lm(turnout ~ turnout_ine, data = corr_test_ine)
+summary(regression_model)
+
+
+
+
+
+
+
+##### Correlation Magar Municipal #####
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
 correlation_result <- cor(correlation_magar_mun$turnout_magar, correlation_magar_mun$turnout, use = "complete.obs")
@@ -94,7 +107,7 @@ correlation_result
 ##### OPCION 2  #####
 # Step 1: Flag rows where incumbent_party contains a coalition (i.e., has '_')
 # and calculate number of elections at the municipal level
-coalition_trend <- final_db %>%
+coalition_trend <- db %>%
   # Create a flag for coalitions (1 if coalition, 0 otherwise)
   mutate(coalition = ifelse(grepl("_", incumbent_party), 1, 0)) %>%
   

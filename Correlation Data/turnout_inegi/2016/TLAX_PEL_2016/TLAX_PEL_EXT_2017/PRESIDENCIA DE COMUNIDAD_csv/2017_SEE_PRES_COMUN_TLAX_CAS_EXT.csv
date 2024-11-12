@@ -1,0 +1,10 @@
+﻿CIRCUNSCRIPCION,ID_ESTADO,NOMBRE_ESTADO,ID_COMUNIDAD,COMUNIDAD,SECCION,CASILLA,PAN,PRI,PRD,PAC,PS,MORENA,NUM_VOTOS_CAN_NREG,NUM_VOTOS_VALIDOS,NUM_VOTOS_NULOS,TOTAL_VOTOS,LISTA_NOMINAL,ESTATUS_ACTA,TEPJF,OBSERVACIONES,RUTA_ACTA
+4,29,TLAXCALA,45,SAN CRISTOBAL ZACACALCO,96,B,113,81,0,0,0,5,148,347,12,359,513,Acta Casilla,,Elección Extraordinaria,http://www.itetlax.org.mx/wp-content/uploads/2017/06/San_Crist%C3%B3bal_Zacacalco.pdf
+4,29,TLAXCALA,136,LA PROVIDENCIA,293,B,40,67,0,0,0,0,0,107,1,108,142,Acta Casilla,,Elección Extraordinaria,http://www.itetlax.org.mx/wp-content/uploads/2017/06/La_Providencia.pdf
+4,29,TLAXCALA,59,SAN MIGUEL BUENAVISTA,119,B,0,219,114,50,0,33,0,416,10,426,542,Acta Casilla,,Elección Extraordinaria,http://www.itetlax.org.mx/wp-content/uploads/2017/06/San_Miguel_Buenavista.pdf
+4,29,TLAXCALA,262,COLONIA SANTA MARTHA TERCERA SECCION,539,B,115,54,43,68,0,125,0,405,3,408,658,Acta Casilla,,Elección Extraordinaria,http://www.itetlax.org.mx/wp-content/uploads/2017/06/COLONIA_SANTA_MARTHA_TERCERA_SECCION.pdf
+4,29,TLAXCALA,262,COLONIA SANTA MARTHA TERCERA SECCION,539,C01,110,55,30,102,0,94,0,391,2,393,658,Acta Casilla,,Elección Extraordinaria,http://www.itetlax.org.mx/wp-content/uploads/2017/06/COLONIA_SANTA_MARTHA_TERCERA_SECCION.pdf
+4,29,TLAXCALA,262,COLONIA SANTA MARTHA TERCERA SECCION,539,C02,112,64,45,64,0,82,0,367,5,372,658,Acta Casilla,,Elección Extraordinaria,http://www.itetlax.org.mx/wp-content/uploads/2017/06/COLONIA_SANTA_MARTHA_TERCERA_SECCION.pdf
+4,29,TLAXCALA,271,SAN JOSE TEXOPA,553,B,0,0,0,68,69,70,0,207,4,211,287,Recuento,,Elección Extraordinaria,http://www.itetlax.org.mx/wp-content/uploads/2017/06/San_Jose_Texopa_Recuento.pdf
+4,29,TLAXCALA,23,BARRIO DE SANTIAGO,60,B,0,121,133,51,43,59,0,407,15,422,632,Recuento,,Elección Extraordinaria,http://www.itetlax.org.mx/wp-content/uploads/2017/06/Barrio_de_Santiago_Recuento.pdf
+4,29,TLAXCALA,25,LA GARITA,61,E01,0,82,0,22,0,138,0,242,9,251,363,Acta Casilla,,Elección Extraordinaria,http://www.itetlax.org.mx/wp-content/uploads/2017/06/La_Garita.pdf
