@@ -7,7 +7,9 @@ library(openxlsx)
 library(purrr)
 library(readxl)
 library(rstudioapi)
-library(ti)
+library(readr)
+library(stringr)
+library(ggplot2)
 
 
 # Get the path of the current script
@@ -152,54 +154,59 @@ stargazer(model_turnout, model_PRI, model_PAN, model_PRD, model_MORENA, type = "
           column.labels = c("Turnout", "PRI", "PAN", "PRD", "MORENA"),
           dep.var.labels = "Correlation")
 
+
+
 ##### GRAPHS #####
-
-##### OPCION 2  #####
-# Step 1: Flag rows where incumbent_party contains a coalition (i.e., has '_')
-# and calculate number of elections at the municipal level
-coalition_trend <- db %>%
-  # Create a flag for coalitions (1 if coalition, 0 otherwise)
-  mutate(coalition = ifelse(grepl("_", incumbent_party), 1, 0)) %>%
-  
-  # Step 2: Summarize the number of coalitions and elections per year
+####Proportion of Municipalities with at Least Electoral Coalition Over time#####
+# Calculate proportion of municipalities with at least one coalition per year
+graph1 <- db %>%
+  # Identify coalition presence by uniqueid and year
+  group_by(year, uniqueid) %>%
+  mutate(underscore_count = ifelse(str_count(party_component, "_") > 0 & !str_starts(party_component, "CI_1"), 1, 0)) %>%
+  summarise(has_coalition = ifelse(sum(underscore_count, na.rm = TRUE) > 0, 1, 0)) %>%
+  ungroup() %>%
+  # Calculate proportion of municipalities with coalitions each year
   group_by(year) %>%
-  summarise(
-    # Count the total number of coalitions
-    num_coalitions = sum(coalition),
-    
-    # Count the unique number of municipal elections (use 'mun' for this)
-    num_elections = n_distinct(uniqueid)
-  ) %>%
-  
-  # Calculate the number of coalitions per election
-  mutate(coalitions_per_election = num_coalitions / num_elections)
+  summarise(proportion_with_coalition = mean(has_coalition, na.rm = TRUE))
 
-# Step 1: Calculate Z-score for coalitions per election
-coalition_trend <- coalition_trend %>%
-  mutate(z_score_coalitions = (coalitions_per_election - mean(coalitions_per_election)) / sd(coalitions_per_election))
 
-# Step 2a: Plot the trend of Z-score normalized coalitions per election over time (Line Chart)
-ggplot(coalition_trend, aes(x = year, y = z_score_coalitions)) +
-  geom_line(color = "blue") +
-  geom_point(size = 3) +
-  labs(title = "Z-Score of Coalitions per Election Over Time",
-       x = "Year",
-       y = "Z-Score (Coalitions per Election)") +
-  theme_minimal()
+ggplot(graph1, aes(x = year, y = proportion_with_coalition)) +
+  geom_line() +
+  geom_point() +
+  labs(x = "Year", y = "Proportion of Municipalities with Coalitions",
+       title = "Proportion of Municipalities with at Least One Electoral Coalition Over Time") #+
+  # theme_minimal()  +
+  # theme(axis.title.x = element_blank(),
+  #       axis.title.y = element_blank())
 
-# Step 2b: Create a histogram to show the Z-score of coalitions per election over time
-ggplot(coalition_trend, aes(x = year, y = z_score_coalitions)) +
-  geom_bar(stat = "identity", fill = "blue") +
-  labs(title = "Z-Score of Coalitions per Election Over Time",
-       x = "Year",
-       y = "Z-Score (Coalitions per Election)") +
-  theme_minimal()
 
-##### OPCION 2  #####
 
+####Trend of Avergae Number of Parties in electoral coalitions over time#####
+# Calculate average coalition size per year
+graph2 <- db %>%
+  # Identify and count coalition size based on underscores in party_component
+  mutate(coalition_size = ifelse(str_count(party_component, "_") > 0 & !str_starts(party_component, "CI_1"),
+                                 str_count(party_component, "_") + 1, NA)) %>%
+  # Keep only rows with coalition sizes
+  filter(!is.na(coalition_size)) %>%
+  # Group by year to get the average coalition size per year
+  group_by(year) %>%
+  summarise(average_coalition_size = mean(coalition_size, na.rm = TRUE))
+
+# Plot the average coalition size over time
+ggplot(graph2, aes(x = year, y = average_coalition_size)) +
+  geom_line() +
+  geom_point() +
+  labs(x = "Year", y = "Average Number of Parties in Coalition",
+       title = "Trend in the Average Number of Parties in Electoral Coalitions Over Time") +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+
+##### Heatmap #####
 
 # Step 1: Add state_code based on uniqueid length
-finaldb <- finaldb %>%
+db <- db %>%
   mutate(state_code = case_when(
     nchar(as.character(uniqueid)) == 4 ~ substr(uniqueid, 1, 1),  # First digit for 4-character uniqueid
     nchar(as.character(uniqueid)) == 5 ~ substr(uniqueid, 1, 2),  # First two digits for 5-character uniqueid
@@ -210,7 +217,7 @@ finaldb <- finaldb %>%
 state_names <- c(
   "1" = "Aguascalientes", "2" = "Baja California", "3" = "Baja California Sur",
   "4" = "Campeche", "5" = "Coahuila", "6" = "Colima", "7" = "Chiapas", 
-  "8" = "Chihuahua", "9" = "Ciudad de México", "10" = "Durango", "11" = "Guanajuato", 
+  "8" = "Chihuahua", "10" = "Durango", "11" = "Guanajuato", 
   "12" = "Guerrero", "13" = "Hidalgo", "14" = "Jalisco", "15" = "México (State of)", 
   "16" = "Michoacán", "17" = "Morelos", "18" = "Nayarit", "19" = "Nuevo León", 
   "20" = "Oaxaca", "21" = "Puebla", "22" = "Querétaro", "23" = "Quintana Roo", 
@@ -220,7 +227,7 @@ state_names <- c(
 )
 
 # Step 3: Summarize to check for elections held
-held_elections_data <- final_df  %>%
+held_elections_data <- db %>%
   group_by(state_code, year) %>%
   summarize(elections_held = any(!is.na(incumbent_vote) & incumbent_vote > 0), .groups = 'drop')
 
@@ -229,11 +236,11 @@ held_elections_data$elections_held <- as.numeric(held_elections_data$elections_h
 
 # Step 5: Replace state codes with state names
 held_elections_data <- held_elections_data %>%
-  mutate(state_code = state_names[as.character(state_code)])
+  mutate(state_name = state_names[as.character(state_code)]) %>%
+  filter(!is.na(state_name))  # Remove any unmatched state codes
 
-# Step 6: Plot the data as a binary heatmap with discrete colors (black/white)
 # Step 6: Plot the data as a binary heatmap with discrete colors (black/white) and a black border around the white legend box
-ggplot(held_elections_data, aes(x = year, y = state_code, fill = factor(elections_held))) +
+ggplot(held_elections_data, aes(x = year, y = reorder(state_name, as.numeric(state_code)), fill = factor(elections_held))) +
   geom_tile(color = "white") +
   scale_fill_manual(values = c("0" = "white", "1" = "black"), 
                     name = "Elections Held", 
@@ -244,214 +251,40 @@ ggplot(held_elections_data, aes(x = year, y = state_code, fill = factor(election
        x = "Year", 
        y = "State") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        axis.text.y = element_text(size = 8))  # Adjust y-axis label size if needed
 
 
+######Stacked Area Chart of Party Vote Shares Over Time #####
 
-##
-# Calculate the number of unique sections
-unique_sections <- length(unique(finaldb$section))
+# Normalize vote shares for each year
+party_data <- db %>%
+  group_by(year, party_component) %>%
+  summarise(total_vote = sum(incumbent_vote, na.rm = TRUE), .groups = 'drop') %>%
+  group_by(year) %>%
+  mutate(vote_share = total_vote / sum(total_vote, na.rm = TRUE)) %>%
+  ungroup()
 
-# Calculate the number of unique uniqueids (municipality codes)
-unique_uniqueids <- length(unique(finaldb$uniqueid))
+# Plot the stacked area chart
+ggplot(party_data, aes(x = year, y = vote_share, fill = party_component)) +
+  geom_area(position = "stack") +
+  labs(x = "Year", y = "Vote Share",
+       title = "Vote Share by Party Over Time") +
+  theme_minimal()
 
-cat("Number of unique sections:", unique_sections, "\n")
-cat("Number of unique uniqueids:", unique_uniqueids, "\n")
+#Using valid voteshare
+party_data1 <- db %>%
+  group_by(year, party_component) %>%
+  summarise(total_vote = sum(incumbent_vote, na.rm = TRUE), 
+            vote_share = sum(valid_voteShare_incumbent_vote, na.rm = TRUE), 
+            .groups = 'drop') %>%
+  ungroup()
 
-
-total_elections <- n_distinct(finaldb$uniqueid, finaldb$year)
-
-cat("Total number of elections:", total_elections, "\n")
-
-
-
-
-
-
-###
-
-#######
-
-Db_all_yearly_1 <- final_df  %>% 
-  dplyr::group_by(year,uniqueid) %>% 
-  dplyr::summarise(underscore_count = str_count(party_component, "_")/n()) %>% 
-  dplyr::group_by(year) %>% 
-  dplyr::summarise(Elections = sum(underscore_count, na.rm = TRUE))
-
-ggplot(Db_all_yearly_1, aes(x = year, y = Elections)) +
-  geom_line() +
-  geom_point() +
-  labs(title = "Trend of proportion of electoral coalitions Per Year", x = "Year", y = "Proportion of Coalitions") +
+# Plot the stacked area chart
+ggplot(party_data1, aes(x = year, y = vote_share, fill = party_component)) +
+  geom_area(position = "stack") +
+  labs(x = "Year", y = "Vote Share",
+       title = "Vote Share by Party Over Time") +
   theme_minimal()
 
 
-
-
-Db_all_yearly <-final_df  %>% 
-  dplyr::group_by(year,uniqueid) %>% 
-  dplyr::mutate(underscore_count = ifelse(str_count(party_component, "_")>0,1,0)) %>% 
-  dplyr::ungroup() %>% 
-  dplyr::select(year,uniqueid,section,party_component,underscore_count) %>% 
-  dplyr::group_by(year,uniqueid) %>% 
-  dplyr::summarise(Elections = n(),
-                   Sum_coallitions = sum(underscore_count, na.rm = TRUE)) %>% 
-  dplyr::mutate(Ratio_coalitions = Sum_coallitions/Elections)
-table(Db_all_yearly$Ratio_coalitions)
-
-
-#
-Db_all_yearly <- final_df %>% 
-  dplyr::group_by(year,uniqueid) %>% 
-  dplyr::summarise(underscore_count = ifelse(str_count(party_component, "_")>0,1,0)) %>% 
-  dplyr::group_by(year) %>% 
-  dplyr::summarise(Elections = n(),
-                   Sum_coallitions = sum(underscore_count, na.rm = TRUE)) %>% 
-  dplyr::mutate(Ratio_coalitions = Sum_coallitions/Elections)
-
-#
-# Plot the trend per year
-ggplot(Db_all_yearly, aes(x = year, y = Ratio_coalitions)) +
-  geom_line() +
-  geom_point() +
-  theme_minimal() +
-  theme(axis.title.x = element_blank(),
-        axis.title.y = element_blank())
-
-
-# Function to calculate coalitions by party
-calc_coalitions_by_party <- function(data, party_component_col) {
-  data %>%
-    group_by(year, uniqueid) %>%
-    summarise(underscore_count = ifelse(str_count(!!sym(party_component_col), "_") > 0, 1, 0)) %>%
-    group_by(year) %>%
-    summarise(Elections = n(),
-              Sum_coalitions = sum(underscore_count, na.rm = TRUE)) %>%
-    mutate(Party = party_component_col,
-           Ratio_coalitions = Sum_coalitions / Elections)
-}
-
-# Apply the function for each party component
-party_list <- c("PRD_vote_party_component", "PRI_vote_party_component", "MORENA_vote_party_component", "PAN_vote_party_component")
-
-# Bind the data for all parties
-Db_all_parties <- bind_rows(lapply(party_list, function(party) calc_coalitions_by_party(final_df, party)))
-
-ggplot(Db_all_parties, aes(x = year, y = Ratio_coalitions, color = Party, group = Party)) +
-  geom_line() +
-  geom_point() +
-  scale_color_discrete(labels = c("MORENA", "PAN", "PRD", "PRI")) +
-  theme_minimal() +
-  theme(axis.title.x = element_blank(),
-        axis.title.y = element_blank())
-
-
-
-# hasta 2018
-
-Db_all_yearly <- final_df %>%
-  dplyr::group_by(year, uniqueid) %>%
-  dplyr::summarise(underscore_count = ifelse(str_count(party_component, "_") > 0, 1, 0)) %>%
-  dplyr::group_by(year) %>%
-  dplyr::summarise(Elections = n(),
-                   Sum_coallitions = sum(underscore_count, na.rm = TRUE)) %>%
-  dplyr::mutate(Ratio_coalitions = Sum_coallitions / Elections) %>%
-  dplyr::filter(year <= 2018)
-
-# Plot the trend per year up to 2018
-ggplot(Db_all_yearly, aes(x = year, y = Ratio_coalitions)) +
-  geom_line() +
-  geom_point() +
-  labs(title = "Proportion of Elections with Coalitions by Year", 
-       x = "Year", 
-       y = "Proportion of Elections with Coalitions") +
-  theme_minimal()
-
-
-
-# Function to calculate coalitions by party
-calc_coalitions_by_party <- function(data, party_component_col) {
-  data %>%
-    group_by(year, uniqueid) %>%
-    summarise(underscore_count = ifelse(str_count(!!sym(party_component_col), "_") > 0, 1, 0)) %>%
-    group_by(year) %>%
-    summarise(Elections = n(),
-              Sum_coalitions = sum(underscore_count, na.rm = TRUE)) %>%
-    mutate(Party = party_component_col,
-           Ratio_coalitions = Sum_coalitions / Elections)
-}
-
-# Apply the function for each party component
-party_list <- c("PRD_vote_party_component", "PRI_vote_party_component", "MORENA_vote_party_component", "PAN_vote_party_component")
-
-# Bind the data for all parties and filter up to 2018
-Db_all_parties <- bind_rows(lapply(party_list, function(party) calc_coalitions_by_party(final_df, party))) %>%
-  dplyr::filter(year <= 2018)
-
-# Plot the trends for all parties up to 2018
-ggplot(Db_all_parties, aes(x = year, y = Ratio_coalitions, color = Party, group = Party)) +
-  geom_line() +
-  geom_point() +
-  labs(title = "Trend of Proportion of Coalitions Per Year for Each Party",
-       x = "Year",
-       y = "Proportion of Coalitions") +
-  scale_color_discrete(labels = c("MORENA", "PAN", "PRD", "PRI")) +
-  theme_minimal()
-
-
-##### OPCION 3 #####
-names(final_df)
-
-validation <- final_df %>% 
-  group_by(year,uniqueid) %>% 
-  mutate(distinct_party_component = n_distinct(party_component))  %>% 
-  group_by(year,uniqueid) %>% 
-  summarise(Count_party_component = sum(Count_party_component),
-            Count = n(),
-            Ratio =Count_party_component/Count)
-
-table(final_df$year)
-
-
-Db_all_yearly <-final_df  %>% 
-  dplyr::group_by(year,uniqueid) %>% 
-  dplyr::mutate(distinct_party_component = n_distinct(party_component))  %>% 
-  dplyr::filter(distinct_party_component == 1) %>% 
-  dplyr::mutate(underscore_count = ifelse(str_count(party_component, "_")>0,1,0)) %>% 
-  dplyr::ungroup() %>% 
-  dplyr::select(year,uniqueid,section,party_component,underscore_count) %>% 
-  dplyr::group_by(year,uniqueid) %>% 
-  dplyr::summarise(Coallitions_dich = max(underscore_count)) %>% 
-  dplyr::group_by(year) %>% 
-  dplyr::mutate(Count_elections = n(),
-                Coalitions = sum(Coallitions_dich, na.rm = T),
-                Ratio_coalitions = Coalitions/Count_elections)
-
-# Add the standard deviation
-Db_all_yearly <- final_df %>%
-  dplyr::group_by(year, uniqueid) %>%
-  dplyr::mutate(distinct_party_component = n_distinct(party_component)) %>%
-  dplyr::filter(distinct_party_component == 1) %>%
-  dplyr::mutate(underscore_sum = str_count(party_component, "_") + 1) %>%
-  dplyr::ungroup() %>%
-  dplyr::filter(underscore_sum > 1) %>%
-  dplyr::select(year, uniqueid, section, party_component, underscore_sum) %>%
-  dplyr::group_by(year, uniqueid) %>%
-  dplyr::summarise(Coallitions = max(underscore_sum)) %>%
-  dplyr::group_by(year) %>%
-  dplyr::mutate(Coallitions_mean = mean(Coallitions, na.rm = TRUE),
-                Coallitions_sd = sd(Coallitions, na.rm = TRUE))
-
-# Now plot with error bars and sexenio shading
-ggplot(Db_all_yearly, aes(x = year, y = Coallitions_mean)) +
-  geom_line() +
-  geom_point() +
-  geom_errorbar(aes(ymin = Coallitions_mean - Coallitions_sd, ymax = Coallitions_mean + Coallitions_sd), width = 0.2) +
-  
-  # Shade regions for different presidential periods (sexenios)
-  annotate("rect", xmin = 2000, xmax = 2006, ymin = -Inf, ymax = Inf, alpha = 0.2, fill = "blue") +  # Fox (2000-2006)
-  annotate("rect", xmin = 2006, xmax = 2012, ymin = -Inf, ymax = Inf, alpha = 0.2, fill = "blue") +   # Calderon (2006-2012)
-  annotate("rect", xmin = 2012, xmax = 2018, ymin = -Inf, ymax = Inf, alpha = 0.2, fill = "green") + # Peña Nieto (2012-2018)
-  annotate("rect", xmin = 2018, xmax = 2019, ymin = -Inf, ymax = Inf, alpha = 0.2, fill = "red") + # López Obrador (2018-2024)
-  theme_minimal() +
-  theme(axis.title.x = element_blank(),
-        axis.title.y = element_blank())

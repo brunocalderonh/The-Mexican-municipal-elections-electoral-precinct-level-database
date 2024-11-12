@@ -271,6 +271,7 @@ final_df <- final_df %>%
          incumbent_candidate,
          incumbent_party,
          incumbent_vote,
+         party_component,
          valid_voteShare_incumbent_vote,
          listanominal_voteShare_incumbent_vote,
          state_incumbent_party,
