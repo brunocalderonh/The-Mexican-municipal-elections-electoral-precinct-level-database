@@ -29,7 +29,6 @@ unzipped_file <- file.path(temp_dir, "all_states_final.csv")
 db <- read_csv(unzipped_file)  # Use read_csv for CSV files
 
 
-
 ##### CORRELATION - INE #####
 #### INE
 ine_db <- read.csv("correlation/generated_data/ine_turnout_sec.csv") %>% 
