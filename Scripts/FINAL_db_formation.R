@@ -254,17 +254,23 @@ output_path <- file.path(output_dir, "all_states_final.csv")
 write_csv(final_df, output_path)
 
 # Confirm file saved correctly
-cat("File saved at:", output_path)
+cat("File saved at:", output_path, "\n")
 
-# Compress the file as a zip archive
-zip_path <- file.path(output_dir, "all_states_final.zip")
-zip(zipfile = zip_path, files = output_path)
+# Switch to the directory where the CSV is saved
+old_dir <- getwd()
+setwd(output_dir)
+
+# Compress only the CSV file into a zip without any subfolder structure
+zip::zipr("all_states_final.zip", files = "all_states_final.csv")
+
+# Switch back to the original working directory
+setwd(old_dir)
 
 # Confirm compression
-cat("File compressed at:", zip_path)
+cat("File compressed at:", file.path(output_dir, "all_states_final.zip"), "\n")
 
 # Delete the original CSV file
 file.remove(output_path)
 
 # Confirm deletion
-cat("Original CSV file deleted:", output_path)
+cat("Original CSV file deleted:", output_path, "\n")

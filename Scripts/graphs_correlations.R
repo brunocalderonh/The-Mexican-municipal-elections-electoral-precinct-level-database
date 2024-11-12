@@ -2,7 +2,7 @@ rm(list = ls())
 
 library(tidyr)
 library(dplyr)
-library(haven)
+library(readr)  # Use readr for read_csv
 library(openxlsx)
 library(purrr)
 library(readxl)
@@ -22,9 +22,11 @@ zip_file <- "Final Data/all_states_final.zip"
 temp_dir <- tempdir()  # Create a temporary directory
 unzip(zip_file, exdir = temp_dir)  # Extract the contents to the temp directory
 
-# Find the .dta file within the temp directory
+# Find the CSV file within the temp directory
 unzipped_file <- file.path(temp_dir, "all_states_final.csv")
 
-# Now read the unzipped .dta file from the temporary directory
-db <- read_dta(unzipped_file)
+# Now read the unzipped CSV file from the temporary directory
+db <- read_csv(unzipped_file)  # Use read_csv for CSV files
 
+# Print the first few rows to confirm it loaded correctly
+print(head(db))
