@@ -40,6 +40,20 @@ finaldb <- finaldb %>%
   mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
 
 
+replace1 <- function(party_str) {
+  if (!is.na(party_str)) {
+    if (party_str == "PT_MC") {
+      party_str <- "PT_PC"
+    } 
+  }
+  return(party_str)  # Ensure the function returns the modified value
+}
+
+finaldb <- finaldb %>%
+  mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace1)) %>%
+  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace1))
+
+
 
 finaldb <- finaldb %>%
   mutate(incumbent_party_magar = ifelse(year == 1997 & incumbent_party_magar == "PDM", "PD", incumbent_party_magar)) %>%

@@ -17,12 +17,26 @@ finaldb <- read_csv("Processed Data/sanluispotosi/sanluispotosi_incumbent_manipu
 
 finaldb <- finaldb %>%
   select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
+# replace_parties1 <- function(party_str) {
+#   if (!is.na(party_str)) {
+#     if (party_str == "PAN_PRD_PT_PVEM_PCP_MC_PANAL") {
+#       party_str <- "PAN_PRD_PT_PVEM_PCP_PC_PANAL"
+#     } else if (party_str == "PAN_PT_MC_PANAL") {
+#       party_str <- "PAN_PT_PC_PANAL"
+#     } 
+#   }}
+# 
+# finaldb <- finaldb %>%
+#   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties1)) %>%
+#   mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties1))
 replace_parties <- function(party_str) {
   replacements <- c( "PNA" = "PANAL", 
-                    "CONVE" = "PC",
-                    "PD1" ="PD",
-                    "INDEP" = "CI_1",
-                    "PDM" = "PD")
+                     "CONVE" = "PC",
+                     "PD1" ="PD",
+                     "INDEP" = "CI_1",
+                     "PFCRN" = "PartCardenista",
+                     "PASD" = "PAS",
+                     "PDM" = "PD")
   
   for (replacement in names(replacements)) {
     party_str <- str_replace_all(party_str, replacements[replacement], replacement)
@@ -36,9 +50,21 @@ finaldb <- finaldb %>%
   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
   mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
 
+replace1 <- function(party_str) {
+  if (!is.na(party_str)) {
+    if (party_str == "PAN_PRD_PT_PVEM_PCP_MC_PANAL") {
+      party_str <- "PAN_PRD_PT_PVEM_PCP_PC_PANAL"
+    } else if (party_str == "PAN_PT_MC_PANAL") {
+      party_str <- "PAN_PT_PC_PANAL"
+    }
+  }
+  return(party_str)  # Ensure the function returns the modified value
+}
 
+finaldb <- finaldb %>%
+  mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace1),
+         runnerup_party_magar = sapply(runnerup_party_magar, replace1))
 
-  
 assign_incumbent_vote <- function(data) {
   
   # Initialize columns
@@ -178,7 +204,6 @@ assign_runnerup_vote <- function(data) {
 }
 finaldb <- assign_runnerup_vote(finaldb)
 
-
 check_mutual_exclusivity <- function(data) {
   
   # Initialize mutually_exclusive column
@@ -242,7 +267,6 @@ check_mutual_exclusivity <- function(data) {
   
   return(data)
 }
-
 
 finaldb <- check_mutual_exclusivity(finaldb)
 

@@ -24,12 +24,14 @@ replace_parties <- function(party_str) {
                     "PD1" ="PD",
                     "INDEP" = "CI_1",
                     "PASD" = "PAS",
-                    "PVER" = "PRV")
+                    "PVER" = "PRV",
+                    "PFCRN" = "PartCardenista",
+                    "DSPPN" = "PDS")
   
   for (replacement in names(replacements)) {
     party_str <- str_replace_all(party_str, replacements[replacement], replacement)
   }
-  
+
   return(party_str)
 }
 

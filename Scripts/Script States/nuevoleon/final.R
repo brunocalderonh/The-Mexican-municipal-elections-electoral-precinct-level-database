@@ -27,7 +27,8 @@ og <- og %>%
 
 # Select the relevant columns from the collapsed database
 db_subset <- db %>%
-  select(uniqueid, year, PRI_vote, researched_incumbent, source_researched_incumbent)
+  select(uniqueid, year, PRI_vote, researched_incumbent, source_researched_incumbent)%>% 
+  filter(!is.na(researched_incumbent))
 
 #db_subset <- db_subset[!duplicated(db_subset), ]
 

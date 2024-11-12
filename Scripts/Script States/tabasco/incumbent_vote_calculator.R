@@ -22,7 +22,9 @@ replace_parties <- function(party_str) {
   replacements <- c( "PNA" = "PANAL", 
                     "CONVE" = "PC",
                     "PD1" ="PD",
-                    "INDEP" = "CI_1")
+                    "INDEP" = "CI_1",
+                    "PFCRN" = "PartCardenista",
+                    "PASD" = "PAS")
   
   for (replacement in names(replacements)) {
     party_str <- str_replace_all(party_str, replacements[replacement], replacement)
@@ -35,6 +37,19 @@ replace_parties <- function(party_str) {
 finaldb <- finaldb %>%
   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
   mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
+replace1 <- function(party_str) {
+  if (!is.na(party_str)) {
+    if (party_str == "PRD_PT_MC") {
+      party_str <- "PRD_PT_PC"
+    }
+  }
+  return(party_str)  # Ensure the function returns the modified value
+}
+
+finaldb <- finaldb %>%
+  mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace1),
+         runnerup_party_magar = sapply(runnerup_party_magar, replace1))
+
 
 
   

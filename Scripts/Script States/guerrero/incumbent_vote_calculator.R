@@ -38,6 +38,19 @@ finaldb <- finaldb %>%
   mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
 
 
+replace1 <- function(party_str) {
+  if (!is.na(party_str)) {
+    if (party_str == "PRD_PC") {
+      party_str <- "PRD_MC"
+    } 
+  }
+  return(party_str)  # Ensure the function returns the modified value
+}
+
+finaldb <- finaldb %>%
+  mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace1)) %>%
+  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace1))
+
 
   
 assign_incumbent_vote <- function(data) {

@@ -286,6 +286,5 @@ municipality_counts
 # test <- db %>%
 #   filter(PT_MORENA > 0 & (PT > 0 | MORENA > 0 ))
 
-# 
 
 

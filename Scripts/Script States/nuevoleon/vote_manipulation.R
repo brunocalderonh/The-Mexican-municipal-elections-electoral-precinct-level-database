@@ -33,7 +33,10 @@ db <- db %>%
   mutate(across(where(is.character), ~ iconv(., from = "", to = "UTF-8")))
 
 db <- db %>%
-  anti_join(extra_correction, by = c("section","mun","year", "uniqueid"))
+  anti_join(extra_correction, by = c("section","mun","year", "uniqueid")) %>%
+  filter(!(uniqueid == 19039 & year == 2018 & state == "NUEVO LEON" & mun == "MONTERREY" & section %in% c(2726, 2724, 2717, 2725)))
+
+
 
 
 # Set the path to save the CSV file relative to the repository's root

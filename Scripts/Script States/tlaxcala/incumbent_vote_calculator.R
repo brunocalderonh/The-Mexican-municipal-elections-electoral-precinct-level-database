@@ -24,7 +24,8 @@ replace_parties <- function(party_str) {
                     "PS1" = "PS",
                     "INDEP" = "CI_1",
                     "PASD" = "PAS",
-                    "PP1" = "PP")
+                    "PP1" = "PP",
+                    "PFCRN" = "PartCardenista")
   
   for (replacement in names(replacements)) {
     party_str <- str_replace_all(party_str, replacements[replacement], replacement)

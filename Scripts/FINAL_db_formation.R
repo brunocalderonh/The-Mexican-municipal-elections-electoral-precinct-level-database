@@ -113,10 +113,10 @@ determine_final_incumbent <- function(researched_incumbent, incumbent_party_maga
   }
   
   # Step 2: Create a list of incumbent parties
-  incumbents <- c(incumbent_party_magar, incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed)
+  incumbents <- c(incumbent_party_magar, incumbent_party_JL, incumbent_party_Horacio)
   
   # Step 3: Check for CI_# patterns first
-  ci_matches <- incumbents[grepl("^CI_\\w+", incumbents)]
+  ci_matches <- incumbents[grepl("^CI_1", incumbents)]
   if (length(ci_matches) > 0) {
     return(ci_matches[1])  # Return the first match containing "CI_"
   }
@@ -255,3 +255,16 @@ write_csv(final_df, output_path)
 
 # Confirm file saved correctly
 cat("File saved at:", output_path)
+
+# Compress the file as a zip archive
+zip_path <- file.path(output_dir, "all_states_final.zip")
+zip(zipfile = zip_path, files = output_path)
+
+# Confirm compression
+cat("File compressed at:", zip_path)
+
+# Delete the original CSV file
+file.remove(output_path)
+
+# Confirm deletion
+cat("Original CSV file deleted:", output_path)

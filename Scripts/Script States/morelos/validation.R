@@ -31,7 +31,6 @@ if(nrow(duplicates) > 0) {
 }
 
 
-
 #### turnout values #####
 # Check turnout for reasonable values
 invalid_turnout <- db %>%

@@ -30,6 +30,7 @@ if(nrow(duplicates) > 0) {
   print("No duplicates found.")
 }
 
+db$MDZ
 
 
 #### turnout values #####

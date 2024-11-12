@@ -30,8 +30,9 @@ replace_parties <- function(party_str) {
                     "INDEP" = "CI_1",
                     "CONVE" = "PC",
                     "JUSTA" = "Alianza_Justa",
-                    "PFCRN" = "PartCardenista")
-
+                    "PFCRN" = "PartCardenista",
+                    "FUECIUD" = "FC",
+    "FUECIU" = "FC")
   for (replacement in names(replacements)) {
     party_str <- str_replace_all(party_str, replacements[replacement], replacement)
   }

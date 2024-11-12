@@ -278,7 +278,5 @@ write_csv(final_merged_data, output_path)
 # Confirm file saved correctly
 cat("File saved at:", output_path)
 
-# Confirm file saved correctly
-cat("File saved at:", output_path)
 
 
