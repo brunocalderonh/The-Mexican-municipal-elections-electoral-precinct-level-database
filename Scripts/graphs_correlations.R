@@ -239,8 +239,8 @@ held_elections_data <- held_elections_data %>%
   mutate(state_name = state_names[as.character(state_code)]) %>%
   filter(!is.na(state_name))  # Remove any unmatched state codes
 
-# Step 6: Plot the data as a binary heatmap with discrete colors (black/white) and a black border around the white legend box
-ggplot(held_elections_data, aes(x = year, y = reorder(state_name, as.numeric(state_code)), fill = factor(elections_held))) +
+# Adjust the y-axis to display states in reverse alphabetical order
+ggplot(held_elections_data, aes(x = year, y = reorder(state_name, desc(state_name)), fill = factor(elections_held))) +
   geom_tile(color = "white") +
   scale_fill_manual(values = c("0" = "white", "1" = "black"), 
                     name = "Elections Held", 
@@ -253,7 +253,6 @@ ggplot(held_elections_data, aes(x = year, y = reorder(state_name, as.numeric(sta
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
         axis.text.y = element_text(size = 8))  # Adjust y-axis label size if needed
-
 
 ######Stacked Area Chart of Party Vote Shares Over Time #####
 
