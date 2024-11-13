@@ -50,11 +50,21 @@ assign_incumbent_vote <- function(data) {
     # Skip if incumbent_party is NA or empty
     if (is.na(incumbent_party) || incumbent_party == "") next
     
-    # Check if it is a coalition
+    # Step 1: Check for exact column match with incumbent_party
+    if (incumbent_party %in% names(data)) {
+      if (!is.na(data[[incumbent_party]][I]) && data[[incumbent_party]][I] != 0) {
+        data$incumbent_vote[I] <- data[[incumbent_party]][I]
+        data$party_component[I] <- incumbent_party
+        next
+      }
+    }
+    
+    # Step 2: If not an exact match, proceed with coalition or single party logic
     if (str_detect(incumbent_party, "_")) {
+      # Coalition handling
       parties <- unlist(str_split(incumbent_party, "_"))
       
-      # Check if any individual party within the coalition is present in other columns
+      # Coalition logic: Check if any individual party within the coalition is present
       individual_party_found <- FALSE
       for (party in parties) {
         if (party %in% data$incumbent_party_JL[I] || 
@@ -74,7 +84,7 @@ assign_incumbent_vote <- function(data) {
         }
       }
       
-      # Proceed with coalition logic if no individual party is found
+      # If no individual party found, check for broader coalition matches
       if (!individual_party_found) {
         coalition_vars <- names(data)[sapply(names(data), function(x) all(parties %in% str_split(x, "_")[[1]]))]
         
@@ -87,36 +97,15 @@ assign_incumbent_vote <- function(data) {
         }
       }
     } else {
-      # Handle single parties
+      # Single party handling
       party_vars <- names(data)[str_detect(names(data), paste0("\\b", incumbent_party, "\\b"))]
       
       for (party_var in party_vars) {
         # Ensure PAN is not confused with PANAL by using word boundaries
-        if (str_detect(party_var, "\\bPAN\\b")) {
-          if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
-            data$incumbent_vote[I] <- data[[party_var]][I]
-            data$party_component[I] <- party_var
-            break
-          }
-        } else if (!str_detect(party_var, "\\bPANAL\\b") && !str_detect(party_var, "\\bPAN\\b")) {
-          if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
-            data$incumbent_vote[I] <- data[[party_var]][I]
-            data$party_component[I] <- party_var
-            break
-          }
-        }
-      }
-      
-      # If no single party found, check coalitions containing the single party
-      if (is.na(data$incumbent_vote[I])) {
-        coalition_vars <- names(data)[sapply(names(data), function(x) incumbent_party %in% str_split(x, "_")[[1]])]
-        
-        for (coalition_var in coalition_vars) {
-          if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
-            data$incumbent_vote[I] <- data[[coalition_var]][I]
-            data$party_component[I] <- coalition_var
-            break
-          }
+        if (!str_detect(party_var, "\\bPANAL\\b") && !is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
+          data$incumbent_vote[I] <- data[[party_var]][I]
+          data$party_component[I] <- party_var
+          break
         }
       }
     }

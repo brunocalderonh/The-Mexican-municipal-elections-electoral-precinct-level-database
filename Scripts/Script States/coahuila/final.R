@@ -337,6 +337,33 @@ correct_runnerup_vote <- function(data) {
 
 merged_data <- correct_runnerup_vote (merged_data)
 
+correct_incumbent_vote_PRI <- function(data) {
+  
+  # Loop through each row and target specific observations
+  for (I in 1:nrow(data)) {
+    
+    # Check if the row matches the specified criteria
+    if (data$uniqueid[I] == 5001 && data$year[I] == 2006 && data$section[I] %in% c(1, 2) && data$incumbent_party_Horacio[I] == "PRI") {
+      
+      # Find columns that contain "PRI" in their names
+      pri_columns <- names(data)[str_detect(names(data), "PRI")]
+      
+      # Loop through each "PRI" column and assign the first non-NA value to `incumbent_vote`
+      for (col in pri_columns) {
+        if (!is.na(data[[col]][I]) && data[[col]][I] != 0) {
+          data$incumbent_vote[I] <- data[[col]][I]
+          break
+        }
+      }
+    }
+  }
+  
+  return(data)
+}
+
+# Example usage
+merged_data <- correct_incumbent_vote_PRI(merged_data)
+
 merged_data <- merged_data %>%
   mutate(turnout = ifelse(listanominal > 0, total / listanominal, NA)) 
 

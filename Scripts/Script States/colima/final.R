@@ -279,52 +279,21 @@ assign_state_incumbent_vote <- function(data) {
 }
 merged_data <- assign_state_incumbent_vote(merged_data)
 
-correct_runnerup_vote <- function(data) {
-  
-  # Initialize columns for storing results
-  data <- data %>%
-    mutate(runnerup_vote = NA,
-           runnerup_party_component = NA)
+correct_runnerup_vote_pan <- function(data) {
   
   # Loop through each row of the data
   for (I in 1:nrow(data)) {
-    runnerup_party <- data$runnerup_party_magar[I]
-    
-    # Skip processing for NA or empty runnerup_party
-    if (is.na(runnerup_party) || runnerup_party == "") next
-    
-    # List to collect all relevant columns
-    candidate_vars <- c()
-    
-    # Adjusted regex to differentiate between PAN and PANAL
-    # Use word boundaries for PAN and consider coalitions like PAN_PANAL
-    if (runnerup_party == "PAN") {
-      party_regex <- "\\bPAN\\b"  # Word boundary to match PAN exactly
-    } else {
-      party_regex <- paste0("(^|_)", runnerup_party, "($|_)") # Regex to capture exact party within coalitions
-    }
-    
-    # Find columns matching the party pattern
-    candidate_vars <- names(data)[grepl(party_regex, names(data))]
-    
-    # Check each potential column for a valid vote
-    valid_found <- FALSE
-    for (var in candidate_vars) {
-      if (!is.na(data[[var]][I]) && data[[var]][I] != 0 && data[[var]][I] != "") {
-        data$runnerup_vote[I] <- data[[var]][I]
-        data$runnerup_party_component[I] <- var
-        valid_found <- TRUE
-        break
-      }
-    }
-    
-    # If no valid entry is found in direct or coalition matches, check for broader coalitions
-    if (!valid_found && !str_detect(runnerup_party, "_")) {
-      broader_coalition_vars <- names(data)[grepl(paste0("\\b", runnerup_party, "\\b"), names(data)) & grepl("_", names(data))]
-      for (var in broader_coalition_vars) {
-        if (!is.na(data[[var]][I]) && data[[var]][I] != 0 && data[[var]][I] != "") {
-          data$runnerup_vote[I] <- data[[var]][I]
-          data$runnerup_party_component[I] <- var
+    # Check if runnerup_party_magar is "PAN"
+    if (data$runnerup_party_magar[I] == "PAN") {
+      
+      # Find columns that contain "PAN" but not "PANAL"
+      pan_cols <- names(data)[str_detect(names(data), "\\bPAN\\b") & !str_detect(names(data), "\\bPANAL\\b")]
+      
+      # Assign the first non-NA, non-zero value from columns containing PAN (e.g., PAN_ADC)
+      for (pan_col in pan_cols) {
+        if (!is.na(data[[pan_col]][I]) && data[[pan_col]][I] != 0) {
+          data$runnerup_vote[I] <- data[[pan_col]][I]
+          data$runnerup_vote_party_component[I] <- pan_col
           break
         }
       }
@@ -333,7 +302,9 @@ correct_runnerup_vote <- function(data) {
   
   return(data)
 }
-merged_data <- correct_runnerup_vote (merged_data)
+
+# Example usage
+merged_data <- correct_runnerup_vote_pan(merged_data)
 
 merged_data <- merged_data %>%
   mutate(turnout = ifelse(listanominal > 0, total / listanominal, NA)) 
