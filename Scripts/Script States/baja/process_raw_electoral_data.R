@@ -56,6 +56,17 @@ collapsed_1995 <- data_1995 %>%
   dplyr::group_by(municipality, section) %>%
   dplyr::summarise(across(c(PAN, PRI, PRD, PFCRN, PT, PVEM, PRS, PPBC, total, Nulos), sum, na.rm = TRUE))
 
+# Merge with the dataset "ln_all_months_years.dta" using seccion (section) and ed
+data_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta")
+
+data_all <- data_all %>% 
+  dplyr::filter(state == "BAJA CALIFORNIA" & month == "June" & year == 1998) # Keep only records for June 2013
+
+# Merge the datasets
+collapsed_1995 <- collapsed_1995 %>%
+  dplyr::left_join(data_all %>% dplyr::select(section,lista), by = c("section")) %>% 
+  dplyr::rename("listanominal"="lista")
+
 # Rename columns for easier interpretation
 collapsed_1995 <- collapsed_1995 %>%
   dplyr::rename(
@@ -90,7 +101,8 @@ collapsed_1995 <- collapsed_1995 %>%
 collapsed_1995 <- collapsed_1995 %>%
   dplyr::mutate(
     year = 1995,
-    month = "August"
+    month = "August",
+    turnout = total / listanominal
   )
 rm(data_1995)
 
@@ -122,6 +134,17 @@ collapsed_1998 <- data_1998 %>%
   dplyr::summarise(across(c(PAN, PRI, PRD, PT, PVEM, PEBC, PRS, PPBC, total, Nulos), sum, na.rm = TRUE)) %>% 
   dplyr::rename(nulos=Nulos)
 
+# Merge with the dataset "ln_all_months_years.dta" using seccion (section) and ed
+data_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta")
+
+data_all <- data_all %>% 
+  dplyr::filter(state == "BAJA CALIFORNIA" & month == "June" & year == 1998) # Keep only records for June 2013
+
+# Merge the datasets
+collapsed_1998 <- collapsed_1998 %>%
+  dplyr::left_join(data_all %>% dplyr::select(section,lista), by = c("section")) %>% 
+  dplyr::rename("listanominal"="lista")
+
 # Generate uniqueid
 collapsed_1998 <- collapsed_1998 %>%
   dplyr::mutate(
@@ -143,7 +166,8 @@ collapsed_1998 <- collapsed_1998 %>%
 collapsed_1998 <- collapsed_1998 %>%
   dplyr::mutate(
     year = 1998,
-    month = "June"
+    month = "June",
+    turnout = total / listanominal
   )
 
 rm(data_1998)
@@ -175,6 +199,17 @@ collapsed_2001 <- data_2001 %>%
   dplyr::summarise(across(c(`PAN-PVEM`, PRI, PRD, PT, PEBC, PSN, `PC- PAS`, total, Nulos), sum, na.rm = TRUE))%>% 
   dplyr::rename(nulos=Nulos)
 
+# Merge with the dataset "ln_all_months_years.dta" using seccion (section) and ed
+data_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta")
+
+data_all <- data_all %>% 
+  dplyr::filter(state == "BAJA CALIFORNIA" & month == "September" & year == 2001) # Keep only records for June 2013
+
+# Merge the datasets
+collapsed_2001 <- collapsed_2001 %>%
+  dplyr::left_join(data_all %>% dplyr::select(section,lista), by = c("section")) %>% 
+  dplyr::rename("listanominal"="lista")
+
 # Rename parties
 collapsed_2001 <- collapsed_2001 %>%
   dplyr::rename(
@@ -202,7 +237,8 @@ collapsed_2001 <- collapsed_2001 %>%
 collapsed_2001 <- collapsed_2001 %>%
   dplyr::mutate(
     year = 2001,
-    month = "August"
+    month = "August",
+    turnout = total / listanominal
   )
 
 rm(data_2001)
@@ -232,8 +268,9 @@ data_2004 <- data_2004 %>%
 # Collapse by municipality and section
 collapsed_2004 <- data_2004 %>%
   dplyr::group_by(municipality, section) %>%
-  dplyr::summarise(across(c(PAN, `PRI-PT-PVEM-PEBC`, PRD, PC, total,Nulos), sum, na.rm = TRUE))%>% 
-  dplyr::rename(nulos=Nulos)
+  dplyr::summarise(across(c(PAN, `PRI-PT-PVEM-PEBC`, PRD, PC, total,Nulos, `Lista Nominal`), sum, na.rm = TRUE))%>% 
+  dplyr::rename(nulos=Nulos,
+                listanominal = "Lista Nominal")
 
 # Rename parties
 collapsed_2004 <- collapsed_2004 %>%
@@ -261,7 +298,8 @@ collapsed_2004 <- collapsed_2004 %>%
 collapsed_2004 <- collapsed_2004 %>%
   dplyr::mutate(
     year = 2004,
-    month = "August"
+    month = "August",
+    turnout = total / listanominal
   )
 
 rm(data_2004)
@@ -290,7 +328,7 @@ data_2007 <- data_2007 %>%
 # Collapse by municipality and section
 collapsed_2007 <- data_2007 %>%
   dplyr::group_by(municipality, section) %>%
-  dplyr::summarise(across(c(`PAN-PANAL-PES`, `PRI-PVEM-PEBC`, PRD, `PC-PT`, PAS, total, anulados), sum, na.rm = TRUE))%>% 
+  dplyr::summarise(across(c(`PAN-PANAL-PES`, `PRI-PVEM-PEBC`, PRD, `PC-PT`, PAS, total, anulados, listanominal), sum, na.rm = TRUE))%>% 
   dplyr::rename(nulos=anulados)
 
 # Rename parties
@@ -322,7 +360,8 @@ collapsed_2007 <- collapsed_2007 %>%
 collapsed_2007 <- collapsed_2007 %>%
   dplyr::mutate(
     year = 2007,
-    month = "August"
+    month = "August",
+    turnout = total / listanominal
   )
 
 rm(data_2007)
@@ -350,7 +389,7 @@ data_2010 <- data_2010 %>%
 # Collapse by municipality and section
 collapsed_2010 <- data_2010 %>%
   dplyr::group_by(municipality, section) %>%
-  dplyr::summarise(across(c(`PAN-PANAL-PES`, `PRI-PVEM`, PRD, `PC-PT`, PEBC, total, anulados), sum, na.rm = TRUE))%>% 
+  dplyr::summarise(across(c(`PAN-PANAL-PES`, `PRI-PVEM`, PRD, `PC-PT`, PEBC, total, anulados, listanominal), sum, na.rm = TRUE))%>% 
   dplyr::rename(nulos=anulados)
 
 # Rename parties
@@ -381,7 +420,8 @@ collapsed_2010 <- collapsed_2010 %>%
 collapsed_2010 <- collapsed_2010 %>%
   dplyr::mutate(
     year = 2010,
-    month = "August"
+    month = "August",
+    turnout = total / listanominal
   )
 
 rm(data_2010)
@@ -397,7 +437,7 @@ data_2013 <- data_2013 %>%
   dplyr::rename(
     municipality = "MUNICIPIO",
     section = "CASILLA",
-    LISTA_NOMINAL = `LISTA NOMINAL`
+    listanominal = `LISTA NOMINAL`
   )
 
 
@@ -413,7 +453,7 @@ data_2013 <- data_2013 %>%
 # Collapse by municipality and section
 collapsed_2013 <- data_2013 %>%
   dplyr::group_by(municipality, section) %>%
-  dplyr::summarise(across(c(PAN_PRD_PANAL_PEBC, PRI_PVEM_PES_PT, MC, total,NULO), sum, na.rm = TRUE))%>% 
+  dplyr::summarise(across(c(PAN_PRD_PANAL_PEBC, PRI_PVEM_PES_PT, MC, total,NULO,listanominal), sum, na.rm = TRUE))%>% 
   dplyr::rename(nulos=NULO)
 
 # Assign unique municipality IDs
@@ -437,7 +477,8 @@ collapsed_2013 <- collapsed_2013 %>%
 collapsed_2013 <- collapsed_2013 %>%
   dplyr::mutate(
     year = 2013,
-    month = "July"
+    month = "July",
+    turnout = total / listanominal
   )
 
 rm(data_2013)
@@ -471,7 +512,7 @@ data_2016 <- data_2016 %>%
 collapsed_2016 <- data_2016 %>%
   dplyr::group_by(uniqueid, section) %>%
   dplyr::summarise(across(c(PAN,PRD,PBC,PES,MORENA,PPC,MUNICIPALISTA,
-                            HUMANISTA,PRI_PVEM_PT_PANAL,MC,starts_with("ind"), total,nulo), sum, na.rm = TRUE))%>% 
+                            HUMANISTA,PRI_PVEM_PT_PANAL,MC,starts_with("ind"), total,nulo,listanominal), sum, na.rm = TRUE))%>% 
   dplyr::rename(nulos=nulo)
 # Generate valid votes and apply ranking logic
 collapsed_2016 <- collapsed_2016 %>%
@@ -484,7 +525,8 @@ collapsed_2016 <- collapsed_2016 %>%
 collapsed_2016 <- collapsed_2016 %>%
   dplyr::mutate(
     year = 2016,
-    month = "June")
+    month = "June",
+    turnout = total / listanominal)
 
 rm(data_2016)
 
@@ -494,7 +536,7 @@ rm(data_2016)
 
 # Load 2019 data
 data_2019 <- readxl::read_excel("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/ComputoPorCasilla_Mun.xlsx", sheet = "Todos_Ayuntamientos", range = "A6:AF4811")
-
+names(data_2019)
 # Rename and clean columns
 data_2019 <- data_2019 %>%
   dplyr::mutate(
@@ -569,6 +611,6 @@ final_data <- bind_rows(
 )
 
 data.table::fwrite(final_data,"../../../Processed Data/baja/baja_process_raw_data.csv")
-
+summary(final_data)
 
 

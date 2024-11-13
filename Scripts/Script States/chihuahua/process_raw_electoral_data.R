@@ -201,6 +201,10 @@ data_2001_collapsed <- data_2001_collapsed %>%
 data_2001_collapsed <- data_2001_collapsed %>%
   dplyr::select(-"CAND. NO REGIST.")
 
+# Calculate the sum of valid votes across PAN, PRI, PRD, PT, PVEM, PCDP
+data_2001_collapsed <- data_2001_collapsed %>%
+  dplyr::mutate(valid = rowSums(across(c(PAN:PC_PSN)), na.rm = TRUE))
+
 names(data_2001_collapsed)
 
 # Assign unique IDs based on municipality name

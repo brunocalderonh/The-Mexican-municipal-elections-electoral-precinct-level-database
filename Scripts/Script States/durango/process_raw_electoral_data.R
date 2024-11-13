@@ -48,6 +48,17 @@ collapsed_1995 <- Ayu_Seccion_1995_No_LN %>%
   group_by(municipality, section) %>%
   summarize(across(pan:total, sum, na.rm = TRUE), .groups = "drop")
 
+# Step 11: Add external data (merge listanominal data)
+ln_data <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta") %>%
+  filter(month == "March" & year == 1998) %>%
+  select(state, section, lista)
+
+collapsed_1995 <- collapsed_1995 %>%
+  mutate(state = "DURANGO") %>%
+  left_join(ln_data, by = c("state", "section")) %>%
+  filter(!is.na(lista)) %>%
+  rename(listanominal = lista)
+
 # Step 6: Rename columns
 collapsed_1995 <- collapsed_1995 %>%
   rename(
@@ -120,7 +131,8 @@ collapsed_1995 <- collapsed_1995 %>%
 collapsed_1995 <- collapsed_1995 %>%
   mutate(
     year = 1995,
-    month = "July")
+    month = "July",
+    turnout = total / listanominal)
 
 # Step 1: Load the CSV file
 Ayu_Seccion_1998_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Ayu_Seccion_1998_No_LN.csv")

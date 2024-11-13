@@ -89,6 +89,17 @@ collapsed_1994 <- collapsed_1994 %>%
   mutate(valid = sum(c_across(c(PAN, PRI, PPS, PRD, PartCardenista, PDM, PRT, PT)), na.rm = TRUE)) %>%
   ungroup()
 
+# Merge with the dataset "ln_all_months_years.dta" using seccion (section) and ed
+data_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta")
+
+data_all <- data_all %>% 
+  dplyr::filter(state == "COLIMA" & month == "March" & year == 2000)  # Keep only records for June 2013
+
+# Merge the datasets
+collapsed_1994 <- collapsed_1994 %>%
+  dplyr::left_join(data_all %>% dplyr::select(section,lista), by = c("section")) %>% 
+  dplyr::rename("listanominal"="lista")
+
 # Step 15: Add year and month, sort, and save
 collapsed_1994 <- collapsed_1994 %>%
   mutate(
@@ -658,6 +669,13 @@ collapsed_2015 <- collapsed_2015 %>%
   mutate(
     turnout = total / listanominal
   )
+names(collapsed_2015)
+
+# Step 10: Compute `valid` as the row total
+collapsed_2015 <- collapsed_2015 %>%
+  rowwise() %>%
+  mutate(valid = sum(c_across(c(PAN:PES,PANAL,PRI_PVEM_PANAL)), na.rm = TRUE)) %>%
+  ungroup()
 
 # Step 12: Add year and month, and sort by section
 collapsed_2015 <- collapsed_2015 %>%
