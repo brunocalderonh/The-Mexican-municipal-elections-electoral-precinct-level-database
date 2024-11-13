@@ -312,4 +312,52 @@ mean_vote_vars_per_year <- db %>%
 mean_vote_vars_per_year
 
 
+#pan pri prd
+db_test_pan <- db %>%
+  filter(year %in% c(1995, 1997,1998, 2000, 2003,2004, 2006,2007,2009, 2012)) %>%
+  select(
+    uniqueid, year, section,PAN_vote, 
+    contains("PAN")
+  ) # 1995 1997 1998 2000 2003 2004 2006 2007 2009 2012 
 
+
+db_test_pri <- db %>%
+  filter(year %in% c(1995, 1997,1998, 2000, 2003,2004,2006, 2007, 2012,2018)) %>%
+  select(
+    uniqueid, year, section,PRI_vote, 
+    contains("PRI")
+  ) #1995 1997 1998 2000 2003 2004 2006 2007  2012  2018
+
+
+db_test_prd <- db %>%
+  filter(year %in% c(1995, 1997,1998, 2000, 2004, 2007, 2012)) %>%
+  select(
+    uniqueid, year, section,PRD_vote, 
+    contains("PRD")
+  ) #1995 1997 1998 2000 2004 2007 2012 
+
+#runnerup
+db_test_runnerup <- db %>%
+  filter(year == c(1998,2004)) %>%
+  select(
+    uniqueid, year, section,runnerup_party_magar, runnerup_vote, 
+    contains("PAN")
+) #1998 PAN 2004 PAN
+
+
+#state
+db_test_state <- db %>%
+  filter(year == c(1995, 1997,1998, 2000, 2003,2004,2006, 2007,2009, 2012,2018)) %>%
+  select(
+    uniqueid, year, section, state_incumbent_party, state_incumbent_vote,
+    contains("PRI"),
+    contains("PAN")
+  ) #1995 1997 1998 2000 2003 2004 2006 2007 2009 2012  2018
+
+
+db_test <- db %>%
+  filter(year %in% c(1998,2004,2007)) %>%
+  select(
+    uniqueid, year, section, incumbent_party_magar, incumbent_vote, incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed,
+    contains("PRI")
+  )#1998 PRI 2004 2007

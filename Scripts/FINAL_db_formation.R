@@ -336,7 +336,6 @@ final_df <- final_df %>%
          valid,
          total,
          turnout,
-         INDEP  # Select all columns that start with 'CI_'
   ) 
 
 # Set the path to save the CSV file relative to the repository's root

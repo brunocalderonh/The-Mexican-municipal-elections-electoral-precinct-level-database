@@ -78,8 +78,8 @@ assign_votes <- function(data) {
     
     # Adjusted logic for PAN detection
     pan_cols <- names(data)[str_detect(names(data), "\\bPAN\\b") | 
-                              str_detect(names(data), "\\bPAN_") | 
-                              str_detect(names(data), "_PAN\\b")]
+                              str_detect(names(data), "_PAN") | 
+                              str_detect(names(data), "PAN_")]
     for (pan_col in pan_cols) {
       if (!is.na(data[[pan_col]][I]) && data[[pan_col]][I] != 0 && data[[pan_col]][I] != "") {
         data$PAN_vote[I] <- data[[pan_col]][I]
@@ -179,8 +179,6 @@ assign_votes <- function(data) {
   
   return(data)
 }
-
-merged_data <- assign_votes(merged_data)
 
 assign_state_incumbent_vote <- function(data) {
   
