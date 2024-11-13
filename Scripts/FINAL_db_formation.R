@@ -130,7 +130,9 @@ for (state in states) {
         listanominal,
         valid,
         total,
-        turnout)
+        turnout,
+        starts_with("CI_")  # Select all columns that start with 'CI_'
+      )
     
     # Add the data to the list
     df_list[[state]] <- data_selected
@@ -238,14 +240,48 @@ final_df <- final_df %>%
   mutate(runnerup_candidate = runnerup_party_magar) %>% 
   mutate( incumbent_candidate = incumbent_candidate_magar)
 
-# 
-# final_df <- final_df %>%
-#   mutate(incumbent_party = case_when(
-#     incumbent_party %in% c("PCARDE", "PartCardenista", "PFCRN") ~ "PartCarden",
-#     incumbent_party %in% c("PI", "CI_1", "CI", "C.I.", "Independent") ~ "Independent",
-#     TRUE ~ incumbent_party
-#   )) %>%
-# mutate( incumbent_candidate = incumbent_candidate_magar)
+replace1 <- function(party_str) {
+  if (!is.na(party_str)) {
+    if (party_str == "INDEPENDIENTE") {
+      party_str <- "INDEP"
+    } 
+  }
+  return(party_str)  # Ensure the function returns the modified value
+}
+
+final_df <- final_df%>%
+  mutate(state_incumbent_party = sapply(state_incumbent_party, replace1))
+
+replace2 <- function(party_str) {
+  if (!is.na(party_str)) {
+    if (party_str == "CI_1") {
+      party_str <- "INDEP"
+    } else if (party_str == "CI") {
+      party_str <- "INDEP"
+    } else if (party_str == "CI_") {
+      party_str <- "INDEP"
+    } 
+  }
+  return(party_str)  # Ensure the function returns the modified value
+}
+
+final_df <- final_df %>%
+  mutate(incumbent_party = sapply(incumbent_party , replace2),
+         runnerup_party = sapply(runnerup_party , replace2))
+
+# Create the new column INDEP by summing all columns that start with "CI_"
+final_df <- final_df %>%
+  mutate(INDEP = rowSums(select(., starts_with("CI_")), na.rm = TRUE)) %>%
+  select(-starts_with("CI_")) # Remove all columns that start with "CI_"
+
+final_df <- final_df %>%
+  mutate(
+    incumbent_vote = if_else(incumbent_party == "INDEP", INDEP, incumbent_vote),
+    runnerup_vote = if_else(runnerup_party == "INDEP", INDEP, runnerup_vote),
+    state_incumbent_vote = if_else(state_incumbent_party == "INDEP", INDEP, state_incumbent_vote)
+  )
+
+
 
 
 final_df <- final_df %>% 
@@ -299,7 +335,9 @@ final_df <- final_df %>%
          listanominal,
          valid,
          total,
-         turnout) 
+         turnout,
+         INDEP  # Select all columns that start with 'CI_'
+  ) 
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Final Data")
