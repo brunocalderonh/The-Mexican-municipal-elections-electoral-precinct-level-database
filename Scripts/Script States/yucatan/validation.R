@@ -287,4 +287,7 @@ municipality_counts
 #   filter(PT_MORENA > 0 & (PT > 0 | MORENA > 0 ))
 
 
-
+mean_vote_vars_per_year <- db %>%
+  group_by(year) %>%
+  summarize(across(ends_with("_vote"), mean, na.rm = TRUE)) %>%
+  ungroup()

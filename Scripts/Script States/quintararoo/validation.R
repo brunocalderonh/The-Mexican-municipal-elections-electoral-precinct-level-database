@@ -287,5 +287,8 @@ municipality_counts
 #   filter(PRI_PVEM > 0 & (PRI > 0 | PVEM > 0 ))
 # 
 
-
+mean_vote_vars_per_year <- db %>%
+  group_by(year) %>%
+  summarize(across(ends_with("_vote"), mean, na.rm = TRUE)) %>%
+  ungroup()
 

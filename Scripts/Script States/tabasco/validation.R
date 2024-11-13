@@ -289,3 +289,15 @@ municipality_counts
 # 
 
 
+mean_vote_vars_per_year <- db %>%
+  group_by(year) %>%
+  summarize(across(ends_with("_vote"), mean, na.rm = TRUE)) %>%
+  ungroup()
+
+
+# db_test <- db %>%
+#   filter(year == 2016) %>%
+#   select(
+#     uniqueid, year, section,PAN_vote, 
+#     contains("PAN")
+#   ) 

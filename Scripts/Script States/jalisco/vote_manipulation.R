@@ -52,3 +52,11 @@ write_csv(db, output_path)
 
 # Confirm file saved correctly
 cat("File saved at:", output_path)
+
+
+
+# na_summary <- db %>%
+#   select(-c(mun, state, uniqueid, section, valid, winner, listanominal, total, CI_1, CI_2, nulo, CI_3, CI_4, CI_5)) %>%
+#   group_by(year) %>%
+#   summarize(across(everything(), ~ sum(is.na(.)), .names = "na_{col}"))
+

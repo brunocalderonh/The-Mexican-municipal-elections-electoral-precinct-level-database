@@ -342,5 +342,17 @@ ggplot(db, aes(x = factor(year), y = incumbent_vote / valid)) +
 
 
 
+mean_vote_vars_per_year <- db %>%
+  group_by(year) %>%
+  summarize(across(ends_with("_vote"), mean, na.rm = TRUE)) %>%
+  ungroup()
 
 
+db_test <- db %>%
+  filter(year == 2007) %>%
+  select(
+    uniqueid, year, section,runnerup_party_magar, runnerup_vote, 
+    contains("PRI"),
+    contains("PVEM"),
+    contains("PT")
+  )

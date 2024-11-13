@@ -289,3 +289,10 @@ municipality_counts
 # 
 
 
+# Calculate mean of all _vote variables per year
+mean_vote_vars_per_year <- db %>%
+  group_by(year) %>%
+  summarize(across(ends_with("_vote"), mean, na.rm = TRUE)) %>%
+  ungroup()
+
+

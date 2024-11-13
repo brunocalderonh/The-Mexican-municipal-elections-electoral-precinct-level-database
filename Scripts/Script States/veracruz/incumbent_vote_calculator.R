@@ -52,9 +52,19 @@ assign_incumbent_vote <- function(data) {
   
   # Loop through each row of the data
   for (I in 1:nrow(data)) {
+    # Determine the incumbent party by prioritizing non-NA values
     incumbent_party <- data$incumbent_party_magar[I]
+    if (is.na(incumbent_party) || incumbent_party == "") {
+      incumbent_party <- data$incumbent_party_Horacio[I]
+    }
+    if (is.na(incumbent_party) || incumbent_party == "") {
+      incumbent_party <- data$incumbent_party_inafed[I]
+    }
+    if (is.na(incumbent_party) || incumbent_party == "") {
+      incumbent_party <- data$incumbent_party_JL[I]
+    }
     
-    # Skip if incumbent_party is NA or empty
+    # Skip if incumbent_party is still NA or empty
     if (is.na(incumbent_party) || incumbent_party == "") next
     
     # Check if it is a coalition
@@ -64,9 +74,8 @@ assign_incumbent_vote <- function(data) {
       # Check if any individual party within the coalition is present in other columns
       individual_party_found <- FALSE
       for (party in parties) {
-        if (party %in% data$incumbent_party_JL[I] || 
-            party %in% data$incumbent_party_Horacio[I] || 
-            party %in% data$incumbent_party_inafed[I]) {
+        if (party %in% c(data$incumbent_party_magar[I], data$incumbent_party_Horacio[I], 
+                         data$incumbent_party_inafed[I], data$incumbent_party_JL[I])) {
           individual_party_found <- TRUE
           party_vars <- names(data)[str_detect(names(data), paste0("\\b", party, "\\b"))]
           
@@ -131,6 +140,8 @@ assign_incumbent_vote <- function(data) {
   
   return(data)
 }
+
+# Example usage
 finaldb <- assign_incumbent_vote(finaldb)
 
 

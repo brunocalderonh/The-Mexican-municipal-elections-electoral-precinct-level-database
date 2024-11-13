@@ -280,7 +280,10 @@ municipality_counts <- db %>%
 municipality_counts
 
 
-
+mean_vote_vars_per_year <- db %>%
+  group_by(year) %>%
+  summarize(across(ends_with("_vote"), mean, na.rm = TRUE)) %>%
+  ungroup()
 
 
 

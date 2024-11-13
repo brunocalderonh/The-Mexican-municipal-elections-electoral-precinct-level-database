@@ -338,7 +338,7 @@ correct_runnerup_vote <- function(data) {
   return(data)
 }
 
-merged_data <- correct_runnerup_vote (merged_data)
+merged_data <- correct_runnerup_vote(merged_data)
 
 
 merged_data <- merged_data %>%
