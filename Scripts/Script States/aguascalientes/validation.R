@@ -283,6 +283,62 @@ municipality_counts
 
 
 
+####
+
+# Calculate mean incumbent_vote for the year 2010
+mean_incumbent_vote_2010 <- db %>%
+  filter(year == 2010) %>%
+  summarize(mean_incumbent_vote = mean(incumbent_vote, na.rm = TRUE))
+
+mean_incumbent_vote_2010
+
+
+# Calculate mean of incumbent_vote divided by valid for the year 2010
+mean_incumbent_vote_ratio_2010 <- db %>%
+  filter(year == 2010) %>%
+  summarize(mean_incumbent_vote_ratio = mean(incumbent_vote / valid, na.rm = TRUE))
+
+mean_incumbent_vote_ratio_2010
+
+
+####
+# 1. Summary statistics for incumbent_vote, valid, and their ratio by year
+summary_stats <- db %>%
+  group_by(year) %>%
+  summarize(
+    mean_incumbent_vote = mean(incumbent_vote, na.rm = TRUE),
+    median_incumbent_vote = median(incumbent_vote, na.rm = TRUE),
+    mean_valid = mean(valid, na.rm = TRUE),
+    median_valid = median(valid, na.rm = TRUE),
+    mean_ratio = mean(incumbent_vote / valid, na.rm = TRUE),
+    median_ratio = median(incumbent_vote / valid, na.rm = TRUE),
+    sd_ratio = sd(incumbent_vote / valid, na.rm = TRUE)
+  )
+
+
+# 2. Inspect outliers specifically for 2010
+outliers_2010 <- db %>%
+  filter(year == 2010) %>%
+  select(uniqueid, incumbent_vote, valid) %>%
+  arrange(desc(incumbent_vote / valid))
+
+# Boxplot for incumbent_vote by year
+ggplot(db, aes(x = factor(year), y = incumbent_vote)) +
+  geom_boxplot() +
+  labs(title = "Incumbent Vote Distribution by Year", x = "Year", y = "Incumbent Vote")
+
+# Boxplot for valid votes by year
+ggplot(db, aes(x = factor(year), y = valid)) +
+  geom_boxplot() +
+  labs(title = "Valid Votes Distribution by Year", x = "Year", y = "Valid Votes")
+
+# Boxplot for incumbent_vote / valid ratio by year
+ggplot(db, aes(x = factor(year), y = incumbent_vote / valid)) +
+  geom_boxplot() +
+  labs(title = "Incumbent Vote / Valid Ratio by Year", x = "Year", y = "Incumbent Vote / Valid Ratio")
+
+
+
 
 
 

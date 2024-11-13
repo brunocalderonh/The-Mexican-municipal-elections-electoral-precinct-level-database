@@ -288,3 +288,35 @@ municipality_counts
 
 
 
+# Calculate mean of all _vote variables per year
+mean_vote_vars_per_year <- db %>%
+  group_by(year) %>%
+  summarize(across(ends_with("_vote"), mean, na.rm = TRUE)) %>%
+  ungroup()
+
+# Display the result
+mean_vote_vars_per_year
+
+
+
+#####
+
+
+
+db_2018 <- db %>%
+  filter(year == 2015) %>%
+  select(
+    uniqueid, year, section, incumbent_party_magar, incumbent_vote, incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed,
+    contains("PRI"),
+    contains("PVEM")
+  )
+
+
+# Calculate mean of all _vote variables per year
+mean_vote_vars_per_year <- db %>%
+  group_by(year) %>%
+  summarize(across(ends_with("_vote"), mean, na.rm = TRUE)) %>%
+  ungroup()
+
+# Display the result
+mean_vote_vars_per_year

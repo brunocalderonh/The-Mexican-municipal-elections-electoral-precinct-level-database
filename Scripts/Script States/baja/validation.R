@@ -284,6 +284,15 @@ municipality_counts
 
 
 
+##
+# Calculate total listanominal per year and uniqueid
+listanominal_totals <- db %>%
+  group_by(year, uniqueid) %>%
+  summarize(total_listanominal = sum(listanominal, na.rm = TRUE)) %>%
+  ungroup()
+
+listanominal_totals
+
 
 
 
