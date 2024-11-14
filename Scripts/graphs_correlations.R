@@ -35,58 +35,153 @@ unzipped_file <- file.path(temp_dir, "all_states_final.csv")
 db <- read_csv(unzipped_file)  # Use read_csv for CSV files
 
 
+#COMPUTE BASIC STATS OF ELECTIONS AND SUCH
+# Number of unique municipal elections (unique combinations of `mun_code` and `year`)
+num_municipal_elections <- nrow(unique(db[c("mun_code", "year")]))
+cat("Number of unique municipal elections:", num_municipal_elections, "\n")
+
+# Number of unique municipalities (`mun_code`)
+num_unique_municipalities <- length(unique(db$mun_code))
+cat("Number of unique municipalities:", num_unique_municipalities, "\n")
+
+# Number of unique electoral precincts, considering both `uniqueid` and `section`
+num_unique_precincts <- nrow(unique(db[c("state_code", "precinct")]))
+cat("Number of unique electoral precincts:", num_unique_precincts, "\n")
+
+#COMPUTE STATS OF DIFFERENT CASES OF INCUMBENT CALCULATIONS
+# Assuming your data frame is named 'db'
+
+# Case 1: incumbent_party is a single party and incumbent_party_component is either a single party or a coalition (no _ in incumbent_party)
+case1_df <- db %>%
+  filter(
+    !grepl("_", incumbent_party) & # Single party in incumbent_party
+      (grepl("_", incumbent_party_component) | !grepl("_", incumbent_party_component)) & # Single party or coalition in incumbent_party_component
+      is.na(researched_incumbent) # Exclude observations with a value in researched_incumbent
+  )
+
+num_municipal_elections_case1 <- case1_df %>%
+  distinct(mun_code, year) %>%
+  nrow()
+
+percent_precincts_affected_case1 <- (nrow(case1_df) / nrow(db)) * 100
+
+# Case 2: incumbent_party is a coalition (contains "_") and incumbent_party_component is the same or a bigger coalition
+case2_df <- db %>%
+  filter(
+    grepl("_", incumbent_party) & # Coalition in incumbent_party
+      grepl(incumbent_party, incumbent_party_component, fixed = TRUE) & # Same or bigger coalition in incumbent_party_component
+      is.na(researched_incumbent) # Exclude observations with a value in researched_incumbent
+  )
+
+num_municipal_elections_case2 <- case2_df %>%
+  distinct(mun_code, year) %>%
+  nrow()
+
+percent_precincts_affected_case2 <- (nrow(case2_df) / nrow(db)) * 100
+
+# Case 3: Valid value in researched_incumbent and incumbent_vote
+case3_df <- db %>%
+  filter(
+    !is.na(researched_incumbent) &
+      !is.na(incumbent_vote)
+  )
+
+num_municipal_elections_case3 <- case3_df %>%
+  distinct(mun_code, year) %>%
+  nrow()
+
+percent_precincts_affected_case3 <- (nrow(case3_df) / nrow(db)) * 100
+
+# Case 4: Valid value in researched_incumbent and no value in incumbent_vote
+case4_df <- db %>%
+  filter(
+    !is.na(researched_incumbent) &
+      is.na(incumbent_vote)
+  )
+
+num_municipal_elections_case4 <- case4_df %>%
+  distinct(mun_code, year) %>%
+  nrow()
+
+percent_precincts_affected_case4 <- (nrow(case4_df) / nrow(db)) * 100
+
+# Print results
+cat("Case 1:\n")
+cat("Number of municipal elections:", num_municipal_elections_case1, "\n")
+cat("Percentage of precincts affected:", percent_precincts_affected_case1, "%\n\n")
+
+cat("Case 2:\n")
+cat("Number of municipal elections:", num_municipal_elections_case2, "\n")
+cat("Percentage of precincts affected:", percent_precincts_affected_case2, "%\n\n")
+
+cat("Case 3:\n")
+cat("Number of municipal elections:", num_municipal_elections_case3, "\n")
+cat("Percentage of precincts affected:", percent_precincts_affected_case3, "%\n\n")
+
+cat("Case 4:\n")
+cat("Number of municipal elections:", num_municipal_elections_case4, "\n")
+cat("Percentage of precincts affected:", percent_precincts_affected_case4, "%\n")
+
+
+
+#LOAD DATABASES FOR CORRELATION CALCULATIONS
 #ine
 ine_db <- read.csv("Correlation Data/generated_data/ine_turnout.csv") %>% 
-  mutate(uniqueid = as.numeric(uniqueid))  %>% 
+  rename("mun_code" = "uniqueid",
+         "precinct" = 'section',
+         "registered_voters" = "listanominal") %>% 
+  mutate(mun_code = as.numeric(mun_code))  %>% 
    filter(turnout_ine != 0)
 
 #Magar 
 magar_db <- read.csv("Correlation Data/generated_data/magar_turnout.csv") %>% 
-  mutate(magar_listanominal_voteShare_PRI =ifelse(listanominal> 0, pri / listanominal, NA)) %>% 
-  mutate(magar_listanominal_voteShare_PAN =ifelse(listanominal> 0, pan / listanominal, NA)) %>% 
-  mutate(magar_listanominal_voteShare_PRD =ifelse(listanominal> 0, prd / listanominal, NA)) %>% 
-  mutate(magar_listanominal_voteShare_MORENA =ifelse(listanominal> 0, morena / listanominal, NA)) 
+  rename("mun_code" = "uniqueid",
+         "registered_voters"="listanominal") %>% 
+  mutate(magar_share_PRI_registered_voters =ifelse(registered_voters> 0, pri / registered_voters, NA)) %>% 
+  mutate(magar_share_PAN_registered_voters =ifelse(registered_voters> 0, pan / registered_voters, NA)) %>% 
+  mutate(magar_share_PRD_registered_voters =ifelse(registered_voters> 0, prd / registered_voters, NA)) %>% 
+  mutate(magar_share_MORENA_registered_voters =ifelse(registered_voters> 0, morena / registered_voters, NA)) 
+  
 
 #aggregate to mun level for corr with magar 
 # Aggregating at the municipal level
 db_mun <- db %>%
-  group_by(uniqueid, year) %>%
+  group_by(mun_code, year) %>%
   summarise(
-    # Calculations with listanominal
-    listanominal_voteShare_incumbent = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
-                                              sum(incumbent_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
-    listanominal_voteShare_state_incumbent = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
-                                                    sum(state_incumbent_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
-    listanominal_voteShare_PRI = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
-                                        sum(PRI_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
-    listanominal_voteShare_PRD = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
-                                        sum(PRD_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
-    listanominal_voteShare_PAN = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
-                                        sum(PAN_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
-    listanominal_voteShare_MORENA = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
-                                           sum(MORENA_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
-    listanominal_voteShare_runnerup = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
-                                             sum(runnerup_vote, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA),
+    # Calculations with registered_voters
+    share_incumbent_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
+                                              sum(incumbent_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
+    share_state_incumbent_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
+                                                    sum(state_incumbent_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
+    share_PRI_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
+                                        sum(PRI_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
+    share_PRD_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
+                                        sum(PRD_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
+    share_PAN_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
+                                        sum(PAN_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
+    share_MORENA_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
+                                           sum(MORENA_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
+    share_runnerup_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
+                                             sum(runnerup_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
     
     # New Calculations with valid
-    valid_voteShare_incumbent = ifelse(sum(valid, na.rm = TRUE) > 0, 
+    share_incumbent_valid_vote  = ifelse(sum(valid, na.rm = TRUE) > 0, 
                                        sum(incumbent_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
-    valid_voteShare_state_incumbent = ifelse(sum(valid, na.rm = TRUE) > 0, 
+    share_state_incumbent_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
                                              sum(state_incumbent_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
-    valid_voteShare_PRI = ifelse(sum(valid, na.rm = TRUE) > 0, 
+    share_PRI_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
                                  sum(PRI_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
-    valid_voteShare_PRD = ifelse(sum(valid, na.rm = TRUE) > 0, 
+    share_PRD_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
                                  sum(PRD_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
-    valid_voteShare_PAN = ifelse(sum(valid, na.rm = TRUE) > 0, 
+    vshare_PAN_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
                                  sum(PAN_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
-    valid_voteShare_MORENA = ifelse(sum(valid, na.rm = TRUE) > 0, 
+    share_MORENA_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
                                     sum(MORENA_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
-    valid_voteShare_runnerup = ifelse(sum(valid, na.rm = TRUE) > 0, 
+    share_runnerup_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
                                       sum(runnerup_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
-    
     # Turnout at municipal level
-    turnout = ifelse(sum(listanominal, na.rm = TRUE) > 0, 
-                     sum(total, na.rm = TRUE) / sum(listanominal, na.rm = TRUE), NA)
+    turnout = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
+                     sum(total, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA)
   ) %>%
   ungroup()
 
@@ -94,13 +189,13 @@ db_mun <- db %>%
 
 ##### CORRELATION - INE #####
 
-# Left join `ine_db` to `db` on `year`, `uniqueid`, and `section`
+# Left join `ine_db` to `db` on `year`, `mun_code`, and `section`
 corr_test_ine <- db %>%
-  left_join(ine_db %>% select(year, uniqueid, section, turnout_ine), by = c("year", "uniqueid", "section")) 
+  left_join(ine_db %>% select(year, mun_code, precinct, turnout_ine), by = c("year", "mun_code", "precinct")) 
 
 # Run a linear regression with `turnout` as the dependent variable and `turnout_ine` as the independent variable
 regression_model <- lm(turnout ~ turnout_ine, data = corr_test_ine)
-stargazer::stargazer(regression_model, type = "text")
+stargazer::stargazer(regression_model, type = "latex")
 correlation <- cor(corr_test_ine$turnout, corr_test_ine$turnout_ine, use = "complete.obs")
 correlation
 
@@ -111,8 +206,8 @@ correlation
 
 
 corr_test_magar_mun <- db_mun%>%
-  left_join(magar_db %>% select(uniqueid, year, magar_turnout, magar_listanominal_voteShare_PRI, magar_listanominal_voteShare_PAN,magar_listanominal_voteShare_PRD,magar_listanominal_voteShare_MORENA), 
-            by = c("uniqueid", "year"))
+  left_join(magar_db %>% select(mun_code, year, magar_turnout, magar_share_PRI_registered_voters, magar_share_PAN_registered_voters,magar_share_PRD_registered_voters,magar_share_MORENA_registered_voters), 
+            by = c("mun_code", "year"))
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
 correlation_result <- cor(corr_test_magar_mun$magar_turnout, corr_test_magar_mun$turnout, use = "complete.obs")
@@ -120,22 +215,22 @@ correlation_result <- cor(corr_test_magar_mun$magar_turnout, corr_test_magar_mun
 correlation_result
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(corr_test_magar_mun$magar_listanominal_voteShare_PRI, corr_test_magar_mun$listanominal_voteShare_PRI, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_share_PRI_registered_voters, corr_test_magar_mun$registered_voters_voteShare_PRI, use = "complete.obs")
 # Print the correlation result
 correlation_result
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(corr_test_magar_mun$magar_listanominal_voteShare_PAN, corr_test_magar_mun$listanominal_voteShare_PAN, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_share_PAN_registered_voters, corr_test_magar_mun$registered_voters_voteShare_PAN, use = "complete.obs")
 # Print the correlation result
 correlation_result
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(corr_test_magar_mun$magar_listanominal_voteShare_PRD, corr_test_magar_mun$listanominal_voteShare_PRD, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_share_PRD_registered_voters, corr_test_magar_mun$registered_voters_voteShare_PRD, use = "complete.obs")
 # Print the correlation result
 correlation_result
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(corr_test_magar_mun$magar_listanominal_voteShare_MORENA, corr_test_magar_mun$listanominal_voteShare_MORENA, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_share_MORENA_registered_voters, corr_test_magar_mun$registered_voters_voteShare_MORENA, use = "complete.obs")
 # Print the correlation result
 correlation_result
 
@@ -144,74 +239,47 @@ library(stargazer)
 
 # Create linear models to represent the correlations
 model_turnout <- lm(turnout ~ magar_turnout, data = corr_test_magar_mun)
-model_PRI <- lm(listanominal_voteShare_PRI ~ magar_listanominal_voteShare_PRI, data = corr_test_magar_mun)
-model_PAN <- lm(listanominal_voteShare_PAN ~ magar_listanominal_voteShare_PAN, data = corr_test_magar_mun)
-model_PRD <- lm(listanominal_voteShare_PRD ~ magar_listanominal_voteShare_PRD, data = corr_test_magar_mun)
-model_MORENA <- lm(listanominal_voteShare_MORENA ~ magar_listanominal_voteShare_MORENA, data = corr_test_magar_mun)
+model_PRI <- lm(share_PRI_registered_voters ~ magar_share_PRI_registered_voters, data = corr_test_magar_mun)
+model_PAN <- lm(share_PAN_registered_voters ~ magar_share_PAN_registered_voters, data = corr_test_magar_mun)
+model_PRD <- lm(share_PRD_registered_voters ~ magar_share_PRD_registered_voters, data = corr_test_magar_mun)
+model_MORENA <- lm(share_MORENA_registered_voters ~ magar_share_MORENA_registered_voters, data = corr_test_magar_mun)
 
 # Use stargazer to display the correlations in a regression table format
-stargazer(model_turnout, model_PRI, model_PAN, model_PRD, model_MORENA, type = "text",
+stargazer(model_turnout, model_PRI, model_PAN, model_PRD, model_MORENA, type = "latex",
           column.labels = c("Turnout", "PRI", "PAN", "PRD", "MORENA"),
           dep.var.labels = "Correlation")
 
 
 
 ##### GRAPHS #####
-####Proportion of Municipalities with at Least Electoral Coalition Over time#####
-# Calculate proportion of municipalities with at least one coalition per year
-graph1 <- db %>%
-  # Identify coalition presence by uniqueid and year
-  group_by(year, uniqueid) %>%
-  mutate(underscore_count = ifelse(str_count(party_component, "_") > 0 & !str_starts(party_component, "CI_1"), 1, 0)) %>%
+####Proportion of Municipalities with at Least Electoral Coalition Over time####
+graph2 <- db %>%
+  # Identify coalition presence by mun_code and year
+  group_by(year, mun_code) %>%
+  mutate(underscore_count = ifelse(str_count(incumbent_party_component, "_") > 0 & !str_starts(incumbent_party_component, "CI_1"), 1, 0)) %>%
   summarise(has_coalition = ifelse(sum(underscore_count, na.rm = TRUE) > 0, 1, 0)) %>%
   ungroup() %>%
-  # Calculate proportion of municipalities with coalitions each year
+  # Calculate the total number of municipalities per year
   group_by(year) %>%
-  summarise(proportion_with_coalition = mean(has_coalition, na.rm = TRUE))
+  summarise(
+    total_municipalities = n(),
+    coalition_municipalities = sum(has_coalition, na.rm = TRUE),
+    proportion_with_coalition = coalition_municipalities / total_municipalities
+  )
 
-
-ggplot(graph1, aes(x = year, y = proportion_with_coalition)) +
+# Plot with x-axis showing every 5 years
+ggplot(graph2, aes(x = year, y = proportion_with_coalition)) +
   geom_line() +
   geom_point() +
-  labs(x = "Year", y = "Proportion of Municipalities with Coalitions",
-       title = "Proportion of Municipalities with at Least One Electoral Coalition Over Time") #+
-  # theme_minimal()  +
-  # theme(axis.title.x = element_blank(),
-  #       axis.title.y = element_blank())
+  scale_x_continuous(breaks = seq(min(graph2$year, na.rm = TRUE), max(graph2$year, na.rm = TRUE), by = 5)) +  # Show only every 5 years
+  labs(x = "", y = "") +
+  theme_bw() +
+  theme(axis.text.x = element_text( face = "bold", size = 15),  # Make x-axis (years) bold
+        axis.text.y = element_text(size = 15, face = "bold")) # Increase font size of legend labels  # Make y-axis (state names) bold
 
-
-
-####Trend of Avergae Number of Parties in electoral coalitions over time#####
-# Calculate average coalition size per year
-graph2 <- db %>%
-  # Identify and count coalition size based on underscores in party_component
-  mutate(coalition_size = ifelse(str_count(party_component, "_") > 0 & !str_starts(party_component, "CI_1"),
-                                 str_count(party_component, "_") + 1, NA)) %>%
-  # Keep only rows with coalition sizes
-  filter(!is.na(coalition_size)) %>%
-  # Group by year to get the average coalition size per year
-  group_by(year) %>%
-  summarise(average_coalition_size = mean(coalition_size, na.rm = TRUE))
-
-# Plot the average coalition size over time
-ggplot(graph2, aes(x = year, y = average_coalition_size)) +
-  geom_line() +
-  geom_point() +
-  labs(x = "Year", y = "Average Number of Parties in Coalition",
-       title = "Trend in the Average Number of Parties in Electoral Coalitions Over Time") +
-  theme_minimal() +
-  theme(axis.title.x = element_blank(),
-        axis.title.y = element_blank())
 
 ##### Heatmap #####
 
-# Step 1: Add state_code based on uniqueid length
-db <- db %>%
-  mutate(state_code = case_when(
-    nchar(as.character(uniqueid)) == 4 ~ substr(uniqueid, 1, 1),  # First digit for 4-character uniqueid
-    nchar(as.character(uniqueid)) == 5 ~ substr(uniqueid, 1, 2),  # First two digits for 5-character uniqueid
-    TRUE ~ NA_character_  # Handle unexpected cases
-  ))
 
 # Step 2: Create a mapping for state names
 state_names <- c(
@@ -247,43 +315,13 @@ ggplot(held_elections_data, aes(x = year, y = reorder(state_name, desc(state_nam
                     labels = c("No Elections", "Elections Held"),
                     guide = guide_legend(override.aes = list(color = c("black", NA)))) +  # Black border around the white legend box
   scale_x_continuous(breaks = seq(min(held_elections_data$year), max(held_elections_data$year), by = 1)) +  # Display all years
-  labs(title = "Elections Held by State and Year",
-       x = "Year", 
-       y = "State") +
+  labs(x = "", y = "") +  # Remove y-axis label by setting it to an empty string
+  # labs(title = "Elections Held by State and Year",
+  #      x = "Year", 
+  #      y = "State") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
-        axis.text.y = element_text(size = 8))  # Adjust y-axis label size if needed
-
-######Stacked Area Chart of Party Vote Shares Over Time #####
-
-# Normalize vote shares for each year
-party_data <- db %>%
-  group_by(year, party_component) %>%
-  summarise(total_vote = sum(incumbent_vote, na.rm = TRUE), .groups = 'drop') %>%
-  group_by(year) %>%
-  mutate(vote_share = total_vote / sum(total_vote, na.rm = TRUE)) %>%
-  ungroup()
-
-# Plot the stacked area chart
-ggplot(party_data, aes(x = year, y = vote_share, fill = party_component)) +
-  geom_area(position = "stack") +
-  labs(x = "Year", y = "Vote Share",
-       title = "Vote Share by Party Over Time") +
-  theme_minimal()
-
-#Using valid voteshare
-party_data1 <- db %>%
-  group_by(year, party_component) %>%
-  summarise(total_vote = sum(incumbent_vote, na.rm = TRUE), 
-            vote_share = sum(valid_voteShare_incumbent_vote, na.rm = TRUE), 
-            .groups = 'drop') %>%
-  ungroup()
-
-# Plot the stacked area chart
-ggplot(party_data1, aes(x = year, y = vote_share, fill = party_component)) +
-  geom_area(position = "stack") +
-  labs(x = "Year", y = "Vote Share",
-       title = "Vote Share by Party Over Time") +
-  theme_minimal()
-
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, face = "bold", size = 13),  # Make x-axis (years) bold
+      axis.text.y = element_text(size = 13, face = "bold"),  # Increase y-axis text size and make it bold
+      legend.title = element_text(size = 13, face = "bold"),  # Make legend title bold and larger
+      legend.text = element_text(size = 13))  # Increase font size of legend labels  # Make y-axis (state names) bold
 

@@ -126,6 +126,8 @@ for (state in states) {
         runnerup_candidate_magar,
         runnerup_vote ,
         runnerup_party_component,
+        researched_incumbent,
+        source_researched_incumbent,
         margin,
         listanominal,
         valid,
@@ -281,62 +283,76 @@ final_df <- final_df %>%
     state_incumbent_vote = if_else(state_incumbent_party == "INDEP", INDEP, state_incumbent_vote)
   )
 
-
+final_df <- final_df %>%
+  mutate(state_code = case_when(
+    nchar(uniqueid) == 4 ~ substr(uniqueid, 1, 1),  # If `uniqueid` is 4 digits, take the first digit
+    nchar(uniqueid) == 5 ~ substr(uniqueid, 1, 2)))   # If `uniqueid` is 5 digits, take the first 2 digits
 
 
 final_df <- final_df %>% 
-  mutate(valid_voteShare_incumbent_vote = ifelse(valid > 0, incumbent_vote / valid, NA),
-         valid_voteShare_state_incumbent_vote = ifelse(valid > 0, state_incumbent_vote / valid, NA),
-         valid_voteShare_PRI_vote = ifelse(valid > 0, PRI_vote / valid, NA),
-         valid_voteShare_PRD_vote = ifelse(valid > 0, PRD_vote / valid, NA),
-         valid_voteShare_PAN_vote = ifelse(valid > 0, PAN_vote / valid, NA),
-         valid_voteShare_MORENA_vote = ifelse(valid > 0, MORENA_vote / valid, NA),
-         valid_voteShare_runnerup_vote = ifelse(valid > 0, runnerup_vote / valid, NA),
-         listanominal_voteShare_incumbent_vote = ifelse(listanominal > 0, incumbent_vote / listanominal, NA),
-         listanominal_voteShare_state_incumbent_vote = ifelse(listanominal > 0, state_incumbent_vote / listanominal, NA),
-         listanominal_voteShare_PRI_vote = ifelse(listanominal > 0, PRI_vote / listanominal, NA),
-         listanominal_voteShare_PRD_vote = ifelse(listanominal > 0, PRD_vote / listanominal, NA),
-         listanominal_voteShare_PAN_vote = ifelse(listanominal > 0, PAN_vote / listanominal, NA),
-         listanominal_voteShare_MORENA_vote = ifelse(listanominal > 0, MORENA_vote / listanominal, NA),
-         listanominal_voteShare_runnerup_vote = ifelse(listanominal > 0, runnerup_vote / listanominal, NA)) %>% 
-  select(uniqueid,
-         year,
-         state, 
-         mun, 
-         section,
-         incumbent_candidate,
-         incumbent_party,
-         incumbent_vote,
-         party_component,
-         valid_voteShare_incumbent_vote,
-         listanominal_voteShare_incumbent_vote,
-         state_incumbent_party,
-         state_incumbent_vote,
-         valid_voteShare_state_incumbent_vote,
-         listanominal_voteShare_state_incumbent_vote,
-         PRI_vote,
-         valid_voteShare_PRI_vote,
-         listanominal_voteShare_PRI_vote,
-         PRD_vote,
-         valid_voteShare_PRD_vote,
-         listanominal_voteShare_PRD_vote,
-         PAN_vote,
-         valid_voteShare_PAN_vote,
-         listanominal_voteShare_PAN_vote,
-         MORENA_vote,
-         valid_voteShare_MORENA_vote,
-         listanominal_voteShare_MORENA_vote,
-         runnerup_candidate,
-         runnerup_party,
-         runnerup_vote,
-         valid_voteShare_runnerup_vote,
-         listanominal_voteShare_runnerup_vote,
-         margin,
-         listanominal,
-         valid,
-         total,
-         turnout,
-  ) 
+  mutate(share_incumbent_valid_vote = ifelse(valid > 0, incumbent_vote / valid, NA),
+         share_state_incumbent_valid_vote = ifelse(valid > 0, state_incumbent_vote / valid, NA),
+         share_PRI_valid_vote = ifelse(valid > 0, PRI_vote / valid, NA),
+         share_PRD_valid_vote = ifelse(valid > 0, PRD_vote / valid, NA),
+         share_PAN_valid_vote = ifelse(valid > 0, PAN_vote / valid, NA),
+         share_MORENA_valid_vote = ifelse(valid > 0, MORENA_vote / valid, NA),
+         share_runnerup_valid_vote= ifelse(valid > 0, runnerup_vote / valid, NA),
+         share_incumbent_registered_voters = ifelse(listanominal > 0, incumbent_vote / listanominal, NA),
+         share_state_incumbent_registered_voters = ifelse(listanominal > 0, state_incumbent_vote / listanominal, NA),
+         share_PRI_registered_voters = ifelse(listanominal > 0, PRI_vote / listanominal, NA),
+         share_PRD_registered_voters = ifelse(listanominal > 0, PRD_vote / listanominal, NA),
+         share_PAN_registered_voters = ifelse(listanominal > 0, PAN_vote / listanominal, NA),
+         share_MORENA_registered_voters = ifelse(listanominal > 0, MORENA_vote / listanominal, NA),
+         share_runnerup_registered_voters = ifelse(listanominal > 0, runnerup_vote / listanominal, NA)) %>% 
+  select(
+    state_code,
+    uniqueid,
+    year,
+    state, 
+    mun, 
+    section,
+    incumbent_candidate,
+    incumbent_party,
+    incumbent_vote,
+    party_component,
+    share_incumbent_valid_vote,
+    share_incumbent_registered_voters,
+    state_incumbent_party,
+    state_incumbent_vote,
+    share_state_incumbent_valid_vote,
+    share_state_incumbent_registered_voters,
+    PRI_vote,
+    share_PRI_valid_vote,
+    share_PRI_registered_voters,
+    PRD_vote,
+    share_PRD_valid_vote,
+    share_PRD_registered_voters,
+    PAN_vote,
+    share_PAN_valid_vote,
+    share_PAN_registered_voters,
+    MORENA_vote,
+    share_MORENA_valid_vote,
+    share_MORENA_registered_voters,
+    runnerup_candidate,
+    runnerup_party,
+    runnerup_vote,
+    share_runnerup_valid_vote,
+    share_runnerup_registered_voters,
+    researched_incumbent,
+    source_researched_incumbent,
+    margin,
+    listanominal,
+    valid,
+    total,
+    turnout
+  )
+
+final_df <- final_df %>%
+  rename( "mun_code" = "uniqueid",
+          "precinct" = "section",
+          "incumbent_party_component"= "party_component",
+          "registered_voters" = "listanominal",
+          "mun_winning_margin" = "margin")
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Final Data")
@@ -366,3 +382,4 @@ file.remove(output_path)
 
 # Confirm deletion
 cat("Original CSV file deleted:", output_path, "\n")
+
