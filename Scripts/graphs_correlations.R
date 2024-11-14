@@ -20,7 +20,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, "../"))
 
 # Path to the .zip file
-zip_file <- "Final Data/all_states_final.zip"
+zip_file <- "Final Data/all_states_final_graphs_corr.zip"
 
 # Unzip the file to a temporary directory
 temp_dir <- tempdir()  # Create a temporary directory
@@ -253,7 +253,7 @@ stargazer(model_turnout, model_PRI, model_PAN, model_PRD, model_MORENA, type = "
 
 ##### GRAPHS #####
 ####Proportion of Municipalities with at Least Electoral Coalition Over time####
-graph2 <- db %>%
+graph <- db %>%
   # Identify coalition presence by mun_code and year
   group_by(year, mun_code) %>%
   mutate(underscore_count = ifelse(str_count(incumbent_party_component, "_") > 0 & !str_starts(incumbent_party_component, "CI_1"), 1, 0)) %>%
@@ -268,10 +268,10 @@ graph2 <- db %>%
   )
 
 # Plot with x-axis showing every 5 years
-ggplot(graph2, aes(x = year, y = proportion_with_coalition)) +
+ggplot(graph, aes(x = year, y = proportion_with_coalition)) +
   geom_line() +
   geom_point() +
-  scale_x_continuous(breaks = seq(min(graph2$year, na.rm = TRUE), max(graph2$year, na.rm = TRUE), by = 5)) +  # Show only every 5 years
+  scale_x_continuous(breaks = seq(min(graph$year, na.rm = TRUE), max(graph$year, na.rm = TRUE), by = 5)) +  # Show only every 5 years
   labs(x = "", y = "") +
   theme_bw() +
   theme(axis.text.x = element_text( face = "bold", size = 15),  # Make x-axis (years) bold
