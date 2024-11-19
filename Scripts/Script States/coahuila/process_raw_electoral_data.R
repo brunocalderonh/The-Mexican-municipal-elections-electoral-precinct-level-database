@@ -813,7 +813,7 @@ data_2010 <- data_2010 %>%
 
 # Step 4: Create a new column "section" from "CASILLA"
 data_2010 <- data_2010 %>%
-  dplyr::mutate(section = substr(CASILLA, 2, 3))
+  dplyr::mutate(section = substr(CASILLA, 2, 4))
 
 
 # Step 5: Convert all columns to numeric where possible
@@ -959,7 +959,7 @@ ayuntamientos <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1
 
 # Step 2: Drop rows where TOTAL is NA or 0
 ayuntamientos <- ayuntamientos %>%
-  filter(!(is.na(TOTAL) | TOTAL == 0))
+  dplyr::filter(!(is.na(TOTAL) | TOTAL == 0))
 
 # Step 3: Collapse data by MUNICIPIO and SECC (sum values from PAN to LN)
 data_2013 <- ayuntamientos %>%
