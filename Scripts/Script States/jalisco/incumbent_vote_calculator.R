@@ -73,10 +73,28 @@ assign_incumbent_vote <- function(data) {
   
   # Loop through each row of the data
   for (I in 1:nrow(data)) {
-    incumbent_party <- data$incumbent_party_magar[I]
+    # Get incumbent party values
+    parties_to_check <- c(
+      data$incumbent_party_JL[I],
+      data$incumbent_party_Horacio[I],
+      data$incumbent_party_inafed[I],
+      data$incumbent_party_magar[I]
+    )
     
-    # Skip if incumbent_party is NA or empty
-    if (is.na(incumbent_party) || incumbent_party == "") next
+    # Filter non-NA values
+    non_na_parties <- parties_to_check[!is.na(parties_to_check) & parties_to_check != ""]
+    
+    # If more than one non-NA party exists, prioritize incumbent_party_magar
+    incumbent_party <- if (length(non_na_parties) == 1) {
+      non_na_parties[1]
+    } else if (!is.na(data$incumbent_party_magar[I]) && data$incumbent_party_magar[I] != "") {
+      data$incumbent_party_magar[I]
+    } else {
+      NA
+    }
+    
+    # Skip if no valid incumbent_party is identified
+    if (is.na(incumbent_party)) next
     
     # Check if it is a coalition
     if (str_detect(incumbent_party, "_")) {

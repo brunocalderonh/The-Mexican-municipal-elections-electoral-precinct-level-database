@@ -14,7 +14,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 #Assuming your script is in 'Scripts/Script States/', go two levels up
 setwd(file.path(script_dir, "../../../"))
 
-db <- read_csv("Processed Data/hidalgo/hidalgo_final.csv")
+db2 <- read_csv("Processed Data/hidalgo/hidalgo_final.csv")
 coalitions <- read_csv("Processed Data/coalition_dic.csv")
 
 #### duplicate values #####

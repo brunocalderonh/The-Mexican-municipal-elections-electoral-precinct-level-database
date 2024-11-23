@@ -104,8 +104,6 @@ for (state in states) {
         incumbent_vote,
         party_component,
         mutually_exclusive,
-        researched_incumbent,
-        source_researched_incumbent,
         incumbent_party_JL,
         incumbent_candidate_JL,
         incumbent_party_Horacio,
@@ -126,8 +124,8 @@ for (state in states) {
         runnerup_candidate_magar,
         runnerup_vote ,
         runnerup_party_component,
-        # researched_incumbent,
-        # source_researched_incumbent,
+        researched_incumbent,
+        source_researched_incumbent,
         margin,
         listanominal,
         valid,
@@ -163,7 +161,7 @@ determine_final_incumbent <- function(researched_incumbent, incumbent_party_maga
                         "PRIZAC", "CUXT", "CSA", "CCS", "TRANSIN", "XGR", "QROOUNE", "APPJ", 
                         "APSP", "JPC", "UYC", "SNI", "XENQTQ", "CPM", "MNU", "ECV", "CPEM", "UPH", 
                         "CPG", "PPG", "CACPC", "NCCH", "CCCH", "UXBCS", "SUDTP", "COALICIÓN", "XGR",
-                        "SQROO", "UPI", "PMC")  # Newly added PMC
+                        "SQROO", "UPI", "PMC", "CXBDS", "C5M", "TEP", "CPU" ,"UDO","PRD-PT","PNA","CM-PRI")  # Newly added PMC
   
   # Step 1: Check if researched_incumbent has a value
   if (!is.na(researched_incumbent) && researched_incumbent != "") {

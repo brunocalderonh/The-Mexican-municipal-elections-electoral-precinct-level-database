@@ -322,7 +322,7 @@ db_test_pan <- db %>%
 
 
 db_test_pri <- db %>%
-  filter(year %in% c(1995, 1997,1998, 2000, 2003,2004,2006, 2007, 2012,2018)) %>%
+  filter(year == 2012) %>%
   select(
     uniqueid, year, section,PRI_vote, 
     contains("PRI")
@@ -330,7 +330,7 @@ db_test_pri <- db %>%
 
 
 db_test_prd <- db %>%
-  filter(year %in% c(1995, 1997,1998, 2000, 2004, 2007, 2012)) %>%
+  filter(year == 2007) %>%
   select(
     uniqueid, year, section,PRD_vote, 
     contains("PRD")
@@ -356,7 +356,7 @@ db_test_state <- db %>%
 
 
 db_test <- db %>%
-  filter(year %in% c(1998,2004,2007)) %>%
+  filter(year == 2004) %>%
   select(
     uniqueid, year, section, incumbent_party_magar, incumbent_vote, incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed,
     contains("PRI")

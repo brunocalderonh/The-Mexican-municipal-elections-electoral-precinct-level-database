@@ -10,6 +10,8 @@ library(rstudioapi)
 library(readr)
 library(stringr)
 library(ggplot2)
+library(stargazer)
+
 
 
 # Get the path of the current script
@@ -79,7 +81,7 @@ num_municipal_elections_case2 <- case2_df %>%
 
 percent_precincts_affected_case2 <- (nrow(case2_df) / nrow(db)) * 100
 
-# Case 3: Valid value in researched_incumbent and incumbent_vote
+# Case 3: Valid value in researched_incumbent and incumbent_vote (manually researched cases with vote values found)
 case3_df <- db %>%
   filter(
     !is.na(researched_incumbent) &
@@ -92,7 +94,7 @@ num_municipal_elections_case3 <- case3_df %>%
 
 percent_precincts_affected_case3 <- (nrow(case3_df) / nrow(db)) * 100
 
-# Case 4: Valid value in researched_incumbent and no value in incumbent_vote
+# Case 4: Valid value in researched_incumbent and no value in incumbent_vote (manual cases for which we did not find a valid match)
 case4_df <- db %>%
   filter(
     !is.na(researched_incumbent) &
@@ -104,6 +106,18 @@ num_municipal_elections_case4 <- case4_df %>%
   nrow()
 
 percent_precincts_affected_case4 <- (nrow(case4_df) / nrow(db)) * 100
+
+# Case 5: NA or 0 in incumbent_vote and no valid value in researched_incumbent
+case5_df <- db %>%
+  filter(
+    (is.na(incumbent_vote) | incumbent_vote == 0)
+  )
+
+num_municipal_elections_case5 <- case5_df %>%
+  distinct(mun_code, year) %>%
+  nrow()
+
+percent_precincts_affected_case5 <- (nrow(case5_df) / nrow(db)) * 100
 
 # Print results
 cat("Case 1:\n")
@@ -122,6 +136,9 @@ cat("Case 4:\n")
 cat("Number of municipal elections:", num_municipal_elections_case4, "\n")
 cat("Percentage of precincts affected:", percent_precincts_affected_case4, "%\n")
 
+cat("Case 5:\n")
+cat("Number of municipal elections:", num_municipal_elections_case5, "\n")
+cat("Percentage of precincts affected:", percent_precincts_affected_case5, "%\n")
 
 
 #LOAD DATABASES FOR CORRELATION CALCULATIONS
@@ -173,7 +190,7 @@ db_mun <- db %>%
                                  sum(PRI_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
     share_PRD_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
                                  sum(PRD_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
-    vshare_PAN_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
+    share_PAN_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
                                  sum(PAN_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
     share_MORENA_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
                                     sum(MORENA_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
@@ -215,27 +232,24 @@ correlation_result <- cor(corr_test_magar_mun$magar_turnout, corr_test_magar_mun
 correlation_result
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(corr_test_magar_mun$magar_share_PRI_registered_voters, corr_test_magar_mun$registered_voters_voteShare_PRI, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_share_PRI_registered_voters, corr_test_magar_mun$share_PRI_registered_voters, use = "complete.obs")
 # Print the correlation result
 correlation_result
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(corr_test_magar_mun$magar_share_PAN_registered_voters, corr_test_magar_mun$registered_voters_voteShare_PAN, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_share_PAN_registered_voters, corr_test_magar_mun$share_PAN_registered_voters, use = "complete.obs")
 # Print the correlation result
 correlation_result
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(corr_test_magar_mun$magar_share_PRD_registered_voters, corr_test_magar_mun$registered_voters_voteShare_PRD, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_share_PRD_registered_voters, corr_test_magar_mun$share_PRD_registered_voters, use = "complete.obs")
 # Print the correlation result
 correlation_result
 
 # Calculate the correlation between 'turnout_magar' and 'turnout'
-correlation_result <- cor(corr_test_magar_mun$magar_share_MORENA_registered_voters, corr_test_magar_mun$registered_voters_voteShare_MORENA, use = "complete.obs")
+correlation_result <- cor(corr_test_magar_mun$magar_share_MORENA_registered_voters, corr_test_magar_mun$share_MORENA_registered_voters, use = "complete.obs")
 # Print the correlation result
 correlation_result
-
-# Load the required package
-library(stargazer)
 
 # Create linear models to represent the correlations
 model_turnout <- lm(turnout ~ magar_turnout, data = corr_test_magar_mun)
@@ -296,7 +310,7 @@ state_names <- c(
 
 # Step 3: Summarize to check for elections held
 held_elections_data <- db %>%
-  group_by(state_code, year) %>%
+  group_by(state_code, mun, year) %>%
   summarize(elections_held = any(!is.na(incumbent_vote) & incumbent_vote > 0), .groups = 'drop')
 
 # Step 4: Convert elections_held to numeric (0 or 1)
@@ -307,21 +321,121 @@ held_elections_data <- held_elections_data %>%
   mutate(state_name = state_names[as.character(state_code)]) %>%
   filter(!is.na(state_name))  # Remove any unmatched state codes
 
-# Adjust the y-axis to display states in reverse alphabetical order
-ggplot(held_elections_data, aes(x = year, y = reorder(state_name, desc(state_name)), fill = factor(elections_held))) +
+
+# Step 6: Add a condition for "EXTRAORDINARIO" in the `mun` column
+held_elections_data <- held_elections_data %>%
+  mutate(
+    fill_category = case_when(
+      str_detect(mun, "EXTRAORDINARIO") ~ "Extraordinary Elections",
+      elections_held == 1 ~ "Elections Held",
+      TRUE ~ "No Elections"
+    )
+  )
+
+# Step 7: Update the ggplot to use the new `fill_category` column
+ggplot(held_elections_data, aes(x = year, y = reorder(state_name, desc(state_name)), fill = fill_category)) +
   geom_tile(color = "white") +
-  scale_fill_manual(values = c("0" = "white", "1" = "black"), 
-                    name = "Elections Held", 
-                    labels = c("No Elections", "Elections Held"),
-                    guide = guide_legend(override.aes = list(color = c("black", NA)))) +  # Black border around the white legend box
+  scale_fill_manual(
+    values = c(
+      "No Elections" = "white",
+      "Elections Held" = "black",
+      "Extraordinary Elections" = "red"
+    ),
+    name = "Elections Held"
+  ) +
   scale_x_continuous(breaks = seq(min(held_elections_data$year), max(held_elections_data$year), by = 1)) +  # Display all years
-  labs(x = "", y = "") +  # Remove y-axis label by setting it to an empty string
-  # labs(title = "Elections Held by State and Year",
-  #      x = "Year", 
-  #      y = "State") +
+  labs(x = "", y = "") +  # Remove axis labels
   theme_minimal() +
-theme(axis.text.x = element_text(angle = 90, vjust = 0.5, face = "bold", size = 13),  # Make x-axis (years) bold
-      axis.text.y = element_text(size = 13, face = "bold"),  # Increase y-axis text size and make it bold
-      legend.title = element_text(size = 13, face = "bold"),  # Make legend title bold and larger
-      legend.text = element_text(size = 13))  # Increase font size of legend labels  # Make y-axis (state names) bold
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, face = "bold", size = 13),  # Make x-axis (years) bold
+    axis.text.y = element_text(size = 13, face = "bold"),  # Increase y-axis text size and make it bold
+    legend.title = element_text(size = 13, face = "bold"),  # Make legend title bold and larger
+    legend.text = element_text(size = 13)  # Increase font size of legend labels
+  )
+
+##OLD
+# 
+# # Adjust the y-axis to display states in reverse alphabetical order
+# ggplot(held_elections_data, aes(x = year, y = reorder(state_name, desc(state_name)), fill = factor(elections_held))) +
+#   geom_tile(color = "white") +
+#   scale_fill_manual(values = c("0" = "white", "1" = "black"), 
+#                     name = "Elections Held", 
+#                     labels = c("No Elections", "Elections Held"),
+#                     guide = guide_legend(override.aes = list(color = c("black", NA)))) +  # Black border around the white legend box
+#   scale_x_continuous(breaks = seq(min(held_elections_data$year), max(held_elections_data$year), by = 1)) +  # Display all years
+#   labs(x = "", y = "") +  # Remove y-axis label by setting it to an empty string
+#   # labs(title = "Elections Held by State and Year",
+#   #      x = "Year", 
+#   #      y = "State") +
+#   theme_minimal() +
+# theme(axis.text.x = element_text(angle = 90, vjust = 0.5, face = "bold", size = 13),  # Make x-axis (years) bold
+#       axis.text.y = element_text(size = 13, face = "bold"),  # Increase y-axis text size and make it bold
+#       legend.title = element_text(size = 13, face = "bold"),  # Make legend title bold and larger
+#       legend.text = element_text(size = 13))  # Increase font size of legend labels  # Make y-axis (state names) bold
+# 
+
+
+##### Evolutions of electoral precints through time 
+
+precints_db <- read_csv("Correlation Data/table_precintsthroughtime.csv")
+
+# Summarize the data by year and state to calculate total sections for each state-year
+sections_evolution_state <- precints_db %>%
+  group_by(Year, State) %>%
+  summarize(Total_Sections = sum(`Total Sections`, na.rm = TRUE), .groups = 'drop')
+
+# Create the faceted line graph with standardized y-axis
+ggplot(sections_evolution_state, aes(x = Year, y = Total_Sections, group = State, color = State)) +
+  geom_line(size = 1) +
+  labs(
+    title = "Evolution of Total Sections Over Time by State",
+    x = "Year",
+    y = "Total Number of Sections"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 12, face = "bold"),
+    legend.position = "none"  # Remove legend to avoid clutter
+  ) +
+  facet_wrap(~ State, ncol = 4, scales = "fixed") 
+
+# Summarize the data by year to calculate total sections for each year
+sections_evolution_total <- precints_db %>%
+  group_by(Year) %>%
+  summarize(Total_Sections = sum(`Total Sections`, na.rm = TRUE), .groups = 'drop')
+
+
+# Create the bar graph
+ggplot(sections_evolution_total, aes(x = Year, y = Total_Sections)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(
+    title = "Total Number of Sections Over Time",
+    x = "Year",
+    y = "Total Number of Sections"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 12, face = "bold")
+  )
+
+
+
+# Create the line graph
+ggplot(sections_evolution_total, aes(x = Year, y = Total_Sections)) +
+  geom_line(size = 1.5, color = "blue") +
+  labs(
+    title = "Evolution of Total Sections Over Time",
+    x = "Year",
+    y = "Total Number of Sections"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 12, face = "bold")
+  )
 

@@ -78,22 +78,24 @@ assign_incumbent_vote <- function(data) {
       # Check if any individual party within the coalition is present in other incumbent_party_* fields
       individual_party_found <- FALSE
       for (party in parties) {
-        # Only consider individual party matches if they are part of the coalition and present in the other fields
+        # Check if the individual party is part of the coalition and present in any incumbent_party_* field
         if ((!is.na(data$incumbent_party_JL[I]) && party == data$incumbent_party_JL[I]) || 
             (!is.na(data$incumbent_party_Horacio[I]) && party == data$incumbent_party_Horacio[I]) || 
             (!is.na(data$incumbent_party_inafed[I]) && party == data$incumbent_party_inafed[I]) ||
             (!is.na(data$incumbent_party_magar[I]) && party == data$incumbent_party_magar[I])) {
-          individual_party_found <- TRUE
+          
+          # Use the individual party to find a value
           party_vars <- names(data)[str_detect(names(data), paste0("\\b", party, "\\b"))]
           
           for (party_var in party_vars) {
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
               data$incumbent_vote[I] <- data[[party_var]][I]
               data$party_component[I] <- party_var
+              individual_party_found <- TRUE
               break
             }
           }
-          if (!is.na(data$incumbent_vote[I])) break
+          if (individual_party_found) break
         }
       }
       
