@@ -155,13 +155,6 @@ merged_data <- merged_data %>%
              str_replace_all(toupper(.), "-", "_"))
   )
 
-# Set the path to save the CSV file relative to the repository's root
-output_dir <- file.path(getwd(), "Data/municipal magar data splitcoal")
-output_path <- file.path(output_dir, "magar_mun_votes.csv")
- 
-# Use write_csv to save the file
-write_csv(merged_data, output_path)
-
 
 ##### merge with the final db incumbent and runnerup parties
 
@@ -499,4 +492,12 @@ mun_db <- mun_db %>%
           runnerup_party,
           mun_runnerup_vote,
           mun_runnerup_party_component
-          )
+          ) 
+
+# Set the path to save the CSV file relative to the repository's root
+output_dir <- file.path(getwd(), "Data/municipal magar data splitcoal")
+output_path <- file.path(output_dir, "magar_mun_votes.csv")
+
+# Use write_csv to save the file
+write_csv(merged_data, output_path)
+
