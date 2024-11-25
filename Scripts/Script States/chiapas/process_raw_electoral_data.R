@@ -1859,7 +1859,7 @@ data_2018 <- data_2018 %>%
       municipality == "VILLA COMALTITLAN" ~ 7071,
       municipality == "EL PARRAL" ~ 7122,
       municipality == "METAPA" ~ 7055,
-      municipality == "RINCON CHAMULA SAN PEDRO" ~ 7121,
+      municipality == "RINCON CHAMULA SAN PEDRO" ~ 7124,
       municipality == "CAPITAN LUIS ANGEL VIDAL" ~ 7120,
       TRUE ~ NA_real_  # Default case for municipalities that are not in the list
     ))
