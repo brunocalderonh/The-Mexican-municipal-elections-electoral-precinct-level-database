@@ -65,74 +65,105 @@ assign_incumbent_vote <- function(data) {
   for (I in 1:nrow(data)) {
     incumbent_party <- data$incumbent_party_magar[I]
     
-    # Skip if incumbent_party is NA or empty
-    if (is.na(incumbent_party) || incumbent_party == "") next
+    # Handle cases where all incumbent_party_ variables are NA
+    if (is.na(incumbent_party) || incumbent_party == "") {
+      incumbent_party <- data %>%
+        select(starts_with("incumbent_party_")) %>%
+        filter(row_number() == I) %>%
+        unlist(use.names = FALSE) %>%
+        na.omit() %>%
+        unique()
+      
+      if (length(incumbent_party) == 0) next # Skip if no valid incumbent_party values are found
+    }
+    
+    # Check if there's a mix of coalitions and single parties
+    all_parties <- data %>%
+      select(starts_with("incumbent_party_")) %>%
+      filter(row_number() == I) %>%
+      unlist(use.names = FALSE) %>%
+      na.omit() %>%
+      unique()
+    
+    coalition_parties <- all_parties[str_detect(all_parties, "_")]
+    single_parties <- all_parties[!str_detect(all_parties, "_")]
+    
+    if (length(coalition_parties) > 0 && length(single_parties) > 0) {
+      # Check if any single party is part of the coalition
+      for (coalition in coalition_parties) {
+        coalition_components <- unlist(str_split(coalition, "_"))
+        for (single_party in single_parties) {
+          if (single_party %in% coalition_components) {
+            incumbent_party <- single_party
+            break
+          }
+        }
+        if (incumbent_party %in% single_parties) break
+      }
+    }
     
     # Check if it is a coalition
     if (str_detect(incumbent_party, "_")) {
+      # Split the coalition into individual parties
       parties <- unlist(str_split(incumbent_party, "_"))
       
-      # Check if any individual party within the coalition is present in other columns
-      individual_party_found <- FALSE
-      for (party in parties) {
-        if (party %in% data$incumbent_party_JL[I] || 
-            party %in% data$incumbent_party_Horacio[I] || 
-            party %in% data$incumbent_party_inafed[I]) {
-          individual_party_found <- TRUE
-          party_vars <- names(data)[str_detect(names(data), paste0("\\b", party, "\\b"))]
-          
-          for (party_var in party_vars) {
-            if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
-              data$incumbent_vote[I] <- data[[party_var]][I]
-              data$party_component[I] <- party_var
-              break
-            }
-          }
-          if (!is.na(data$incumbent_vote[I])) break
+      # Find columns that match all parties in any order (exact match or broader coalition)
+      coalition_vars <- names(data)[sapply(names(data), function(x) {
+        party_components <- unlist(str_split(x, "_"))
+        all(parties %in% party_components) # Check if all parties are in the column
+      })]
+      
+      # Check for valid votes in coalition columns
+      valid_found <- FALSE
+      for (var in coalition_vars) {
+        if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
+          data$incumbent_vote[I] <- data[[var]][I]
+          data$party_component[I] <- var
+          valid_found <- TRUE
+          break
         }
       }
       
-      # Proceed with coalition logic if no individual party is found
-      if (!individual_party_found) {
-        coalition_vars <- names(data)[sapply(names(data), function(x) all(parties %in% str_split(x, "_")[[1]]))]
-        
-        for (coalition_var in coalition_vars) {
-          if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
-            data$incumbent_vote[I] <- data[[coalition_var]][I]
-            data$party_component[I] <- coalition_var
-            break
-          }
-        }
-      }
+      # If no valid value found, continue to next row
+      if (valid_found) next
     } else {
       # Handle single parties
-      party_vars <- names(data)[str_detect(names(data), paste0("\\b", incumbent_party, "\\b"))]
+      party <- incumbent_party
       
-      for (party_var in party_vars) {
-        # Ensure PAN is not confused with PANAL by using word boundaries
-        if (str_detect(party_var, "\\bPAN\\b")) {
-          if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
-            data$incumbent_vote[I] <- data[[party_var]][I]
-            data$party_component[I] <- party_var
-            break
-          }
-        } else if (!str_detect(party_var, "\\bPANAL\\b") && !str_detect(party_var, "\\bPAN\\b")) {
-          if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
-            data$incumbent_vote[I] <- data[[party_var]][I]
-            data$party_component[I] <- party_var
-            break
-          }
+      # Regex to match the exact party name (exclude PANAL for PAN)
+      if (party == "PAN") {
+        party_regex <- "(^PAN$|_PAN$|^PAN_)"
+      } else if (party == "PANAL") {
+        party_regex <- "(^PANAL$|_PANAL$|^PANAL_)"
+      } else {
+        party_regex <- paste0("(^|_)", party, "($|_)")
+      }
+      
+      # Find columns matching the standalone party
+      candidate_vars <- names(data)[grepl(party_regex, names(data))]
+      
+      # Check for valid votes in candidate columns
+      valid_found <- FALSE
+      for (var in candidate_vars) {
+        if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
+          data$incumbent_vote[I] <- data[[var]][I]
+          data$party_component[I] <- var
+          valid_found <- TRUE
+          break
         }
       }
       
-      # If no single party found, check coalitions containing the single party
-      if (is.na(data$incumbent_vote[I])) {
-        coalition_vars <- names(data)[sapply(names(data), function(x) incumbent_party %in% str_split(x, "_")[[1]])]
+      # If no valid value found, check for broader coalitions containing the party
+      if (!valid_found) {
+        broader_coalition_vars <- names(data)[sapply(names(data), function(x) {
+          party_components <- unlist(str_split(x, "_"))
+          party %in% party_components # Check if the party is part of the coalition
+        })]
         
-        for (coalition_var in coalition_vars) {
-          if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
-            data$incumbent_vote[I] <- data[[coalition_var]][I]
-            data$party_component[I] <- coalition_var
+        for (var in broader_coalition_vars) {
+          if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
+            data$incumbent_vote[I] <- data[[var]][I]
+            data$party_component[I] <- var
             break
           }
         }
@@ -142,6 +173,7 @@ assign_incumbent_vote <- function(data) {
   
   return(data)
 }
+
 finaldb <- assign_incumbent_vote(finaldb)
 
 assign_runnerup_vote <- function(data) {
