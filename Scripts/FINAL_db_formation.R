@@ -508,16 +508,13 @@ final_magar_mun_db <- final_magar_mun_db %>%
 #municipal level identifying variables
 mun_db <- final_df %>% 
   select(
-    state_code,                             
     mun_code,                              
     year,                                   
-    state,                                  
-    mun,                                    
     incumbent_party,
     runnerup_party) # Use read_csv for CSV files
 
 mun_db <- mun_db %>%
-  group_by(mun_code, state_code, year, state, mun) %>%
+  group_by(mun_code, year) %>%
   summarise(
     incumbent_party = first(incumbent_party), # Assuming incumbent_party doesn't vary within mun_code
     runnerup_party = first(runnerup_party),   # Assuming runnerup_party doesn't vary within mun_code
@@ -807,23 +804,19 @@ correct_runnerup_vote <- function(data) {
 mun_db <- assign_incumbent_vote(mun_db)
 mun_db <- correct_runnerup_vote(mun_db)
 mun_db <- mun_db %>% 
-  select( state_code,                             
+  select(                             
           mun_code,                              
           year,                                   
-          state,                                  
-          mun,                                    
-          incumbent_party,
           mun_incumbent_vote,
           mun_party_component,
-          runnerup_party,
           mun_runnerup_vote,
           mun_runnerup_party_component
-  ) 
+  )
 
-final_df<- final_df %>% 
-  left_join(mun_db, by = c("mun_code", "year"))
+final_data <- final_df %>% 
+  left_join(mun_db, by = c("mun_code", "year")) 
 
-# Filtered <- final_df %>% filter(row_number() %in% c(40079))
+#Filtered <- final_data %>% filter(row_number() %in% c(153458))
 
 
 # Set the path to save the CSV file relative to the repository's root
@@ -831,7 +824,7 @@ output_dir <- file.path(getwd(), "Final Data")
 output_path <- file.path(output_dir, "all_states_final.csv")
 
 # Use write_csv to save the file
-write_csv(final_df, output_path)
+write_csv(final_data, output_path)
 
 # Confirm file saved correctly
 cat("File saved at:", output_path, "\n")
