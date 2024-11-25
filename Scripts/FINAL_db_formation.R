@@ -806,18 +806,41 @@ mun_db <- correct_runnerup_vote(mun_db)
 mun_db <- mun_db %>% 
   select(                             
           mun_code,                              
-          year,                                   
+          year,
           mun_incumbent_vote,
           mun_party_component,
           mun_runnerup_vote,
           mun_runnerup_party_component
-  )
+  ) %>% 
+  mutate(
+    mun_incumbent_vote = as.numeric(mun_incumbent_vote),
+    mun_runnerup_vote = as.numeric(mun_incumbent_vote)
+    )
 
 final_data <- final_df %>% 
   left_join(mun_db, by = c("mun_code", "year")) 
 
-#Filtered <- final_data %>% filter(row_number() %in% c(153458))
+final_data <- final_data %>% 
+  group_by(year,mun_code) %>% 
+  mutate(mun_registered_voters = sum(registered_voters, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(share_mun_incumbent_registered_voters = ifelse(mun_registered_voters > 0, (mun_incumbent_vote / mun_registered_voters), NA),
+         share_mun_runnerup_registered_voters = ifelse(mun_registered_voters > 0, (mun_runnerup_vote / mun_registered_voters), NA)) 
 
+view(final_data %>% 
+       filter(share_mun_incumbent_registered_voters>1))  
+
+filtered <- final_data %>% 
+  filter(incumbent_party == runnerup_party & !is.na(incumbent_party)) %>% 
+  select(mun_code,year,incumbent_party, mun_incumbent_vote,incumbent_vote,
+         mun_party_component,runnerup_party, mun_runnerup_vote,
+         mun_runnerup_party_component, runnerup_vote)
+
+
+summary(final_data)
+
+test <- filtered  %>% 
+  filter(is.na(year))
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Final Data")
