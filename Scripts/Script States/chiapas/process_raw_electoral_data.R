@@ -1,5 +1,5 @@
 # Basic setup
-rm(list = ls())          # clear all objects in memory
+rm(list = ls())# clear all objects in memory
 #dev.off()                  # reload graphic device
 cat("\014")                # clear console
 options(max.print = 5000)  # expand display
