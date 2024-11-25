@@ -681,7 +681,7 @@ data_2009 <- seccion_2009 %>%
 # Step 6: Create 'pri_pvem' for selected municipalities
 data_2009 <- data_2009 %>%
   dplyr::mutate(
-    pri_pvem = case_when(
+    PRI_PVEM = case_when(
       municipality %in% c("Arteaga", "Juárez", "Matamoros", "San Pedro") ~ PRI + PVEM + CC1,
       municipality %in% c("La Madrid", "Ramos Arizpe") ~ PRI + PVEM + CC2,
       TRUE ~ 0),
@@ -693,7 +693,7 @@ data_2009 <- data_2009 %>%
 # Step 7: Create 'pri_pvem_pna' for selected municipalities
 data_2009 <- data_2009 %>%
   dplyr::mutate(
-    pri_pvem_pna = ifelse(municipality == "Abasolo", PRI + PVEM + PNA + CC1, 0),
+    PRI_PVEM_PNA = ifelse(municipality == "Abasolo", PRI + PVEM + PNA + CC1, 0),
     PRI = ifelse(municipality == "Abasolo", 0, PRI),
     PVEM = ifelse(municipality == "Abasolo", 0, PVEM),
     PNA = ifelse(municipality == "Abasolo", 0, PNA),
@@ -702,7 +702,7 @@ data_2009 <- data_2009 %>%
 # Step 8: Create 'pri_pvem_psd' for selected municipalities
 data_2009 <- data_2009 %>%
   dplyr::mutate(
-    pri_pvem_psd = case_when(
+    PRI_PVEM_PSD = case_when(
       municipality %in% c("Nadadores", "Ocampo", "San Buenaventura") ~ PRI + PVEM + PSD + CC1,
       municipality %in% c("Sacramento", "Viesca") ~ PRI + PVEM + PSD + CC2,
       TRUE ~ 0),
@@ -715,7 +715,7 @@ data_2009 <- data_2009 %>%
 # Step 9: Create 'pri_pvem_pna_psd' for selected municipalities
 data_2009 <- data_2009 %>%
   dplyr::mutate(
-    pri_pvem_pna_psd = case_when(
+    PRI_PVEM_PNA_PSD = case_when(
       municipality %in% c("Allende", "Candela", "Cuatrociénegas", "Escobedo", "Guerrero", "Hidalgo", 
                           "Morelos", "Múzquiz", "Sierra Mojada", "Villa Unión", "Zaragoza") ~ PRI + PVEM + PNA + PSD + CC1,
       municipality %in% c("Castaños", "Sabinas", "Progreso") ~ PRI + PVEM + PNA + PSD + CC2,TRUE ~ 0),

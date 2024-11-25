@@ -52,8 +52,17 @@ assign_incumbent_vote <- function(data) {
   for (I in 1:nrow(data)) {
     incumbent_party <- data$incumbent_party_magar[I]
     
-    # Skip if incumbent_party is NA or empty
-    if (is.na(incumbent_party) || incumbent_party == "") next
+    # Handle cases where all incumbent_party_ variables are NA
+    if (is.na(incumbent_party) || incumbent_party == "") {
+      incumbent_party <- data %>%
+        select(starts_with("incumbent_party_")) %>%
+        filter(row_number() == I) %>%
+        unlist(use.names = FALSE) %>%
+        na.omit() %>%
+        unique()
+      
+      if (length(incumbent_party) == 0) next # Skip if no valid incumbent_party values are found
+    }
     
     # Check if it is a coalition
     if (str_detect(incumbent_party, "_")) {
@@ -66,7 +75,7 @@ assign_incumbent_vote <- function(data) {
             party %in% data$incumbent_party_Horacio[I] || 
             party %in% data$incumbent_party_inafed[I]) {
           individual_party_found <- TRUE
-          party_vars <- names(data)[str_detect(names(data), paste0("\\b", party, "\\b"))]
+          party_vars <- names(data)[str_detect(names(data), party)]
           
           for (party_var in party_vars) {
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
@@ -93,17 +102,17 @@ assign_incumbent_vote <- function(data) {
       }
     } else {
       # Handle single parties
-      party_vars <- names(data)[str_detect(names(data), paste0("\\b", incumbent_party, "\\b"))]
+      party_vars <- names(data)[str_detect(names(data), incumbent_party)]
       
       for (party_var in party_vars) {
-        # Ensure PAN is not confused with PANAL by using word boundaries
-        if (str_detect(party_var, "\\bPAN\\b")) {
+        # Ensure PAN is not confused with PANAL
+        if (str_detect(party_var, "^PAN$") || (!str_detect(party_var, "PANAL") && str_detect(party_var, "PAN"))) {
           if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[party_var]][I]
             data$party_component[I] <- party_var
             break
           }
-        } else if (!str_detect(party_var, "\\bPANAL\\b") && !str_detect(party_var, "\\bPAN\\b")) {
+        } else if (!str_detect(party_var, "PAN") && !str_detect(party_var, "PANAL")) {
           if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[party_var]][I]
             data$party_component[I] <- party_var

@@ -84,8 +84,17 @@
     for (I in 1:nrow(data)) {
       incumbent_party <- data$incumbent_party_magar[I]
       
-      # Skip if incumbent_party is NA or empty
-      if (is.na(incumbent_party) || incumbent_party == "") next
+      # Handle cases where all incumbent_party_ variables are NA
+      if (is.na(incumbent_party) || incumbent_party == "") {
+        incumbent_party <- data %>%
+          select(starts_with("incumbent_party_")) %>%
+          filter(row_number() == I) %>%
+          unlist(use.names = FALSE) %>%
+          na.omit() %>%
+          unique()
+        
+        if (length(incumbent_party) == 0) next # Skip if no valid incumbent_party values are found
+      }
       
       # Check if it is a coalition
       if (str_detect(incumbent_party, "_")) {
@@ -161,6 +170,7 @@
     
     return(data)
   }
+  
   
   # Apply the function to your data
   finaldb <- assign_incumbent_vote(finaldb)

@@ -295,39 +295,72 @@ correct_runnerup_vote <- function(data) {
     # Skip processing for NA or empty runnerup_party
     if (is.na(runnerup_party) || runnerup_party == "") next
     
-    # List to collect all relevant columns
-    candidate_vars <- c()
-    
-    # Adjusted regex to differentiate between PAN and PANAL
-    # Use word boundaries for PAN and consider coalitions like PAN_PANAL
-    if (runnerup_party == "PAN") {
-      party_regex <- "\\bPAN\\b"  # Word boundary to match PAN exactly
-    } else {
-      party_regex <- paste0("(^|_)", runnerup_party, "($|_)") # Regex to capture exact party within coalitions
-    }
-    
-    # Find columns matching the party pattern
-    candidate_vars <- names(data)[grepl(party_regex, names(data))]
-    
-    # Check each potential column for a valid vote
-    valid_found <- FALSE
-    for (var in candidate_vars) {
-      if (!is.na(data[[var]][I]) && data[[var]][I] != 0 && data[[var]][I] != "") {
-        data$runnerup_vote[I] <- data[[var]][I]
-        data$runnerup_party_component[I] <- var
-        valid_found <- TRUE
-        break
-      }
-    }
-    
-    # If no valid entry is found in direct or coalition matches, check for broader coalitions
-    if (!valid_found && !str_detect(runnerup_party, "_")) {
-      broader_coalition_vars <- names(data)[grepl(paste0("\\b", runnerup_party, "\\b"), names(data)) & grepl("_", names(data))]
-      for (var in broader_coalition_vars) {
+    # Check if the runnerup_party is a coalition
+    if (str_detect(runnerup_party, "_")) {
+      # Coalition case: split into individual parties
+      coalition_parties <- unlist(str_split(runnerup_party, "_"))
+      
+      # Find columns containing all coalition parties (exact match or with additional parties)
+      coalition_vars <- names(data)[sapply(names(data), function(x) {
+        party_components <- unlist(str_split(x, "_"))
+        all(coalition_parties %in% party_components) && 
+          # Differentiating PAN from PANAL in coalitions
+          ("PAN" %in% coalition_parties && "PANAL" %notin% coalition_parties || "PANAL" %in% coalition_parties && "PAN" %notin% coalition_parties)
+      })]
+      
+      # Check for valid votes in coalition variables
+      for (var in coalition_vars) {
         if (!is.na(data[[var]][I]) && data[[var]][I] != 0 && data[[var]][I] != "") {
           data$runnerup_vote[I] <- data[[var]][I]
           data$runnerup_party_component[I] <- var
           break
+        }
+      }
+    } else {
+      # Single party case
+      party <- runnerup_party
+      
+      # Regex to match the exact party name (excluding other similar names like PANAL for PAN)
+      if (party == "PAN") {
+        # Match exact PAN but exclude PANAL
+        party_regex <- "(^PAN$|_PAN$|^PAN_)"
+      } else if (party == "PANAL") {
+        # Match exact PANAL but exclude PAN
+        party_regex <- "(^PANAL$|_PANAL$|^PANAL_)"
+      } else {
+        # General regex for other parties
+        party_regex <- paste0("(^|_)", party, "($|_)")
+      }
+      
+      # Find columns matching the standalone party
+      candidate_vars <- names(data)[grepl(party_regex, names(data))]
+      
+      # Check for valid votes in standalone party variables
+      valid_found <- FALSE
+      for (var in candidate_vars) {
+        if (!is.na(data[[var]][I]) && data[[var]][I] != 0 && data[[var]][I] != "") {
+          data$runnerup_vote[I] <- data[[var]][I]
+          data$runnerup_party_component[I] <- var
+          valid_found <- TRUE
+          break
+        }
+      }
+      
+      # If no match found, check broader coalitions containing the party
+      if (!valid_found) {
+        broader_coalition_vars <- names(data)[sapply(names(data), function(x) {
+          party_components <- unlist(str_split(x, "_"))
+          party %in% party_components && 
+            # Ensure PAN and PANAL differentiation in broader coalitions
+            ("PAN" %in% party_components && "PANAL" %notin% party_components || "PANAL" %in% party_components && "PAN" %notin% party_components)
+        })]
+        
+        for (var in broader_coalition_vars) {
+          if (!is.na(data[[var]][I]) && data[[var]][I] != 0 && data[[var]][I] != "") {
+            data$runnerup_vote[I] <- data[[var]][I]
+            data$runnerup_party_component[I] <- var
+            break
+          }
         }
       }
     }
