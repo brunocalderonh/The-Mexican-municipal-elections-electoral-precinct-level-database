@@ -291,4 +291,108 @@ mean_vote_vars_per_year <- db %>%
   group_by(year) %>%
   summarize(across(ends_with("_vote"), mean, na.rm = TRUE)) %>%
   ungroup()
+####### 5. validation#######
+
+# Define the excluded columns
+excluded_columns <- c("PRI_vote", "PRD_vote", "PAN_vote", 
+                      "MORENA_vote", "MORENA_vote_party_component",
+                      "PRD_vote_party_component", "PAN_vote_party_component", 
+                      "PRI_vote_party_component")
+
+# Filter and select columns
+validation_results <- db %>%
+  # Filter for rows with NA in incumbent_vote
+  filter(is.na(incumbent_vote)) %>%
+  # Select specific columns and dynamically include desired ones
+  select(
+    uniqueid, year, mun, section, 
+    incumbent_party_JL, incumbent_party_Horacio, incumbent_party_inafed, incumbent_party_magar,researched_incumbent,
+    # Select columns containing "PRI", "PRD", or "PAN" except excluded ones
+    contains("PAN"),
+    # contains("MC"),
+    -all_of(excluded_columns) # Exclude specific columns
+  )
+
+# Filter and select columns
+validation_results1 <- db %>%
+  # Filter for rows with NA in incumbent_vote
+  filter(is.na(runnerup_vote)) %>%
+  # Select specific columns and dynamically include desired ones
+  select(
+    uniqueid, year, mun, section, 
+    runnerup_party_magar,runnerup_vote,
+    # Select columns containing "PRI", "PRD", or "PAN" except excluded ones
+    contains("PRD"),
+    -all_of(excluded_columns) # Exclude specific columns
+  )
+
+# Filter and select columns
+validation_results2 <- db %>%
+  # Filter for rows with NA in state_incumbent_vote
+  filter(is.na(state_incumbent_vote)) %>%
+  # Select specific columns and dynamically include desired ones
+  select(
+    uniqueid, year, mun, section, 
+    state_incumbent_vote, state_incumbent_party,
+    # ends_with("_party"), # Include columns ending with "_party"
+    contains("PAN"),
+    contains("PRD"),
+    contains("PRI"),
+    -all_of(excluded_columns) # Exclude specific columns
+  )
+
+# Filter and select columns
+validation_results3 <- db %>%
+  # Filter for rows with NA in state_incumbent_vote
+  filter(is.na(PRI_vote)) %>%
+  # Select specific columns and dynamically include desired ones
+  select(
+    uniqueid, year, mun, section, 
+    PRI_vote,
+    # ends_with("_party"), # Include columns ending with "_party"
+    contains("PRI"),
+    # contains("PAS"),
+    #-all_of(excluded_columns) # Exclude specific columns
+  )
+
+validation_results4 <- db %>%
+  # Filter for rows with NA in state_incumbent_vote
+  filter(is.na(PRD_vote)) %>%
+  # Select specific columns and dynamically include desired ones
+  select(
+    uniqueid, year, mun, section, 
+    PRD_vote,
+    # ends_with("_party"), # Include columns ending with "_party"
+    contains("PRD"),
+    # contains("PAS"),
+    #-all_of(excluded_columns) # Exclude specific columns
+  )
+
+validation_results5 <- db %>%
+  # Filter for rows with NA in state_incumbent_vote
+  filter(is.na(PAN_vote)) %>%
+  # Select specific columns and dynamically include desired ones
+  select(
+    uniqueid, year, mun, section, 
+    PAN_vote,
+    # ends_with("_party"), # Include columns ending with "_party"
+    contains("PAN"),
+    # contains("PAS"),
+    #-all_of(excluded_columns) # Exclude specific columns
+  )
+
+validation_results6 <- db %>%
+  # Filter for rows with NA in state_incumbent_vote
+  filter(is.na(MORENA_vote)) %>%
+  # Select specific columns and dynamically include desired ones
+  select(
+    uniqueid, year, mun, section, 
+    MORENA_vote,
+    # ends_with("_party"), # Include columns ending with "_party"
+    contains("MORENA"),
+    # contains("PAS"),
+    #-all_of(excluded_columns) # Exclude specific columns
+  )
+
+
 

@@ -342,9 +342,9 @@ validation_results1 <- db %>%
     uniqueid, year, mun, section, 
     runnerup_party_magar,runnerup_vote,
     # Select columns containing "PRI", "PRD", or "PAN" except excluded ones
-    contains("PES"),
+    contains("PT"),
     # contains("PRD"), 
-    contains("PAS"),
+    # contains("PAS"),
     # contains("MC"),
     -all_of(excluded_columns) # Exclude specific columns
   )
@@ -358,7 +358,7 @@ validation_results2 <- db %>%
     uniqueid, year, mun, section, 
     state_incumbent_vote, state_incumbent_party,
     # ends_with("_party"), # Include columns ending with "_party"
-    contains("PAN"),
+    contains("PRI"),
     # contains("PAS"),
     -all_of(excluded_columns) # Exclude specific columns
   )

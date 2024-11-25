@@ -15,10 +15,12 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, "../../../"))
 
 # Now set the path to the CSV file relative to the root of the repository
-db <- read_csv("Processed Data/jalisco/jalisco_process_raw_data.csv")
+db <- read_csv("Processed Data/jalisco/jalisco_process_raw_data.csv", 
+col_types = cols(ASC = col_double(), PVEM_MC = col_character()))
 
 
-
+extra_same_yr <- read_csv("Data/extraordinary elections/diff_year_extra_elec.csv")
+extra_flag <- read_csv("Data/extraordinary elections/diff_year_extra_elec_flag.csv")
 
 extra_correction <- read.csv("Data/extraordinary elections/correct_extra_elec_final.csv")
 
@@ -41,6 +43,14 @@ db <- db %>%
 
 db <- db %>%
   anti_join(extra_correction, by = c("section","mun","year", "uniqueid"))
+db <- db %>%
+  anti_join(extra_same_yr , by = c("section","year", "uniqueid"))
+
+# Add the `extra` column to flag matches
+db <- db %>%
+  left_join(extra_flag %>% select(section, year, uniqueid) %>% mutate(extra = 1), 
+            by = c("section", "year", "uniqueid")) %>%
+  mutate(extra = ifelse(is.na(extra), 0, extra))
 
 
 # Set the path to save the CSV file relative to the repository's root

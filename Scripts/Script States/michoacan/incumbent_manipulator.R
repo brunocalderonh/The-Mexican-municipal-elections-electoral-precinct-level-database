@@ -247,36 +247,51 @@ mag_db <- mag_db %>%
   mutate(incumbent_candidate_magar = lag(incumbent_candidate_magar, 1)) %>%
   mutate(runnerup_candidate_magar = lag(runnerup_candidate_magar, 1)) %>%
   mutate(margin = lag(margin, 1)) %>%
+  rename("manipulated_year" = "year") %>% 
   ungroup()
 
 horacio_db <- horacio_db %>%
   group_by(uniqueid) %>%
   arrange(year) %>%
-  mutate(incumbent_party_Horacio = lag(incumbent_party_Horacio, 1)) %>%
+  mutate(incumbent_party_Horacio = lag(incumbent_party_Horacio, 1))  %>%
+  rename("manipulated_year" = "year") %>% 
   ungroup()
 
 inafed_db <- inafed_db %>%
   group_by(uniqueid) %>%
   arrange(year) %>%
   mutate(incumbent_party_inafed = lag(incumbent_party_inafed , 1)) %>%
-  mutate(incumbent_candidate_inafed  = lag(incumbent_candidate_inafed , 1)) %>%
+  mutate(incumbent_candidate_inafed  = lag(incumbent_candidate_inafed , 1))  %>%
+  rename("manipulated_year" = "year") %>% 
   ungroup()
 
+jl_db <- jl_db %>%
+  rename("manipulated_year" = "year")
 
-vote_db <- read_csv("Processed Data/michoacan/michoacan_vote_manipulation.csv")
+
+vote_db <- read_csv("Processed Data/michoacan/michoacan_vote_manipulation.csv", 
+col_types = cols(PAN_PRD_PANAL = col_double(), PRI_PT_PVEM = col_character()))
+
+
+
+vote_db <- vote_db %>%
+  mutate(
+    manipulated_year = ifelse(extra == 1, year - 1, year)
+  )
 
 final_merged_data <- vote_db  %>%
-  left_join(mag_db, by = c("uniqueid","year"))
+  left_join(mag_db, by = c("uniqueid","manipulated_year"))
 final_merged_data <- final_merged_data %>% 
-  left_join(jl_db, by = c("uniqueid","year")) 
+  left_join(jl_db, by = c("uniqueid","manipulated_year")) 
 
 final_merged_data <- final_merged_data %>% 
-  left_join(inafed_db, by = c("uniqueid","year")) 
+  left_join(inafed_db, by = c("uniqueid","manipulated_year")) 
 final_merged_data <- final_merged_data %>% 
-  left_join(horacio_db, by = c("uniqueid","year"))
+  left_join(horacio_db, by = c("uniqueid","manipulated_year")) 
 
 final_merged_data <- final_merged_data %>% 
-  select(state,mun,uniqueid,section,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_JL,incumbent_candidate_JL,incumbent_party_inafed,incumbent_candidate_inafed,incumbent_party_Horacio,runnerup_party_magar,runnerup_candidate_magar,margin,everything())
+  select(state,mun,uniqueid,section,year,-manipulated_year,-extra,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_JL,incumbent_candidate_JL,incumbent_party_inafed,incumbent_candidate_inafed,incumbent_party_Horacio,runnerup_party_magar,runnerup_candidate_magar,margin,everything())
+
 
 
 # Set the path to save the CSV file relative to the repository's root
