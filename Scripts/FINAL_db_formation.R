@@ -362,20 +362,20 @@ db00 <- read_excel("Data/municipal magar data splitcoal/mu-coalSplit2000s.xlsx")
 db10 <- read_excel("Data/municipal magar data splitcoal/mu-coalSplit2010s.xlsx")
 db20 <- read_excel("Data/municipal magar data splitcoal/mu-coalSplit2020s.xlsx")
 
-db <- rbind(db70,db80)
-db <- rbind(db, db90)
-db <- rbind(db,db00)
-db <- rbind(db,db10)
-db <- rbind(db,db20)
+magar_mun_db <- rbind(db70,db80)
+magar_mun_db <- rbind(magar_mun_db, db90)
+magar_mun_db <- rbind(magar_mun_db,db00)
+magar_mun_db <- rbind(magar_mun_db,db10)
+magar_mun_db <- rbind(magar_mun_db,db20)
 
-db <- db %>% 
+magar_mun_db <- magar_mun_db %>% 
   select(-emm,-edon,-ife,-date,-ncand,-ncoal)
 
 # Define identifier variables
 id_vars <- c("yr", "mun", "inegi")
 
 # Process each pair manually
-pair_01 <- db %>%
+pair_01 <- magar_mun_db %>%
   select(all_of(c(id_vars, "l01", "v01"))) %>%
   filter(!is.na(l01)) %>%
   pivot_wider(
@@ -384,7 +384,7 @@ pair_01 <- db %>%
     values_fn = ~ paste(.x, collapse = ", ")
   )
 
-pair_02 <- db %>%
+pair_02 <- magar_mun_db %>%
   select(all_of(c(id_vars, "l02", "v02"))) %>%
   filter(!is.na(l02)) %>%
   pivot_wider(
@@ -393,7 +393,7 @@ pair_02 <- db %>%
     values_fn = ~ paste(.x, collapse = ", ")
   )
 
-pair_03 <- db %>%
+pair_03 <- magar_mun_db %>%
   select(all_of(c(id_vars, "l03", "v03"))) %>%
   filter(!is.na(l03)) %>%
   pivot_wider(
@@ -402,7 +402,7 @@ pair_03 <- db %>%
     values_fn = ~ paste(.x, collapse = ", ")
   )
 
-pair_04 <- db %>%
+pair_04 <- magar_mun_db %>%
   select(all_of(c(id_vars, "l04", "v04"))) %>%
   filter(!is.na(l04)) %>%
   pivot_wider(
@@ -411,7 +411,7 @@ pair_04 <- db %>%
     values_fn = ~ paste(.x, collapse = ", ")
   )
 
-pair_05 <- db %>%
+pair_05 <- magar_mun_db %>%
   select(all_of(c(id_vars, "l05", "v05"))) %>%
   filter(!is.na(l05)) %>%
   pivot_wider(
@@ -420,7 +420,7 @@ pair_05 <- db %>%
     values_fn = ~ paste(.x, collapse = ", ")
   )
 
-pair_06 <- db %>%
+pair_06 <- magar_mun_db %>%
   select(all_of(c(id_vars, "l06", "v06"))) %>%
   filter(!is.na(l06)) %>%
   pivot_wider(
@@ -429,7 +429,7 @@ pair_06 <- db %>%
     values_fn = ~ paste(.x, collapse = ", ")
   )
 
-pair_07 <- db %>%
+pair_07 <- magar_mun_db %>%
   select(all_of(c(id_vars, "l07", "v07"))) %>%
   filter(!is.na(l07)) %>%
   pivot_wider(
@@ -438,7 +438,7 @@ pair_07 <- db %>%
     values_fn = ~ paste(.x, collapse = ", ")
   )
 
-pair_08 <- db %>%
+pair_08 <- magar_mun_db %>%
   select(all_of(c(id_vars, "l08", "v08"))) %>%
   filter(!is.na(l08)) %>%
   pivot_wider(
@@ -447,7 +447,7 @@ pair_08 <- db %>%
     values_fn = ~ paste(.x, collapse = ", ")
   )
 
-pair_09 <- db %>%
+pair_09 <- magar_mun_db %>%
   select(all_of(c(id_vars, "l09", "v09"))) %>%
   filter(!is.na(l09)) %>%
   pivot_wider(
@@ -456,7 +456,7 @@ pair_09 <- db %>%
     values_fn = ~ paste(.x, collapse = ", ")
   )
 
-pair_10 <- db %>%
+pair_10 <- magar_mun_db %>%
   select(all_of(c(id_vars, "l10", "v10"))) %>%
   filter(!is.na(l10)) %>%
   pivot_wider(
@@ -468,27 +468,27 @@ pair_10 <- db %>%
 # Continue similarly for all pairs (l11/v11 through l23/v23)...
 
 # Step 2: Merge pairs one by one
-merged_data <- full_join(pair_01, pair_02, by = id_vars)
-merged_data <- full_join(merged_data, pair_03, by = id_vars)
-merged_data <- full_join(merged_data, pair_04, by = id_vars)
-merged_data <- full_join(merged_data, pair_05, by = id_vars)
-merged_data <- full_join(merged_data, pair_06, by = id_vars)
-merged_data <- full_join(merged_data, pair_07, by = id_vars)
-merged_data <- full_join(merged_data, pair_08, by = id_vars)
-merged_data <- full_join(merged_data, pair_09, by = id_vars)
-merged_data <- full_join(merged_data, pair_10, by = id_vars)
+final_magar_mun_db <- full_join(pair_01, pair_02, by = id_vars)
+final_magar_mun_db <- full_join(final_magar_mun_db, pair_03, by = id_vars)
+final_magar_mun_db <- full_join(final_magar_mun_db, pair_04, by = id_vars)
+final_magar_mun_db <- full_join(final_magar_mun_db, pair_05, by = id_vars)
+final_magar_mun_db <- full_join(final_magar_mun_db, pair_06, by = id_vars)
+final_magar_mun_db <- full_join(final_magar_mun_db, pair_07, by = id_vars)
+final_magar_mun_db <- full_join(final_magar_mun_db, pair_08, by = id_vars)
+final_magar_mun_db <- full_join(final_magar_mun_db, pair_09, by = id_vars)
+final_magar_mun_db <- full_join(final_magar_mun_db, pair_10, by = id_vars)
 # Continue merging for remaining pairs...
 
 # Step 3: Combine `.x` and `.y` columns dynamically
-for (col in names(merged_data)) {
+for (col in names(final_magar_mun_db)) {
   if (grepl("\\.x$", col)) {
     base_col <- sub("\\.x$", "", col)  # Get the base column name (e.g., 'pri')
-    merged_data[[base_col]] <- coalesce(merged_data[[col]], merged_data[[paste0(base_col, ".y")]])
+    final_magar_mun_db[[base_col]] <- coalesce(final_magar_mun_db[[col]], final_magar_mun_db[[paste0(base_col, ".y")]])
   }
 }
 
 # Step 4: Remove `.x` and `.y` columns
-merged_data <- merged_data %>%
+final_magar_mun_db <- final_magar_mun_db %>%
   select(-ends_with(".x"), -ends_with(".y")) %>% 
   rename(
     "year" = "yr",
@@ -501,7 +501,7 @@ merged_data <- merged_data %>%
   )
 
 
-merged_data <- merged_data %>%
+final_magar_mun_db <- final_magar_mun_db %>%
   select(-mun)
 
 ##### merge with the final db incumbent and runnerup parties
@@ -527,7 +527,7 @@ mun_db <- mun_db %>%
 
 
 mun_db <- mun_db %>% 
-  left_join(merged_data, by = c("mun_code", "year"))
+  left_join(final_magar_mun_db, by = c("mun_code", "year"))
 
 
 ####
@@ -821,7 +821,9 @@ mun_db <- mun_db %>%
   ) 
 
 final_df<- final_df %>% 
-  left_join(finaldb, by = c("mun_code", "year"))
+  left_join(mun_db, by = c("mun_code", "year"))
+
+# Filtered <- final_df %>% filter(row_number() %in% c(40079))
 
 
 # Set the path to save the CSV file relative to the repository's root
