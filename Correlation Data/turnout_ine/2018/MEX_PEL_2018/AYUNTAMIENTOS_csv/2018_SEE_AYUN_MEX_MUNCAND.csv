@@ -1,0 +1,126 @@
+ID_ESTADO,NOMBRE_ESTADO,ID_MUNICIPIO,MUNICIPIO,SECCIONES,CASILLAS,PAN,PAN_PRD_PT,PRI,PRD,PT,PT_MORENA_ES,PVEM,MC,NA,MORENA,ES,VR,CAND_IND2,CAND_IND3,CAND_IND4,CAND_IND5,CAND_IND6,CAND_IND7,CAND_IND8,CAND_IND9,CAND_IND10,CAND_IND11,CAND_IND12,CAND_IND13,CAND_IND14,CAND_IND15,CAND_IND16,CAND_IND17,CAND_IND18,CAND_IND19,NUM_VOTOS_VALIDOS,NUM_VOTOS_CAN_NREG,NUM_VOTOS_NULOS,TOTAL_VOTOS,LISTA_NOMINAL,RUTA_ACTA
+15,MEXICO,1,ACAMBAY DE RUIZ CASTAÑEDA,32,86,,6695,9934,,,10208,420,,2472,,,145,,,,,,,,,,,,,,,,,,,29874,7,1258,31139,45311,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M001.pdf
+15,MEXICO,2,ACOLMAN,26,125,,8790,16065,,,25503,2020,,1400,,,1074,,,,,,,,,,,,,,,,,,,54852,34,1212,56098,81436,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M002.pdf
+15,MEXICO,3,ACULCO,23,59,,6438,10841,,,4560,385,,254,,,446,,,,,,,,,,,,,,,,,,,22924,17,1026,23967,33305,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M003.pdf
+15,MEXICO,4,ALMOLOYA DE ALQUISIRAS,12,23,,752,5312,,,2538,23,,60,,,13,,,,,,,,,,,,,,,,,,,8698,2,275,8975,11863,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M004.pdf
+15,MEXICO,5,ALMOLOYA DE JUAREZ 1,56,181,,14484,17794,,4451,,1978,,3034,20589,1538,2079,,,,,,,,,,,,,,,,,,,65947,14,3655,69616,111693,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M005_ALMOLOYADEJUAREZ_JI_14_2018.pdf
+15,MEXICO,6,ALMOLOYA DEL RIO 2,5,13,,1880,1254,,,1731,1296,,207,,,43,,,,,,,,,,,,,,,,,,,6411,30,202,6643,8464,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M006.pdf
+15,MEXICO,7,AMANALCO,10,29,,421,3491,,,4840,548,,663,,,2985,,,,,,,,,,,,,,,,,,,12948,4,439,13391,17591,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M007.pdf
+15,MEXICO,8,AMATEPEC,27,46,,7173,5073,,,2441,43,,,,,,,,,,,,,,,,,,,,,,,,14730,10,625,15365,20578,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M008.pdf
+15,MEXICO,9,AMECAMECA,26,68,,3722,5352,,,6211,8954,,410,,,3679,,,,,,,,,,,,,,,,,,,28328,12,801,29141,40264,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M009.pdf
+15,MEXICO,10,APAXCO,14,36,4688,,2066,65,,978,,3225,833,,,40,2945,,,,,,,,,,,,,,,,,,14840,3,361,15204,21514,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M010.pdf
+15,MEXICO,11,ATENCO,14,66,,1825,6713,,2056,,314,,1751,11227,841,254,,3670,,,,,,,,,,,,,,,,,28651,10,1219,29880,43672,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M011.pdf
+15,MEXICO,12,ATIZAPAN,3,13,,846,994,,,2626,1062,,71,,,318,,,,,,,,,,,,,,,,,,,5917,2,146,6065,8343,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M012.pdf
+15,MEXICO,13,ATIZAPAN DE ZARAGOZA 3,167,617,,67010,34002,,,88024,51627,,4667,,,6363,,,,,,,,,,,,,,,,,,,251693,180,6342,258215,396803,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M013_ATIZAPANDEZARAGOZA_JI_116_2018.pdf
+15,MEXICO,14,ATLACOMULCO,39,126,,6154,15520,,,26203,1123,,1055,,,433,,,,,,,,,,,,,,,,,,,50488,35,1543,52066,74401,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M014.pdf
+15,MEXICO,15,ATLAUTLA,13,34,,2766,3828,,,1607,60,,592,,,4800,,,863,,,,,,,,,,,,,,,,14516,1,522,15039,20936,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M015.pdf
+15,MEXICO,16,AXAPUSCO,20,33,,2146,4827,,,6044,50,,226,,,35,,,,665,,,,,,,,,,,,,,,13993,2,336,14331,17874,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M016.pdf
+15,MEXICO,17,AYAPANGO,5,9,,2799,794,,,539,37,,22,,,18,,,,,,,,,,,,,,,,,,,4209,4,109,4322,5683,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M017.pdf
+15,MEXICO,18,CALIMAYA,16,60,,8250,7036,,,7180,1124,,919,,,1772,,,,,,,,,,,,,,,,,,,26281,7,702,26990,37607,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M018.pdf
+15,MEXICO,19,CAPULHUAC 4,12,40,,1264,2490,,,3289,1699,,5060,,,914,,,,,,,,,,,,,,,,,,,14716,10,321,15047,25014,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M019.pdf
+15,MEXICO,20,COACALCO DE BERRIOZABAL,106,351,,41515,24423,,,71428,4525,,3298,,,5641,,,,,,,,,,,,,,,,,,,150830,102,3408,154340,223214,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M020.pdf
+15,MEXICO,21,COATEPEC HARINAS 5,19,50,,3063,5357,,,8702,533,,198,,,169,,,,,,,,,,,,,,,,,,,18022,10,607,18639,26702,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M021.pdf
+15,MEXICO,22,COCOTITLAN 6,6,17,2050,,1587,2319,,951,475,1139,127,,,23,,,,,,,,,,,,,,,,,,,8671,6,177,8854,11388,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M022.pdf
+15,MEXICO,23,COYOTEPEC,11,54,,6624,3510,,,7891,2482,,1667,,,1026,,,,,,,,,,,,,,,,,,,23200,19,481,23700,36152,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M023.pdf
+15,MEXICO,24,CUAUTITLAN 7,27,123,,8248,14418,,,23555,732,,4798,,,789,,,,,3576,,,,,,,,,,,,,,56116,20,1102,57238,81448,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M024_CUAUTITLAN_JI_88_2018.pdf
+15,MEXICO,25,CUAUTITLAN IZCALLI 8,258,674,,95694,35029,,,120348,11645,,7969,,,8689,,,,,,,,,,,,,,,,,,,279374,170,6374,285918,408508,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M025.pdf
+15,MEXICO,26,CHALCO 9,71,356,,27669,30187,,,80202,2974,,2226,,,2378,,,,,,,,,,,,,,,,,,,145636,98,4341,150075,239188,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M026.pdf
+15,MEXICO,27,CHAPA DE MOTA,14,39,,7210,3481,,,1042,174,,4499,,,188,,,,,,,,,,,,,,,,,,,16594,1,627,17222,20760,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M027.pdf
+15,MEXICO,28,CHAPULTEPEC,2,12,,779,2185,,,780,1075,,187,,,737,,,,,,,,,,,,,,,,,,,5743,2,106,5851,7927,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M028.pdf
+15,MEXICO,29,CHIAUTLA,12,35,,652,5861,,101,,577,,263,8574,118,,,,,,,,,,,,,,,,,,,,16146,11,312,16469,21271,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M029.pdf
+15,MEXICO,30,CHICOLOAPAN,70,207,,11267,23349,,,39088,1832,,1395,,,679,,,,,,1565,,,,,,,,,,,,,79175,162,2057,81394,129663,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M030.pdf
+15,MEXICO,31,CHICONCUAC,7,31,,2334,1525,,,4196,688,,2118,,,1075,,,,,,,2304,,,,,,,,,,,,14240,2,331,14573,19651,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M031.pdf
+15,MEXICO,32,CHIMALHUACAN 10,162,683,,26221,114409,,,110810,3234,,3814,,,2623,,,,,,,,,,,,,,,,,,,262027,142,7723,269892,451573,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M032_CHIMALHUACAN_JI_3_2018.pdf
+15,MEXICO,33,DONATO GUERRA,16,39,,7849,7396,,,857,62,,254,,,48,,,,,,,,,,,,,,,,,,,16466,0,825,17291,23599,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M033.pdf
+15,MEXICO,34,ECATEPEC DE MORELOS,745,2052,,153116,163325,,,420623,24683,,17056,,,11125,,,,,,,,,,,,,,,,,,,789928,561,23149,813638,1248615,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M034.pdf
+15,MEXICO,35,ECATZINGO,4,12,,1780,1404,,,1855,,,92,,,20,,,,,,,,,,,,,,,,,,,5151,3,128,5282,6830,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M035.pdf
+15,MEXICO,36,HUEHUETOCA,51,148,,15108,8968,,,11202,7215,,2846,,,6599,,,,,,,,,,,,,,,,,,,51938,17,1376,53331,92773,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M036.pdf
+15,MEXICO,37,HUEYPOXTLA,16,49,,4304,5705,,,5544,115,,5606,,,,,,,,,,,,,,,,,,,,,,21274,9,850,22133,30394,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M037.pdf
+15,MEXICO,38,HUIXQUILUCAN 11,76,289,,73852,31879,,,22742,2387,,1341,,,,,,,,,,,,,,,,,,,,,,132201,21,3046,135268,187671,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M038_HUIXQUILUCAN_JI_66_2018.pdf
+15,MEXICO,39,ISIDRO FABELA 12,5,13,,1350,2495,,,375,327,,957,,,355,,,,,,,,,,,,,,,,,,,5859,2,194,6055,8054,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M039.pdf
+15,MEXICO,40,IXTAPALUCA,226,573,,24533,101340,,,83536,2436,,2242,,,2926,,,,,,,,,,,,,,,,,,,217013,97,5823,222933,344842,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M040.pdf
+15,MEXICO,41,IXTAPAN DE LA SAL,19,47,,7908,5109,,,3757,245,,275,,,125,,,,,,,,,,,,,,,,,,,17419,11,607,18037,26407,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M041.pdf
+15,MEXICO,42,IXTAPAN DEL ORO 13,5,9,1199,,1092,1157,,196,100,5,35,,,25,,,,,,,,,,,,,,,,,,,3809,0,139,3948,5116,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M042_IXTAPANDELORO_JI_98_2018.pdf
+15,MEXICO,43,IXTLAHUACA,48,172,,24571,12402,,10962,,4812,,1117,16872,762,,,,,,,,,,,,,,,,,,,,71498,11,3693,75202,107519,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M043.pdf
+15,MEXICO,44,XALATLACO,7,30,,1805,2647,,,2724,4644,,141,,,91,,,,,,,,,,,,,,,,,,,12052,15,287,12354,18208,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M044.pdf
+15,MEXICO,45,JALTENCO 14,14,33,,3994,2553,,,6319,332,,180,,,426,,,,,,,,,,,,,,,,,,,13804,6,310,14120,19670,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M045.pdf
+15,MEXICO,46,JILOTEPEC,44,116,,5186,9989,,,13506,6162,,11465,,,257,,,,,,,,,,,,,,,,,,,46565,13,1483,48061,64903,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M046.pdf
+15,MEXICO,47,JILOTZINGO,10,25,,2814,2330,,,1524,2711,,79,,,1344,,,,,,,,,,,,,,,,,,,10802,2,336,11140,14896,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M047.pdf
+15,MEXICO,48,JIQUIPILCO,30,90,,2546,13241,,,12550,2193,,487,,,3227,,,,,,,,,,,,,,,,,,,34244,13,1482,35739,51235,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M048.pdf
+15,MEXICO,49,JOCOTITLAN,29,86,,12794,12985,,,8085,194,,437,,,179,,,,,,,,,,,,,,,,,,,34674,5,1049,35728,47187,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M049.pdf
+15,MEXICO,50,JOQUICINGO,5,17,,204,2058,,,3608,1767,,,,,36,,,,,,,,,,,,,,,,,,,7673,1,190,7864,10087,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M050.pdf
+15,MEXICO,51,JUCHITEPEC,8,27,,1369,3303,,,7780,78,,134,,,62,,,,,,,,,,,,,,,,,,,12726,3,332,13061,17550,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M051.pdf
+15,MEXICO,52,LERMA,48,169,,22396,25825,,,23778,3419,,648,,,728,,,,,,,,,,,,,,,,,,,76794,55,1730,78579,105497,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M052.pdf
+15,MEXICO,53,MALINALCO,16,36,,6924,4474,,,1775,260,,259,,,206,,,,,,,,,,,,,,,,,,,13898,16,498,14412,19224,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M053.pdf
+15,MEXICO,54,MELCHOR OCAMPO,16,73,14478,,4357,339,,6142,232,6376,314,,,480,,,,,,,,,,,,,,,,,,,32718,9,825,33552,49097,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M054.pdf
+15,MEXICO,55,METEPEC,86,281,,32937,35148,,,54678,4397,,1982,,,2681,,,,,,,,,,,,,,,,,,,131823,78,2678,134579,180279,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M055.pdf
+15,MEXICO,56,MEXICALTZINGO 15,4,14,,409,1408,,,947,248,,1324,,,1433,,,,,,,,602,,,,,,,,,,,6371,2,114,6487,9479,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M056.pdf
+15,MEXICO,57,MORELOS,18,40,,8292,5944,,,1375,216,,181,,,35,,,,,,,,,,,,,,,,,,,16043,4,718,16765,21739,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M057.pdf
+15,MEXICO,58,NAUCALPAN DE JUAREZ 16,454,1159,,156616,73029,,,174373,10350,,6986,,,7000,,,,,,,,,,,,,,,,,,,428354,414,12626,441394,686477,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M058_NAUCALPANDEJUAREZ_JI_92_2018.pdf
+15,MEXICO,59,NEXTLALPAN,10,41,,1172,3545,,362,,750,,843,7710,3623,544,,,,,,,,,,,,,,,,,,,18549,8,556,19113,26750,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M059.pdf
+15,MEXICO,60,NEZAHUALCOYOTL 17,680,1511,,228654,76011,,,216533,10891,,6800,,,4329,,,,,,,,,,,,,,,,,,,543218,358,13703,557271,865265,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M060_NEZAHUALCOYOTL_JI_119_2018.pdf
+15,MEXICO,61,NICOLAS ROMERO,100,430,,55439,34442,,,75313,5151,,4895,,,2384,,,,,,,,,2983,,,,,,,,,,180607,144,4773,185524,284282,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M061.pdf
+15,MEXICO,62,NOPALTEPEC,5,13,,2517,1345,,1060,,863,,,94,0,146,,,,,,,,,,,,,,,,,,,6025,3,203,6231,7529,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M062.pdf
+15,MEXICO,63,OCOYOACAC,22,77,,9491,9758,,,10228,2123,,,,,2246,,,,,,,,,,,,,,,,,,,33846,40,842,34728,47899,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M063.pdf
+15,MEXICO,64,OCUILAN 18,13,38,,5892,3944,,,2844,639,,2289,,,85,,,,,,,,,,,,,,,,,,,15693,2,600,16295,20827,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M064.pdf
+15,MEXICO,65,EL ORO,17,53,,4667,4849,,,2628,122,,4518,,,951,,,,,,,,,,,,,,,,,,,17735,16,660,18411,25978,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M065.pdf
+15,MEXICO,66,OTUMBA,18,46,,6783,3766,,,3694,240,,1630,,,1105,,,,,,,,,,,,,,,,,,,17218,8,487,17713,26374,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M066.pdf
+15,MEXICO,67,OTZOLOAPAN,4,11,,38,1655,,1810,,,,,23,0,,,,,,,,,,,,,,,,,,,,3526,0,66,3592,4201,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M067.pdf
+15,MEXICO,68,OTZOLOTEPEC,24,87,,4624,7176,,,13307,1983,,8901,,,1809,,,,,,,,,,,,,,,,,,,37800,49,1100,38949,55239,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M068.pdf
+15,MEXICO,69,OZUMBA 19,13,34,,486,3616,,,5540,1278,,2599,,,483,,,,,,,,,,,,,,,,,,,14002,7,284,14293,19836,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M069.pdf
+15,MEXICO,70,PAPALOTLA,2,6,,183,1050,,,1266,192,,,,,420,,,,,,,,,,,,,,,,,,,3111,0,44,3155,3877,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M070.pdf
+15,MEXICO,71,LA PAZ,82,306,,23942,33426,,,51011,7814,,1896,,,1600,,,,,,,,,,,,,,,,,,,119689,63,4109,123861,193763,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M071.pdf
+15,MEXICO,72,POLOTITLAN 20,10,21,,340,2668,,,593,3505,,1188,,,11,,,,,,,,,,,,,,,,,,,8305,0,266,8571,11640,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M072.pdf
+15,MEXICO,73,RAYON 21,4,13,,676,2432,,,2461,25,,859,,,390,,,,,,,,,,,,,,,,,,,6843,8,152,7003,8778,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M073.pdf
+15,MEXICO,74,SAN ANTONIO LA ISLA,4,25,,2281,3451,,,3103,2751,,337,,,354,,,,,,,,,,,,,,,,,,,12277,3,239,12519,16927,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M074.pdf
+15,MEXICO,75,SAN FELIPE DEL PROGRESO,43,149,,6296,22730,,,26452,1208,,902,,,450,,,,,,,,,,,,,,,,,,,58038,33,2845,60916,89327,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M075.pdf
+15,MEXICO,76,SAN MARTIN DE LAS PIRAMIDES,14,32,,6359,4505,,,2885,244,,145,,,252,,,,,,,,,,,,,,,,,,,14390,6,319,14715,19819,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M076.pdf
+15,MEXICO,77,SAN MATEO ATENCO 22,21,95,,7783,16217, ,,15874,1261,,3370,,,441,,,,,,,,,,,,,,,,,,,44946,27,1000,45973,62857,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M077_SANMATEOATENCO_JI_111_2018.pdf
+15,MEXICO,78,SAN SIMON DE GUERRERO,4,9,,2175,1528,,,400,4,,,,,,,,,,,,,,,,,,,,,,,,4107,0,79,4186,4938,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M078.pdf
+15,MEXICO,79,SANTO TOMAS,10,19,,2173,1951,,,308,808,,66,,,19,,,,,,,,,,,,,,,,,,,5325,1,192,5518,7024,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M079.pdf
+15,MEXICO,80,SOYANIQUILPAN DE JUAREZ,7,19,,4438,661,,,1338,20,,2008,,,22,,,,,,,,,,,,,,,,,,,8487,0,156,8643,10207,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M080.pdf
+15,MEXICO,81,SULTEPEC,23,40,,3772,6536,,,2648,85,,,,,50,,,,,,,,,,,,,,,,,,,13091,2,694,13787,19349,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M081.pdf
+15,MEXICO,82,TECAMAC,157,504,,25571,64821,,9606,,3131,,4542,95606,3529,2193,,,,,,,,,,2955,,,,,,,,,211954,370,8010,220334,322728,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M082.pdf
+15,MEXICO,83,TEJUPILCO,44,104,,8983,11870,,,13993,178,,1012,,,366,,,,,,,,,,,,,,,,,,,36402,24,1531,37957,55886,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M083.pdf
+15,MEXICO,84,TEMAMATLA,5,16,,1742,950,,,1368,104,,2188,,,286,,,,,,,,,,,,,,,,,,,6638,2,155,6795,9877,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M084.pdf
+15,MEXICO,85,TEMASCALAPA,15,45,,9344,4332,,,6535,66,,118,,,62,,,,,,,,,,,,,,,,,,,20457,6,493,20956,28256,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M085.pdf
+15,MEXICO,86,TEMASCALCINGO,34,88,,2362,7170,,499,,10082,,587,10261,1069,1545,,,,,,,,,,,,,,,,,,,33575,7,1591,35173,48037,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M086.pdf
+15,MEXICO,87,TEMASCALTEPEC,23,47,,4543,4262,,,6084,2595,,139,,,,,,,,,,,,,,,,,,,,,,17623,2,481,18106,23868,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M087.pdf
+15,MEXICO,88,TEMOAYA,26,109,,10882,9085,,,16388,4647,,796,,,951,,,,,,,,,,,,,,,,,,,42749,11,1640,44400,66560,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M088.pdf
+15,MEXICO,89,TENANCINGO,36,113,,7248,9111,,,11073,5069,,1956,,,4468,,,,,,,,,,,5285,,,,,,,,44210,44,1538,45792,69404,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M089.pdf
+15,MEXICO,90,TENANGO DEL AIRE,5,13,,373,1283,,,1893,2801,,24,,,19,,,,,,,,,,,,,,,,,,,6393,1,131,6525,8305,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M090.pdf
+15,MEXICO,91,TENANGO DEL VALLE,27,91,,8116,5961,,,22085,820,,1012,,,347,,,,,,,,,,,,,,,,,,,38341,41,1063,39445,59014,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M091.pdf
+15,MEXICO,92,TEOLOYUCAN,25,95,,12345,7846,,,17705,1639,,1203,,,279,,,,,,,,,,,,,,,,,,,41017,16,934,41967,62655,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M092.pdf
+15,MEXICO,93,TEOTIHUACAN,23,73,,7213,7796,,,9891,1091,,621,,,3074,,,,,,,,,,,,,,,,,,,29686,628,815,31129,44310,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M093.pdf
+15,MEXICO,94,TEPETLAOXTOC,11,36,,1289,4230,,,5437,1202,,822,,,2335,,,,,,,,,,,,,,,,,,,15315,4,370,15689,21489,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M094.pdf
+15,MEXICO,95,TEPETLIXPA,8,21,,430,1591,,,3412,3796,,118,,,298,,,,,,,,,,,,,,,,,,,9645,1,339,9985,14030,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M095.pdf
+15,MEXICO,96,TEPOTZOTLAN,24,90,,14781,6477,,,11042,4113,,1971,,,557,,,,,,,,,,,,,,,,,,,38941,26,905,39872,57778,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M096.pdf
+15,MEXICO,97,TEQUIXQUIAC,13,42,,4728,3267,,,4408,143,,6701,,,,,,,,,,,,,,,,,,,,,,19247,6,507,19760,26598,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M097.pdf
+15,MEXICO,98,TEXCALTITLAN,8,23,165,,2092,3877,,1038,2324,45,176,,,18,,,,,,,,,,,,,,,,,,,9735,8,417,10160,12979,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M098.pdf
+15,MEXICO,99,TEXCALYACAC,2,6,,386,761,,,507,694,,538,,,327,,,,,,,,,,,,,,,,,,,3213,21,171,3405,4139,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M099.pdf
+15,MEXICO,100,TEXCOCO,80,306,,12031,17111,,,68907,22760,,2669,,,1904,,,,,,,,,,,,,,,,,,,125382,59,3473,128914,195151,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M100.pdf
+15,MEXICO,101,TEZOYUCA,9,44,,6020,2450,,,6910,997,,1502,,,247,,,,,,,,,,,,,,,,,,,18126,5,466,18597,29280,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M101.pdf
+15,MEXICO,102,TIANGUISTENCO,24,86,,4063,7178,,,11798,9897,,636,,,259,,,,,,,,,,,,3417,,,,,,,37248,13,997,38258,53495,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M102.pdf
+15,MEXICO,103,TIMILPAN,11,24,,2771,4489,,,2155,873,,51,,,50,,,,,,,,,,,,,,,,,,,10389,0,265,10654,12912,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M103.pdf
+15,MEXICO,104,TLALMANALCO,21,63,,7314,4188,,,8176,659,,1323,,,865,,,,,,,,,,,,,1996,,,,,,24521,27,681,25229,36705,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M104.pdf
+15,MEXICO,105,TLALNEPANTLA DE BAZ 23,380,952,,95585,72785,,,166462,8993,,5957,,,12611,,,,,,,,,,,,,,,,,,,362393,317,10349,373059,562003,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M105_TLALNEPANTLADEBAZ_JI_65_2018.pdf
+15,MEXICO,106,TLATLAYA,32,57,,11837,6209,,,1532,,,211,,,12,,,,,,,,,,,,,,,,,,,19801,0,460,20261,25981,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M106.pdf
+15,MEXICO,107,TOLUCA 24,304,1012,,142885,89663,,,180560,11601,,7107,,,13192,,,,,,,,,,,,,,,,,,,445008,370,12222,457600,641016,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M107.pdf
+15,MEXICO,108,TONATICO,9,20,2573,,1970,381,,2232,,25,,,,388,,,,,,,,,,,,,,,,,,,7569,2,164,7735,10474,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M108.pdf
+15,MEXICO,109,TULTEPEC,30,170,,30758,13928,,,29254,826,,1050,,,1011,,,,,,,,,,,,,,,,,,,76827,35,1585,78447,116211,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M109.pdf
+15,MEXICO,110,TULTITLAN 25,183,581,,54651,34494,,,111983,6101,,18457,,,5384,,,,,,,,,,,,,,,,,,,231070,120,6632,237822,361888,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M110.pdf
+15,MEXICO,111,VALLE DE BRAVO 26,28,85,,2655,10074,,,9522,322,,1799,,,8829,,,,,,,,,,,,,,,,,,,33201,4,947,34152,50958,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M111_VALLEDEBRAVO_JI_114_2018.pdf
+15,MEXICO,112,VILLA DE ALLENDE,22,59,,12075,2803,,,7858,736,,226,,,,,,,,,,,,,,,,,,,,,,23698,10,1070,24778,33252,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M112.pdf
+15,MEXICO,113,VILLA DEL CARBON 27,19,61,,5847,5641,,,2555,5820,,3070,,,360,,,,,,,,,,,,,,,,,,,23293,1,861,24155,32179,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M113_VILLADELCARBON_JI_126_2018.pdf
+15,MEXICO,114,VILLA GUERRERO 28,25,70,,6085,5154,,,5302,4850,,2949,,,2756,,,,,,,,,,,,,,,,,,,27096,28,954,28078,42422,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M114_VILLAGUERRERO_JI_117_2018.pdf
+15,MEXICO,115,VILLA VICTORIA,44,120,,7642,26353,,,8247,1060,,539,,,1537,,,,,,,,,,,,,,,,,,,45378,19,1851,47248,65343,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M115.pdf
+15,MEXICO,116,XONACATLAN,14,63,292,,5020,3843,4036,,2481,6059,326,4482,296,619,,,,,,,,,,,,,,1075,1525,,,,30054,4,959,31017,41550,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M116.pdf
+15,MEXICO,117,ZACAZONAPAN,2,6,,1342,670,,15,,,,,920,4,,,,,,,,,,,,,,,,,,,,2951,1,67,3019,3545,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M117.pdf
+15,MEXICO,118,ZACUALPAN,15,25,,265,1118,,,2390,,,3549,,,47,,,,,,,,,,,,,,,,,,,7369,0,363,7732,10586,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M118.pdf
+15,MEXICO,119,ZINACANTEPEC 29,46,197,,17763,27236,,,31572,3137,,1901,,,1213,,,,,,,,,,,,,,,,3453,,,86275,50,2989,89314,129935,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M119.pdf
+15,MEXICO,120,ZUMPAHUACAN,11,23,,3050,2090,,,3274,35,,135,,,35,,,,,,,,,,,,,,,,,,,8619,4,379,9002,11999,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M120.pdf
+15,MEXICO,121,ZUMPANGO,44,213,,13363,16398,,,36707,1260,,12376,,,775,,,,,,,,,,,,,,,,,3347,,84226,134,2103,86463,142742,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M121.pdf
+15,MEXICO,122,VALLE DE CHALCO SOLIDARIDAD,114,404,,38756,20994,,,87834,6866,,2142,,,1893,,,,,,,,,,,,,,,,,,,158485,103,5254,163842,262331,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M122.pdf
+15,MEXICO,123,LUVIANOS,27,47,,4328,9874,,,817,52,,,,,11,,,,,,,,,,,,,,,,,,,15082,13,765,15860,21979,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M123.pdf
+15,MEXICO,124,SAN JOSE DEL RINCON 30,43,112,,9071,10750,,,2894,4352,,9938,,,452,,,,,,,,,,,,,,,,,,,37457,0,2504,39961,64471,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M124.pdf
+15,MEXICO,125,TONANITLA 31,3,12,,1369,1370,,,1316,474,,273,,,124,,,,,,,,,,,,,,,,,,968,5894,2,156,6052,8032,http://www.ieem.org.mx/proceso2018/actas/municipal/ACM2018_M125_TONANITLA_JRC_218_2018.pdf

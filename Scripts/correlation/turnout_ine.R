@@ -26,7 +26,7 @@ codes <- c("AGS", "BCS", "BC", "CAMP", "CHIS", "CHIH", "CDMX", "COL", "COAH", "D
 # Define a function to load CSV files and add the year variable
 load_csv_files <- function(year, code) {
   # Construct the full folder path including "AYUNTAMIENTOS_csv"
-  folder_path <- file.path("Correlation Data", "turnout_inegi", year, paste0(code, "_PEL_", year), "AYUNTAMIENTOS_csv")
+  folder_path <- file.path("Correlation Data", "turnout_ine", year, paste0(code, "_PEL_", year), "AYUNTAMIENTOS_csv")
   
   # Create the CSV file name for the 'SEC' file
   csv_file <- file.path(folder_path, paste0(year, "_SEE_AYUN_", code, "_SEC.csv"))

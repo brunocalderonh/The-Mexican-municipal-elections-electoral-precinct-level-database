@@ -146,99 +146,104 @@ final_df <- bind_rows(df_list)
 
 ####### Manipulate the previously created database in order to obtain a cleaned final database
 
-
-determine_final_incumbent <- function(researched_incumbent, incumbent_party_magar, incumbent_party_JL,
-                                      incumbent_party_Horacio, incumbent_party_inafed) {
-  
-  # Full list of forbidden parties (including newly added PMC)
-  excluded_parties <- c("AXB", "AXA", "AXC", "AXCH", "AXS", "CONVER", "CXBDT", "AXU", "CXBNCH", "CXBT",
-                        "CXBNDT", "ALIANZA_", "ALIANZA", "CXBDCH", "COALICIoN", "COAL", "CC", "CCC", 
-                        "UXCH", "GNU", "MXH", "DPDG", "CD", "AXJ", "CPJ", "APT_", "APM", "CUPM", 
-                        "CONVER.", "COAL.", "C.C.", "CM", "APN2005", "JXBDT", "NNU", "CAC", "AXM", 
-                        "JXNL", "CPNL", "APTS", "CDPPN", "CXBP", "CUPG", "APA", "CPP", "PSI", 
-                        "CCPQ", "CQRA", "CPTGM", "NPP", "CPSL", "APAG", "AP", "CPUGHYE", "TSTAMPS", 
-                        "ATT", "PJS", "ASXXI", "APPT", "UPT", "CAFV", "CUV", "ZANUNE", 
-                        "PRIZAC", "CUXT", "CSA", "CCS", "TRANSIN", "XGR", "QROOUNE", "APPJ", 
-                        "APSP", "JPC", "UYC", "SNI", "XENQTQ", "CPM", "MNU", "ECV", "CPEM", "UPH", 
-                        "CPG", "PPG", "CACPC", "NCCH", "CCCH", "UXBCS", "SUDTP", "COALICIÓN", "XGR",
-                        "SQROO", "UPI", "PMC", "CXBDS", "C5M", "TEP", "CPU" ,"UDO","PRD-PT","PNA","CM-PRI")  # Newly added PMC
-  
-  # Step 1: Check if researched_incumbent has a value
-  if (!is.na(researched_incumbent) && researched_incumbent != "") {
-    return(researched_incumbent)
-  }
-  
-  # Step 2: Create a list of incumbent parties
-  incumbents <- c(incumbent_party_magar, incumbent_party_JL, incumbent_party_Horacio)
-  
-  # Step 3: Check for CI_# patterns first
-  ci_matches <- incumbents[grepl("^CI_1", incumbents)]
-  if (length(ci_matches) > 0) {
-    return(ci_matches[1])  # Return the first match containing "CI_"
-  }
-  
-  # Step 4: Exclude values in the list of excluded parties
-  valid_incumbents <- incumbents[!incumbents %in% excluded_parties & incumbents != "" & !is.na(incumbents)]
-  
-  # Step 5: Count the occurrences of each unique individual party (not coalitions)
-  individual_parties <- valid_incumbents[!grepl("_", valid_incumbents)]
-  
-  if (length(individual_parties) > 0) {
-    party_counts <- table(individual_parties)
-    max_count <- max(party_counts)
-    
-    # If there's a clear majority, return the most common individual party
-    if (sum(party_counts == max_count) == 1) {
-      most_common_party <- names(party_counts)[which.max(party_counts)]
-      return(most_common_party)
-    }
-  }
-  
-  # Step 6: If no clear majority, prioritize incumbent_party_magar if it is among valid incumbents
-  if (incumbent_party_magar %in% valid_incumbents) {
-    return(incumbent_party_magar)
-  }
-  
-  # Step 7: Handle coalitions (values with underscores)
-  coalitions <- valid_incumbents[grepl("_", valid_incumbents)]
-  
-  # Step 8: Check if individual parties from coalitions match any other party
-  if (length(coalitions) > 0) {
-    for (coalition in coalitions) {
-      # Split the coalition into individual parties
-      coalition_parties <- unlist(strsplit(coalition, "_"))
-      
-      # Filter incumbent variables to only consider parties from the coalition
-      matching_parties <- coalition_parties[coalition_parties %in% valid_incumbents]
-      
-      if (length(matching_parties) > 0) {
-        return(matching_parties[1])  # Return the first matched party
-      }
-    }
-    # If no individual match found, return the coalition itself
-    return(coalitions[1])
-  }
-  
-  # If no valid values are found, return NA
-  return(NA)
-}
-
+# determine_final_incumbent <- function(researched_incumbent, incumbent_party_magar, incumbent_party_JL,
+#                                       incumbent_party_Horacio, incumbent_party_inafed) {
+#   
+#   # Full list of forbidden parties (including newly added PMC)
+#   excluded_parties <- c("AXB", "AXA", "AXC", "AXCH", "AXS", "CONVER", "CXBDT", "AXU", "CXBNCH", "CXBT",
+#                         "CXBNDT", "ALIANZA_", "ALIANZA", "CXBDCH", "COALICIoN", "COAL", "CC", "CCC", 
+#                         "UXCH", "GNU", "MXH", "DPDG", "CD", "AXJ", "CPJ", "APT_", "APM", "CUPM", 
+#                         "CONVER.", "COAL.", "C.C.", "CM", "APN2005", "JXBDT", "NNU", "CAC", "AXM", 
+#                         "JXNL", "CPNL", "APTS", "CDPPN", "CXBP", "CUPG", "APA", "CPP", "PSI", 
+#                         "CCPQ", "CQRA", "CPTGM", "NPP", "CPSL", "APAG", "AP", "CPUGHYE", "TSTAMPS", 
+#                         "ATT", "PJS", "ASXXI", "APPT", "UPT", "CAFV", "CUV", "ZANUNE", 
+#                         "PRIZAC", "CUXT", "CSA", "CCS", "TRANSIN", "XGR", "QROOUNE", "APPJ", 
+#                         "APSP", "JPC", "UYC", "SNI", "XENQTQ", "CPM", "MNU", "ECV", "CPEM", "UPH", 
+#                         "CPG", "PPG", "CACPC", "NCCH", "CCCH", "UXBCS", "SUDTP", "COALICIÓN", "XGR",
+#                         "SQROO", "UPI", "PMC", "CXBDS", "C5M", "TEP", "CPU" ,"UDO","PRD-PT","PNA","CM-PRI")  # Newly added PMC
+#   
+#   # Step 1: Check if researched_incumbent has a value
+#   if (!is.na(researched_incumbent) && researched_incumbent != "") {
+#     return(researched_incumbent)
+#   }
+#   
+#   # Step 2: Create a list of incumbent parties
+#   incumbents <- c(incumbent_party_magar, incumbent_party_JL, incumbent_party_Horacio)
+#   
+#   # Step 3: Check for CI_# patterns first
+#   ci_matches <- incumbents[grepl("^CI_1", incumbents)]
+#   if (length(ci_matches) > 0) {
+#     return(ci_matches[1])  # Return the first match containing "CI_"
+#   }
+#   
+#   # Step 4: Exclude values in the list of excluded parties
+#   valid_incumbents <- incumbents[!incumbents %in% excluded_parties & incumbents != "" & !is.na(incumbents)]
+#   
+#   # Step 5: Count the occurrences of each unique individual party (not coalitions)
+#   individual_parties <- valid_incumbents[!grepl("_", valid_incumbents)]
+#   
+#   if (length(individual_parties) > 0) {
+#     party_counts <- table(individual_parties)
+#     max_count <- max(party_counts)
+#     
+#     # If there's a clear majority, return the most common individual party
+#     if (sum(party_counts == max_count) == 1) {
+#       most_common_party <- names(party_counts)[which.max(party_counts)]
+#       return(most_common_party)
+#     }
+#   }
+#   
+#   # Step 6: If no clear majority, prioritize incumbent_party_magar if it is among valid incumbents
+#   if (incumbent_party_magar %in% valid_incumbents) {
+#     return(incumbent_party_magar)
+#   }
+#   
+#   # Step 7: Handle coalitions (values with underscores)
+#   coalitions <- valid_incumbents[grepl("_", valid_incumbents)]
+#   
+#   # Step 8: Check if individual parties from coalitions match any other party
+#   if (length(coalitions) > 0) {
+#     for (coalition in coalitions) {
+#       # Split the coalition into individual parties
+#       coalition_parties <- unlist(strsplit(coalition, "_"))
+#       
+#       # Filter incumbent variables to only consider parties from the coalition
+#       matching_parties <- coalition_parties[coalition_parties %in% valid_incumbents]
+#       
+#       if (length(matching_parties) > 0) {
+#         return(matching_parties[1])  # Return the first matched party
+#       }
+#     }
+#     # If no individual match found, return the coalition itself
+#     return(coalitions[1])
+#   }
+#   
+#   # If no valid values are found, return NA
+#   return(NA)
+# }
 
 
 # Apply the function to your dataset
 final_df <- final_df %>%
   rowwise() %>%
-  mutate(incumbent_party = determine_final_incumbent(researched_incumbent,
-                                                     incumbent_party_magar,
-                                                     incumbent_party_JL,
-                                                     incumbent_party_Horacio,
-                                                     incumbent_party_inafed)) %>%
+  mutate(incumbent_party = determine_final_incumbent(
+    researched_incumbent = researched_incumbent,
+    incumbent_party_magar = incumbent_party_magar,
+    incumbent_party_JL = incumbent_party_JL,
+    incumbent_party_Horacio = incumbent_party_Horacio,
+    incumbent_party_inafed = incumbent_party_inafed,
+    party_component = party_component
+  )) %>%
   ungroup()
+
+
+final_df <- final_df %>%
+  select(-incumbent_party_magar,-incumbent_party_Horacio,-incumbent_party_inafed,-incumbent_party_JL)
 
 final_df <- final_df %>%
   mutate(runnerup_party = runnerup_party_magar) %>% 
   mutate(runnerup_candidate = runnerup_party_magar) %>% 
-  mutate( incumbent_candidate = incumbent_candidate_magar)
+  mutate(incumbent_candidate = incumbent_candidate_magar)
 
 replace1 <- function(party_str) {
   if (!is.na(party_str)) {
@@ -800,7 +805,6 @@ correct_runnerup_vote <- function(data) {
   return(data)
 }
 
-
 mun_db <- assign_incumbent_vote(mun_db)
 mun_db <- correct_runnerup_vote(mun_db)
 mun_db <- mun_db %>% 
@@ -820,21 +824,21 @@ mun_db <- mun_db %>%
 final_data <- final_df %>% 
   left_join(mun_db, by = c("mun_code", "year")) 
 
-final_data <- final_data %>% 
-  group_by(year,mun_code) %>% 
-  mutate(mun_registered_voters = sum(registered_voters, na.rm = TRUE)) %>% 
-  ungroup() %>% 
+final_data1 <- final_data %>%
+  group_by(year,mun_code) %>%
+  mutate(mun_registered_voters = sum(registered_voters, na.rm = TRUE)) %>%
+  ungroup() %>%
   mutate(share_mun_incumbent_registered_voters = ifelse(mun_registered_voters > 0, (mun_incumbent_vote / mun_registered_voters), NA),
-         share_mun_runnerup_registered_voters = ifelse(mun_registered_voters > 0, (mun_runnerup_vote / mun_registered_voters), NA)) 
+         share_mun_runnerup_registered_voters = ifelse(mun_registered_voters > 0, (mun_runnerup_vote / mun_registered_voters), NA))
 
-view(final_data %>% 
-       filter(share_mun_incumbent_registered_voters>1))  
+view(final_data %>%
+       filter(share_mun_incumbent_registered_voters>1))
 
-filtered <- final_data %>% 
-  filter(incumbent_party == runnerup_party & !is.na(incumbent_party)) %>% 
-  select(mun_code,year,incumbent_party, mun_incumbent_vote,incumbent_vote,
+filtered <- final_data %>%
+  filter(incumbent_party == runnerup_party & !is.na(incumbent_party)) %>%
+  select(mun_code,year,incumbent_party, mun_incumbent_vote,incumbent_vote,incumbent_party_component,
          mun_party_component,runnerup_party, mun_runnerup_vote,
-         mun_runnerup_party_component, runnerup_vote)
+         mun_runnerup_party_component, runnerup_vote )
 
 
 summary(final_data)
