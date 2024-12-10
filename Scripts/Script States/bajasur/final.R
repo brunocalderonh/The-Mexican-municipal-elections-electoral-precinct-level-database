@@ -281,6 +281,8 @@ assign_state_incumbent_vote <- function(data) {
 merged_data <- assign_state_incumbent_vote(merged_data)
 
 correct_runnerup_vote <- function(data) {
+  # Define %notin% operator
+  `%notin%` <- Negate(`%in%`)
   
   # Initialize columns for storing results
   data <- data %>%
@@ -304,7 +306,8 @@ correct_runnerup_vote <- function(data) {
         party_components <- unlist(str_split(x, "_"))
         all(coalition_parties %in% party_components) && 
           # Differentiating PAN from PANAL in coalitions
-          ("PAN" %in% coalition_parties && "PANAL" %notin% coalition_parties || "PANAL" %in% coalition_parties && "PAN" %notin% coalition_parties)
+          (("PAN" %in% coalition_parties && "PANAL" %notin% coalition_parties) || 
+             ("PANAL" %in% coalition_parties && "PAN" %notin% coalition_parties))
       })]
       
       # Check for valid votes in coalition variables
@@ -351,7 +354,8 @@ correct_runnerup_vote <- function(data) {
           party_components <- unlist(str_split(x, "_"))
           party %in% party_components && 
             # Ensure PAN and PANAL differentiation in broader coalitions
-            ("PAN" %in% party_components && "PANAL" %notin% party_components || "PANAL" %in% party_components && "PAN" %notin% party_components)
+            (("PAN" %in% party_components && "PANAL" %notin% party_components) || 
+               ("PANAL" %in% party_components && "PAN" %notin% party_components))
         })]
         
         for (var in broader_coalition_vars) {
@@ -376,7 +380,8 @@ assign_votes1 <- function(data) {
   if (!"incumbent_vote" %in% colnames(data)) {
     data <- data %>%
       mutate(incumbent_vote = NA,
-             party_component = NA)
+             party_component = NA,
+             final_incumbent = NA)  # Add final_incumbent column
   }
   
   # Loop through each row of the data with missing incumbent_vote
@@ -403,6 +408,7 @@ assign_votes1 <- function(data) {
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
               data$incumbent_vote[I] <- data[[party_var]][I]
               data$party_component[I] <- party_var
+              data$final_incumbent[I] <- party_var  # Track the exact column used
               individual_party_found <- TRUE
               break
             }
@@ -418,6 +424,7 @@ assign_votes1 <- function(data) {
             if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
               data$incumbent_vote[I] <- data[[coalition_var]][I]
               data$party_component[I] <- coalition_var
+              data$final_incumbent[I] <- coalition_var  # Track the exact column used
               break
             }
           }
@@ -432,12 +439,14 @@ assign_votes1 <- function(data) {
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
               data$incumbent_vote[I] <- data[[party_var]][I]
               data$party_component[I] <- party_var
+              data$final_incumbent[I] <- party_var  # Track the exact column used
               break
             }
           } else if (!str_detect(party_var, "PAN") && !str_detect(party_var, "PANAL")) {
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
               data$incumbent_vote[I] <- data[[party_var]][I]
               data$party_component[I] <- party_var
+              data$final_incumbent[I] <- party_var  # Track the exact column used
               break
             }
           }
@@ -451,6 +460,7 @@ assign_votes1 <- function(data) {
             if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
               data$incumbent_vote[I] <- data[[coalition_var]][I]
               data$party_component[I] <- coalition_var
+              data$final_incumbent[I] <- coalition_var  # Track the exact column used
               break
             }
           }
@@ -466,7 +476,22 @@ merged_data <- assign_votes1(merged_data)
 merged_data  <- merged_data  %>%
      mutate(turnout = total/listanominal) 
 
-summary(merged_data$turnout)
+
+final_incumbent_manual <- function(data) {
+  # Update final_incumbent for valid researched_incumbent cases
+  data <- data %>%
+    mutate(
+      final_incumbent = ifelse(
+        !is.na(researched_incumbent) & researched_incumbent != "" & researched_incumbent != 0,
+        researched_incumbent,
+        final_incumbent
+      )
+    )
+  
+  return(data)
+}
+
+merged_data <- final_incumbent_manual(merged_data)
 
 
 merged_data <- merged_data %>%
@@ -477,6 +502,7 @@ merged_data <- merged_data %>%
          section,
          incumbent_party_magar,
          incumbent_candidate_magar,
+         final_incumbent,
          incumbent_vote,
          party_component,
          mutually_exclusive,

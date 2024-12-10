@@ -6,7 +6,7 @@ library(readxl)
 library(dplyr)
 library(rstudioapi)
 library(readr)
-
+library(tidyverse)
 # Get the path of the current script
 script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
@@ -389,6 +389,12 @@ merged_data <- correct_runnerup_vote (merged_data)
 
 correct_incumbent_vote_PRI <- function(data) {
   
+  # Initialize the `final_incumbent` column if it doesn't exist
+  if (!"final_incumbent" %in% colnames(data)) {
+    data <- data %>%
+      mutate(final_incumbent = NA)
+  }
+  
   # Loop through each row and target specific observations
   for (I in 1:nrow(data)) {
     
@@ -402,6 +408,7 @@ correct_incumbent_vote_PRI <- function(data) {
       for (col in pri_columns) {
         if (!is.na(data[[col]][I]) && data[[col]][I] != 0) {
           data$incumbent_vote[I] <- data[[col]][I]
+          data$final_incumbent[I] <- col  # Track the column used
           break
         }
       }
@@ -417,7 +424,23 @@ merged_data <- correct_incumbent_vote_PRI(merged_data)
 merged_data <- merged_data %>%
   mutate(turnout = ifelse(listanominal > 0, total / listanominal, NA)) 
 
-summary(merged_data$turnout)
+
+final_incumbent_manual <- function(data) {
+  # Update final_incumbent for valid researched_incumbent cases
+  data <- data %>%
+    mutate(
+      final_incumbent = ifelse(
+        !is.na(researched_incumbent) & researched_incumbent != "" & researched_incumbent != 0,
+        researched_incumbent,
+        final_incumbent
+      )
+    )
+  
+  return(data)
+}
+
+merged_data <- final_incumbent_manual(merged_data)
+
 
 
 merged_data <- merged_data %>%
@@ -428,6 +451,7 @@ merged_data <- merged_data %>%
          section,
          incumbent_party_magar,
          incumbent_candidate_magar,
+         final_incumbent,
          incumbent_vote,
          party_component,
          mutually_exclusive,

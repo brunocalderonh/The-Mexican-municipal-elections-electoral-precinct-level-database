@@ -284,6 +284,8 @@ assign_state_incumbent_vote <- function(data) {
 merged_data <- assign_state_incumbent_vote(merged_data)
 
 correct_runnerup_vote <- function(data) {
+  # Define %notin% operator
+  `%notin%` <- Negate(`%in%`)
   
   # Initialize columns for storing results
   data <- data %>%
@@ -307,7 +309,8 @@ correct_runnerup_vote <- function(data) {
         party_components <- unlist(str_split(x, "_"))
         all(coalition_parties %in% party_components) && 
           # Differentiating PAN from PANAL in coalitions
-          ("PAN" %in% coalition_parties && "PANAL" %notin% coalition_parties || "PANAL" %in% coalition_parties && "PAN" %notin% coalition_parties)
+          (("PAN" %in% coalition_parties && "PANAL" %notin% coalition_parties) || 
+             ("PANAL" %in% coalition_parties && "PAN" %notin% coalition_parties))
       })]
       
       # Check for valid votes in coalition variables
@@ -354,7 +357,8 @@ correct_runnerup_vote <- function(data) {
           party_components <- unlist(str_split(x, "_"))
           party %in% party_components && 
             # Ensure PAN and PANAL differentiation in broader coalitions
-            ("PAN" %in% party_components && "PANAL" %notin% party_components || "PANAL" %in% party_components && "PAN" %notin% party_components)
+            (("PAN" %in% party_components && "PANAL" %notin% party_components) || 
+               ("PANAL" %in% party_components && "PAN" %notin% party_components))
         })]
         
         for (var in broader_coalition_vars) {
@@ -376,7 +380,22 @@ merged_data <- correct_runnerup_vote (merged_data)
 merged_data  <- merged_data  %>%
   mutate(turnout = total/listanominal) 
 
-summary(merged_data$turnout)
+
+final_incumbent_manual <- function(data) {
+  # Update final_incumbent for valid researched_incumbent cases
+  data <- data %>%
+    mutate(
+      final_incumbent = ifelse(
+        !is.na(researched_incumbent) & researched_incumbent != "" & researched_incumbent != 0,
+        researched_incumbent,
+        final_incumbent
+      )
+    )
+  
+  return(data)
+}
+
+merged_data <- final_incumbent_manual(merged_data)
 
 merged_data <- merged_data %>%
   select(uniqueid,
@@ -386,6 +405,7 @@ merged_data <- merged_data %>%
          section,
          incumbent_party_magar,
          incumbent_candidate_magar,
+         final_incumbent,
          incumbent_vote,
          party_component,
          mutually_exclusive,

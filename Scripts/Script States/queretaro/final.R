@@ -396,6 +396,12 @@ focused1 <- function(data) {
   target_data <- data %>%
     filter(uniqueid == 22010, year == 2012, section >= 168, section <= 181)
   
+  # Initialize columns if they don't exist in the target data
+  if (!"final_incumbent" %in% colnames(target_data)) {
+    target_data <- target_data %>%
+      mutate(final_incumbent = NA)  # Track the specific column used
+  }
+  
   # Loop through each row of the filtered data
   for (I in 1:nrow(target_data)) {
     # Set the target party to "PAN"
@@ -413,12 +419,13 @@ focused1 <- function(data) {
       if (!is.na(target_data[[var]][I]) && target_data[[var]][I] != 0) {
         target_data$incumbent_vote[I] <- target_data[[var]][I]
         target_data$party_component[I] <- var
+        target_data$final_incumbent[I] <- var  # Track the specific column used
         valid_found <- TRUE
         break
       }
     }
     
-    # If no valid value is found, leave incumbent_vote and party_component as NA
+    # If no valid value is found, leave incumbent_vote, party_component, and final_incumbent as NA
   }
   
   # Update the original data with the modified rows
@@ -428,13 +435,28 @@ focused1 <- function(data) {
   return(data)
 }
 
-merged_data <- focused1 (merged_data)
-
+# Apply the function
+merged_data <- focused1(merged_data)
 
 merged_data <- merged_data %>%
   mutate(turnout = ifelse(listanominal > 0, total / listanominal, NA)) 
 
-summary(merged_data$turnout)
+
+final_incumbent_manual <- function(data) {
+  # Update final_incumbent for valid researched_incumbent cases
+  data <- data %>%
+    mutate(
+      final_incumbent = ifelse(
+        !is.na(researched_incumbent) & researched_incumbent != "" & researched_incumbent != 0,
+        researched_incumbent,
+        final_incumbent
+      )
+    )
+  
+  return(data)
+}
+
+merged_data <- final_incumbent_manual(merged_data)
 
 
 merged_data <- merged_data %>%
@@ -445,6 +467,7 @@ merged_data <- merged_data %>%
          section,
          incumbent_party_magar,
          incumbent_candidate_magar,
+         final_incumbent,
          incumbent_vote,
          party_component,
          mutually_exclusive,
@@ -480,7 +503,7 @@ merged_data <- merged_data %>%
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/queretaro")
-output_path <- file.path(output_dir, "queretaro_final.csv")
+output_path <- file.path(output_dir, "queretaro_final1.csv")
 
 # Use write_csv to save the file
 write_csv(merged_data, output_path)

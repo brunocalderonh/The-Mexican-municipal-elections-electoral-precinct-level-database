@@ -44,11 +44,13 @@ assign_incumbent_vote <- function(data) {
   # Initialize columns
   data <- data %>%
     mutate(incumbent_vote = NA,
-           party_component = NA)
+           party_component = NA,
+           final_incumbent = NA)  # Track the exact column used
   
   # Loop through each row of the data
   for (I in 1:nrow(data)) {
     incumbent_party <- data$incumbent_party_magar[I]
+    final_incumbent_value <- NA  # Track the source of incumbent_vote
     
     # Skip if incumbent_party is NA or empty
     if (is.na(incumbent_party) || incumbent_party == "") next
@@ -70,6 +72,7 @@ assign_incumbent_vote <- function(data) {
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
               data$incumbent_vote[I] <- data[[party_var]][I]
               data$party_component[I] <- party_var
+              final_incumbent_value <- party_var  # Track the column used
               break
             }
           }
@@ -85,6 +88,7 @@ assign_incumbent_vote <- function(data) {
           if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[coalition_var]][I]
             data$party_component[I] <- coalition_var
+            final_incumbent_value <- coalition_var  # Track the column used
             break
           }
         }
@@ -99,12 +103,14 @@ assign_incumbent_vote <- function(data) {
           if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[party_var]][I]
             data$party_component[I] <- party_var
+            final_incumbent_value <- party_var  # Track the column used
             break
           }
         } else if (!str_detect(party_var, "\\bPANAL\\b") && !str_detect(party_var, "\\bPAN\\b")) {
           if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[party_var]][I]
             data$party_component[I] <- party_var
+            final_incumbent_value <- party_var  # Track the column used
             break
           }
         }
@@ -118,10 +124,16 @@ assign_incumbent_vote <- function(data) {
           if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[coalition_var]][I]
             data$party_component[I] <- coalition_var
+            final_incumbent_value <- coalition_var  # Track the column used
             break
           }
         }
       }
+    }
+    
+    # Assign final_incumbent if incumbent_vote is determined
+    if (!is.na(data$incumbent_vote[I])) {
+      data$final_incumbent[I] <- final_incumbent_value
     }
   }
   
@@ -254,6 +266,7 @@ finaldb <- finaldb %>%
     year, 
     incumbent_party_magar,
     incumbent_candidate_magar,
+    final_incumbent,
     incumbent_vote,
     party_component,
     mutually_exclusive,

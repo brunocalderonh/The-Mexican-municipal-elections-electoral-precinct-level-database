@@ -393,7 +393,21 @@ merged_data <- correct_runnerup_vote (merged_data)
 merged_data <- merged_data %>%
   mutate(turnout = ifelse(listanominal > 0, total / listanominal, NA)) 
 
-summary(merged_data$turnout)
+final_incumbent_manual <- function(data) {
+  # Update final_incumbent for valid researched_incumbent cases
+  data <- data %>%
+    mutate(
+      final_incumbent = ifelse(
+        !is.na(researched_incumbent) & researched_incumbent != "" & researched_incumbent != 0,
+        researched_incumbent,
+        final_incumbent
+      )
+    )
+  
+  return(data)
+}
+
+merged_data <- final_incumbent_manual(merged_data)
 
 merged_data <- merged_data %>%
   select(uniqueid,
@@ -403,6 +417,7 @@ merged_data <- merged_data %>%
          section,
          incumbent_party_magar,
          incumbent_candidate_magar,
+         final_incumbent,
          incumbent_vote,
          party_component,
          mutually_exclusive,

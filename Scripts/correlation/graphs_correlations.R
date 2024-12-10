@@ -22,7 +22,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, "../../"))
 
 # Path to the .zip file
-zip_file <- "Final Data/all_states_final_graphs_corr.zip"
+zip_file <- "Final Data/all_states_final.zip"
 
 # Unzip the file to a temporary directory
 temp_dir <- tempdir()  # Create a temporary directory
@@ -67,6 +67,10 @@ num_municipal_elections_case1 <- case1_df %>%
 
 percent_precincts_affected_case1 <- (nrow(case1_df) / nrow(db)) * 100
 
+cat("Case 1:\n")
+cat("Number of municipal elections:", num_municipal_elections_case1, "\n")
+cat("Percentage of precincts affected:", percent_precincts_affected_case1, "%\n\n")
+
 # Case 2: incumbent_party is a coalition (contains "_") and incumbent_party_component is the same or a bigger coalition
 case2_df <- db %>%
   filter(
@@ -81,6 +85,12 @@ num_municipal_elections_case2 <- case2_df %>%
 
 percent_precincts_affected_case2 <- (nrow(case2_df) / nrow(db)) * 100
 
+cat("Case 2:\n")
+cat("Number of municipal elections:", num_municipal_elections_case2, "\n")
+cat("Percentage of precincts affected:", percent_precincts_affected_case2, "%\n\n")
+
+
+
 # Case 3: Valid value in researched_incumbent and incumbent_vote (manually researched cases with vote values found)
 case3_df <- db %>%
   filter(
@@ -93,6 +103,12 @@ num_municipal_elections_case3 <- case3_df %>%
   nrow()
 
 percent_precincts_affected_case3 <- (nrow(case3_df) / nrow(db)) * 100
+
+cat("Case 3:\n")
+cat("Number of municipal elections:", num_municipal_elections_case3, "\n")
+cat("Percentage of precincts affected:", percent_precincts_affected_case3, "%\n\n")
+
+
 
 # Case 4: Valid value in researched_incumbent and no value in incumbent_vote (manual cases for which we did not find a valid match)
 case4_df <- db %>%
@@ -107,6 +123,11 @@ num_municipal_elections_case4 <- case4_df %>%
 
 percent_precincts_affected_case4 <- (nrow(case4_df) / nrow(db)) * 100
 
+cat("Case 4:\n")
+cat("Number of municipal elections:", num_municipal_elections_case4, "\n")
+cat("Percentage of precincts affected:", percent_precincts_affected_case4, "%\n")
+
+
 # Case 5: NA or 0 in incumbent_vote and no valid value in researched_incumbent
 case5_df <- db %>%
   filter(
@@ -119,26 +140,10 @@ num_municipal_elections_case5 <- case5_df %>%
 
 percent_precincts_affected_case5 <- (nrow(case5_df) / nrow(db)) * 100
 
-# Print results
-cat("Case 1:\n")
-cat("Number of municipal elections:", num_municipal_elections_case1, "\n")
-cat("Percentage of precincts affected:", percent_precincts_affected_case1, "%\n\n")
-
-cat("Case 2:\n")
-cat("Number of municipal elections:", num_municipal_elections_case2, "\n")
-cat("Percentage of precincts affected:", percent_precincts_affected_case2, "%\n\n")
-
-cat("Case 3:\n")
-cat("Number of municipal elections:", num_municipal_elections_case3, "\n")
-cat("Percentage of precincts affected:", percent_precincts_affected_case3, "%\n\n")
-
-cat("Case 4:\n")
-cat("Number of municipal elections:", num_municipal_elections_case4, "\n")
-cat("Percentage of precincts affected:", percent_precincts_affected_case4, "%\n")
-
 cat("Case 5:\n")
 cat("Number of municipal elections:", num_municipal_elections_case5, "\n")
 cat("Percentage of precincts affected:", percent_precincts_affected_case5, "%\n")
+
 
 
 #LOAD DATABASES FOR CORRELATION CALCULATIONS
@@ -212,7 +217,7 @@ corr_test_ine <- db %>%
 
 # Run a linear regression with `turnout` as the dependent variable and `turnout_ine` as the independent variable
 regression_model <- lm(turnout ~ turnout_ine, data = corr_test_ine)
-stargazer::stargazer(regression_model, type = "latex")
+stargazer::stargazer(regression_model, type = "text")
 correlation <- cor(corr_test_ine$turnout, corr_test_ine$turnout_ine, use = "complete.obs")
 correlation
 
@@ -259,7 +264,7 @@ model_PRD <- lm(share_PRD_registered_voters ~ magar_share_PRD_registered_voters,
 model_MORENA <- lm(share_MORENA_registered_voters ~ magar_share_MORENA_registered_voters, data = corr_test_magar_mun)
 
 # Use stargazer to display the correlations in a regression table format
-stargazer(model_turnout, model_PRI, model_PAN, model_PRD, model_MORENA, type = "latex",
+stargazer(model_turnout, model_PRI, model_PAN, model_PRD, model_MORENA, type = "text",
           column.labels = c("Turnout", "PRI", "PAN", "PRD", "MORENA"),
           dep.var.labels = "Correlation")
 
@@ -354,91 +359,5 @@ ggplot(held_elections_data, aes(x = year, y = reorder(state_name, desc(state_nam
     axis.text.y = element_text(size = 13, face = "bold"),  # Increase y-axis text size and make it bold
     legend.title = element_text(size = 13, face = "bold"),  # Make legend title bold and larger
     legend.text = element_text(size = 13)  # Increase font size of legend labels
-  )
-
-##OLD
-# 
-# # Adjust the y-axis to display states in reverse alphabetical order
-# ggplot(held_elections_data, aes(x = year, y = reorder(state_name, desc(state_name)), fill = factor(elections_held))) +
-#   geom_tile(color = "white") +
-#   scale_fill_manual(values = c("0" = "white", "1" = "black"), 
-#                     name = "Elections Held", 
-#                     labels = c("No Elections", "Elections Held"),
-#                     guide = guide_legend(override.aes = list(color = c("black", NA)))) +  # Black border around the white legend box
-#   scale_x_continuous(breaks = seq(min(held_elections_data$year), max(held_elections_data$year), by = 1)) +  # Display all years
-#   labs(x = "", y = "") +  # Remove y-axis label by setting it to an empty string
-#   # labs(title = "Elections Held by State and Year",
-#   #      x = "Year", 
-#   #      y = "State") +
-#   theme_minimal() +
-# theme(axis.text.x = element_text(angle = 90, vjust = 0.5, face = "bold", size = 13),  # Make x-axis (years) bold
-#       axis.text.y = element_text(size = 13, face = "bold"),  # Increase y-axis text size and make it bold
-#       legend.title = element_text(size = 13, face = "bold"),  # Make legend title bold and larger
-#       legend.text = element_text(size = 13))  # Increase font size of legend labels  # Make y-axis (state names) bold
-# 
-
-
-##### Evolutions of electoral precints through time 
-
-precints_db <- read_csv("Correlation Data/table_precintsthroughtime.csv")
-
-# Summarize the data by year and state to calculate total sections for each state-year
-sections_evolution_state <- precints_db %>%
-  group_by(Year, State) %>%
-  summarize(Total_Sections = sum(`Total Sections`, na.rm = TRUE), .groups = 'drop')
-
-# Create the faceted line graph with standardized y-axis
-ggplot(sections_evolution_state, aes(x = Year, y = Total_Sections, group = State, color = State)) +
-  geom_line(size = 1) +
-  labs(
-    title = "Evolution of Total Sections Over Time by State",
-    x = "Year",
-    y = "Total Number of Sections"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
-    axis.text = element_text(size = 10),
-    axis.title = element_text(size = 12, face = "bold"),
-    legend.position = "none"  # Remove legend to avoid clutter
-  ) +
-  facet_wrap(~ State, ncol = 4, scales = "fixed") 
-
-# Summarize the data by year to calculate total sections for each year
-sections_evolution_total <- precints_db %>%
-  group_by(Year) %>%
-  summarize(Total_Sections = sum(`Total Sections`, na.rm = TRUE), .groups = 'drop')
-
-
-# Create the bar graph
-ggplot(sections_evolution_total, aes(x = Year, y = Total_Sections)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  labs(
-    title = "Total Number of Sections Over Time",
-    x = "Year",
-    y = "Total Number of Sections"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
-    axis.text = element_text(size = 10),
-    axis.title = element_text(size = 12, face = "bold")
-  )
-
-
-
-# Create the line graph
-ggplot(sections_evolution_total, aes(x = Year, y = Total_Sections)) +
-  geom_line(size = 1.5, color = "blue") +
-  labs(
-    title = "Evolution of Total Sections Over Time",
-    x = "Year",
-    y = "Total Number of Sections"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
-    axis.text = element_text(size = 10),
-    axis.title = element_text(size = 12, face = "bold")
   )
 

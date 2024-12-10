@@ -46,7 +46,8 @@ assign_incumbent_vote <- function(data) {
   # Initialize columns
   data <- data %>%
     mutate(incumbent_vote = NA,
-           party_component = NA)
+           party_component = NA,
+           final_incumbent = NA)  # Track the source of incumbent_vote
   
   # Loop through each row of the data
   for (I in 1:nrow(data)) {
@@ -62,6 +63,12 @@ assign_incumbent_vote <- function(data) {
         unique()
       
       if (length(incumbent_party) == 0) next # Skip if no valid incumbent_party values are found
+      
+      if (length(incumbent_party) > 1) {
+        incumbent_party <- incumbent_party[1] # Use the first value as a fallback
+      }
+      
+      data$final_incumbent[I] <- incumbent_party  # Track the fallback incumbent party
     }
     
     # Check if there's a mix of coalitions and single parties
@@ -82,6 +89,7 @@ assign_incumbent_vote <- function(data) {
         for (single_party in single_parties) {
           if (single_party %in% coalition_components) {
             incumbent_party <- single_party
+            data$final_incumbent[I] <- single_party  # Track the single party
             break
           }
         }
@@ -106,12 +114,12 @@ assign_incumbent_vote <- function(data) {
         if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
           data$incumbent_vote[I] <- data[[var]][I]
           data$party_component[I] <- var
+          data$final_incumbent[I] <- incumbent_party  # Track coalition
           valid_found <- TRUE
           break
         }
       }
       
-      # If no valid value found, continue to next row
       if (valid_found) next
     } else {
       # Handle single parties
@@ -135,6 +143,7 @@ assign_incumbent_vote <- function(data) {
         if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
           data$incumbent_vote[I] <- data[[var]][I]
           data$party_component[I] <- var
+          data$final_incumbent[I] <- party  # Track the standalone party
           valid_found <- TRUE
           break
         }
@@ -151,6 +160,7 @@ assign_incumbent_vote <- function(data) {
           if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
             data$incumbent_vote[I] <- data[[var]][I]
             data$party_component[I] <- var
+            data$final_incumbent[I] <- party  # Track broader coalition
             break
           }
         }
@@ -160,6 +170,7 @@ assign_incumbent_vote <- function(data) {
   
   return(data)
 }
+
 
 finaldb <- assign_incumbent_vote(finaldb)
 
@@ -289,6 +300,7 @@ finaldb <- finaldb %>%
     year, 
     incumbent_party_magar,
     incumbent_candidate_magar,
+    final_incumbent,
     incumbent_vote,
     party_component,
     mutually_exclusive,
