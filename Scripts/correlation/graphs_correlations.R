@@ -163,10 +163,10 @@ db_mun <- db %>%
   group_by(mun_code, year) %>%
   summarise(
     # Calculations with registered_voters
-    share_incumbent_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
-                                              sum(incumbent_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
-    share_state_incumbent_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
-                                                    sum(state_incumbent_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
+    share_incumbent_party_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
+                                              sum(incumbent_party_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
+    share_state_incumbent_party_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
+                                                    sum(state_incumbent_party_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
     share_PRI_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
                                         sum(PRI_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
     share_PRD_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
@@ -175,14 +175,14 @@ db_mun <- db %>%
                                         sum(PAN_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
     share_MORENA_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
                                            sum(MORENA_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
-    share_runnerup_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
-                                             sum(runnerup_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
+    share_runnerup_party_registered_voters = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
+                                             sum(runnerup_party_vote, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA),
     
     # New Calculations with valid
-    share_incumbent_valid_vote  = ifelse(sum(valid, na.rm = TRUE) > 0, 
-                                       sum(incumbent_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
-    share_state_incumbent_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
-                                             sum(state_incumbent_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
+    share_incumbent_party_valid_vote  = ifelse(sum(valid, na.rm = TRUE) > 0, 
+                                       sum(incumbent_party_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
+    share_state_incumbent_party_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
+                                             sum(state_incumbent_party_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
     share_PRI_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
                                  sum(PRI_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
     share_PRD_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
@@ -191,8 +191,8 @@ db_mun <- db %>%
                                  sum(PAN_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
     share_MORENA_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
                                     sum(MORENA_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
-    share_runnerup_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
-                                      sum(runnerup_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
+    share_runnerup_party_valid_vote = ifelse(sum(valid, na.rm = TRUE) > 0, 
+                                      sum(runnerup_party_vote, na.rm = TRUE) / sum(valid, na.rm = TRUE), NA),
     # Turnout at municipal level
     turnout = ifelse(sum(registered_voters, na.rm = TRUE) > 0, 
                      sum(total, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA)
@@ -297,7 +297,7 @@ state_names <- c(
 # Step 3: Summarize to check for elections held
 held_elections_data <- db %>%
   group_by(state_code, mun, year) %>%
-  summarize(elections_held = any(!is.na(incumbent_vote) & incumbent_vote > 0), .groups = 'drop')
+  summarize(elections_held = any(!is.na(incumbent_party_vote) & incumbent_party_vote > 0), .groups = 'drop')
 
 # Step 4: Convert elections_held to numeric (0 or 1)
 held_elections_data$elections_held <- as.numeric(held_elections_data$elections_held)
