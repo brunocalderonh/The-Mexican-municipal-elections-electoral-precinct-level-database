@@ -17,7 +17,7 @@ setwd(file.path(script_dir, "../../../"))
 finaldb <- read_csv("Processed Data/veracruz/veracruz_incumbent_manipulator.csv")
 
 finaldb <- finaldb %>%
-  select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
+  select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_JL,runnerup_party_magar, runnerup_candidate_magar, margin,everything())
 
 replace_parties <- function(party_str) {
   replacements <- c( "PNA" = "PANAL", 
@@ -58,25 +58,22 @@ assign_incumbent_vote <- function(data) {
     
     # Handle cases where all incumbent_party_ variables are NA
     if (is.na(incumbent_party) || incumbent_party == "") {
-      incumbent_party <- data %>%
+      all_incumbent_parties <- data %>%
         select(starts_with("incumbent_party_")) %>%
         filter(row_number() == I) %>%
         unlist(use.names = FALSE) %>%
         na.omit() %>%
         unique()
       
-      if (length(incumbent_party) == 0) {
-        data$final_incumbent[I] <- NA  # No valid party, set final_incumbent to NA
-        next
+      if (length(all_incumbent_parties) > 0) {
+        incumbent_party <- all_incumbent_parties[1]  # Use the first available party
+        final_incumbent_value <- all_incumbent_parties[1]
+      } else {
+        next  # Skip if no valid incumbent_party values are found
       }
-      
-      # Determine the first non-NA incumbent party variable used
-      incumbent_cols <- grep("^incumbent_party_", names(data), value = TRUE)
-      used_col <- incumbent_cols[which.max(!is.na(data[I, incumbent_cols]))]
-      final_incumbent_value <- data[[used_col]][I]
     }
     
-    # Check if there's a mix of coalitions and single parties
+    # Check if there are coalitions and single parties
     all_parties <- data %>%
       select(starts_with("incumbent_party_")) %>%
       filter(row_number() == I) %>%
@@ -88,13 +85,12 @@ assign_incumbent_vote <- function(data) {
     single_parties <- all_parties[!str_detect(all_parties, "_")]
     
     if (length(coalition_parties) > 0 && length(single_parties) > 0) {
-      # Check if any single party is part of the coalition
       for (coalition in coalition_parties) {
         coalition_components <- unlist(str_split(coalition, "_"))
         for (single_party in single_parties) {
           if (single_party %in% coalition_components) {
             incumbent_party <- single_party
-            final_incumbent_value <- single_party  # Assign the single party value
+            final_incumbent_value <- single_party
             break
           }
         }
@@ -102,74 +98,55 @@ assign_incumbent_vote <- function(data) {
       }
     }
     
-    # Check if it is a coalition
+    # Handle coalitions
     if (str_detect(incumbent_party, "_")) {
-      # Split the coalition into individual parties
       parties <- unlist(str_split(incumbent_party, "_"))
-      
-      # Find columns that match all parties in any order (exact match or broader coalition)
       coalition_vars <- names(data)[sapply(names(data), function(x) {
         party_components <- unlist(str_split(x, "_"))
-        all(parties %in% party_components) # Check if all parties are in the column
+        all(parties %in% party_components)
       })]
       
-      # Check for valid votes in coalition columns
       valid_found <- FALSE
       for (var in coalition_vars) {
         if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
           data$incumbent_vote[I] <- data[[var]][I]
           data$party_component[I] <- var
-          final_incumbent_value <- incumbent_party  # Coalition uses the resolved party
+          final_incumbent_value <- incumbent_party
           valid_found <- TRUE
           break
         }
       }
       
-      # If no valid value found, continue to next row
-      if (!valid_found) {
-        data$final_incumbent[I] <- NA  # No valid coalition found
-        next
-      }
+      if (!valid_found) next
     } else {
       # Handle single parties
       party <- incumbent_party
+      party_regex <- paste0("(^|_)", party, "($|_)")
       
-      # Regex to match the exact party name (exclude PANAL for PAN)
-      if (party == "PAN") {
-        party_regex <- "(^PAN$|_PAN$|^PAN_)"
-      } else if (party == "PANAL") {
-        party_regex <- "(^PANAL$|_PANAL$|^PANAL_)"
-      } else {
-        party_regex <- paste0("(^|_)", party, "($|_)")
-      }
-      
-      # Find columns matching the standalone party
       candidate_vars <- names(data)[grepl(party_regex, names(data))]
-      
-      # Check for valid votes in candidate columns
       valid_found <- FALSE
+      
       for (var in candidate_vars) {
         if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
           data$incumbent_vote[I] <- data[[var]][I]
           data$party_component[I] <- var
-          final_incumbent_value <- party  # Use the resolved party
+          final_incumbent_value <- party
           valid_found <- TRUE
           break
         }
       }
       
-      # If no valid value found, check for broader coalitions containing the party
       if (!valid_found) {
         broader_coalition_vars <- names(data)[sapply(names(data), function(x) {
           party_components <- unlist(str_split(x, "_"))
-          party %in% party_components # Check if the party is part of the coalition
+          party %in% party_components
         })]
         
         for (var in broader_coalition_vars) {
           if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
             data$incumbent_vote[I] <- data[[var]][I]
             data$party_component[I] <- var
-            final_incumbent_value <- party  # Use the resolved party
+            final_incumbent_value <- party
             break
           }
         }
@@ -179,8 +156,6 @@ assign_incumbent_vote <- function(data) {
     # Assign `final_incumbent` only if `incumbent_vote` is non-NA
     if (!is.na(data$incumbent_vote[I])) {
       data$final_incumbent[I] <- final_incumbent_value
-    } else {
-      data$final_incumbent[I] <- NA  # Explicitly set to NA if no incumbent_vote
     }
   }
   
@@ -322,9 +297,6 @@ finaldb <- finaldb %>%
     mutually_exclusive,
     incumbent_party_JL, 
     incumbent_candidate_JL,
-    incumbent_party_Horacio, 
-    incumbent_party_inafed, 
-    incumbent_candidate_inafed,
     runnerup_party_magar,
     runnerup_candidate_magar,
     runnerup_vote ,

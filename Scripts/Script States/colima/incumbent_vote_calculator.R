@@ -17,7 +17,7 @@ setwd(file.path(script_dir, "../../../"))
 finaldb <- read_csv("Processed Data/colima/colima_incumbent_manipulator.csv")
 
 finaldb <- finaldb %>%
-  select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
+  select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_JL, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
 replace_parties <- function(party_str) {
   replacements <- c( "PNA" = "PANAL", 
                     "INDEP" = "CI_1",
@@ -108,7 +108,7 @@ assign_incumbent_vote <- function(data) {
         if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
           data$incumbent_vote[I] <- data[[var]][I]
           data$party_component[I] <- var
-          final_incumbent_value <- var  # Track coalition column name
+          final_incumbent_value <- incumbent_party  # Track coalition as final_incumbent
           valid_found <- TRUE
           break
         }
@@ -139,7 +139,7 @@ assign_incumbent_vote <- function(data) {
         if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
           data$incumbent_vote[I] <- data[[var]][I]
           data$party_component[I] <- var
-          final_incumbent_value <- var  # Track party column name
+          final_incumbent_value <- incumbent_party  # Track single party as final_incumbent
           valid_found <- TRUE
           break
         }
@@ -156,7 +156,7 @@ assign_incumbent_vote <- function(data) {
           if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
             data$incumbent_vote[I] <- data[[var]][I]
             data$party_component[I] <- var
-            final_incumbent_value <- var  # Track coalition column name
+            final_incumbent_value <- incumbent_party  # Track coalition containing single party
             break
           }
         }
@@ -302,9 +302,6 @@ finaldb <- finaldb %>%
     mutually_exclusive,
     incumbent_party_JL, 
     incumbent_candidate_JL,
-    incumbent_party_Horacio, 
-    incumbent_party_inafed, 
-    incumbent_candidate_inafed,
     runnerup_party_magar,
     runnerup_candidate_magar,
     runnerup_vote ,

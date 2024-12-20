@@ -18,7 +18,7 @@ finaldb <- read_csv("Processed Data/chiapas/chiapas_incumbent_manipulator.csv")
 
 
 finaldb <- finaldb %>%
-  select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
+  select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_JL, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
 replace_parties <- function(party_str) {
   replacements <- c( 
     #PPS no tenemos
@@ -68,7 +68,6 @@ assign_incumbent_vote <- function(data) {
   # assign_incumbent_vote logic
   for (I in 1:nrow(data)) {
     incumbent_party <- data$incumbent_party_magar[I]
-    final_incumbent_value <- NA  # Tracker for final_incumbent assignment
     
     # Handle cases where all incumbent_party_ variables are NA
     if (is.na(incumbent_party) || incumbent_party == "") {
@@ -80,12 +79,9 @@ assign_incumbent_vote <- function(data) {
         unique()
       
       if (length(incumbent_party) == 0) next  # Skip if no valid incumbent_party values are found
-      
       if (length(incumbent_party) > 1) {
         incumbent_party <- incumbent_party[1]  # Use the first party if multiple are found
       }
-      
-      final_incumbent_value <- incumbent_party  # Track fallback incumbent_party
     }
     
     # Check if it is a coalition
@@ -99,68 +95,29 @@ assign_incumbent_vote <- function(data) {
       })]
       
       # Check for valid votes in coalition columns
-      valid_found <- FALSE
       for (var in coalition_vars) {
         if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
           data$incumbent_vote[I] <- data[[var]][I]
           data$party_component[I] <- var
-          final_incumbent_value <- var  # Track coalition column
-          valid_found <- TRUE
+          data$final_incumbent[I] <- incumbent_party  # Assign the coalition as final_incumbent
           break
         }
-      }
-      
-      if (valid_found) {
-        data$final_incumbent[I] <- final_incumbent_value
-        next
       }
     } else {
       # Handle single parties
       party <- incumbent_party
-      
-      # Regex to match the exact party name
-      if (party == "PAN") {
-        party_regex <- "(^PAN$|_PAN$|^PAN_)"
-      } else if (party == "PANAL") {
-        party_regex <- "(^PANAL$|_PANAL$|^PANAL_)"
-      } else {
-        party_regex <- paste0("(^|_)", party, "($|_)")
-      }
+      party_regex <- paste0("(^|_)", party, "($|_)")
       
       # Find columns matching the single party
       candidate_vars <- names(data)[grepl(party_regex, names(data))]
-      valid_found <- FALSE
       for (var in candidate_vars) {
         if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
           data$incumbent_vote[I] <- data[[var]][I]
           data$party_component[I] <- var
-          final_incumbent_value <- var  # Track single party column
-          valid_found <- TRUE
+          data$final_incumbent[I] <- incumbent_party  # Assign the single party as final_incumbent
           break
         }
       }
-      
-      # If no single party match, check broader coalitions containing the party
-      if (!valid_found) {
-        broader_coalition_vars <- names(data)[sapply(names(data), function(x) {
-          party_components <- unlist(str_split(x, "_"))
-          party %in% party_components  # Check if single party is part of coalition
-        })]
-        
-        for (var in broader_coalition_vars) {
-          if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
-            data$incumbent_vote[I] <- data[[var]][I]
-            data$party_component[I] <- var
-            final_incumbent_value <- var  # Track coalition containing single party
-            break
-          }
-        }
-      }
-    }
-    
-    # Assign final_incumbent if incumbent_vote is determined
-    if (!is.na(data$incumbent_vote[I])) {
-      data$final_incumbent[I] <- final_incumbent_value
     }
   }
   
@@ -168,86 +125,44 @@ assign_incumbent_vote <- function(data) {
   incumbent_cols <- c("incumbent_party_Horacio", "incumbent_party_inafed", "incumbent_party_JL", "incumbent_party_magar")
   
   for (I in which(is.na(data$incumbent_vote))) {
-    
     party_count <- list()
     panal_found <- FALSE
     
-    # Check the special case for PC
-    if (data$incumbent_party_magar[I] == "PC" && data$incumbent_candidate_magar[I] == "ALFREDO CRUZ GUZMAN" && data$year[I] == 2010) {
-      pc_vars <- names(data)[str_detect(names(data), "PC")]
-      for (pc_var in pc_vars) {
-        if (!is.na(data[[pc_var]][I]) && data[[pc_var]][I] != 0) {
-          data$incumbent_vote[I] <- data[[pc_var]][I]
-          data$party_component[I] <- pc_var
-          data$final_incumbent[I] <- pc_var
-          next
-        }
-      }
-    }
-    
     # Count the occurrence of each party in the specified columns
     for (col in incumbent_cols) {
-      if (!is.na(data[[col]][I]) && data[[col]][I] != "") {
-        party <- data[[col]][I]
-        if (party == "PANAL") {
-          panal_found <- TRUE
-        }
-        if (party %in% names(party_count)) {
-          party_count[[party]] <- party_count[[party]] + 1
-        } else {
-          party_count[[party]] <- 1
-        }
-      }
-    }
-    
-    # If PANAL is found in any of the columns, look for PANAL in the data
-    if (panal_found) {
-      panal_vars <- names(data)[str_detect(names(data), "PANAL")]
-      for (panal_var in panal_vars) {
-        if (!is.na(data[[panal_var]][I]) && data[[panal_var]][I] != 0) {
-          data$incumbent_vote[I] <- data[[panal_var]][I]
-          data$party_component[I] <- panal_var
-          data$final_incumbent[I] <- panal_var
-          next
+      if (col %in% names(data)) {
+        value <- data[[col]][I]
+        if (!is.na(value) && value != "") {
+          party <- value
+          if (party == "PANAL") {
+            panal_found <- TRUE
+          }
+          if (party %in% names(party_count)) {
+            party_count[[party]] <- party_count[[party]] + 1
+          } else {
+            party_count[[party]] <- 1
+          }
         }
       }
     }
     
-    # Find the majority party
-    majority_party <- NA
-    for (party in names(party_count)) {
-      if (party_count[[party]] > 1) {
-        majority_party <- party
-        break
-      }
+    # Check for majority party only if party_count is not empty
+    if (length(party_count) > 0) {
+      majority_party <- names(which.max(unlist(party_count)))
+    } else {
+      majority_party <- NA  # Set to NA if no parties are found
     }
     
-    # If a majority party is found
+    # Proceed only if majority_party is valid
     if (!is.na(majority_party) && majority_party != "") {
-      
-      # Check individual party or coalition containing the party
       party_vars <- names(data)[str_detect(names(data), majority_party)]
-      party_found <- FALSE
       
       for (party_var in party_vars) {
         if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
           data$incumbent_vote[I] <- data[[party_var]][I]
           data$party_component[I] <- party_var
-          data$final_incumbent[I] <- party_var
-          party_found <- TRUE
+          data$final_incumbent[I] <- majority_party
           break
-        }
-      }
-      
-      if (!party_found) {
-        coalition_vars <- names(data)[sapply(names(data), function(x) majority_party %in% str_split(x, "_")[[1]])]
-        for (coalition_var in coalition_vars) {
-          if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
-            data$incumbent_vote[I] <- data[[coalition_var]][I]
-            data$party_component[I] <- coalition_var
-            data$final_incumbent[I] <- coalition_var
-            break
-          }
         }
       }
     }
@@ -387,9 +302,6 @@ finaldb <- finaldb %>%
     mutually_exclusive,
     incumbent_party_JL, 
     incumbent_candidate_JL,
-    incumbent_party_Horacio, 
-    incumbent_party_inafed, 
-    incumbent_candidate_inafed,
     runnerup_party_magar,
     runnerup_candidate_magar,
     runnerup_vote ,

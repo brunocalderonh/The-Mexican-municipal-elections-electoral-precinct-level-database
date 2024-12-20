@@ -387,9 +387,9 @@ assign_votes1 <- function(data) {
   # Loop through each row of the data with missing incumbent_vote
   for (I in which(is.na(data$incumbent_vote))) {
     
-    # Process rows with a string value in incumbent_party_inafed
-    if (!is.na(data$incumbent_party_inafed[I]) && data$incumbent_party_inafed[I] != "") {
-      incumbent_party <- data$incumbent_party_inafed[I]
+    # Process rows with a string value in incumbent_party_JL
+    if (!is.na(data$incumbent_party_JL[I]) && data$incumbent_party_JL[I] != "") {
+      incumbent_party <- data$incumbent_party_JL[I]
       
       # Reset incumbent_vote and party_component for these rows
       data$incumbent_vote[I] <- NA
@@ -510,9 +510,6 @@ merged_data <- merged_data %>%
          source_researched_incumbent,
          incumbent_party_JL,
          incumbent_candidate_JL,
-         incumbent_party_Horacio,
-         incumbent_party_inafed,
-         incumbent_candidate_inafed,
          state_incumbent_party,
          state_incumbent_vote,
          state_incumbent_vote_party_component,

@@ -17,7 +17,7 @@ setwd(file.path(script_dir, "../../../"))
 finaldb <- read_csv("Processed Data/aguascalientes/aguascalientes_incumbent_manipulator.csv")
 
 finaldb <- finaldb %>%
-  select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar,runnerup_candidate_magar, margin,everything())
+  select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_JL, runnerup_party_magar,runnerup_candidate_magar, margin,everything())
 
 replace_parties <- function(party_str) {
   replacements <- c("PNA" = "PANAL", 
@@ -50,7 +50,6 @@ assign_incumbent_vote <- function(data) {
   # Loop through each row of the data
   for (I in 1:nrow(data)) {
     incumbent_party <- data$incumbent_party_magar[I]
-    final_incumbent_value <- NA  # Track the source of incumbent_vote
     
     # Skip if incumbent_party is NA or empty
     if (is.na(incumbent_party) || incumbent_party == "") next
@@ -72,7 +71,6 @@ assign_incumbent_vote <- function(data) {
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
               data$incumbent_vote[I] <- data[[party_var]][I]
               data$party_component[I] <- party_var
-              final_incumbent_value <- party_var  # Track the column used
               break
             }
           }
@@ -88,7 +86,6 @@ assign_incumbent_vote <- function(data) {
           if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[coalition_var]][I]
             data$party_component[I] <- coalition_var
-            final_incumbent_value <- coalition_var  # Track the column used
             break
           }
         }
@@ -103,14 +100,12 @@ assign_incumbent_vote <- function(data) {
           if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[party_var]][I]
             data$party_component[I] <- party_var
-            final_incumbent_value <- party_var  # Track the column used
             break
           }
         } else if (!str_detect(party_var, "\\bPANAL\\b") && !str_detect(party_var, "\\bPAN\\b")) {
           if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[party_var]][I]
             data$party_component[I] <- party_var
-            final_incumbent_value <- party_var  # Track the column used
             break
           }
         }
@@ -124,7 +119,6 @@ assign_incumbent_vote <- function(data) {
           if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
             data$incumbent_vote[I] <- data[[coalition_var]][I]
             data$party_component[I] <- coalition_var
-            final_incumbent_value <- coalition_var  # Track the column used
             break
           }
         }
@@ -133,7 +127,17 @@ assign_incumbent_vote <- function(data) {
     
     # Assign final_incumbent if incumbent_vote is determined
     if (!is.na(data$incumbent_vote[I])) {
-      data$final_incumbent[I] <- final_incumbent_value
+      # Check if it matches incumbent_party_magar
+      if (!is.na(data$incumbent_party_magar[I]) && 
+          any(str_detect(data$party_component[I], str_split(data$incumbent_party_magar[I], "_")[[1]]))) {
+        data$final_incumbent[I] <- data$incumbent_party_magar[I]
+      } else if (!is.na(data$incumbent_party_JL[I]) && 
+                 any(str_detect(data$party_component[I], str_split(data$incumbent_party_JL[I], "_")[[1]]))) {
+        data$final_incumbent[I] <- data$incumbent_party_JL[I]
+      } else {
+        # Fallback: Assign incumbent_party_magar if no clear match
+        data$final_incumbent[I] <- data$incumbent_party_magar[I]
+      }
     }
   }
   
@@ -272,9 +276,6 @@ finaldb <- finaldb %>%
     mutually_exclusive,
     incumbent_party_JL, 
     incumbent_candidate_JL,
-    incumbent_party_Horacio, 
-    incumbent_party_inafed, 
-    incumbent_candidate_inafed,
     runnerup_party_magar,
     runnerup_candidate_magar,
     runnerup_vote ,

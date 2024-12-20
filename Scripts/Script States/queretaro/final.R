@@ -475,9 +475,6 @@ merged_data <- merged_data %>%
          source_researched_incumbent,
          incumbent_party_JL,
          incumbent_candidate_JL,
-         incumbent_party_Horacio,
-         incumbent_party_inafed,
-         incumbent_candidate_inafed,
          state_incumbent_party,
          state_incumbent_vote,
          state_incumbent_vote_party_component,
@@ -503,7 +500,7 @@ merged_data <- merged_data %>%
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/queretaro")
-output_path <- file.path(output_dir, "queretaro_final1.csv")
+output_path <- file.path(output_dir, "queretaro_final.csv")
 
 # Use write_csv to save the file
 write_csv(merged_data, output_path)

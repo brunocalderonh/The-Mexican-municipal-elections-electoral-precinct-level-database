@@ -17,7 +17,7 @@ setwd(file.path(script_dir, "../../../"))
 finaldb <- read_csv("Processed Data/nuevoleon/nuevoleon_incumbent_manipulator.csv")
 
 finaldb <- finaldb %>%
-  select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
+  select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_JL, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
 replace_parties <- function(party_str) {
   replacements <- c( "PNA" = "PANAL", 
                     "CONVE" = "PC",
@@ -68,7 +68,7 @@ assign_incumbent_vote <- function(data) {
   # Loop through each row of the data
   for (I in 1:nrow(data)) {
     incumbent_party <- data$incumbent_party_magar[I]
-    final_incumbent_value <- NA  # Initialize the final_incumbent tracker
+    final_incumbent_value <- NA  # Track the source for final_incumbent
     
     # Handle cases where all incumbent_party_ variables are NA
     if (is.na(incumbent_party) || incumbent_party == "") {
@@ -82,7 +82,7 @@ assign_incumbent_vote <- function(data) {
       
       if (length(all_incumbent_parties) > 0) {
         incumbent_party <- all_incumbent_parties[1]
-        final_incumbent_value <- all_incumbent_parties[1]
+        final_incumbent_value <- all_incumbent_parties[1]  # Track the first valid party
       } else {
         next  # Skip if no valid incumbent_party values are found
       }
@@ -106,18 +106,12 @@ assign_incumbent_vote <- function(data) {
         for (single_party in single_parties) {
           if (single_party %in% coalition_components) {
             incumbent_party <- single_party
-            final_incumbent_value <- single_party  # Track single party value
+            final_incumbent_value <- single_party  # Track the single party used
             break
           }
         }
         if (incumbent_party %in% single_parties) break
       }
-    }
-    
-    # Ensure incumbent_party is scalar
-    if (length(incumbent_party) > 1) {
-      incumbent_party <- incumbent_party[1]
-      final_incumbent_value <- incumbent_party[1]
     }
     
     # Check if it is a coalition
@@ -143,8 +137,11 @@ assign_incumbent_vote <- function(data) {
         }
       }
       
-      # If no valid value found, continue to next row
-      if (valid_found) next
+      # If valid vote found, skip to next iteration
+      if (valid_found) {
+        data$final_incumbent[I] <- final_incumbent_value
+        next
+      }
     } else {
       # Handle single parties
       party <- incumbent_party
@@ -194,14 +191,11 @@ assign_incumbent_vote <- function(data) {
     # Assign the final_incumbent value
     if (!is.na(data$incumbent_vote[I])) {
       data$final_incumbent[I] <- final_incumbent_value
-    } else {
-      data$final_incumbent[I] <- NA
     }
   }
   
   return(data)
 }
-
 finaldb <- assign_incumbent_vote(finaldb)
 
 assign_runnerup_vote <- function(data) {
@@ -334,9 +328,6 @@ finaldb <- finaldb %>%
     mutually_exclusive,
     incumbent_party_JL, 
     incumbent_candidate_JL,
-    incumbent_party_Horacio, 
-    incumbent_party_inafed, 
-    incumbent_candidate_inafed,
     runnerup_party_magar,
     runnerup_candidate_magar,
     runnerup_vote ,

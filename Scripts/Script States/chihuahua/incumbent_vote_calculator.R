@@ -15,7 +15,7 @@ setwd(file.path(script_dir, "../../../"))
 finaldb <- read_csv("Processed Data/chihuahua/chihuahua_incumbent_manipulator.csv")
 
 finaldb <- finaldb %>%
-  select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
+  select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_JL, runnerup_party_magar, runnerup_candidate_magar, margin,everything())
 replace_parties <- function(party_str) {
   replacements <- c( "PNA" = "PANAL", 
                     "INDEP" = "CI_1",
@@ -47,6 +47,9 @@ assign_incumbent_vote <- function(data) {
   for (I in 1:nrow(data)) {
     incumbent_party <- data$incumbent_party_magar[I]
     final_incumbent_value <- NA  # Tracker for final_incumbent assignment
+    
+    # Debug: Print current row and incumbent_party
+    print(paste("Processing row:", I, "incumbent_party:", incumbent_party))
     
     # Handle cases where all incumbent_party_ variables are NA
     if (is.na(incumbent_party) || incumbent_party == "") {
@@ -83,7 +86,7 @@ assign_incumbent_vote <- function(data) {
         if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
           data$incumbent_vote[I] <- data[[var]][I]
           data$party_component[I] <- var
-          final_incumbent_value <- var  # Track coalition column
+          final_incumbent_value <- incumbent_party  # Track coalition column
           valid_found <- TRUE
           break
         }
@@ -98,13 +101,9 @@ assign_incumbent_vote <- function(data) {
       party <- incumbent_party
       
       # Regex to match the exact party name
-      if (party == "PAN") {
-        party_regex <- "(^PAN$|_PAN$|^PAN_)"
-      } else if (party == "PANAL") {
-        party_regex <- "(^PANAL$|_PANAL$|^PANAL_)"
-      } else {
-        party_regex <- paste0("(^|_)", party, "($|_)")
-      }
+      party_regex <- ifelse(party == "PAN", "(^PAN$|_PAN$|^PAN_)",
+                            ifelse(party == "PANAL", "(^PANAL$|_PANAL$|^PANAL_)",
+                                   paste0("(^|_)", party, "($|_)")))
       
       # Find columns matching the single party
       candidate_vars <- names(data)[grepl(party_regex, names(data))]
@@ -113,7 +112,7 @@ assign_incumbent_vote <- function(data) {
         if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
           data$incumbent_vote[I] <- data[[var]][I]
           data$party_component[I] <- var
-          final_incumbent_value <- var  # Track single party column
+          final_incumbent_value <- incumbent_party  # Track single party column
           valid_found <- TRUE
           break
         }
@@ -130,7 +129,7 @@ assign_incumbent_vote <- function(data) {
           if (!is.na(data[[var]][I]) && data[[var]][I] != 0) {
             data$incumbent_vote[I] <- data[[var]][I]
             data$party_component[I] <- var
-            final_incumbent_value <- var  # Track coalition containing single party
+            final_incumbent_value <- incumbent_party  # Track coalition containing single party
             break
           }
         }
@@ -281,9 +280,6 @@ finaldb <- finaldb %>%
     mutually_exclusive,
     incumbent_party_JL, 
     incumbent_candidate_JL,
-    incumbent_party_Horacio, 
-    incumbent_party_inafed, 
-    incumbent_candidate_inafed,
     runnerup_party_magar,
     runnerup_candidate_magar,
     runnerup_vote ,

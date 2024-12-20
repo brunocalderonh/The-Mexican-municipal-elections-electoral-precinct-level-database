@@ -18,7 +18,7 @@
   
   finaldb <- finaldb %>%
     #select(-winner) %>%
-    select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_Horacio,incumbent_party_JL,incumbent_party_inafed, incumbent_candidate_inafed, runnerup_party_magar, runnerup_candidate_magar, margin,everything())  
+    select(state,mun,section,uniqueid,year,incumbent_party_magar,incumbent_candidate_magar,incumbent_party_JL,runnerup_party_magar, runnerup_candidate_magar, margin,everything())  
   replace_parties1 <- function(party_str) {
     replacements <- c( "PNA" = "PANAL", 
                       "CONVE" = "PC",
@@ -121,7 +121,7 @@
               if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
                 data$incumbent_vote[I] <- data[[party_var]][I]
                 data$party_component[I] <- party_var
-                final_incumbent_value <- party_var  # Track individual party column
+                final_incumbent_value <- incumbent_party  # Reflect the coalition as final_incumbent
                 break
               }
             }
@@ -137,7 +137,7 @@
             if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
               data$incumbent_vote[I] <- data[[coalition_var]][I]
               data$party_component[I] <- coalition_var
-              final_incumbent_value <- coalition_var  # Track coalition column
+              final_incumbent_value <- incumbent_party  # Reflect the coalition as final_incumbent
               break
             }
           }
@@ -152,14 +152,14 @@
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
               data$incumbent_vote[I] <- data[[party_var]][I]
               data$party_component[I] <- party_var
-              final_incumbent_value <- party_var  # Track party column
+              final_incumbent_value <- incumbent_party  # Reflect the party as final_incumbent
               break
             }
           } else if (!str_detect(party_var, "PAN") && !str_detect(party_var, "PANAL")) {
             if (!is.na(data[[party_var]][I]) && data[[party_var]][I] != 0) {
               data$incumbent_vote[I] <- data[[party_var]][I]
               data$party_component[I] <- party_var
-              final_incumbent_value <- party_var  # Track party column
+              final_incumbent_value <- incumbent_party  # Reflect the party as final_incumbent
               break
             }
           }
@@ -173,7 +173,7 @@
             if (!is.na(data[[coalition_var]][I]) && data[[coalition_var]][I] != 0) {
               data$incumbent_vote[I] <- data[[coalition_var]][I]
               data$party_component[I] <- coalition_var
-              final_incumbent_value <- coalition_var  # Track coalition column
+              final_incumbent_value <- incumbent_party  # Reflect the coalition as final_incumbent
               break
             }
           }
@@ -188,10 +188,7 @@
     
     return(data)
   }
-  
-  
-  # Apply the function to your data
-  finaldb <- assign_incumbent_vote(finaldb)
+finaldb <- assign_incumbent_vote(finaldb)
   
   assign_runnerup_vote <- function(data) {
     
@@ -324,9 +321,6 @@
       mutually_exclusive,
       incumbent_party_JL, 
       incumbent_candidate_JL,
-      incumbent_party_Horacio, 
-      incumbent_party_inafed, 
-      incumbent_candidate_inafed,
       runnerup_party_magar,
       runnerup_candidate_magar,
       runnerup_vote ,

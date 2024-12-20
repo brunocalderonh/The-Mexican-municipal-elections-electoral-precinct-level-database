@@ -39,9 +39,7 @@ required_columns <- c(
   "incumbent_party_magar", "incumbent_candidate_magar",
   "incumbent_vote", "party_component", "mutually_exclusive",
   "researched_incumbent", "source_researched_incumbent",
-  "incumbent_party_JL", "incumbent_candidate_JL",
-  "incumbent_party_Horacio", "incumbent_party_inafed",
-  "incumbent_candidate_inafed", "state_incumbent_party",
+  "incumbent_party_JL", "incumbent_candidate_JL", "state_incumbent_party",
   "state_incumbent_vote", "state_incumbent_vote_party_component",
   "PRI_vote", "PRI_vote_party_component", "PRD_vote",
   "PRD_vote_party_component", "PAN_vote", "PAN_vote_party_component",
@@ -108,9 +106,6 @@ for (state in states) {
         mutually_exclusive,
         incumbent_party_JL,
         incumbent_candidate_JL,
-        incumbent_party_Horacio,
-        incumbent_party_inafed,
-        incumbent_candidate_inafed,
         state_incumbent_party,
         state_incumbent_vote,
         state_incumbent_vote_party_component,
@@ -292,16 +287,12 @@ assign_incumbent_vote_duplicates <- function(data) {
 }
 final_df <- assign_incumbent_vote_duplicates(final_df)
 
-# cases <- cases1 %>%
-#   filter(id_duplicate == 1 ) #%>%
-# # select(uniqueid, year, section,id_duplicate,researched_incumbent, source_researched_incumbent)
-
 # Apply the function to your dataset
 final_df <- final_df %>%
   mutate(incumbent_party = final_incumbent) 
 
 final_df <- final_df %>%
-  select(-incumbent_party_magar,-final_incumbent,-incumbent_party_Horacio,-incumbent_party_inafed,-incumbent_party_JL)
+  select(-incumbent_party_magar,-final_incumbent,-incumbent_party_JL)
 
 final_df <- final_df %>%
   mutate(runnerup_party = runnerup_party_magar) %>% 
