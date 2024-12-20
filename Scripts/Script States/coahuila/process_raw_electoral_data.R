@@ -504,7 +504,7 @@ data_2005 <- data_2005 %>%
 # *****************************
 
 # Step 16: Load and merge 'ListaNominal2005.rds' by 'section'
-lista_nominal_2005 <- read.dta13("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/ListaNominal2005.dta")
+lista_nominal_2005 <- read.dta13("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Other/ListaNominal2005.dta")
 data_2005 <- left_join(data_2005, lista_nominal_2005, 
                           by = "section")
 
@@ -584,7 +584,7 @@ summary(data_2005)
 
 # Step 28: Load "all_months_years.dta" file
 # Step 16: Load and merge 'ListaNominal2005.rds' by 'section'
-lista <- read.dta13("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/ListaNominal2005.dta")
+lista <- read.dta13("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Other/ListaNominal2005.dta")
 
 # Step 32: Load 'Abasolo extraord 2006' Excel file
 abasolo_2006 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Abasolo extraord 2006.xlsx", sheet = "Hoja1", range = "A7:K10")
@@ -1442,8 +1442,6 @@ coahuila_all <- bind_rows(data_1996,
                           data_2013,
                           data_2017,
                           data_2018 )
-
-summary(coahuila_all)
 
 data.table::fwrite(coahuila_all,"../../../Processed Data/coahuila/coahuila_process_raw_data.csv")
 

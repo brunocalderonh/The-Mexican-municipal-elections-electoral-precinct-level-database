@@ -1055,7 +1055,7 @@ summary(collapsed_2010)
 ### PROCESSING DATA FOR 2012
 #####################################
 
-data_2012 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/2012/Ayu_Seccion_No_LN_2012.xlsx") %>%
+data_2012 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_No_LN_2012.xlsx") %>%
   dplyr::rename(municipality = Municipio, 
                 section = Seccion) %>%
   dplyr::mutate(section = as.numeric(section),
@@ -1272,7 +1272,7 @@ collapsed_2012 <- collapsed_2012 %>%
     ))
 
 # Load and merge Lista Nominal data
-ln_2012 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/2012/LN_2012.xlsx")
+ln_2012 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/LN_2012.xlsx")
 
 ln_2012 <- ln_2012 %>%
   dplyr::mutate(section = as.numeric(Secc),
@@ -1339,7 +1339,6 @@ collapsed_2012 <- collapsed_2012 %>%
                                          PVEM_POP)), na.rm = TRUE))
 rm(ln_2012)
 rm(data_2012)
-View(collapsed_2012 %>% dplyr::filter(is.na(uniqueid)))
 #####################################
 ### PROCESSING DATA FOR 2015
 #####################################
@@ -1636,7 +1635,6 @@ collapsed_2015 <- collapsed_2015 %>%
 collapsed_2015 <- collapsed_2015 %>%
   dplyr::mutate(turnout = total / listanominal)
 
-View(collapsed_2015 %>% dplyr::filter(is.na(turnout)))
 rm(data_2015)
 rm(ln_data_2015)
 

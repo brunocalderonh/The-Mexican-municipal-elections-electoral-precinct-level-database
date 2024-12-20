@@ -380,7 +380,7 @@ collapsed_2001 <- collapsed_2001 %>%
   )
 
 # Step 1: Import the Excel file and filter by date
-lista_nominal <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/INE-CI141-2014 Horacio Larreguy Arbesu/pdln10_edms_PEL_2004_2007.xls", 
+lista_nominal <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Other/INE-CI141-2014 Horacio Larreguy Arbesu/pdln10_edms_PEL_2004_2007.xls", 
                             sheet = "pdln10_edms") %>%
   filter(FECHA == "20040704") %>%
   rename(
@@ -487,7 +487,7 @@ collapsed_2004 <- collapsed_2004 %>%
   arrange(section)
 
 # Step 1: Import the Excel file and filter by date
-lista_nominal <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/INE-CI141-2014 Horacio Larreguy Arbesu/pdln10_edms_PEL_2004_2007.xls", 
+lista_nominal <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Other/INE-CI141-2014 Horacio Larreguy Arbesu/pdln10_edms_PEL_2004_2007.xls", 
                             sheet = "pdln10_edms") %>%
   filter(FECHA == "20070701") %>%
   rename(
@@ -499,7 +499,7 @@ lista_nominal <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 19
 
 
 # Step 2: Import and process the dataset
-Ayu_Seccion_2007 <- read_dta("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Ayu_Seccion_2007.dta") 
+Ayu_Seccion_2007 <- read_dta("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Other/Ayu_Seccion_2007.dta") 
 colnames(Ayu_Seccion_2007) <- tolower(colnames(Ayu_Seccion_2007))
 
 Ayu_Seccion_2007 <- Ayu_Seccion_2007 %>%

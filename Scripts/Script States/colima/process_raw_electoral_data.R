@@ -514,7 +514,7 @@ collapsed_2009 <- collapsed_2009 %>%
 #######################-------------------2012---------------###############################
 
 # Step 1: Load the dataset
-ayu_seccion <- read_dta("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/CASILLAS_AYUNTAMIENTOS_2012/Ayu_Seccion_2012.dta")
+ayu_seccion <- read_dta("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Other/Ayu_Seccion_2012.dta")
 
 # Step 2: Drop empty rows and rows where `total` is missing or zero
 ayu_seccion <- ayu_seccion %>%
@@ -758,8 +758,7 @@ collapsed_2018 <- collapsed_2018 %>%
   mutate(
     year = 2018,
     month = "July",
-    STATE = "COLIMA"
-  )
+    STATE = "COLIMA")
 
 # Combine the dataframes, handling different columns by filling with NA
 Colima_all <- bind_rows(collapsed_1994,
@@ -773,7 +772,3 @@ Colima_all <- bind_rows(collapsed_1994,
                                 collapsed_2018)
 
 data.table::fwrite(Colima_all,"../../../Processed Data/colima/colima_process_raw_data.csv")
-summary(Colima_all)
-
-
-
