@@ -147,13 +147,6 @@ cat("Percentage of precincts affected:", percent_precincts_affected_case5, "%\n"
 
 
 #LOAD DATABASES FOR CORRELATION CALCULATIONS
-#ine
-ine_db <- read.csv("Correlation Data/generated_data/ine_turnout.csv") %>% 
-  rename("mun_code" = "uniqueid",
-         "precinct" = 'section',
-         "registered_voters" = "listanominal") %>% 
-  mutate(mun_code = as.numeric(mun_code))  %>% 
-   filter(turnout_ine != 0)
 
 #Magar 
 magar_db <- read.csv("Correlation Data/generated_data/magar_turnout.csv") %>% 
@@ -206,20 +199,6 @@ db_mun <- db %>%
                      sum(total, na.rm = TRUE) / sum(registered_voters, na.rm = TRUE), NA)
   ) %>%
   ungroup()
-
-
-
-##### CORRELATION - INE #####
-
-# Left join `ine_db` to `db` on `year`, `mun_code`, and `section`
-corr_test_ine <- db %>%
-  left_join(ine_db %>% select(year, mun_code, precinct, turnout_ine), by = c("year", "mun_code", "precinct")) 
-
-# Run a linear regression with `turnout` as the dependent variable and `turnout_ine` as the independent variable
-regression_model <- lm(turnout ~ turnout_ine, data = corr_test_ine)
-stargazer::stargazer(regression_model, type = "text")
-correlation <- cor(corr_test_ine$turnout, corr_test_ine$turnout_ine, use = "complete.obs")
-correlation
 
 
 

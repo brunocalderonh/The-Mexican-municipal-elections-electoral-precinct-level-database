@@ -876,6 +876,25 @@ mun_db <- mun_db %>%
 final_data <- final_df %>% 
   left_join(mun_db, by = c("mun_code", "year")) 
 
+final_data <- final_data %>% 
+  rename(
+    incumbent_party_candidate = incumbent_candidate,
+    incumbent_party_vote = incumbent_vote,
+    share_incumbent_party_valid_vote = share_incumbent_valid_vote,
+    share_incumbent_party_registered_voters = share_incumbent_registered_voters,
+    state_incumbent_party_vote = state_incumbent_vote,
+    share_state_incumbent_party_valid_vote = share_state_incumbent_valid_vote,
+    share_state_incumbent_party_registered_voters = share_state_incumbent_registered_voters,
+    runnerup_party_candidate = runnerup_candidate,
+    runnerup_party_vote = runnerup_vote,
+    share_runnerup_party_valid_vote = share_runnerup_valid_vote,
+    share_runnerup_party_registered_voters = share_runnerup_registered_voters,
+    mun_incumbent_party_vote = mun_incumbent_vote,
+    mun_incumbent_party_component = mun_party_component,
+    mun_runnerup_party_vote = mun_runnerup_vote,
+    researched_incumbent_party = researched_incumbent,
+    source_researched_incumbent_party = source_researched_incumbent,
+  )
 
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Final Data")
