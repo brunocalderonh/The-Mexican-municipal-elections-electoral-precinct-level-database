@@ -18,7 +18,7 @@ library(stargazer)
 script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
 # Set the working directory to the root of the repository
-# Assuming your script is in 'Scripts/Script States/', go two levels up
+
 setwd(file.path(script_dir, "../../"))
 
 # Path to the .zip file
@@ -51,14 +51,13 @@ num_unique_precincts <- nrow(unique(db[c("state_code", "precinct")]))
 cat("Number of unique electoral precincts:", num_unique_precincts, "\n")
 
 #COMPUTE STATS OF DIFFERENT CASES OF INCUMBENT CALCULATIONS
-# Assuming your data frame is named 'db'
 
 # Case 1: incumbent_party is a single party and incumbent_party_component is either a single party or a coalition (no _ in incumbent_party)
 case1_df <- db %>%
   filter(
     !grepl("_", incumbent_party) & # Single party in incumbent_party
       (grepl("_", incumbent_party_component) | !grepl("_", incumbent_party_component)) & # Single party or coalition in incumbent_party_component
-      is.na(researched_incumbent) # Exclude observations with a value in researched_incumbent
+      is.na(researched_incumbent_party) # Exclude observations with a value in researched_incumbent_party
   )
 
 num_municipal_elections_case1 <- case1_df %>%
@@ -76,7 +75,7 @@ case2_df <- db %>%
   filter(
     grepl("_", incumbent_party) & # Coalition in incumbent_party
       grepl(incumbent_party, incumbent_party_component, fixed = TRUE) & # Same or bigger coalition in incumbent_party_component
-      is.na(researched_incumbent) # Exclude observations with a value in researched_incumbent
+      is.na(researched_incumbent_party) # Exclude observations with a value in researched_incumbent_party
   )
 
 num_municipal_elections_case2 <- case2_df %>%
@@ -91,11 +90,11 @@ cat("Percentage of precincts affected:", percent_precincts_affected_case2, "%\n\
 
 
 
-# Case 3: Valid value in researched_incumbent and incumbent_vote (manually researched cases with vote values found)
+# Case 3: Valid value in researched_incumbent_party and incumbent_vote (manually researched cases with vote values found)
 case3_df <- db %>%
   filter(
-    !is.na(researched_incumbent) &
-      !is.na(incumbent_vote)
+    !is.na(researched_incumbent_party) &
+      !is.na(incumbent_party_vote)
   )
 
 num_municipal_elections_case3 <- case3_df %>%
@@ -110,11 +109,11 @@ cat("Percentage of precincts affected:", percent_precincts_affected_case3, "%\n\
 
 
 
-# Case 4: Valid value in researched_incumbent and no value in incumbent_vote (manual cases for which we did not find a valid match)
+# Case 4: Valid value in researched_incumbent_party and no value in incumbent_vote (manual cases for which we did not find a valid match)
 case4_df <- db %>%
   filter(
-    !is.na(researched_incumbent) &
-      is.na(incumbent_vote)
+    !is.na(researched_incumbent_party) &
+      is.na(incumbent_party_vote)
   )
 
 num_municipal_elections_case4 <- case4_df %>%
@@ -128,10 +127,10 @@ cat("Number of municipal elections:", num_municipal_elections_case4, "\n")
 cat("Percentage of precincts affected:", percent_precincts_affected_case4, "%\n")
 
 
-# Case 5: NA or 0 in incumbent_vote and no valid value in researched_incumbent
+# Case 5: NA or 0 in incumbent_vote and 
 case5_df <- db %>%
   filter(
-    (is.na(incumbent_vote) | incumbent_vote == 0)
+    (is.na(incumbent_party_vote) | incumbent_party_vote == 0)
   )
 
 num_municipal_elections_case5 <- case5_df %>%
