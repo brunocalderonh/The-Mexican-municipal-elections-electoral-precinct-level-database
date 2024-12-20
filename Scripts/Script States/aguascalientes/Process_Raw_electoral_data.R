@@ -294,7 +294,7 @@ collapsed_2013 <- data_2013 %>%
   dplyr::summarise(across(c(PAN, PRI, PRD, PT, PVEM, MC, PNA, `PAN-PRD`, `PRI-PVEM`, total,VN), sum, na.rm = TRUE))
 
 # Merge with the dataset "ln_all_months_years.dta" using seccion (section) and ed
-data_all <- read_dta("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019/ln_all_months_years.dta")
+data_all <- read_dta("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019/Other/ln_all_months_years.dta")
 
 data_all <- data_all %>% 
   dplyr::filter(state == "AGUASCALIENTES" & month == "June" & year == 2013)  # Keep only records for June 2013
@@ -400,7 +400,7 @@ rm(ln_data_2016)
 ####################################
 
 # Define the folder path
-folder_path <- "../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019/Municipales 2019/"
+folder_path <- "../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019/"
 
 # Process all Excel files from 1 to 11
 for (x in 1:11) {

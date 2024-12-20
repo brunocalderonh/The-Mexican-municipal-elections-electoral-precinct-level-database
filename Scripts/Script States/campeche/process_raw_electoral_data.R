@@ -553,4 +553,3 @@ campeche_all <- bind_rows(collapsed_1997,
                           collapsed_2018)
 
 data.table::fwrite(campeche_all,"../../../Processed Data/campeche/campeche_process_raw_data.csv")
-

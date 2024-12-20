@@ -488,7 +488,7 @@ rm(data_2013)
 #####################################
 
 # Load 2016 data from Excel
-data_2016 <- readxl::read_excel("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Municipales 2016/Baja California_2016.xlsx", sheet = 1)
+data_2016 <- readxl::read_excel("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Baja California_2016.xlsx", sheet = 1)
 names(data_2016)
 # Rename columns for consistency
 data_2016 <- data_2016 %>%
@@ -611,6 +611,3 @@ final_data <- bind_rows(
 )
 
 data.table::fwrite(final_data,"../../../Processed Data/baja/baja_process_raw_data.csv")
-summary(final_data)
-
-
