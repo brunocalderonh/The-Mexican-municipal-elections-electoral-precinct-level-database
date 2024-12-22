@@ -1,18 +1,27 @@
-# Load required libraries
-library(dplyr)
-library(readr)
+# Basic setup
+rm(list = ls())          # clear all objects in memory
+#dev.off()                  # reload graphic device
+cat("\014")                # clear console
+options(max.print = 5000)  # expand display
+options(scipen=10)
+# Load packages
+if (!require("pacman")) install.packages("pacman")  # load packages
 
-# Set working directory (adjust this based on your file location)
-setwd("D:/Dropbox/Incumbency Advantage/Data Analysis/Raw Data/Precinct/Mexico - 1996, 2000, 2003, 2006, 2009, 2012")
+pacman::p_load (dplyr
+                , haven
+                , readstata13
+                , readxl
+                , tidyverse
+                , tidyr
+                , openxlsx
+                , data.table)
 
-# Helper function to identify winners based on max votes
-get_winner <- function(df, party_vars) {
-  df <- df %>%
-    rowwise() %>%
-    mutate(winner = names(df)[which.max(c_across(all_of(party_vars)))]) %>%
-    ungroup()
-  return(df)
-}
+# Set working directory
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, ""))
 
 # Helper function to create uniqueid
 create_uniqueid <- function(df, year, municipality_var) {

@@ -26,11 +26,14 @@ setwd(file.path(script_dir, ""))
 #-------------------------------------------------------------
 # 1. Read data (Ayu_Seccion_1995.csv)
 #-------------------------------------------------------------
+
 data_1995 <- read_csv("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1995.csv", show_col_types = FALSE)
 names(data_1995) <- tolower(names(data_1995))
+
 #-------------------------------------------------------------
 # 2. Rename variables municipio -> municipality, seccion -> section
 #-------------------------------------------------------------
+
 data_1995 <- data_1995 %>%
   rename(municipality = municipio,
          section = seccion)
