@@ -22,7 +22,7 @@ This folder contains all the raw and auxiliary data required to process and gene
    - Contains data on incumbents, used during the construction of state-level databases.
 
 5. **`municipal_magar_data_splitcoal`**  
-   - Contains municipal-level Magar data [1], used for correlation analysis and to construct municipal-level incumbent and runner-up data in `FINAL_db_formation.R`.
+   - Contains Magar's Municipal and State Election Data [1], used for correlation analysis and to construct municipal-level incumbent and runner-up data in `FINAL_db_formation.R`.
 
 ---
 
@@ -55,13 +55,10 @@ This folder contains data and scripts used for the correlation analysis during t
 
 #### Subfolders:
 1. **`turnout_magar`**  
-   - Contains Magar data [1], processed by `magar_mun.R` for correlation.
+   - Contains Magar's Municipal and State Election Data  [1], processed by `magar_mun.R` for correlation.
 
-2. **`turnout_ine`**  
-   - Contains INE data processed by `ine_mun.R` for correlation.
-
-3. **`generated_data`**  
-   - Includes the outputs `ine_turnout.csv` and `magar_turnout.csv`, used in `graphs_correlation.R`.
+2. **`generated_data`**  
+   - Includes the outputs `magar_turnout.csv`, used in `graphs_correlation.R`.
 
 ---
 
@@ -76,7 +73,7 @@ This folder contains all R scripts used for data processing and analysis.
    - Cleans and selects relevant variables (e.g., municipality/state names, codes, votes). For some states, incorporates `correct_extra_elec_final.csv`, `diff_year_extra_elec.csv`, and `diff_year_extra_elec_flag.csv`. Produces `state_vote_manipulation.csv`.
 
 3. **`incumbent_manipulation.R`**  
-   - Processes incumbent and runner-up data from multiple sources, including Magar [1] and SNIM [2], and merges it into the precinct-level dataset. Produces `state_incumbent_manipulator.csv`.
+   - Processes incumbent and runner-up data from multiple sources, including Magar's Municipal and State Election Data  [1] and SNIM [2], and merges it into the precinct-level dataset. Produces `state_incumbent_manipulator.csv`.
 
 4. **`incumbent_vote_calculator.R`**  
    - Calculates precinct-level votes for incumbents and runner-ups, standardizing party names and handling coalitions. Produces `state_vote_calculator.csv`.
@@ -91,10 +88,10 @@ This folder contains all R scripts used for data processing and analysis.
 
 ### `correlation`
 Contains scripts for technical validation:
-1. **`magar_turnout.R`**  
-   - Generates `magar_turnout.csv` using Magar data [1].
+1. **`magar_.R`**  
+   - Generates `magar_.csv` using Magar data [1].
 2. **`graphs_correlations.R`**  
-   - Produces correlation graphs and tests using `ine_turnout.csv` and `magar_turnout.csv`.
+   - Produces correlation graphs and tests using `magar_.csv`.
 
 ---
 
