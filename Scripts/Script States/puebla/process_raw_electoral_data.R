@@ -1,21 +1,38 @@
-# Load necessary libraries
-library(readr)   # For reading CSV files
-library(dplyr)   # For data manipulation
+# Basic setup
+rm(list = ls())          # clear all objects in memory
+#dev.off()                  # reload graphic device
+cat("\014")                # clear console
+options(max.print = 5000)  # expand display
+options(scipen=10)
+# Load packages
+if (!require("pacman")) install.packages("pacman")  # load packages
 
-# Change the working directory (in R, it's typically set once at the start)
-# You can use `setwd()` to change the directory, but R doesn't support a "capture" like Stata. 
-# If needed, check both directories manually using:
-# setwd("D:/Dropbox/Incumbency Advantage/Data Analysis/Raw Data/Precinct/Puebla - 1998, 2001, 2004, 2007, 2010, 2013")
-# setwd("C:/Users/Horacio/Dropbox/Incumbency Advantage/Data Analysis/Raw Data/Precinct/Puebla - 1998, 2001, 2004, 2007, 2010, 2013")
+pacman::p_load (dplyr
+                , haven
+                , readstata13
+                , readxl
+                , tidyverse
+                , tidyr
+                , openxlsx
+                , data.table)
+
+# Set working directory
+# Get the path of the current script
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+# Set the working directory to the root of the repository
+# Assuming your script is in 'Scripts/Script States/', go two levels up
+setwd(file.path(script_dir, ""))
 
 # Read the CSV file
-data <- read_csv("Ayu_Seccion_1998_No_LN.csv")
-
+data <- fread("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Ayu_Seccion_1998_No_LN.csv",
+              encoding = "Latin-1")
+colnames(data) <- tolower(colnames(data))
+names(data) <- gsub("[- ]", "", names(data))
 # Rename columns to match Stata code
 data <- data %>%
   rename(
     municipality = municipio,
-    section = seccin
+    section = "sección"
   )
 
 # Drop rows where both `municipality` is empty and `section` is NA
@@ -47,7 +64,7 @@ data <- data %>%
 
 # Drop columns `noreg` and `nulos` if they exist
 data <- data %>%
-  select(-noreg, -nulos)
+  select(-noregistrados, -nulos)
 
 # Initialize 'uniqueid' variable with 0
 data <- data %>%
@@ -294,19 +311,16 @@ data <- data %>%
   mutate(ed = 21, seccion = section)
 
 # Merge the data with an external dataset (all_months_years.dta) by 'ed' and 'seccion'
-external_data <- read_dta("../../all_months_years.dta")
+external_data <- read_dta("../../all_months_years.dta") %>%
+  filter(month == 9 & year == 1998)
 
 # Merge by 'ed' and 'seccion', keeping 'month', 'year', and 'lista' from the external data
 merged_data <- data %>%
   left_join(external_data %>% select(ed, seccion, month, year, lista), by = c("ed", "seccion"))
 
-# Filter rows where 'month' is 9 and 'year' is 1998
-filtered_data <- merged_data %>%
-  filter(month == 9 & year == 1998)
-
 # Drop unnecessary columns after merging
 filtered_data <- filtered_data %>%
-  select(-_merge, -ed, -seccion, -year, -month)
+  select(-ed, -seccion, -year, -month)
 
 # Rename 'lista' to 'listanominal'
 filtered_data <- filtered_data %>%
@@ -316,57 +330,14 @@ filtered_data <- filtered_data %>%
 filtered_data <- filtered_data %>%
   mutate(turnout = total / listanominal)
 
-# Generate municipal-level sums and their inverses for listanominal
-filtered_data <- filtered_data %>%
-  group_by(uniqueid) %>%
-  mutate(mun_listanominal = sum(listanominal, na.rm = TRUE)) %>%
-  mutate(inv_mun_listanominal = 1 / mun_listanominal)
-
-# Calculate municipal turnout
-filtered_data <- filtered_data %>%
-  mutate(mun_turnout = mun_total / mun_listanominal)
-
-# The resulting `filtered_data` now matches the operations in your Stata code
-
-# Rank the inverse municipal values using frankv() from the data.table package
-filtered_data <- filtered_data %>%
-  mutate(PAN_r = frankv(inv_mun_PAN, ties.method = "min", na.last = "keep"),
-         PRI_r = frankv(inv_mun_PRI, ties.method = "min", na.last = "keep"),
-         PRD_r = frankv(inv_mun_PRD, ties.method = "min", na.last = "keep"),
-         PT_r = frankv(inv_mun_PT, ties.method = "min", na.last = "keep"),
-         PVEM_r = frankv(inv_mun_PVEM, ties.method = "min", na.last = "keep"),
-         PCP_r = frankv(inv_mun_PCP, ties.method = "min", na.last = "keep"))
-
-# Drop the inverse municipal columns (inv_mun_*)
-filtered_data <- filtered_data %>%
-  select(-starts_with("inv_mun_"))
-
-# Determine the winner based on rankings
-filtered_data <- filtered_data %>%
-  mutate(winner = case_when(
-    PAN_r == 1 ~ "PAN",
-    PRI_r == 1 ~ "PRI",
-    PRD_r == 1 ~ "PRD",
-    PT_r == 1 ~ "PT",
-    PVEM_r == 1 ~ "PVEM",
-    PCP_r == 1 ~ "PCP",
-    TRUE ~ winner  # Retain any existing values if no match is found
-  ))
-
-# Drop the ranking columns
-filtered_data <- filtered_data %>%
-  select(-ends_with("_r"))
-
 # Add year and month columns
-filtered_data <- filtered_data %>%
+df_1998 <- filtered_data %>%
   mutate(year = 1998, month = "November")
-
-# Save the dataset to a .dta file
-write_dta(filtered_data, "Puebla_Section_1998.dta")
+rm(filtered_data)
 
 # Read the CSV file
-data <- read_csv("Ayu_Seccion_2001.csv")
-
+data <- read_csv("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Ayu_Seccion_2001.csv")
+colnames(data) <- tolower(colnames(data))
 # Rename columns
 data <- data %>%
   rename(
@@ -401,10 +372,7 @@ data <- data %>%
   mutate(ed = 21, seccion = section)
 
 # Merge the dataset with external data (all_months_years.dta) by 'ed' and 'seccion'
-external_data <- read_dta("../../all_months_years.dta")
-
-# Keep rows where 'month' is September (9) and 'year' is 2001
-external_data <- external_data %>%
+external_data <- read_dta("../../all_months_years.dta")%>%
   filter(month == 9 & year == 2001)
 
 # Merge, keeping 'month', 'year', and 'lista' from the external data
@@ -443,8 +411,6 @@ data <- data %>%
 # Drop unwanted columns 'noreg' and 'nulos' if they exist
 data <- data %>%
   select(-noreg, -nulos, everything())
-
-# The resulting 'filtered_data' is now ready and matches the operations in your Stata code
 
 # Use a sequence of conditional replacements to assign unique IDs based on 'municipality'
 data <- data %>%
@@ -674,72 +640,51 @@ data <- data %>%
 data <- data %>%
   mutate(valid = rowSums(across(c(PAN, PRI, PRD, PT, PVEM, PC, PSN, PAS)), na.rm = TRUE))
 
-# Generate municipal-level sums and inverses
-for (var in c("PAN", "PRI", "PRD", "PT", "PVEM", "PC", "PSN", "PAS", "total", "listanominal", "valid")) {
-  data <- data %>%
-    group_by(uniqueid) %>%
-    mutate(!!paste0("mun_", var) := sum(get(var), na.rm = TRUE)) %>%
-    mutate(!!paste0("inv_mun_", var) := 1 / get(paste0("mun_", var)))
-}
-
-# Calculate municipal turnout
-data <- data %>%
-  mutate(mun_turnout = mun_total / mun_listanominal)
-
-# Rank the inverse municipal values using frankv() from data.table
-data <- data %>%
-  mutate(PAN_r = frankv(inv_mun_PAN, ties.method = "min", na.last = "keep"),
-         PRI_r = frankv(inv_mun_PRI, ties.method = "min", na.last = "keep"),
-         PRD_r = frankv(inv_mun_PRD, ties.method = "min", na.last = "keep"),
-         PT_r = frankv(inv_mun_PT, ties.method = "min", na.last = "keep"),
-         PVEM_r = frankv(inv_mun_PVEM, ties.method = "min", na.last = "keep"),
-         PC_r = frankv(inv_mun_PC, ties.method = "min", na.last = "keep"),
-         PSN_r = frankv(inv_mun_PSN, ties.method = "min", na.last = "keep"),
-         PAS_r = frankv(inv_mun_PAS, ties.method = "min", na.last = "keep"))
-
-# Drop the inverse municipal columns (inv_mun_*)
-data <- data %>%
-  select(-starts_with("inv_mun_"))
-
-# Determine the winner based on rankings
-data <- data %>%
-  mutate(winner = case_when(
-    PAN_r == 1 ~ "PAN",
-    PRI_r == 1 ~ "PRI",
-    PRD_r == 1 ~ "PRD",
-    PT_r == 1 ~ "PT",
-    PVEM_r == 1 ~ "PVEM",
-    PC_r == 1 ~ "PC",
-    PSN_r == 1 ~ "PSN",
-    PAS_r == 1 ~ "PAS",
-    TRUE ~ winner  # Retain any existing values if no match is found
-  ))
-
-# Drop the ranking columns
-data <- data %>%
-  select(-ends_with("_r"))
-
 # Add year and month columns
-data <- data %>%
+data_2001 <- data %>%
   mutate(year = 2001, month = "November")
 
-# Save the dataset to a .dta file
-write_dta(data, "Puebla_Section_2001.dta")
-
 # Import the Excel sheet and specify the range of cells to read
-data <- read_excel("Resultados por casilla elección 2002 Molcaxac.xlsx", sheet = "aytos", range = "A8:V16", col_names = TRUE)
+data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Resultados por casilla elección 2002 Molcaxac.xlsx", sheet = "aytos", range = "A8:V16", col_names = TRUE)
+
+colnames(data) <- tolower(colnames(data))
+
+gen_excel_col_names <- function(n) {
+  # Generates Excel-like column names from A..Z, AA..ZZ, etc.
+  # for n columns.
+  out <- character(n)
+  for (i in seq_len(n)) {
+    num  <- i
+    name <- ""
+    while (num > 0) {
+      r     <- (num - 1) %% 26
+      name  <- paste0(LETTERS[r + 1], name)
+      num   <- (num - r - 1) %/% 26
+    }
+    out[i] <- name
+  }
+  out
+}
+
+# Example:
+n_cols  <- ncol(data)        # how many columns do you have?
+new_names <- gen_excel_col_names(n_cols)
+names(data) <- new_names
 
 # Rename columns
 data <- data %>%
   rename(
-    section = `sección`,
-    PAN = F,
-    PRI = G,
-    PRD = H,
-    PC = K,
-    PAS = M,
-    listanominal = CiudadanosenListaNominal,
-    total = VotaciónTotal
+    "Dtto." = `A`,
+    "municipality" = `B`,
+    section = `C`,
+    casilla = `D`,
+    PAN = `F`,
+    PRI = `G`,
+    PRD = `H`,
+    PC = `K`,
+    PAS = `M`,
+    listanominal = `O`,
+    total = `S`
   )
 
 # Drop rows where `section` is missing (NA)
@@ -766,55 +711,13 @@ collapsed_data <- collapsed_data %>%
 collapsed_data <- collapsed_data %>%
   mutate(valid = rowSums(across(c(PAN, PRI, PRD, PC, PAS)), na.rm = TRUE))
 
-# Generate municipal-level sums and their inverses
-for (var in c("PAN", "PRI", "PRD", "PC", "PAS", "total", "listanominal", "valid")) {
-  collapsed_data <- collapsed_data %>%
-    group_by(uniqueid) %>%
-    mutate(!!paste0("mun_", var) := sum(get(var), na.rm = TRUE)) %>%
-    mutate(!!paste0("inv_mun_", var) := 1 / get(paste0("mun_", var)))
-}
-
-# Calculate municipal turnout
-collapsed_data <- collapsed_data %>%
-  mutate(mun_turnout = mun_total / mun_listanominal)
-
-# Rank the inverse municipal values using frankv() from data.table
-collapsed_data <- collapsed_data %>%
-  mutate(PAN_r = frankv(inv_mun_PAN, ties.method = "min", na.last = "keep"),
-         PRI_r = frankv(inv_mun_PRI, ties.method = "min", na.last = "keep"),
-         PRD_r = frankv(inv_mun_PRD, ties.method = "min", na.last = "keep"),
-         PC_r = frankv(inv_mun_PC, ties.method = "min", na.last = "keep"),
-         PAS_r = frankv(inv_mun_PAS, ties.method = "min", na.last = "keep"))
-
-# Drop the inverse municipal columns (inv_mun_*)
-collapsed_data <- collapsed_data %>%
-  select(-starts_with("inv_mun_"))
-
-# Determine the winner based on rankings
-collapsed_data <- collapsed_data %>%
-  mutate(winner = case_when(
-    PAN_r == 1 ~ "PAN",
-    PRI_r == 1 ~ "PRI",
-    PRD_r == 1 ~ "PRD",
-    PC_r == 1 ~ "PC",
-    PAS_r == 1 ~ "PAS",
-    TRUE ~ winner  # Retain any existing values if no match is found
-  ))
-
-# Drop the ranking columns
-collapsed_data <- collapsed_data %>%
-  select(-ends_with("_r"))
-
 # Add year and month columns
-collapsed_data <- collapsed_data %>%
+data_2002 <- collapsed_data %>%
   mutate(year = 2002, month = "June")
 
-# Save the dataset to a .dta file
-write_dta(collapsed_data, "Puebla_Section_2002.dta")
-
 # Read the CSV file
-data <- read_csv("Ayu_Seccion_2004.csv")
-
+data <- read_csv("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Ayu_Seccion_2004.csv")
+colnames(data) <- tolower(colnames(data))
 # Rename columns
 data <- data %>%
   rename(
@@ -1084,61 +987,17 @@ data <- data %>%
 data <- data %>%
   mutate(valid = rowSums(across(c(PAN, PRI, PRD, PT, PVEM, PC)), na.rm = TRUE))
 
-# Generate municipal-level sums and inverses
-for (var in c("PAN", "PRI", "PRD", "PT", "PVEM", "PC", "total", "listanominal", "valid")) {
-  data <- data %>%
-    group_by(uniqueid) %>%
-    mutate(!!paste0("mun_", var) := sum(get(var), na.rm = TRUE)) %>%
-    mutate(!!paste0("inv_mun_", var) := 1 / get(paste0("mun_", var)))
-}
-
-# Calculate municipal turnout
-data <- data %>%
-  mutate(mun_turnout = mun_total / mun_listanominal)
-
-# Rank the inverse municipal values using frankv() from data.table
-data <- data %>%
-  mutate(PAN_r = frankv(inv_mun_PAN, ties.method = "min", na.last = "keep"),
-         PRI_r = frankv(inv_mun_PRI, ties.method = "min", na.last = "keep"),
-         PRD_r = frankv(inv_mun_PRD, ties.method = "min", na.last = "keep"),
-         PT_r = frankv(inv_mun_PT, ties.method = "min", na.last = "keep"),
-         PVEM_r = frankv(inv_mun_PVEM, ties.method = "min", na.last = "keep"),
-         PC_r = frankv(inv_mun_PC, ties.method = "min", na.last = "keep"))
-
-# Drop the inverse municipal columns (inv_mun_*)
-data <- data %>%
-  select(-starts_with("inv_mun_"))
-
-# Determine the winner based on rankings
-data <- data %>%
-  mutate(winner = case_when(
-    PAN_r == 1 ~ "PAN",
-    PRI_r == 1 ~ "PRI",
-    PRD_r == 1 ~ "PRD",
-    PT_r == 1 ~ "PT",
-    PVEM_r == 1 ~ "PVEM",
-    PC_r == 1 ~ "PC",
-    TRUE ~ winner  # Retain any existing values if no match is found
-  ))
-
-# Drop the ranking columns
-data <- data %>%
-  select(-ends_with("_r"))
-
 # Add year and month columns
-data <- data %>%
+data_2004 <- data %>%
   mutate(year = 2004, month = "November")
 
 # Sort the data by 'section'
 data <- data %>%
   arrange(section)
 
-# Save the dataset to a .dta file
-write_dta(data, "Puebla_Section_2004.dta")
-
 # Import the Excel file with case normalization (convert to lowercase) and keep first row as headers
-data <- read_excel("Ayu_Seccion_2007.xlsx", .name_repair = "minimal")
-
+data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Ayu_Seccion_2007.xlsx", .name_repair = "minimal")
+colnames(data) <- tolower(colnames(data))
 # Rename columns
 data <- data %>%
   rename(
@@ -1167,7 +1026,7 @@ data <- data %>%
   mutate(across(pan:listanominal, as.numeric))
 
 # Collapse (sum) the data by 'municipality' and 'section'
-v <- data %>%
+data <- data %>%
   group_by(municipality, section) %>%
   summarize(across(c(pan:pec, listanominal, total), sum, na.rm = TRUE))
 
@@ -1427,63 +1286,14 @@ collapsed_data <- collapsed_data %>%
 collapsed_data <- collapsed_data %>%
   mutate(valid = rowSums(across(c(PAN, PRI_PVEM, PRD_PC, PT, PANAL, PAS, PEC)), na.rm = TRUE))
 
-# Generate municipal-level sums and inverses
-for (var in c("PAN", "PRI_PVEM", "PRD_PC", "PT", "PANAL", "PAS", "PEC", "total", "listanominal", "valid")) {
-  collapsed_data <- collapsed_data %>%
-    group_by(uniqueid) %>%
-    mutate(!!paste0("mun_", var) := sum(get(var), na.rm = TRUE)) %>%
-    mutate(!!paste0("inv_mun_", var) := 1 / get(paste0("mun_", var)))
-}
-
-# Calculate municipal turnout
-collapsed_data <- collapsed_data %>%
-  mutate(mun_turnout = mun_total / mun_listanominal)
-
-# Rank the inverse municipal values using frankv() from data.table
-collapsed_data <- collapsed_data %>%
-  mutate(PAN_r = frankv(inv_mun_PAN, ties.method = "min", na.last = "keep"),
-         PRI_PVEM_r = frankv(inv_mun_PRI_PVEM, ties.method = "min", na.last = "keep"),
-         PRD_PC_r = frankv(inv_mun_PRD_PC, ties.method = "min", na.last = "keep"),
-         PT_r = frankv(inv_mun_PT, ties.method = "min", na.last = "keep"),
-         PANAL_r = frankv(inv_mun_PANAL, ties.method = "min", na.last = "keep"),
-         PAS_r = frankv(inv_mun_PAS, ties.method = "min", na.last = "keep"),
-         PEC_r = frankv(inv_mun_PEC, ties.method = "min", na.last = "keep"))
-
-# Drop the inverse municipal columns (inv_mun_*)
-collapsed_data <- collapsed_data %>%
-  select(-starts_with("inv_mun_"))
-
-# Determine the winner based on rankings
-collapsed_data <- collapsed_data %>%
-  mutate(winner = case_when(
-    PAN_r == 1 ~ "PAN",
-    PRI_PVEM_r == 1 ~ "PRI_PVEM",
-    PRD_PC_r == 1 ~ "PRD_PC",
-    PT_r == 1 ~ "PT",
-    PANAL_r == 1 ~ "PANAL",
-    PAS_r == 1 ~ "PAS",
-    PEC_r == 1 ~ "PEC",
-    TRUE ~ winner  # Retain existing values if no match is found
-  ))
-
-# Drop the ranking columns
-collapsed_data <- collapsed_data %>%
-  select(-ends_with("_r"))
-
 # Add year and month columns
-collapsed_data <- collapsed_data %>%
+data_2007 <- collapsed_data %>%
   mutate(year = 2007, month = "November")
 
-# Sort the data by 'section'
-collapsed_data <- collapsed_data %>%
-  arrange(section)
-
-# Save the dataset to a .dta file
-write_dta(collapsed_data, "Puebla_Section_2007.dta")
-
 # Import the Excel sheet with specified cell range
-data <- read_excel("ResultadosDeLaElecciónVotaciónXCasilla Aytos extra. 2008.xlsx", sheet = "ayto", range = "A7:R25", col_names = TRUE)
-
+data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/ResultadosDeLaElecciónVotaciónXCasilla Aytos extra. 2008.xlsx", sheet = "ayto", range = "A7:R25", col_names = TRUE)
+# Remove "-" and spaces
+names(data) <- gsub("[. ]", "", names(data))
 # Convert all columns to numeric (similar to destring in Stata)
 data <- data %>%
   mutate(across(everything(), as.numeric))
@@ -1496,7 +1306,7 @@ data <- data %>%
     PT = PARTIDODELTRABAJO,
     PC = CONVERGENCIA,
     PANAL = PARTIDONUEVAALIANZA,
-    PAS = ALTERNATIVASOCIALDEMÓCRATAPAR,
+    PAS = "ALTERNATIVASOCIALDEMÓCRATA,PARTIDOPOLÍTICONACIONAL",
     total = VotaciónTotal,
     listanominal = ListaNominal
   )
@@ -1525,61 +1335,13 @@ collapsed_data <- collapsed_data %>%
 collapsed_data <- collapsed_data %>%
   mutate(valid = rowSums(across(c(PAN, PRI, PRD, PT, PVEM, PC, PANAL, PAS)), na.rm = TRUE))
 
-# Generate municipal-level sums and inverses
-for (var in c("PAN", "PRI", "PRD", "PT", "PVEM", "PC", "PANAL", "PAS", "total", "listanominal", "valid")) {
-  collapsed_data <- collapsed_data %>%
-    group_by(uniqueid) %>%
-    mutate(!!paste0("mun_", var) := sum(get(var), na.rm = TRUE)) %>%
-    mutate(!!paste0("inv_mun_", var) := 1 / get(paste0("mun_", var)))
-}
-
-# Calculate municipal turnout
-collapsed_data <- collapsed_data %>%
-  mutate(mun_turnout = mun_total / mun_listanominal)
-
-# Rank the inverse municipal values using frankv() from data.table
-collapsed_data <- collapsed_data %>%
-  mutate(PAN_r = frankv(inv_mun_PAN, ties.method = "min", na.last = "keep"),
-         PRI_r = frankv(inv_mun_PRI, ties.method = "min", na.last = "keep"),
-         PRD_r = frankv(inv_mun_PRD, ties.method = "min", na.last = "keep"),
-         PT_r = frankv(inv_mun_PT, ties.method = "min", na.last = "keep"),
-         PVEM_r = frankv(inv_mun_PVEM, ties.method = "min", na.last = "keep"),
-         PC_r = frankv(inv_mun_PC, ties.method = "min", na.last = "keep"),
-         PANAL_r = frankv(inv_mun_PANAL, ties.method = "min", na.last = "keep"),
-         PAS_r = frankv(inv_mun_PAS, ties.method = "min", na.last = "keep"))
-
-# Drop the inverse municipal columns (inv_mun_*)
-collapsed_data <- collapsed_data %>%
-  select(-starts_with("inv_mun_"))
-
-# Determine the winner based on rankings
-collapsed_data <- collapsed_data %>%
-  mutate(winner = case_when(
-    PAN_r == 1 ~ "PAN",
-    PRI_r == 1 ~ "PRI",
-    PRD_r == 1 ~ "PRD",
-    PVEM_r == 1 ~ "PVEM",
-    PC_r == 1 ~ "PC",
-    PANAL_r == 1 ~ "PANAL",
-    PT_r == 1 ~ "PT",
-    PAS_r == 1 ~ "PAS",
-    TRUE ~ winner  # Retain any existing values if no match is found
-  ))
-
-# Drop the ranking columns
-collapsed_data <- collapsed_data %>%
-  select(-ends_with("_r"))
-
 # Add year and month columns
-collapsed_data <- collapsed_data %>%
+data_2008 <- collapsed_data %>%
   mutate(year = 2008, month = "June")
 
-# Save the dataset to a .dta file
-write_dta(collapsed_data, "Puebla_Section_2008.dta")
-
 # Import the Excel file and convert column names to lowercase
-data <- read_excel("Ayu_Seccion_2010.xlsx", .name_repair = "minimal")
-
+data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Ayu_Seccion_2010.xlsx", .name_repair = "minimal")
+colnames(data) <- tolower(colnames(data))
 # Rename columns
 data <- data %>%
   rename(
@@ -1861,66 +1623,28 @@ collapsed_data <- collapsed_data %>%
 collapsed_data <- collapsed_data %>%
   mutate(valid = rowSums(across(c(PAN_PRD_PC_PANAL, PRI_PVEM, PT)), na.rm = TRUE))
 
-# Generate municipal-level sums and inverses
-for (var in c("PAN_PRD_PC_PANAL", "PRI_PVEM", "PT", "total", "listanominal", "valid")) {
-  collapsed_data <- collapsed_data %>%
-    group_by(uniqueid) %>%
-    mutate(!!paste0("mun_", var) := sum(get(var), na.rm = TRUE)) %>%
-    mutate(!!paste0("inv_mun_", var) := 1 / get(paste0("mun_", var)))
-}
-
-# Calculate municipal turnout
-collapsed_data <- collapsed_data %>%
-  mutate(mun_turnout = mun_total / mun_listanominal)
-
-# Rank the inverse municipal values using frankv() from data.table
-collapsed_data <- collapsed_data %>%
-  mutate(PAN_PRD_PC_PANAL_r = frankv(inv_mun_PAN_PRD_PC_PANAL, ties.method = "min", na.last = "keep"),
-         PRI_PVEM_r = frankv(inv_mun_PRI_PVEM, ties.method = "min", na.last = "keep"),
-         PT_r = frankv(inv_mun_PT, ties.method = "min", na.last = "keep"))
-
-# Drop the inverse municipal columns (inv_mun_*)
-collapsed_data <- collapsed_data %>%
-  select(-starts_with("inv_mun_"))
-
-# Determine the winner based on rankings
-collapsed_data <- collapsed_data %>%
-  mutate(winner = case_when(
-    PAN_PRD_PC_PANAL_r == 1 ~ "PAN_PRD_PC_PANAL",
-    PRI_PVEM_r == 1 ~ "PRI_PVEM",
-    PT_r == 1 ~ "PT",
-    TRUE ~ winner  # Retain any existing values if no match is found
-  ))
-
-# Drop the ranking columns
-collapsed_data <- collapsed_data %>%
-  select(-ends_with("_r"))
-
 # Add year and month columns
-collapsed_data <- collapsed_data %>%
+data_2010 <- collapsed_data %>%
   mutate(year = 2010, month = "July")
 
 # Sort the data by 'section'
 collapsed_data <- collapsed_data %>%
   arrange(section)
 
-# Save the dataset to a .dta file
-write_dta(collapsed_data, "Puebla_Section_2010.dta")
-
 # Import the Excel file with the specified sheet and cell range
-data <- read_excel("Resul_ por casillas e individuales elec extraordinaria 2011.xlsx", 
+data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Resul_ por casillas e individuales elec extraordinaria 2011.xlsx", 
                    sheet = "2011", range = "A6:K75", col_names = TRUE)
-
+names(data)
 # Rename columns
 data <- data %>%
   rename(
     section = SECCION,
     municipality = MUNICIPIO,
-    PAN = E,
-    PRI_PVEM = F,
-    PC = G,
-    PANAL = H,
-    total = VOTACIONTOTAL
+    PAN = "...5",
+    PRI_PVEM = "...6",
+    PC = "...7",
+    PANAL = "...8",
+    total = "VOTACION TOTAL"
   )
 
 # Drop rows where 'section' is missing
@@ -1963,61 +1687,21 @@ collapsed_data <- collapsed_data %>%
 collapsed_data <- collapsed_data %>%
   mutate(valid = rowSums(across(c(PAN, PRI_PVEM, PC, PANAL)), na.rm = TRUE))
 
-# Generate municipal-level sums and inverses
-for (var in c("PAN", "PRI_PVEM", "PC", "PANAL", "total", "listanominal", "valid")) {
-  collapsed_data <- collapsed_data %>%
-    group_by(uniqueid) %>%
-    mutate(!!paste0("mun_", var) := sum(get(var), na.rm = TRUE)) %>%
-    mutate(!!paste0("inv_mun_", var) := 1 / get(paste0("mun_", var)))
-}
-
-# Calculate municipal turnout
-collapsed_data <- collapsed_data %>%
-  mutate(mun_turnout = mun_total / mun_listanominal)
-
-# Rank the inverse municipal values using frankv() from data.table
-collapsed_data <- collapsed_data %>%
-  mutate(PAN_r = frankv(inv_mun_PAN, ties.method = "min", na.last = "keep"),
-         PRI_PVEM_r = frankv(inv_mun_PRI_PVEM, ties.method = "min", na.last = "keep"),
-         PC_r = frankv(inv_mun_PC, ties.method = "min", na.last = "keep"),
-         PANAL_r = frankv(inv_mun_PANAL, ties.method = "min", na.last = "keep"))
-
-# Drop the inverse municipal columns (inv_mun_*)
-collapsed_data <- collapsed_data %>%
-  select(-starts_with("inv_mun_"))
-
-# Determine the winner based on rankings
-collapsed_data <- collapsed_data %>%
-  mutate(winner = case_when(
-    PAN_r == 1 ~ "PAN",
-    PRI_PVEM_r == 1 ~ "PRI_PVEM",
-    PC_r == 1 ~ "PC",
-    PANAL_r == 1 ~ "PANAL",
-    TRUE ~ winner  # Retain any existing values if no match is found
-  ))
-
-# Drop the ranking columns
-collapsed_data <- collapsed_data %>%
-  select(-ends_with("_r"))
-
 # Add year and month columns
-collapsed_data <- collapsed_data %>%
+data_2011 <- collapsed_data %>%
   mutate(year = 2011, month = "July")
 
-# Save the dataset to a .dta file
-write_dta(collapsed_data, "Puebla_Section_2011.dta")
-
 # Import the Excel sheet with specified cell range
-data <- read_excel("RESULTADOS_POR_CASILLA_AYUNTAMIENTOS Y DIPUTADOS_2012_2013.xlsx", 
+data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/RESULTADOS_POR_CASILLA_AYUNTAMIENTOS Y DIPUTADOS_2012_2013.xlsx", 
                    sheet = "AYUNTAMIENTOS FINAL", range = "A7:O6903", col_names = TRUE)
-
+names(data)
 # Rename columns
 data <- data %>%
   rename(
     municipality = MUNICIPIO,
     section = SECCIÓN,
-    listanominal = NoDECIUDADANOSENLISTANOMI,
-    total = VOTACIÓNTOTAL
+    listanominal = "No.  DE CIUDADANOS EN LISTA NOMINAL",
+    total = "VOTACIÓN TOTAL"
   )
 
 # Drop rows where both 'municipality' and 'section' are empty
@@ -2328,129 +2012,16 @@ collapsed_data <- collapsed_data %>%
                                   PAN_PRD_PANAL_CPP_PC_PSI, PAN_PRD_PANAL_CPP_PSI, PAN_PRD_PANAL_CPP_PT, 
                                   PAN_PRD_PANAL_CPP_PT_PSI)), na.rm = TRUE))
 
-# Generate 'mun_' variables (summation by uniqueid)
-collapsed_data <- collapsed_data %>%
-  group_by(uniqueid) %>%
-  mutate(across(c(PAN_PRD_PANAL_CPP, PRI_PVEM, PT, PC, PSI, PAN_PRD_PANAL_CPP_PC, PAN_PRD_PANAL_CPP_PC_PSI, 
-                  PAN_PRD_PANAL_CPP_PSI, PAN_PRD_PANAL_CPP_PT, PAN_PRD_PANAL_CPP_PT_PSI, total, listanominal, valid),
-                ~ sum(.x, na.rm = TRUE), 
-                .names = "mun_{col}"))
-
-# Create inverse of 'mun_' variables (equivalent to 'inv_mun_`var' in Stata)
-collapsed_data <- collapsed_data %>%
-  mutate(across(starts_with("mun_"), ~ 1 / .x, .names = "inv_{col}"))
-
-# Calculate 'mun_turnout' as the ratio of 'mun_total' to 'mun_listanominal'
-collapsed_data <- collapsed_data %>%
-  mutate(mun_turnout = mun_total / mun_listanominal)
-
-# Rank the inverse 'mun_' variables (equivalent to 'rowranks' in Stata)
-collapsed_data <- collapsed_data %>%
-  mutate(across(starts_with("inv_mun_"), 
-                ~ rowRanks(as.matrix(.), ties.method = "average", decreasing = TRUE),
-                .names = "{str_replace(.col, 'inv_mun_', '')}_r"))
-
-# Drop 'inv_mun_*' columns
-collapsed_data <- collapsed_data %>%
-  select(-starts_with("inv_mun_"))
-
-# Determine the 'winner' based on the ranking
-collapsed_data <- collapsed_data %>%
-  mutate(winner = case_when(
-    PAN_PRD_PANAL_CPP_r == 1 ~ "PAN_PRD_PANAL_CPP",
-    PAN_PRD_PANAL_CPP_PC_r == 1 ~ "PAN_PRD_PANAL_CPP_PC",
-    PAN_PRD_PANAL_CPP_PC_PSI_r == 1 ~ "PAN_PRD_PANAL_CPP_PC_PSI",
-    PAN_PRD_PANAL_CPP_PSI_r == 1 ~ "PAN_PRD_PANAL_CPP_PSI",
-    PAN_PRD_PANAL_CPP_PT_r == 1 ~ "PAN_PRD_PANAL_CPP_PT",
-    PAN_PRD_PANAL_CPP_PT_PSI_r == 1 ~ "PAN_PRD_PANAL_CPP_PT_PSI",
-    PRI_PVEM_r == 1 ~ "PRI_PVEM",
-    PT_r == 1 ~ "PT",
-    PC_r == 1 ~ "PC",
-    PSI_r == 1 ~ "PSI"
-  ))
-
 # Add 'year' and 'month' columns
-collapsed_data <- collapsed_data %>%
+data_2013 <- collapsed_data %>%
   mutate(year = 2013, month = "July")
 
 # Sort by 'section' (optional in R, as this might not be needed before saving)
-collapsed_data <- collapsed_data %>%
+data_2013 <- data_2013 %>%
   arrange(section)
 
-# Save the final dataset as a .dta file
-write_dta(collapsed_data, "Puebla_Section_2013.dta")
-
-# Load and append datasets
-puebla_section <- read_dta("Puebla_Section_1998.dta") %>%
-  bind_rows(
-    read_dta("Puebla_Section_2001.dta"),
-    read_dta("Puebla_Section_2002.dta"),
-    read_dta("Puebla_Section_2004.dta"),
-    read_dta("Puebla_Section_2005.dta"),
-    read_dta("Puebla_Section_2007.dta"),
-    read_dta("Puebla_Section_2008.dta"),
-    read_dta("Puebla_Section_2010.dta"),
-    read_dta("Puebla_Section_2011.dta"),
-    read_dta("Puebla_Section_2013.dta")
-  )
-
-# Remove old files
-file.remove("Puebla_Section_1998.dta", "Puebla_Section_2001.dta", "Puebla_Section_2002.dta",
-            "Puebla_Section_2004.dta", "Puebla_Section_2005.dta", "Puebla_Section_2007.dta",
-            "Puebla_Section_2008.dta", "Puebla_Section_2010.dta", "Puebla_Section_2011.dta",
-            "Puebla_Section_2013.dta")
-
-# View frequency table of 'winner'
-table(puebla_section$winner)
-
-# Browse for missing winners
-puebla_section %>%
-  filter(winner == "") %>%
-  View()
-
-# Browse for specific rows with 'municipality' == "Albino Zertuche" and 'year' == 2010
-puebla_section %>%
-  filter(municipality == "Albino Zertuche" & year == 2010) %>%
-  View()
-
-# Browse for 'San Jeronimo Tecuanipan' in 2010
-puebla_section %>%
-  filter(municipality == "San Jeronimo Tecuanipan" & year == 2010) %>%
-  View()
-
-# Frequency table including missing values
-table(puebla_section$winner, useNA = "ifany")
-
-# Create PAN_winner column and winner_counter
-puebla_section <- puebla_section %>%
-  mutate(
-    PAN_winner = ifelse(grepl("PAN", winner) & !grepl("PANAL", winner), 1, 0),
-    winner_counter = PAN_winner
-  )
-
-# Create other party winner columns and update winner_counter
-parties <- c("PRI", "PRD", "PT", "PC", "PVEM", "PANAL", "PD", "PSD", "PAS", 
-             "PSN", "PartidoMexicoPosible", "CDPPN", "PUP", "PEC", "CPP", "PSI")
-
-for (party in parties) {
-  puebla_section <- puebla_section %>%
-    mutate(
-      !!paste0(party, "_winner") := ifelse(grepl(party, winner), 1, 0),
-      winner_counter = winner_counter + !!sym(paste0(party, "_winner"))
-    )
-}
-
-# Tabulate winner_counter
-table(puebla_section$winner_counter)
-
-# Count how many rows have zero winner_counter
-sum(puebla_section$winner_counter == 0)
-
-# Save the updated dataset in older .dta format (version 12)
-write_dta(puebla_section, "../Puebla_ALL.dta", version = 12)
-
 # Import Excel data
-puebla_data <- read_excel("FINAL_Ayu_Ext_2014.xlsx", sheet = "2014", col_names = TRUE)
+puebla_data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/FINAL_Ayu_Ext_2014.xlsx", sheet = "2014", col_names = TRUE)
 
 # Replace 'uniqueid' based on 'municipality' values
 puebla_data <- puebla_data %>%
@@ -2476,98 +2047,21 @@ collapsed_data <- puebla_data %>%
 collapsed_data <- collapsed_data %>%
   mutate(valid = rowSums(across(c(PRI_PVEM, PAN_PRD_PANAL_CP_PSI, MC)), na.rm = TRUE))
 
-# Generate 'mun_' and 'inv_mun_' variables
-collapsed_data <- collapsed_data %>%
-  group_by(uniqueid) %>%
-  mutate(across(c(PRI_PVEM, PAN_PRD_PANAL_CP_PSI, MC, total, valid, listanominal), 
-                ~ sum(.x, na.rm = TRUE), 
-                .names = "mun_{col}")) %>%
-  mutate(across(starts_with("mun_"), ~ 1 / .x, .names = "i_{col}"))
-
 # Create turnout variables
 collapsed_data <- collapsed_data %>%
-  mutate(turnout = valid / listanominal,
-         mun_turnout = mun_valid / mun_listanominal)
-
-# Rank the inverse 'mun_' variables
-collapsed_data <- collapsed_data %>%
-  mutate(across(starts_with("i_"), 
-                ~ rowRanks(as.matrix(.), ties.method = "average", decreasing = TRUE),
-                .names = "{str_replace(.col, 'i_', '')}_r"))
-
-# Drop the 'i_*' variables
-collapsed_data <- collapsed_data %>%
-  select(-starts_with("i_"))
-
-# Generate empty 'winner', 'second', 'third' columns
-collapsed_data <- collapsed_data %>%
-  mutate(winner = "", second = "", third = "")
-
-# Assign 'winner', 'second', 'third' based on ranks
-collapsed_data <- collapsed_data %>%
-  mutate(winner = case_when(
-    PRI_PVEM_r == 1 ~ "PRI_PVEM",
-    PAN_PRD_PANAL_CP_PSI_r == 1 ~ "PAN_PRD_PANAL_CP_PSI",
-    MC_r == 1 ~ "MC",
-    TRUE ~ winner
-  ),
-  second = case_when(
-    PRI_PVEM_r == 2 ~ "PRI_PVEM",
-    PAN_PRD_PANAL_CP_PSI_r == 2 ~ "PAN_PRD_PANAL_CP_PSI",
-    MC_r == 2 ~ "MC",
-    TRUE ~ second
-  ),
-  third = case_when(
-    PRI_PVEM_r == 3 ~ "PRI_PVEM",
-    PAN_PRD_PANAL_CP_PSI_r == 3 ~ "PAN_PRD_PANAL_CP_PSI",
-    MC_r == 3 ~ "MC",
-    TRUE ~ third
-  ))
-
-# Drop ranking variables
-collapsed_data <- collapsed_data %>%
-  select(-ends_with("_r"))
+  mutate(turnout = valid / listanominal)
 
 # Add year, month, and state columns
-collapsed_data <- collapsed_data %>%
+data_2014 <- collapsed_data %>%
   mutate(year = 2014, month = "July", STATE = "PUEBLA")
 
-# Save the data to .dta format
-write_dta(collapsed_data, "Puebla_Section_2014.dta")
-
-# Collapse data by 'municipality' and 'uniqueid' to get incumbents
-incumbents_data <- collapsed_data %>%
-  group_by(municipality, uniqueid) %>%
-  summarise(winner = first(winner)) %>%
-  rename(incumbent = winner)
-
-# Save incumbents data
-write_dta(incumbents_data, "incumbents2018b.dta")
-
-# Load the data
-puebla_section_2014 <- read_dta("Puebla_Section_2014.dta")
-
-# Collapse (sum) over 'listanominal' to 'valid' and (first) for STATE, year, month, winner, second, third, and mun_turnout
-collapsed_data <- puebla_section_2014 %>%
-  group_by(municipality, uniqueid) %>%
-  summarise(across(c(listanominal:valid), sum, na.rm = TRUE),
-            across(c(STATE, year, month, winner, second, third, mun_turnout), 
-                   first, na.rm = TRUE))
-
-# Rename 'mun_turnout' to 'turnout'
-collapsed_data <- collapsed_data %>%
-  rename(turnout = mun_turnout)
-
 # Sort by 'uniqueid'
-collapsed_data <- collapsed_data %>%
+data_2014 <- data_2014 %>%
   arrange(uniqueid)
 
-# Save the data to .dta format
-write_dta(collapsed_data, "Puebla_2014.dta", version = 12)
-
 # Import the Excel file
-puebla_2018 <- read_excel("Ayuntamientos_2018.xlsx", sheet = "Ayuntamientos")
-
+puebla_2018 <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Ayuntamientos_2018.xlsx", sheet = "Ayuntamientos")
+names(puebla_2018)
 # Apply proper case to the municipality names
 puebla_2018 <- puebla_2018 %>%
   mutate(municipality = str_to_title(municipality))  # equivalent of proper()
@@ -2807,16 +2301,7 @@ puebla_2018 <- puebla_2018 %>%
 
 # Preserve and import the Excel file with coalitions
 # Save it as a temporary file to later merge
-coalitions <- read_excel("puebla_coalitions_2018.xlsx", sheet = "Sheet1")
-saveRDS(coalitions, file = "merge.rds")
-
-# Perform the merge operation
-puebla_2018 <- puebla_2018 %>%
-  left_join(readRDS("merge.rds"), by = "municipality") %>%
-  select(-"_merge")  # Drop any '_merge' column if it exists
-
-# Remove the temporary file
-file.remove("merge.rds")
+coalitions <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/puebla_coalitions_2018.xlsx", sheet = "Sheet1")
 
 # Replace missing values (NA) in cc_* columns with 0
 puebla_2018 <- puebla_2018 %>%
@@ -2909,68 +2394,16 @@ collapsed_data <- collapsed_data %>%
                                 PAN_MC, PAN_PCPP, PRD_MC_PSI, PRD_MC_PCPP, PRD_PCPP_PSI, PRD_MC, PRD_PCPP, PRD_PSI,
                                 MC_PCPP_PSI, MC_PCPP, MC_PSI, PANAL_PCPP, PVEM_PCPP_PSI, PVEM_PSI, PVEM_PCPP, PCPP_PSI, PRI_PANAL, CI_1, CI_2), na.rm = TRUE))
 
-# Generate 'mun_' prefixed columns by summing up variables grouped by 'uniqueid'
-collapsed_data <- collapsed_data %>%
-  group_by(uniqueid) %>%
-  summarise(across(c(PAN, PRI, PRD, PVEM, MC, PANAL, PCPP, PSI, PT_MORENA_PES, PAN_PRD_MC_PCPP_PSI, PAN_PRD_MC_PSI, PAN_PRD_PCPP_PSI,
-                     PAN_PRD_MC_PCPP, PAN_MC_PCPP_PSI, PAN_PRD_MC, PAN_PCPP_PSI, PAN_MC_PSI, PAN_MC_PCPP, PAN_PRD_PSI, PAN_PRD_PCPP, PAN_PRD,
-                     PAN_PSI, PAN_MC, PAN_PCPP, PRD_MC_PSI, PRD_MC_PCPP, PRD_PCPP_PSI, PRD_MC, PRD_PCPP, PRD_PSI, MC_PCPP_PSI, MC_PCPP, MC_PSI,
-                     PANAL_PCPP, PVEM_PCPP_PSI, PVEM_PSI, PVEM_PCPP, PCPP_PSI, PRI_PANAL, CI_1, CI_2, total, valid), sum, na.rm = TRUE))
-
-# Ranking and generating winner, second, and third place
-collapsed_data <- collapsed_data %>%
-  mutate(across(c(PAN_r, PRI_r, PRD_r, PVEM_r, MC_r, PANAL_r, PCPP_r, PSI_r, PT_MORENA_PES_r, PAN_PRD_MC_PCPP_PSI_r,
-                  PAN_PRD_MC_PSI_r, PAN_PRD_PCPP_PSI_r, PAN_PRD_MC_PCPP_r, PAN_MC_PCPP_PSI_r, PAN_PRD_MC_r, PAN_PCPP_PSI_r,
-                  PAN_MC_PSI_r, PAN_MC_PCPP_r, PAN_PRD_PSI_r, PAN_PRD_PCPP_r, PAN_PRD_r, PAN_PSI_r, PAN_MC_r, PAN_PCPP_r,
-                  PRD_MC_PSI_r, PRD_MC_PCPP_r, PRD_PCPP_PSI_r, PRD_MC_r, PRD_PCPP_r, PRD_PSI_r, MC_PCPP_PSI_r, MC_PCPP_r,
-                  MC_PSI_r, PANAL_PCPP_r, PVEM_PCPP_PSI_r, PVEM_PSI_r, PVEM_PCPP_r, PCPP_PSI_r, PRI_PANAL_r, CI_1_r, CI_2_r),
-                rank))
-
-# Generate winner, second, third
-collapsed_data <- collapsed_data %>%
-  mutate(
-    winner = case_when(across(c(PAN_r, PRI_r, PRD_r, PVEM_r, MC_r, PANAL_r, PCPP_r, PSI_r, PT_MORENA_PES_r, PAN_PRD_MC_PCPP_PSI_r,
-                                PAN_PRD_MC_PSI_r, PAN_PRD_PCPP_PSI_r, PAN_PRD_MC_PCPP_r, PAN_MC_PCPP_PSI_r, PAN_PRD_MC_r, PAN_PCPP_PSI_r,
-                                PAN_MC_PSI_r, PAN_MC_PCPP_r, PAN_PRD_PSI_r, PAN_PRD_PCPP_r, PAN_PRD_r, PAN_PSI_r, PAN_MC_r, PAN_PCPP_r,
-                                PRD_MC_PSI_r, PRD_MC_PCPP_r, PRD_PCPP_PSI_r, PRD_MC_r, PRD_PCPP_r, PRD_PSI_r, MC_PCPP_PSI_r, MC_PCPP_r,
-                                MC_PSI_r, PANAL_PCPP_r, PVEM_PCPP_PSI_r, PVEM_PSI_r, PVEM_PCPP_r, PCPP_PSI_r, PRI_PANAL_r, CI_1_r, CI_2_r), min, na.rm = TRUE)),
-    second = case_when(across(c(PAN_r, PRI_r, PRD_r, PVEM_r, MC_r, PANAL_r, PCPP_r, PSI_r, PT_MORENA_PES_r, PAN_PRD_MC_PCPP_PSI_r,
-                                PAN_PRD_MC_PSI_r, PAN_PRD_PCPP_PSI_r, PAN_PRD_MC_PCPP_r, PAN_MC_PCPP_PSI_r, PAN_PRD_MC_r, PAN_PCPP_PSI_r,
-                                PAN_MC_PSI_r, PAN_MC_PCPP_r, PAN_PRD_PSI_r, PAN_PRD_PCPP_r, PAN_PRD_r, PAN_PSI_r, PAN_MC_r, PAN_PCPP_r,
-                                PRD_MC_PSI_r, PRD_MC_PCPP_r, PRD_PCPP_PSI_r, PRD_MC_r, PRD_PCPP_r, PRD_PSI_r, MC_PCPP_PSI_r, MC_PCPP_r,
-                                MC_PSI_r, PANAL_PCPP_r, PVEM_PCPP_PSI_r, PVEM_PSI_r, PVEM_PCPP_r, PCPP_PSI_r, PRI_PANAL_r, CI_1_r, CI_2_r), second_min)),
-    third = case_when(across(c(PAN_r, PRI_r, PRD_r, PVEM_r, MC_r, PANAL_r, PCPP_r, PSI_r, PT_MORENA_PES_r, PAN_PRD_MC_PCPP_PSI_r,
-                               PAN_PRD_MC_PSI_r, PAN_PRD_PCPP_PSI_r, PAN_PRD_MC_PCPP_r, PAN_MC_PCPP_PSI_r, PAN_PRD_MC_r, PAN_PCPP_PSI_r,
-                               PAN_MC_PSI_r, PAN_MC_PCPP_r, PAN_PRD_PSI_r, PAN_PRD_PCPP_r, PAN_PRD_r, PAN_PSI_r, PAN_MC_r, PAN_PCPP_r,
-                               PRD_MC_PSI_r, PRD_MC_PCPP_r, PRD_PCPP_PSI_r, PRD_MC_r, PRD_PCPP_r, PRD_PSI_r, MC_PCPP_PSI_r, MC_PCPP_r,
-                               MC_PSI_r, PANAL_PCPP_r, PVEM_PCPP_PSI_r, PVEM_PSI_r, PVEM_PCPP_r, PCPP_PSI_r, PRI_PANAL_r, CI_1_r, CI_2_r), third_min))
-  )
-
-# Drop all *_r columns
-puebla_data <- collapsed_data %>% select(-contains("_r"))
-
-# Replace winner, second, third with "Independent" if values are "CI_1" or "CI_2"
-puebla_data <- puebla_data %>%
-  mutate(
-    winner = ifelse(winner %in% c("CI_1", "CI_2"), "Independent", winner),
-    second = ifelse(second %in% c("CI_1", "CI_2"), "Independent", second),
-    third = ifelse(third %in% c("CI_1", "CI_2"), "Independent", third)
-  )
-
 # Add year, month, STATE, and incumbent_vote columns
-puebla_data <- puebla_data %>%
+puebla_data_2018 <- puebla_data %>%
   mutate(
     year = 2018,
     month = "July",
     STATE = "PUEBLA",
-    incumbent_vote = NA_real_
   )
 
 # Drop all columns starting with 'cc'
-puebla_data <- puebla_data %>% select(-starts_with("cc"))
-
-# Preserve the current dataset (equivalent to Stata's `preserve`)
-puebla_data_backup <- puebla_data
+puebla_data_2018 <- puebla_data_2018 %>% select(-starts_with("cc"))
 
 # Load the Listado Nominal PREP 2018 data
 prep_data <- readRDS("../Listas Nominales/ListadoNominalPREP2018.rds")  # Adjust to the correct file path
@@ -2978,14 +2411,9 @@ prep_data <- readRDS("../Listas Nominales/ListadoNominalPREP2018.rds")  # Adjust
 # Filter for PUEBLA state
 prep_data <- prep_data %>% filter(STATE == "PUEBLA")
 
-# Save the filtered data (for temporary purposes, similar to the `save` in Stata)
-saveRDS(prep_data, "PUE_LN18.rds")
-
-# Restore the original dataset (equivalent to Stata's `restore`)
-puebla_data <- puebla_data_backup
 
 # Merge puebla_data with prep_data using "section" column
-puebla_data <- puebla_data %>%
+puebla_data_2018 <- puebla_data_2018 %>%
   left_join(prep_data, by = "section") %>%
   filter(!is.na(ListadoNominalINE))  # Drop rows where no match was found (equivalent to `_merge==2` in Stata)
 
@@ -2993,49 +2421,21 @@ puebla_data <- puebla_data %>%
 unlink("PUE_LN18.rds")
 
 # Rename the column `ListadoNominalINE` to `listanominal`
-puebla_data <- puebla_data %>%
+puebla_data_2018 <- puebla_data_2018 %>%
   rename(listanominal = ListadoNominalINE)
 
 # Calculate turnout at the precinct and municipal levels
-puebla_data <- puebla_data %>%
-  mutate(turnout = total / listanominal) %>%
-  group_by(uniqueid) %>%
-  mutate(mun_listanominal = sum(listanominal, na.rm = TRUE)) %>%
-  ungroup() %>%
-  mutate(mun_turnout = mun_total / mun_listanominal)
-
-# Save the final data
-saveRDS(puebla_data, "Puebla_Section_2018.rds")  # Adjust the path and format to your requirements
-
-# Collapse (sum) PAN-valid and listanominal, and take the first value for STATE, year, month, winner, second, third, mun_turnout, incumbent
-puebla_data_collapsed <- puebla_data %>%
-  group_by(municipality, uniqueid) %>%
-  summarise(
-    PAN = sum(PAN, na.rm = TRUE),
-    valid = sum(valid, na.rm = TRUE),
-    listanominal = sum(listanominal, na.rm = TRUE),
-    STATE = first(STATE),
-    year = first(year),
-    month = first(month),
-    winner = first(winner),
-    second = first(second),
-    third = first(third),
-    turnout = first(mun_turnout),
-    incumbent = first(incumbent)
-  ) %>%
-  ungroup()
+puebla_data_2018 <- puebla_data_2018 %>%
+  mutate(turnout = total / listanominal)
 
 # Sort by uniqueid
-puebla_data_collapsed <- puebla_data_collapsed %>%
+data_2018 <- puebla_data_2018 %>%
   arrange(uniqueid)
-
-# Save the dataset
-saveRDS(puebla_data_collapsed, "../../Update Municipal/Puebla_2018.rds")  # Adjust to your correct file path and format
 
 # Import CSV files and save them as individual RDS files
 municipalities <- c("AHUAZOTEPEC", "CAÑADA MORELOS", "MAZAPILTEPEC DE JUAREZ", "OCOYUCAN", "TEPEOJUMA")
 for (x in municipalities) {
-  file_path <- paste0("20190609_0800_CW_PRESIDENTE_MUNICIPAL/PRESIDENTE_MUNICIPAL_", x, "_2019.csv")
+  file_path <- paste0("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/20190609_0800_CW_PRESIDENTE_MUNICIPAL/PRESIDENTE_MUNICIPAL_", x, "_2019.csv")
   data <- read_csv(file_path, col_names = TRUE)
   saveRDS(data, paste0(x, ".rds"))
 }
@@ -3048,7 +2448,6 @@ for (x in municipalities[-length(municipalities)]) {
   file.remove(paste0(x, ".rds")) # Erase the file after appending
 }
 
-file.remove("TEPEOJUMA.rds") # Erase TEPEOJUMA file
 
 # Continue with the necessary manipulations
 append_data <- append_data %>%
@@ -3138,93 +2537,17 @@ append_data_collapsed <- append_data_collapsed %>%
   rowwise() %>%
   mutate(valid = sum(c_across(PRI:PT_MORENA_PES), na.rm = TRUE))
 
-# Generate mun-level sums and inverse variables
-append_data_collapsed <- append_data_collapsed %>%
-  group_by(uniqueid) %>%
-  mutate(across(PRI:valid, list(mun_sum = sum, inv = ~1/sum(.)))) %>%
-  ungroup()
-
-# Calculate municipal-level turnout
-append_data_collapsed <- append_data_collapsed %>%
-  mutate(mun_turnout = mun_total / mun_listanominal)
-
-# Calculate rankings
-append_data_collapsed <- append_data_collapsed %>%
-  rowwise() %>%
-  mutate(across(starts_with("inv_mun"), ~ rank(.), .names = "{col}_r"))
-
-# Determine the winner
-append_data_collapsed <- append_data_collapsed %>%
-  mutate(winner = case_when(
-    PRI_r == 1 ~ "PRI",
-    PT_r == 1 ~ "PT",
-    PVEM_r == 1 ~ "PVEM",
-    MC_r == 1 ~ "MC",
-    MORENA_r == 1 ~ "MORENA",
-    PES_r == 1 ~ "PES",
-    PAN_r == 1 ~ "PAN",
-    PSI_r == 1 ~ "PSI",
-    NAP_r == 1 ~ "NAP",
-    PT_PVEM_MORENA_PES_r == 1 ~ "PT_PVEM_MORENA_PES",
-    PAN_CPP_r == 1 ~ "PAN_CPP",
-    PAN_PRD_MC_CPP_r == 1 ~ "PAN_PRD_MC_CPP",
-    PRI_CPP_r == 1 ~ "PRI_CPP",
-    PRD_MC_CPP_r == 1 ~ "PRD_MC_CPP",
-    PT_MORENA_PES_r == 1 ~ "PT_MORENA_PES"
-  ))
-
 # Add year and month
-append_data_collapsed <- append_data_collapsed %>%
+data_2019 <- append_data_collapsed %>%
   mutate(year = 2019, month = "June")
 
-# Save final dataset
-saveRDS(append_data_collapsed, "Puebla_Section_2019.rds")
-
-# Load the RDS files
-puebla_2014 <- readRDS("Puebla_Section_2014.rds")
-puebla_2018 <- readRDS("Puebla_Section_2018.rds")
-puebla_2019 <- readRDS("Puebla_Section_2019.rds")
-
 # Append the data
-puebla_all <- bind_rows(puebla_2014, puebla_2018, puebla_2019)
+puebla_all <- bind_rows(data_2014, data_2018, data_2019)
 
-# Remove the individual datasets from the directory
-file.remove("Puebla_Section_2014.rds")
-file.remove("Puebla_Section_2018.rds")
-file.remove("Puebla_Section_2019.rds")
-
-# Generate `PAN_winner` based on the winner string
-puebla_all <- puebla_all %>%
-  mutate(
-    PAN_winner = if_else(str_detect(winner, "PAN") & !str_detect(winner, "PANAL"), 1, 0),
-    winner_counter = PAN_winner
-  )
-
-# Loop over other parties and generate the respective winner variables
-parties <- c("PRI", "PRD", "PT", "PC", "PVEM", "PANAL", "MORENA", "MC")
-for (party in parties) {
-  puebla_all <- puebla_all %>%
-    mutate(!!paste0(party, "_winner") := if_else(str_detect(winner, party), 1, 0)) %>%
-    mutate(winner_counter = winner_counter + !!sym(paste0(party, "_winner")))
-}
-
-# Check `winner_counter` and count zeros
-table(puebla_all$winner_counter)
-n_zero_winners <- sum(puebla_all$winner_counter == 0)
-
-# Save the combined dataset
-saveRDS(puebla_all, "Puebla_Section_14_18.rds")
-
-# Clear current dataset and append to an existing one
-puebla_all_data <- readRDS("../../Precinct/Puebla_ALL.rds")
 puebla_combined <- bind_rows(puebla_all_data, puebla_all)
 
 # Replace `municipality` values with uppercase
 puebla_combined <- puebla_combined %>%
   mutate(municipality = str_to_upper(municipality))
 
-# Save the final combined dataset
-saveRDS(puebla_combined, "Puebla_ALL_SALVADOR.rds")
-
-# Remove temporary dataset
-file.remove("Puebla_Section_14_18.rds")
+data.table::fwrite(puebla_combined,"../../../Processed Data/puebla/puebla_process_raw_data.csv")
