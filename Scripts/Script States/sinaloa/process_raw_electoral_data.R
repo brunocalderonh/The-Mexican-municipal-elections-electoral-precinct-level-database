@@ -196,15 +196,13 @@ df_2001 <- df_2001 %>%
   select(-noregistrados, -nulos)
 
 # We replicate partial logic:
-df_all <- read_dta("../all_months_years.dta") %>%
-  filter(ed==25, month==9, year==2001) %>%
-  select(section=seccion, lista)
+df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter(state=="SINALOA", month=="September", year==2001) %>% 
+  dplyr::select(section,lista)
 
 df_2001 <- df_2001 %>%
-  mutate(ed=25, seccion=section) %>%
   left_join(df_all, by="section") %>%
   filter(!is.na(lista)) %>%
-  select(-ed, -seccion) %>%
   rename(listanominal=lista)
 
 df_2001 <- df_2001 %>%
