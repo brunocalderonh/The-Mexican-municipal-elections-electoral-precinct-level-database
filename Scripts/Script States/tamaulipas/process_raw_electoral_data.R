@@ -24,1383 +24,1493 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 # Assuming your script is in 'Scripts/Script States/', go two levels up
 setwd(file.path(script_dir, ""))
 
+################################################################################
+# 1) Read "Ayu_Seccion_1998_No_LN.csv", rename columns, drop empties, parse numeric
+################################################################################
 
-################################################################################
-# 1) Read CSV (equivalent to: insheet using "Ayu_Seccion_1997_No_LN.csv", clear)
-################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
-colnames(df) <- tolower(colnames(df))
-################################################################################
-# 2) Rename columns, drop empty municipality/section, and drop total == NA or 0
-################################################################################
-df <- df %>%
+# In Stata: insheet using Ayu_Seccion_1998_No_LN.csv, clear
+df_tam <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_1998_No_LN.csv", 
+                   show_col_types=FALSE) 
+colnames(df_tam) <- tolower(colnames(df_tam))
+names(df_tam) <- gsub("[- ]", "", names(df_tam))
+
+
+df_tam <-df_tam %>%
   rename(
     municipality = municipio,
-    section      = seccion
+    section      = secc
+    # If there's a "nominal" column, we do not rename or we ignore, 
+    # since the code has "rename listanominal nominal" commented out
   ) %>%
-  filter(!(municipality == "" & is.na(section))) %>%
-  filter(!(is.na(total) | total == 0))
+  # drop if municipality=="" & section==.
+  filter(!(municipality=="" & is.na(section)))
+
+# parse columns pan - total => we identify them or do partial approach:
+vote_cols <- c("pan","pri","prd","pt","pvem","pc","parm","nulos","noreg","total")
+df_tam <- df_tam %>%
+  mutate(across(all_of(intersect(vote_cols, names(.))), as.numeric))
+
 
 ################################################################################
-# 3) Convert (pan through total) to numeric (like "destring pan - total, replace")
+# 2) collapse (sum) pan - total by (municipality, section)
 ################################################################################
-df <- df %>%
-  mutate(across(pan:total, as.numeric))
 
-################################################################################
-# 4) Collapse (sum) pan - total by municipality and section
-#    (equivalent to: collapse (sum) pan - total, by(municipality section))
-################################################################################
-df_collapsed <- df %>%
+# We'll group by municipality, section, then sum those columns
+df_collapse <- df_tam %>%
   group_by(municipality, section) %>%
   summarise(
-    across(pan:total, sum, na.rm = TRUE),
-    .groups = "drop"
+    across(any_of(c("pan","pri","prd","pt","pvem","pc","parm","nulos","noregistrados","total")),
+           sum, na.rm=TRUE),
+    .groups="drop"
   )
 
 ################################################################################
-# 5) Rename columns (like Stata rename pan->PAN, pri->PRI, etc.)
+# 3) rename columns (pan->PAN, pri->PRI, prd->PRD, etc.), drop nulos noreg
 ################################################################################
-df_collapsed <- df_collapsed %>%
+
+df_collapse <- df_collapse %>%
+  rename(
+    PAN            = pan,
+    PRI            = pri,
+    PRD            = prd,
+    PT             = pt,
+    PVEM           = pvem,
+    PartCardenista = pc,     # rename pc -> PartCardenista
+    PARM           = parm
+  ) %>%
+  select(-nulos, -noregistrados)
+
+################################################################################
+# 4) assign uniqueid=0, then set codes for each municipality
+################################################################################
+
+df_collapse <- df_collapse %>%
+  mutate(uniqueid = 0) %>%
+  mutate(
+    uniqueid = case_when(
+      municipality=="ABASOLO"       ~ 28001,
+      municipality=="ALDAMA"        ~ 28002,
+      municipality=="ALTAMIRA"      ~ 28003,
+      municipality=="ANT. MORELOS"  ~ 28004,
+      municipality=="BURGOS"        ~ 28005,
+      municipality=="BUSTAMANTE"    ~ 28006,
+      municipality=="CAMARGO"       ~ 28007,
+      municipality=="CASAS"         ~ 28008,
+      municipality=="CD. MADERO"    ~ 28009,
+      municipality=="CRUILLAS"      ~ 28010,
+      municipality=="MANTE"         ~ 28021,
+      municipality=="GOMEZ FARIAS"  ~ 28011,
+      municipality=="GONZALEZ"      ~ 28012,
+      municipality=="GUEMEZ"        ~ 28013,
+      municipality=="GUERRERO"      ~ 28014,
+      municipality=="G DIAZ ORDAZ"  ~ 28015,
+      municipality=="HIDALGO"       ~ 28016,
+      municipality=="JAUMAVE"       ~ 28017,
+      municipality=="JIMENEZ"       ~ 28018,
+      municipality=="LLERA"         ~ 28019,
+      municipality=="MAINERO"       ~ 28020,
+      municipality=="MATAMOROS"     ~ 28022,
+      municipality=="MENDEZ"        ~ 28023,
+      municipality=="MIER"          ~ 28024,
+      municipality=="MIGUEL ALEMAN" ~ 28025,
+      municipality=="MIQUIHUANA"    ~ 28026,
+      municipality=="NVO. LAREDO"   ~ 28027,
+      municipality=="NVO. MORELOS"  ~ 28028,
+      municipality=="OCAMPO"        ~ 28029,
+      municipality=="PADILLA"       ~ 28030,
+      municipality=="PALMILLA"      ~ 28031,
+      municipality=="REYNOSA"       ~ 28032,
+      municipality=="RIO BRAVO"     ~ 28033,
+      municipality=="SAN CARLOS"    ~ 28034,
+      municipality=="SAN FERNANDO"  ~ 28035,
+      municipality=="SAN NICOLAS"   ~ 28036,
+      municipality=="SOTO LA MARINA"~ 28037,
+      municipality=="TAMPICO"       ~ 28038,
+      municipality=="TULA"          ~ 28039,
+      municipality=="VALLE HERMOSO" ~ 28040,
+      municipality=="VICTORIA"      ~ 28041,
+      municipality=="VILLAGRAN"     ~ 28042,
+      municipality=="XICOTENCATL"   ~ 28043,
+      TRUE ~ uniqueid
+    )
+  )
+
+################################################################################
+# 5) compute valid= rowtotal(PAN PRI PRD PT PVEM PARM PartCardenista),x
+################################################################################
+
+df_collapse <- df_collapse %>%
+  rowwise() %>%
+  mutate(
+    valid = sum(c_across(c("PAN","PRI","PRD","PT","PVEM","PARM","PartCardenista")), na.rm=TRUE)
+  ) %>%
+  ungroup()
+
+
+################################################################################
+# 6) Merge with "..\..\all_months_years.dta" using (ed=28, seccion=section),
+#    keep if month==9 & year==1998, drop unmatched, rename lista->listanominal
+################################################################################
+
+df_collapse <- df_collapse %>%
+  mutate(ed=28, seccion=section)
+
+df_all <- read_dta("../../all_months_years.dta") %>%
+  select(ed, seccion, month, year, lista) 
+
+df_join <- df_collapse %>%
+  left_join(df_all, by=c("ed","seccion")) %>%
+  filter(!is.na(lista)) %>%
+  select(-ed, -seccion, -year, -month)
+
+df_join <- df_join %>%
+  rename(listanominal = lista)
+
+################################################################################
+# 7) gen turnout= total/listanominal, gen year=1998, month="November"
+#    save "Tamaulipas_Section_1998.dta"
+################################################################################
+
+df_join <- df_join %>%
+  mutate(
+    turnout = total / listanominal,
+    year    = 1998,
+    month   = "November"
+  )
+
+################################################################################
+# 8) keep municipality section uniqueid => save "Tamaulipas_Section_1998_to_Merge_1995.dta"
+################################################################################
+
+df_to_merge <- df_join %>%
+  select(municipality, section, uniqueid) %>%
+  arrange(section)
+
+################################################################################
+# 9) use "Tamaulipas_Section_1998.dta", drop if total==. or total==0, save
+################################################################################
+
+df_1998 <- df_join %>%
+  filter(!(is.na(total) | total==0))
+
+
+################################################################################
+# 1) Read "Ayu_Seccion_1995_No_Municipalities_No_LN.csv"
+################################################################################
+
+df_1995 <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_1995_No_Municipalities_No_LN.csv", 
+                    show_col_types=FALSE) 
+colnames(df_1995) <- tolower(colnames(df_1995))
+names(df_1995) <- gsub("[- ]", "", names(df_1995))
+
+df_1995 <-df_1995 %>%
+  rename(section = seccion) %>%
+  filter(!is.na(section)) %>%          # drop if section==.
+  filter(!(is.na(total) | total==0))   # drop if total==. | total==0
+
+# parse columns from 'pan' to 'total' as numeric
+vote_cols <- c("pan","pri","prd","pt","pvem","pfcrn","parm","nulos","validos","total")
+
+df_1995 <- df_1995 %>%
+  mutate(across(all_of(intersect(vote_cols, names(.))), as.numeric))
+
+################################################################################
+# 2) collapse (sum) pan - total by (section)
+################################################################################
+
+# We'll group by `section` and sum the relevant columns (pan through total).
+df_collapse <- df_1995 %>%
+  group_by(section) %>%
+  summarise(
+    across(any_of(c("pan","pri","prd","pt","pvem","pfcrn","parm","nulos","validos","total")),
+           sum, na.rm=TRUE),
+    .groups="drop"
+  )
+
+################################################################################
+# 3) rename columns, drop 'nulos', 'validos'
+################################################################################
+
+df_collapse <- df_collapse %>%
   rename(
     PAN             = pan,
     PRI             = pri,
     PRD             = prd,
     PT              = pt,
     PVEM            = pvem,
-    PartCardenista  = pc,
-    PPS             = pps,
-    PDM             = pdm
-    # 'nulos' was dropped in Stata, so if you have 'nulos' in df, remove it:
-    # select(-nulos)
+    PartCardenista  = pfcrn,  # rename pfcrn->PartCardenista
+    PARM            = parm
   ) %>%
-  select(-any_of("nulos"))  # drop nulos if it exists
+  select(-nulos, -validos)
 
 ################################################################################
-# 6) Generate uniqueid = 0, then assign codes for each municipality
+# 4) sort by section, merge with "Tamaulipas_Section_1998_to_Merge_1995.dta"
 ################################################################################
-df_collapsed <- df_collapsed %>%
+
+df_collapse <- df_collapse %>%
+  arrange(section)
+
+# We'll do a left_join on 'section'
+df_merged <- df_collapse %>%
+  left_join(df_to_merge, by="section") %>%
+  # drop if unmatched
+  filter(!is.na(municipality) & !is.na(uniqueid))
+
+################################################################################
+# 5) compute valid= rowtotal(PAN PRI PRD PartCardenista PARM PT PVEM), 
+#    year=1995, month="November"
+#    save "Tamaulipas_Section_1995.dta"
+################################################################################
+
+df_1995 <- df_merged %>%
+  rowwise() %>%
   mutate(
-    uniqueid = case_when(
-      municipality == "BALANCAN"           ~ 27001,
-      municipality == "CARDENAS"           ~ 27002,
-      municipality == "CENTLA"             ~ 27003,
-      municipality == "CENTRO"             ~ 27004,
-      municipality == "COMALCALCO"         ~ 27005,
-      municipality == "CUNDUACAN"          ~ 27006,
-      municipality == "EMILIANO ZAPATA"    ~ 27007,
-      municipality == "HUIMANGUILLO"       ~ 27008,
-      municipality == "JALAPA"             ~ 27009,
-      municipality == "JALPA DE MENDEZ"    ~ 27010,
-      municipality == "JONUTA"             ~ 27011,
-      municipality == "MACUSPANA"          ~ 27012,
-      municipality == "NACAJUCA"           ~ 27013,
-      municipality == "PARAISO"            ~ 27014,
-      municipality == "TACOTALPA"          ~ 27015,
-      municipality == "TEAPA"              ~ 27016,
-      municipality == "TENOSIQUE"          ~ 27017,
-      TRUE                                 ~ 0
-    )
-  )
-
-################################################################################
-# 7) Create 'valid' as rowtotal(...) of (PAN PRI PRD PartCardenista PT PVEM PPS PDM)
-################################################################################
-df_collapsed <- df_collapsed %>%
+    valid = sum(c_across(c("PAN","PRI","PRD","PartCardenista","PARM","PT","PVEM")), na.rm=TRUE)
+  ) %>%
+  ungroup() %>%
   mutate(
-    valid = rowSums(
-      select(., PAN, PRI, PRD, PartCardenista, PT, PVEM, PPS, PDM),
-      na.rm = TRUE
-    )
-  )
-
-################################################################################
-# 9) Merge with all_months_years.dta (like "capture merge 1:m ed seccion using ..."),
-#    keep only month==12, year==1997, rename lista->listanominal
-################################################################################
-# In Stata:
-#   g ed=27
-#   g seccion=section
-#   merge 1:m ed seccion using all_months_years.dta, keepusing(month year lista)
-#   keep if month==12 & year==1997
-#   drop if _merge==2
-#   drop _merge ed seccion year month
-#   rename lista listanominal
-
-# We'll do something similar in R, reading the external .dta:
-df_all <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista) %>%
-  # filter to ed=27 afterwards or we'll merge first and then filter
-  # We'll do it after merge, to replicate Stata's step order
-  rename(section = seccion)
-
-# add ed=27, reassign "section" from our df_collapsed
-df_collapsed <- df_collapsed %>%
-  mutate(
-    ed      = 27,
-    seccion = section  # just for merging
-  )
-
-# merge 1:m on (ed, seccion)
-df_merged <- df_collapsed %>%
-  left_join(df_all, by = c("ed", "seccion"))
-
-# keep only month==12 & year==1997
-df_merged <- df_merged %>%
-  filter(month == 12, year == 1997)
-
-# drop rows that don't match (Stata's "drop if _merge==2")
-# after a left_join, no extra rows from "using". If we want to
-# drop rows that didn't find a match (which would have NA in 'lista'),
-# we do:
-df_merged <- df_merged %>% filter(!is.na(lista))
-
-# drop _merge, ed, seccion, year, month
-df_merged <- df_merged %>%
-  select(-ed, -seccion, -year, -month)
-
-# rename lista -> listanominal
-df_merged <- df_merged %>%
-  rename(listanominal = lista)
-
-################################################################################
-# 10) turnout = total / listanominal
-################################################################################
-df_merged <- df_merged %>%
-  mutate(turnout = total / listanominal)
-
-################################################################################
-# 14) year=1997, month="November"
-################################################################################
-df_1997 <- df_ranks_combined %>%
-  mutate(
-    year  = 1997,
+    year  = 1995,
     month = "November"
   )
 
 ################################################################################
-# 1) Read CSV (equivalent to "insheet using Ayu_Seccion_2000_No_LN.csv, clear")
+# 1) Read "Ayu_Seccion_2001_No_LN.csv", rename columns, drop incomplete, parse numeric
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayu_Seccion_2000_No_LN.csv", show_col_types = FALSE)
-colnames(df) <- tolower(colnames(df))
-names(df) <- gsub("[- ]", "", names(df))
-################################################################################
-# 2) Rename columns, drop rows where municipality=="" & section==. (NA),
-#    and drop rows where total is NA or 0
-################################################################################
-df <- df %>%
+
+df_2001 <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2001_No_LN.csv", 
+                    show_col_types=FALSE) 
+
+colnames(df_2001) <- tolower(colnames(df_2001))
+names(df_2001) <- gsub("[- ]", "", names(df_2001))
+
+df_2001 <-df_2001 %>%
   rename(
     municipality = municipio,
     section      = seccion
   ) %>%
-  filter(!(municipality == "" & is.na(section))) %>%
-  filter(!(is.na(total) | total == 0))
+  # drop if municipality=="" & section==.
+  filter(!(municipality=="" & is.na(section)))
+
+# drop if total==. or total==0
+df_2001 <- df_2001 %>%
+  filter(!is.na(total) & total!=0)
+
+# destring pan - total => parse numeric
+vote_cols <- c("pan","pri","prd","pt","pvem","pc","pas","psn","ptpvem","paspvempt",
+               "prdpvem","nulos","validos","total")
+df_2001 <- df_2001 %>%
+  mutate(across(all_of(intersect(vote_cols, names(.))), as.numeric))
 
 ################################################################################
-# 3) Convert (pan through total) to numeric 
-#    (like "destring pan - total, replace" in Stata)
+# 2) collapse (sum) pan - total , by(municipality, section)
 ################################################################################
-df <- df %>%
-  mutate(across(pan:total, as.numeric))
 
-################################################################################
-# 4) Collapse (sum) pan - total by (municipality, section)
-#    (like "collapse (sum) pan - total, by(municipality section)")
-################################################################################
-df_collapsed <- df %>%
-  group_by(municipality, section) %>%
-  summarise(across(pan:total, sum, na.rm = TRUE), .groups = "drop")
-
-################################################################################
-# 5) Rename columns to their final form
-################################################################################
-df_collapsed <- df_collapsed %>%
-  rename(
-    PAN  = pan,
-    PRI  = pri,
-    PRD  = prd,
-    PT   = pt,
-    PVEM = pvem,
-    PC   = cdppn,  # cdppn -> PC
-    PCD  = pcd,
-    PDS  = dsppn,  # dsppn -> PDS (Partido Democracia Social)
-    PAS  = pas,
-    PSN  = psn,
-    PARM = parm
-  )
-
-################################################################################
-# 6) Drop columns 'nulos' and 'noregistrados' if they exist
-################################################################################
-df_collapsed <- df_collapsed %>%
-  select(-any_of(c("nulos", "noregistrados")))
-
-################################################################################
-# 7) Create uniqueid = 0, then replace based on municipality
-################################################################################
-df_collapsed <- df_collapsed %>%
-  mutate(
-    uniqueid = case_when(
-      municipality == "BALANCAN"         ~ 27001,
-      municipality == "CARDENAS"         ~ 27002,
-      municipality == "CENTLA"           ~ 27003,
-      municipality == "CENTRO"           ~ 27004,
-      municipality == "COMALCALCO"       ~ 27005,
-      municipality == "CUNDUACAN"        ~ 27006,
-      municipality == "EMILIANO ZAPATA"  ~ 27007,
-      municipality == "HUIMANGUILLO"     ~ 27008,
-      municipality == "JALAPA"           ~ 27009,
-      municipality == "JALPA DE MENDEZ"  ~ 27010,
-      municipality == "JONUTA"           ~ 27011,
-      municipality == "MACUSPANA"        ~ 27012,
-      municipality == "NACAJUCA"         ~ 27013,
-      municipality == "PARAISO"          ~ 27014,
-      municipality == "TACOTALPA"        ~ 27015,
-      municipality == "TEAPA"            ~ 27016,
-      municipality == "TENOSIQUE"        ~ 27017,
-      TRUE                               ~ 0
-    )
-  )
-
-################################################################################
-# 8) Generate 'valid' = rowtotal(...) across relevant columns
-################################################################################
-df_collapsed <- df_collapsed %>%
-  mutate(
-    valid = rowSums(
-      select(., PAN, PRI, PRD, PT, PVEM, PC, PCD, PSN, PARM, PAS, PDS),
-      na.rm = TRUE
-    )
-  )
-
-################################################################################
-# 9) Prepare to merge with the external dataset: set ed=27, seccion=section
-################################################################################
-df_collapsed <- df_collapsed %>%
-  mutate(
-    ed      = 27,
-    seccion = section
-  )
-
-################################################################################
-# 10) Merge 1:m with "..\..\all_months_years.dta", keep only (month, year, lista).
-#     Then filter for month==9 & year==2000. Drop unmatched. Rename lista -> listanominal
-################################################################################
-# Read the external .dta
-df_all <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista)%>%
-  filter(month == 9, year == 2000)
-
-# Merge
-df_merged <- df_collapsed %>%
-  left_join(df_all, by = c("ed", "seccion"))
-
-# Drop rows that had no match (Stata: drop if _merge==2). In left_join, 
-# we remove rows with NA in 'lista' to emulate that behavior:
-df_merged <- df_merged %>%
-  filter(!is.na(lista))
-
-# Drop _merge, ed, seccion, year, month from final
-df_merged <- df_merged %>%
-  select(-ed, -seccion, -year, -month)
-
-# Rename lista -> listanominal
-df_merged <- df_merged %>%
-  rename(listanominal = lista)
-
-################################################################################
-# 11) Compute turnout = total / listanominal, set year=2000, month="October"
-################################################################################
-df_2000 <- df_merged %>%
-  mutate(
-    turnout = total / listanominal,
-    year    = 2000,
-    month   = "October"
-  )
-
-################################################################################
-# 1) Read CSV
-################################################################################
-df <- fread("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayu_Seccion_2003.csv", 
-            encoding = "Latin-1")
-colnames(df) <- tolower(colnames(df))
-names(df) <- gsub("[- ]", "", names(df))
-################################################################################
-# 2) Rename columns, drop rows where municipality=="" & section==. (NA),
-#    and drop rows where total is missing or zero
-################################################################################
-df <- df %>%
-  rename(
-    municipality = municipio,
-    section      = sección
-  ) %>%
-  filter(!(municipality == "" & is.na(section))) %>%
-  filter(!(is.na(total) | total == 0))
-
-################################################################################
-# 3) Convert listanominal, pan through total to numeric (replicating 
-#    'destring listanominal pan - total , replace')
-################################################################################
-df <- df %>%
-  mutate(across(c(listanominal, pan:total), as.numeric))
-
-################################################################################
-# 4) Create a variable 'missing' indicating if listanominal was missing 
-#    (listanominal==.)
-################################################################################
-df <- df %>%
-  mutate(missing = if_else(is.na(listanominal), 1, 0))
-
-################################################################################
-# 5) Collapse (sum) missing, listanominal, pan - total by municipality, section
-#    (Stata: collapse (sum) missing listanominal pan - total, by(municipality section))
-################################################################################
-df_collapsed <- df %>%
+df_collapse <- df_2001 %>%
   group_by(municipality, section) %>%
   summarise(
-    across(c(missing, listanominal, pan:total), sum, na.rm = TRUE),
-    .groups = "drop"
+    across(any_of(vote_cols), sum, na.rm=TRUE),
+    .groups="drop"
   )
 
 ################################################################################
-# 6) Merge with all_months_years (ed=27, seccion=section), keep only 
-#    month==9 & year==2003, drop unmatched, then rename 'lista' -> 'listanominal'
+# 3) Drop 'prdpvem', fix special coalitions for MANTE (PT-PVEM) and REYNOSA (PAS-PVEM-PT)
 ################################################################################
-# In Stata:
-#    g ed=27
-#    g seccion=section
-#    merge 1:m ed seccion using "..\..\all_months_years.dta", keepusing(month year lista)
-#    keep if month==9 & year==2003
-#    drop if _merge==2
-#    drop _merge ed seccion year month
 
-df_collapsed <- df_collapsed %>%
+df_collapse <- df_collapse %>%
+  select(-any_of("prdpvem"))
+
+# * MANTE: PT-PVEM
+df_collapse <- df_collapse %>%
   mutate(
-    ed      = 27,
-    seccion = section
+    ptpvem = if_else(municipality=="MANTE", ptpvem + coalesce(pt,0) + coalesce(pvem,0), ptpvem),
+    pt     = if_else(municipality=="MANTE", 0, pt),
+    pvem   = if_else(municipality=="MANTE", 0, pvem)
   )
+
+# * REYNOSA: PAS-PVEM-PT
+df_collapse <- df_collapse %>%
+  mutate(
+    paspvempt = if_else(municipality=="REYNOSA",
+                        paspvempt + coalesce(pas,0) + coalesce(pvem,0) + coalesce(pt,0),
+                        paspvempt),
+    pas  = if_else(municipality=="REYNOSA", 0, pas),
+    pvem = if_else(municipality=="REYNOSA", 0, pvem),
+    pt   = if_else(municipality=="REYNOSA", 0, pt)
+  )
+
+################################################################################
+# 4) replace total=. if total==0 (in Stata code)
+################################################################################
+
+df_collapse <- df_collapse %>%
+  mutate(total = if_else(total==0, NA_real_, total))
+
+################################################################################
+# 5) rename columns
+################################################################################
+
+df_collapse <- df_collapse %>%
+  rename(
+    PAN             = pan,
+    PRI             = pri,
+    PRD             = prd,
+    PT              = pt,
+    PVEM            = pvem,
+    PC              = pc,   # rename pc->PC
+    PAS             = pas,
+    PSN             = psn,
+    PT_PVEM         = ptpvem,
+    PAS_PT_PVEM     = paspvempt
+  )
+
+# drop validos, nulos
+df_collapse <- df_collapse %>%
+  select(-validos, -nulos)
+
+################################################################################
+# 6) Create uniqueid=0, then assign codes by municipality
+################################################################################
+
+df_collapse <- df_collapse %>%
+  mutate(uniqueid=0) %>%
+  mutate(
+    uniqueid = case_when(
+      municipality=="ABASOLO"         ~ 28001,
+      municipality=="ALDAMA"          ~ 28002,
+      municipality=="ALTAMIRA"        ~ 28003,
+      municipality=="A. MORELOS"      ~ 28004,
+      municipality=="BURGOS"          ~ 28005,
+      municipality=="BUSTAMANTE"      ~ 28006,
+      municipality=="CAMARGO"         ~ 28007,
+      municipality=="CASAS"           ~ 28008,
+      municipality=="CD. MADERO"      ~ 28009,
+      municipality=="CRUILLAS"        ~ 28010,
+      municipality=="MANTE"           ~ 28021,
+      municipality=="GOMEZ F."        ~ 28011,
+      municipality=="GONZALEZ"        ~ 28012,
+      municipality=="GUEMEZ"          ~ 28013,
+      municipality=="GUERRERO"        ~ 28014,
+      municipality=="GVO. DIAZ O."    ~ 28015,
+      municipality=="HIDALGO"         ~ 28016,
+      municipality=="JAUMAVE"         ~ 28017,
+      municipality=="JIMENEZ"         ~ 28018,
+      municipality=="LLERA"           ~ 28019,
+      municipality=="MAINERO"         ~ 28020,
+      municipality=="MATAMOROS"       ~ 28022,
+      municipality=="MENDEZ"          ~ 28023,
+      municipality=="MIER"            ~ 28024,
+      municipality=="MIGUEL A."       ~ 28025,
+      municipality=="MIQUIHUANA"      ~ 28026,
+      municipality=="NVO. LAREDO"     ~ 28027,
+      municipality=="NVO. MORELOS"    ~ 28028,
+      municipality=="OCAMPO"          ~ 28029,
+      municipality=="PADILLA"         ~ 28030,
+      municipality=="PALMILLAS"       ~ 28031,
+      municipality=="REYNOSA"         ~ 28032,
+      municipality=="RíO BRAVO"       ~ 28033,
+      # or handle "RIO BRAVO" partial: if municipality=="RíO BRAVO" or something with a partial
+      municipality== "RIO BRAVO" | str_detect(municipality, "O BRAVO") ~ 28033,
+      municipality=="SAN CARLOS"      ~ 28034,
+      municipality=="SAN FERNANDO"    ~ 28035,
+      municipality=="SAN NICOLAS"     ~ 28036,
+      municipality=="SOTO LA MARINA"  ~ 28037,
+      municipality=="TAMPICO"         ~ 28038,
+      municipality=="TULA"            ~ 28039,
+      municipality=="VALLE HERMOSO"   ~ 28040,
+      municipality=="VICTORIA"        ~ 28041,
+      municipality=="VILLAGRAN"       ~ 28042,
+      municipality=="XICOTENCATL"     ~ 28043,
+      TRUE ~ uniqueid
+    )
+  )
+
+################################################################################
+# 7) Merge with "..\..\all_months_years.dta" for ed=28, seccion=section,
+#    keep if (month==9 & year==2001), drop unmatched, rename lista->listanominal
+################################################################################
+
+df_collapse <- df_collapse %>%
+  mutate(ed=28, seccion=section)
 
 df_all <- read_dta("../../all_months_years.dta") %>%
   select(ed, seccion, month, year, lista)
 
-df_merged <- df_collapsed %>%
-  left_join(df_all, by = c("ed", "seccion")) %>%
-  filter(month == 9, year == 2003) %>%
-  filter(!is.na(lista)) %>%   # drop if no match (Stata: drop if _merge==2)
+df_merged <- df_collapse %>%
+  left_join(df_all, by=c("ed","seccion")) %>%
+  filter(month==9, year==2001) %>%
+  filter(!is.na(lista)) %>%
   select(-ed, -seccion, -year, -month)
 
-# rename lista -> listanominal
-# keep both old 'listanominal' (collapsed) and 'lista' from merge, see next step
 df_merged <- df_merged %>%
-  rename(lista_from_merge = lista)
+  rename(listanominal=lista)
 
 ################################################################################
-# 7) If 'missing' >=1 AND merged 'lista_from_merge' > (collapsed) 'listanominal', 
-#    replace listanominal = lista_from_merge
+# 8) Compute turnout= total/listanominal, gen year=2001, month="October",
 ################################################################################
-df_merged <- df_merged %>%
+
+df_2001 <- df_merged %>%
   mutate(
-    listanominal = if_else(
-      missing >= 1 & lista_from_merge > listanominal,
-      lista_from_merge,
-      listanominal
-    )
-  ) %>%
-  # drop 'missing' and 'lista_from_merge'
-  select(-missing, -lista_from_merge)
-
-################################################################################
-# 8) Rename columns
-#    (like rename pan->PAN, pripvem->PRI_PVEM, prd->PRD, etc.)
-################################################################################
-df_merged <- df_merged %>%
-  rename(
-    PAN     = pan,
-    PRI_PVEM= pripvem,
-    PRD     = prd,
-    PT      = pt,
-    PC      = pc,
-    PAS     = pas,
-    PMP     = pmp,
-    PFC     = fc
+    turnout = total / listanominal,
+    year    = 2001,
+    month   = "October"
   )
 
 ################################################################################
-# 9) Compute turnout = total / listanominal
+# 1) Read Excel "Ayu_Seccion_2004_No_LN.xlsx", rename columns, drop incomplete,
+#    parse numeric columns
 ################################################################################
-df_merged <- df_merged %>%
-  mutate(
-    turnout = total / listanominal
-  )
 
-################################################################################
-# 10) Drop 'nulos' and 'noregistrados' if they exist
-################################################################################
-df_merged <- df_merged %>%
-  select(-any_of(c("nulos", "noregistrados")))
-
-################################################################################
-# 11) Create uniqueid=0, then assign codes based on municipality
-################################################################################
-df_merged <- df_merged %>%
-  mutate(
-    uniqueid = case_when(
-      municipality == "BALANCAN"        ~ 27001,
-      municipality == "CARDENAS"        ~ 27002,
-      municipality == "CENTLA"          ~ 27003,
-      municipality == "CENTRO"          ~ 27004,
-      municipality == "COMALCALCO"      ~ 27005,
-      municipality == "CUNDUACAN"       ~ 27006,
-      municipality == "EMILIANO ZAPATA" ~ 27007,
-      municipality == "HUIMANGUILLO"    ~ 27008,
-      municipality == "JALAPA"          ~ 27009,
-      municipality == "JALPA DE MENDEZ" ~ 27010,
-      municipality == "JONUTA"          ~ 27011,
-      municipality == "MACUSPANA"       ~ 27012,
-      municipality == "NACAJUCA"        ~ 27013,
-      municipality == "PARAISO"         ~ 27014,
-      municipality == "TACOTALPA"       ~ 27015,
-      municipality == "TEAPA"           ~ 27016,
-      municipality == "TENOSIQUE"       ~ 27017,
-      TRUE                              ~ 0
-    )
-  )
-
-################################################################################
-# 12) Compute valid = rowtotal(PAN PRI_PVEM PRD PT PC PAS PMP PFC)
-#    Then year=2003, month="October", sort by section, and save
-################################################################################
-df_2003 <- df_merged %>%
-  mutate(
-    valid = rowSums(
-      select(., PAN, PRI_PVEM, PRD, PT, PC, PAS, PMP, PFC),
-      na.rm = TRUE
-    ),
-    year  = 2003,
-    month = "October"
-  ) %>%
-  arrange(section)  # sort by section
-
-################################################################################
-# 1) Read from Excel
-#    Equivalent to: 
-#    import excel "estadistica_electoral_2006.xls", sheet("Casillas Regidores") 
-#    cellrange(A4:L2429) firstrow clear
-################################################################################
-df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/estadistica_electoral_2006.xls",
-  sheet = "Casillas Regidores",
-  range = "A4:L2429",    # cell range A4:L2429
-  col_names = TRUE
+df_2004 <- read_excel(
+  path     = "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2004_No_LN.xlsx",
+  sheet    = 1,       # or specify the correct sheet if not the first
+  col_names= TRUE
 ) %>%
-  as.data.frame()  # optional, for consistent data.frame behavior
-names(df) <- gsub("[- ]", "", names(df))
-################################################################################
-# 2) Rename columns and convert municipality to uppercase without accents
-#
-#    In Stata:
-#      rename MUNICIPIO municipality
-#      replace municipality=upper(subinstr(municipality, "á", "a",.))
-#      ... etc.
-################################################################################
-df <- df %>%
-  rename(municipality = MUNICIPIO) %>%
-  # remove Spanish accents from municipality
-  mutate(
-    municipality = str_replace_all(municipality, "á", "a"),
-    municipality = str_replace_all(municipality, "é", "e"),
-    municipality = str_replace_all(municipality, "í", "i"),
-    # then uppercase
-    municipality = toupper(municipality)
+  as.data.frame()
+colnames(df_2004) <- tolower(colnames(df_2004))
+names(df_2004) <- gsub("[- ]", "", names(df_2004))
+# rename municipio->municipality, seccion->section
+df_2004 <- df_2004 %>%
+  rename(
+    municipality = municipio,
+    section      = seccion
   )
 
-# Now rename SECCIÓN -> SECCIN (Stata had `capture rename SECCIÓN SECCIN`)
-# Then rename SECCIN -> section
-df <- df %>%
-  rename(section = SECCIÓN)
+# drop if municipality=="" & section==.
+df_2004 <- df_2004 %>%
+  filter(!(municipality=="" & is.na(section)))
+
+# drop if total==. or total==0
+df_2004 <- df_2004 %>%
+  filter(!is.na(total) & total!=0)
+
+# destring pan - total => parse numeric columns
+vote_cols <- c("pan","pri","prdpc","pt","pvem","nulos","validos","total")
+df_2004 <- df_2004 %>%
+  mutate(across(all_of(intersect(vote_cols, names(.))), as.numeric))
 
 ################################################################################
-# 3) Rename further columns:
-#
-#    CPBT         -> PRD_PT
-#    NUEVAALIANZA -> PANAL
-#    ALTERNATIVA  -> PAS
-#    CANDIDATOSNOREGISTRADOS -> noregistrados
-#    VOTOSNULOS   -> nulos
-#    VOTACIÓNTOTAL -> total
+# 2) collapse (sum) pan - total by (municipality, section)
 ################################################################################
-df <- df %>%
-  rename(
-    PRD_PT       = CPBT,
-    PANAL        = NUEVAALIANZA,
-    PAS          = ALTERNATIVA,
-    noregistrados = CANDIDATOSNOREGISTRADOS,
-    nulos        = VOTOSNULOS
-    # Stata: capture rename VOTACIÓNTOTAL VOTACINTOTAL => rename VOTACINTOTAL total
-    # If your sheet has exactly "VOTACIÓNTOTAL" or "VOTACINTOTAL", adapt accordingly:
-    # We'll assume the final name to be 'total'
-  ) %>%
-  rename(total = VOTACIÓNTOTAL)
 
-################################################################################
-# 4) Drop rows where municipality=="" AND section is missing, or total is missing/zero
-################################################################################
-df <- df %>%
-  filter(!(municipality == "" & is.na(section))) %>%
-  filter(!(is.na(total) | total == 0))
-
-################################################################################
-# 5) Collapse (sum) PAN - total by municipality, section
-#    In Stata: collapse (sum) PAN - total , by(municipality section)
-#
-#    That means we sum all columns from PAN through 'total' by municipality, section.
-#    Let's identify the columns that fall in that range.
-################################################################################
-# Suppose your data has columns named PAN, PRI, PVEM, PRD_PT, etc. up to 'total'.
-# We'll find those columns automatically. Make sure "PAN" is the leftmost, 
-# "total" is the rightmost of interest.
-collapse_cols <- df %>%
-  select(matches("^PAN$|^PRI$|^PVEM$|^PRD_PT$|^PRD$|^PT$|^PANAL$|^PAS$|^noregistrados$|^nulos$|^total$")) %>%
-  names()
-
-df_collapsed <- df %>%
+df_collapsed <- df_2004 %>%
   group_by(municipality, section) %>%
-  summarise(across(all_of(collapse_cols), sum, na.rm = TRUE), .groups = "drop")
+  summarise(
+    across(any_of(vote_cols), sum, na.rm=TRUE),
+    .groups="drop"
+  )
 
 ################################################################################
-# 6) Drop 'nulos' and 'noregistrados' if they exist
+# 3) rename columns, drop validos, nulos
 ################################################################################
+
 df_collapsed <- df_collapsed %>%
-  select(-any_of(c("nulos", "noregistrados")))
+  rename(
+    PAN    = pan,
+    PRI    = pri,
+    PRD_PC = prdpc,
+    PT     = pt,
+    PVEM   = pvem
+  ) %>%
+  select(-validos, -nulos)
 
 ################################################################################
-# 7) Generate uniqueid=0, then replace based on municipality
+# 4) create uniqueid=0, then assign municipality codes
 ################################################################################
+
 df_collapsed <- df_collapsed %>%
+  mutate(uniqueid=0) %>%
   mutate(
     uniqueid = case_when(
-      municipality == "BALANCAN"        ~ 27001,
-      municipality == "CARDENAS"        ~ 27002,
-      municipality == "CENTLA"          ~ 27003,
-      municipality == "CENTRO"          ~ 27004,
-      municipality == "COMALCALCO"      ~ 27005,
-      municipality == "CUNDUACAN"       ~ 27006,
-      municipality == "E. ZAPATA"       ~ 27007,  # note "E. ZAPATA" in your script
-      municipality == "HUIMANGUILLO"    ~ 27008,
-      municipality == "JALAPA"          ~ 27009,
-      municipality == "J. DE MENDEZ"    ~ 27010,  # note "J. DE MENDEZ" in your script
-      municipality == "JONUTA"          ~ 27011,
-      municipality == "MACUSPANA"       ~ 27012,
-      municipality == "NACAJUCA"        ~ 27013,
-      municipality == "PARAISO"         ~ 27014,
-      municipality == "TACOTALPA"       ~ 27015,
-      municipality == "TEAPA"           ~ 27016,
-      municipality == "TENOSIQUE"       ~ 27017,
-      TRUE                              ~ 0
+      municipality=="ABASOLO"           ~ 28001,
+      municipality=="ALDAMA"            ~ 28002,
+      municipality=="ALTAMIRA"          ~ 28003,
+      municipality=="ANTIGUO MORELOS"   ~ 28004,
+      municipality=="BURGOS"            ~ 28005,
+      municipality=="BUSTAMANTE"        ~ 28006,
+      municipality=="CAMARGO"           ~ 28007,
+      municipality=="CASAS"             ~ 28008,
+      municipality=="CD. MADERO"        ~ 28009,
+      municipality=="CRUILLAS"          ~ 28010,
+      municipality=="MANTE"             ~ 28021,
+      municipality=="GÓMEZ FARIAS"      ~ 28011,
+      municipality=="GONZÁLEZ"          ~ 28012,
+      municipality=="GÜÉMEZ"            ~ 28013,
+      municipality=="GUERRERO"          ~ 28014,
+      municipality=="G. DIAZ ORDAZ"     ~ 28015,
+      municipality=="HIDALGO"           ~ 28016,
+      municipality=="JAUMAVE"           ~ 28017,
+      municipality=="JIMÉNEZ"           ~ 28018,
+      municipality=="LLERA"             ~ 28019,
+      municipality=="MAINERO"           ~ 28020,
+      municipality=="MATAMOROS"         ~ 28022,
+      municipality=="MENDEZ"            ~ 28023,
+      municipality=="MIER"              ~ 28024,
+      municipality=="MIGUEL ALEMAN"     ~ 28025,
+      municipality=="MIQUIHUANA"        ~ 28026,
+      municipality=="NUEVO LAREDO"      ~ 28027,
+      municipality=="NUEVO MORELOS"     ~ 28028,
+      municipality=="OCAMPO"            ~ 28029,
+      municipality=="PADILLA"           ~ 28030,
+      municipality=="PALMILLAS"         ~ 28031,
+      municipality=="REYNOSA"           ~ 28032,
+      municipality=="RIO BRAVO"         ~ 28033,
+      municipality=="SAN CARLOS"        ~ 28034,
+      municipality=="SAN FERNANDO"      ~ 28035,
+      municipality=="SAN NICOLAS"       ~ 28036,
+      municipality=="SOTO LA MARINA"    ~ 28037,
+      municipality=="TAMPICO"           ~ 28038,
+      municipality=="TULA"              ~ 28039,
+      municipality=="VALLE HERMOSO"     ~ 28040,
+      municipality=="VICTORIA"          ~ 28041,
+      municipality=="VILLAGRAN"         ~ 28042,
+      municipality=="XICOTENCATL"       ~ 28043,
+      TRUE ~ uniqueid
     )
   )
 
 ################################################################################
-# 8) Compute valid = rowtotal(PAN PRI PRD_PT PVEM PANAL PAS) in Stata
-#    We'll replicate with rowSums. Then set ed=27, seccion=section for merging.
+# 5) compute valid= rowtotal(PAN PRI PRD_PC PT PVEM), then merge with all_months_years,
+#    keep if (month==10 & year==2004), rename listanominal, compute turnout, set year=2004, month="November"
 ################################################################################
-# If you have a PRD column, add it to the row-sum. 
-# Your script doesn't rename PRD. Possibly the column is absent or included in PRD_PT?
-# We'll assume you have columns named: PAN, PRI, PRD_PT, PVEM, PANAL, PAS. 
-# If PRD also exists as a separate column, add it.
-vars_valid <- c("PAN", "PRI", "PRD_PT", "PVEM", "PANAL", "PAS")
 
 df_collapsed <- df_collapsed %>%
+  rowwise() %>%
   mutate(
-    valid = rowSums(select(., all_of(vars_valid)), na.rm = TRUE),
-    ed = 27,
+    valid = sum(c_across(c("PAN","PRI","PRD_PC","PT","PVEM")), na.rm=TRUE)
+  ) %>%
+  ungroup() %>%
+  mutate(
+    ed      = 28,
     seccion = section
   )
 
-################################################################################
-# 9) Merge (1:m) with "..\..\all_months_years.dta", keep only (month, year, lista)
-#    Then keep if month==9 & year==2006, drop unmatched, rename lista->listanominal
-################################################################################
 df_all <- read_dta("../../all_months_years.dta") %>%
   select(ed, seccion, month, year, lista)
 
 df_merged <- df_collapsed %>%
-  left_join(df_all, by = c("ed", "seccion")) %>%
-  filter(month == 9, year == 2006) %>%
-  filter(!is.na(lista))  # drop if no match (Stata: drop if _merge==2)
+  left_join(df_all, by=c("ed","seccion")) %>%
+  filter(month==10, year==2004) %>%
+  filter(!is.na(lista))
 
-df_merged <- df_merged %>%
-  select(-ed, -seccion, -year, -month) %>%
-  rename(listanominal = lista)
-
-################################################################################
-# 10) Generate turnout = total / listanominal, year=2006, month="October",
-#     sort by section, and save
-################################################################################
-df_2006 <- df_merged %>%
+df_2004<- df_merged %>%
+  select(-ed, -seccion, -month, -year) %>%
+  rename(listanominal=lista) %>%
   mutate(
     turnout = total / listanominal,
-    year    = 2006,
-    month   = "October"
+    year    = 2004,
+    month   = "November"
   ) %>%
   arrange(section)
 
-###############################################################################
-# 1) Read CSV (Equivalent to: insheet using "Ayu_Seccion_2009.csv", clear)
-###############################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.csv", show_col_types = FALSE)
-names(df) <- gsub("[- ]", "", names(df))
-colnames(df) <- tolower(colnames(df))
-###############################################################################
-# 2) Rename columns, drop rows where municipality is "" & section is missing,
-#    and drop rows where total is missing or zero
-###############################################################################
-df <- df %>%
+################################################################################
+# 1) Read "Ayu_Seccion_2007.csv" CSV file, rename columns, filter, parse numeric
+################################################################################
+
+df_2007 <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2007.csv", 
+                    show_col_types=FALSE)
+colnames(df_2007) <- tolower(colnames(df_2007))
+names(df_2007) <- gsub("[. ]", "", names(df_2007))
+
+
+df_2007 <-df_2007 %>%
   rename(
     municipality = nombre_municipio,
     section      = seccion,
     listanominal = lista_nominal
   ) %>%
-  filter(!(municipality == "" & is.na(section))) %>%
-  filter(!(is.na(total) | total == 0))
+  filter(!(municipality=="" & is.na(section))) %>%  # drop if municipality=="" & section==.
+  filter(!(is.na(total) | total==0))               # drop if total==. | total==0
 
-###############################################################################
-# 3) Convert listanominal, pan through total to numeric
-#    (Equivalent to: destring listanominal pan - total, replace)
-###############################################################################
-df <- df %>%
-  mutate(across(c(listanominal, pan:total), as.numeric))
+# Convert columns from pan through total to numeric
+# In Stata, 'destring listanominal pan - total, replace'
+vote_cols <- c("listanominal","pan","pri","prd","pt","pvem","pc","prdpt","pas","total")
+df_2007 <- df_2007 %>%
+  mutate(across(all_of(intersect(vote_cols, names(.))), as.numeric))
 
-###############################################################################
-# 4) Collapse: sum(pan - total), but take the "first" for listanominal,
-#    by (municipality, section).
-#    In Stata: collapse (sum) pan - total (first) listanominal, by(...)
-###############################################################################
-df_collapsed <- df %>%
+################################################################################
+# 2) Collapse (sum) listanominal pan - total, by (municipality, section)
+################################################################################
+
+df_collapsed <- df_2007 %>%
   group_by(municipality, section) %>%
   summarise(
-    listanominal = dplyr::first(listanominal),  # 'first' for listanominal
-    across(pan:total, sum, na.rm = TRUE),
-    .groups = "drop"
+    across(all_of(intersect(vote_cols, names(.))), sum, na.rm=TRUE),
+    .groups="drop"
   )
 
-###############################################################################
-# 5) Combine (replace) pripanal = pri + panal + pripanal, then drop pri, panal
-###############################################################################
-df_collapsed <- df_collapsed %>%
-  mutate(
-    pripanal = coalesce(pripanal, 0) +
-      coalesce(pri, 0) +
-      coalesce(panal, 0)
-  ) %>%
-  select(-pri, -panal)
+################################################################################
+# 3) Rename columns
+################################################################################
 
-###############################################################################
-# 6) Rename columns to final form
-###############################################################################
 df_collapsed <- df_collapsed %>%
   rename(
-    PAN       = pan,
-    PRI_PANAL = pripanal,
-    PRD       = prd,
-    PT        = pt,
-    PVEM      = pvem,
-    PC        = convergencia
+    PAN    = pan,
+    PRI    = pri,
+    PRD    = prd,
+    PT     = pt,
+    PVEM   = pvem,
+    PC     = pc,
+    PRD_PT = prdpt,
+    PAS    = pas
   )
 
-###############################################################################
-# 7) Compute turnout = total / listanominal
-###############################################################################
+################################################################################
+# 4) Compute turnout= total/listanominal
+################################################################################
+
 df_collapsed <- df_collapsed %>%
   mutate(turnout = total / listanominal)
 
-###############################################################################
-# 8) Drop 'nulos' and 'noregistrados' if they exist
-###############################################################################
-df_collapsed <- df_collapsed %>%
-  select(-any_of(c("nulos", "noregistrados")))
+################################################################################
+# 5) Create uniqueid=0 and assign municipality codes
+################################################################################
 
-###############################################################################
-# 9) Create uniqueid=0, then replace based on municipality
-###############################################################################
 df_collapsed <- df_collapsed %>%
+  mutate(uniqueid=0) %>%
   mutate(
     uniqueid = case_when(
-      municipality == "BALANCAN"         ~ 27001,
-      municipality == "CARDENAS"         ~ 27002,
-      municipality == "CENTLA"           ~ 27003,
-      municipality == "CENTRO"           ~ 27004,
-      municipality == "COMALCALCO"       ~ 27005,
-      municipality == "CUNDUACAN"        ~ 27006,
-      municipality == "EMILIANO ZAPATA"  ~ 27007,
-      municipality == "HUIMANGUILLO"     ~ 27008,
-      municipality == "JALAPA"           ~ 27009,
-      municipality == "JALPA DE MENDEZ"  ~ 27010,
-      municipality == "JONUTA"           ~ 27011,
-      municipality == "MACUSPANA"        ~ 27012,
-      municipality == "NACAJUCA"         ~ 27013,
-      municipality == "PARAISO"          ~ 27014,
-      municipality == "TACOTALPA"        ~ 27015,
-      municipality == "TEAPA"            ~ 27016,
-      municipality == "TENOSIQUE"        ~ 27017,
-      TRUE                               ~ 0
+      municipality=="ABASOLO"          ~ 28001,
+      municipality=="ALDAMA"           ~ 28002,
+      municipality=="ALTAMIRA"         ~ 28003,
+      municipality=="ANTIGUO MORELOS"  ~ 28004,
+      municipality=="BURGOS"           ~ 28005,
+      municipality=="BUSTAMANTE"       ~ 28006,
+      municipality=="CAMARGO"          ~ 28007,
+      municipality=="CASAS"            ~ 28008,
+      municipality=="CIUDAD MADERO"    ~ 28009,
+      municipality=="CRUILLAS"         ~ 28010,
+      municipality=="EL MANTE"         ~ 28021,
+      municipality=="GOMEZ FARIAS"     ~ 28011,
+      municipality=="GONZALEZ"         ~ 28012,
+      municipality=="GUEMEZ"           ~ 28013,
+      municipality=="GUERRERO"         ~ 28014,
+      municipality=="GUSTAVO DIAZ ORDAZ" ~ 28015,
+      municipality=="HIDALGO"          ~ 28016,
+      municipality=="JAUMAVE"          ~ 28017,
+      municipality=="JIMENEZ"          ~ 28018,
+      municipality=="LLERA"            ~ 28019,
+      municipality=="MAINERO"          ~ 28020,
+      municipality=="MATAMOROS"        ~ 28022,
+      municipality=="MENDEZ"           ~ 28023,
+      municipality=="MIER"             ~ 28024,
+      municipality=="MIGUEL ALEMAN"    ~ 28025,
+      municipality=="MIQUIHUANA"       ~ 28026,
+      municipality=="NUEVO LAREDO"     ~ 28027,
+      municipality=="NUEVO MORELOS"    ~ 28028,
+      municipality=="OCAMPO"           ~ 28029,
+      municipality=="PADILLA"          ~ 28030,
+      municipality=="PALMILLAS"        ~ 28031,
+      municipality=="REYNOSA"          ~ 28032,
+      municipality=="RIO BRAVO"        ~ 28033,
+      municipality=="SAN CARLOS"       ~ 28034,
+      municipality=="SAN FERNANDO"     ~ 28035,
+      municipality=="SAN NICOLAS"      ~ 28036,
+      municipality=="SOTO LA MARINA"   ~ 28037,
+      municipality=="TAMPICO"          ~ 28038,
+      municipality=="TULA"             ~ 28039,
+      municipality=="VALLE HERMOSO"    ~ 28040,
+      municipality=="VICTORIA"         ~ 28041,
+      municipality=="VILLAGRAN"        ~ 28042,
+      municipality=="XICOTENCATL"      ~ 28043,
+      TRUE ~ uniqueid
     )
   )
 
-###############################################################################
-# 10) Calculate 'valid' = rowtotal(PAN PRI_PANAL PRD PT PVEM PC)
-#     Then set year=2009, month="October"
-###############################################################################
-df_2009 <- df_collapsed %>%
-  mutate(
-    valid = rowSums(
-      select(., PAN, PRI_PANAL, PRD, PT, PVEM, PC),
-      na.rm = TRUE
-    ),
-    year  = 2009,
-    month = "October"
-  ) %>%
-  arrange(section)  # sort by section (Stata: sort section)
+################################################################################
+# 6) Compute valid= rowtotal(PAN PRI PRD PRD_PT PT PVEM PC PAS),
+#    set year=2007, month="November", sort section
+################################################################################
 
-###############################################################################
-# 1) Read Excel 
-###############################################################################
-df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.xlsx",
-  sheet = "Sheet1",
-  col_names = TRUE
+df_2007 <- df_collapsed %>%
+  rowwise() %>%
+  mutate(
+    valid = sum(c_across(c("PAN","PRI","PRD","PRD_PT","PT","PVEM","PC","PAS")), na.rm=TRUE)
+  ) %>%
+  ungroup() %>%
+  mutate(
+    year  = 2007,
+    month = "November"
+  ) %>%
+  arrange(section)
+
+################################################################################
+# 1) Read "Ayu_Seccion_2010.xlsx", rename columns, drop empties, parse numeric
+################################################################################
+
+df_2010 <- read_excel(
+  path = "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2010.xlsx",
+  sheet = 1,         # or specify the correct sheet if not the first
+  col_names= TRUE
 ) %>%
-  as.data.frame()  # optional: ensure a standard data.frame
+  as.data.frame()
+colnames(df_2010) <- tolower(colnames(df_2010))
+names(df_2010) <- gsub("[- ]", "", names(df_2010))
+# rename municipio->municipality, seccion->section (some versions might use "sección")
+if ("municipio" %in% names(df_2010)) {
+  df_2010 <- df_2010 %>% rename(municipality = municipio)
+}
+if ("sección" %in% names(df_2010)) {
+  df_2010 <- df_2010 %>% rename(section = sección)
+}
 
-###############################################################################
-# 2) Drop rows where MUNICIPIO==. (in Stata). 
-#    Then rename SECCION -> section, drop CASILLA
-###############################################################################
-df <- df %>%
-  filter(!is.na(MUNICIPIO)) %>%  # equivalent to drop if MUNICIPIO==.
-  rename(section = SECCION) %>%  # rename SECCION -> section
-  select(-CASILLA)               # drop CASILLA
+# drop if municipality=="" & section==.
+df_2010 <- df_2010 %>%
+  filter(!(municipality=="" & is.na(section)))
 
-###############################################################################
-# 3) Create PRD_PT_PC, PRI_PVEM_PANAL, drop old coalition columns
-#    In Stata:
-#      gen PRD_PT_PC = CC_PRD_PT_PC + PRD + PT + PC
-#      gen PRI_PVEM_PANAL = CC_PRI_PVEM_PANAL + PRI + PVEM + PANAL
-#      drop CC_PRD_PT_PC PRD PT PC CC_PRI_PVEM_PANAL PRI PVEM PANAL
-###############################################################################
-df <- df %>%
+# drop if total==. | total==0
+df_2010 <- df_2010 %>%
+  filter(!is.na(total) & total!=0)
+
+# destring listanominal pan - total => parse numeric
+vote_cols <- c("listanominal","pan","pri","pripanal","pripvempanal","prd","pt","pvem","pc","panal",
+               "nulos","validos","total")
+df_2010 <- df_2010 %>%
+  mutate(across(all_of(intersect(vote_cols, names(.))), as.numeric))
+
+################################################################################
+# 2) Mark 'missing = listanominal==. or municipality=="Mainero"' => we replicate 
+################################################################################
+
+df_2010 <- df_2010 %>%
   mutate(
-    PRD_PT_PC = coalesce(CC_PRD_PT_PC, 0) + coalesce(PRD, 0) + coalesce(PT, 0) + coalesce(PC, 0),
-    PRI_PVEM_PANAL = coalesce(CC_PRI_PVEM_PANAL, 0) + coalesce(PRI, 0) + coalesce(PVEM, 0) + coalesce(PANAL, 0)
-  ) %>%
-  select(
-    -CC_PRD_PT_PC, -PRD, -PT, -PC,
-    -CC_PRI_PVEM_PANAL, -PRI, -PVEM, -PANAL
+    missing = if_else(is.na(listanominal) | municipality=="Mainero", 1, 0)
   )
 
-###############################################################################
-# 4) Collapse (sum) columns from PAN to PRI_PVEM_PANAL by (MUNICIPIO, section)
-#    In Stata:
-#    collapse (sum) PAN - PRI_PVEM_PANAL, by (MUNICIPIO section)
-###############################################################################
-# Let's identify columns from PAN to PRI_PVEM_PANAL automatically:
-col_range <- df %>%
-  select(matches("^PAN$|^PRD_PT_PC$|^PRI_PVEM_PANAL$|^NOREGISTRADOS$|^NULOS$")) %>%
-  names()
+################################################################################
+# 3) collapse (sum) missing listanominal pan - total, by (municipality, section)
+################################################################################
 
-df_collapsed <- df %>%
-  group_by(MUNICIPIO, section) %>%
-  summarise(across(all_of(col_range), sum, na.rm = TRUE), .groups = "drop")
+collapse_cols <- c("missing","listanominal","pan","pri","pripanal","pripvempanal","prd","pt","pvem","pc","panal","nulos","validos","total")
+df_collapsed <- df_2010 %>%
+  group_by(municipality, section) %>%
+  summarise(across(all_of(intersect(collapse_cols, names(.))), sum, na.rm=TRUE), .groups="drop")
 
-###############################################################################
-# 5) Generate total = rowtotal(PRD_PT_PC PRI_PVEM_PANAL NOREGISTRADOS NULOS),
-#    then drop NOREGISTRADOS, NULOS
-###############################################################################
+################################################################################
+# 4) Merge with all_months_years for (ed=28, seccion=section, month==6 & year==2010),
+#    drop unmatched, replace listanominal if missing>=1 & new lista>old
+################################################################################
+
 df_collapsed <- df_collapsed %>%
-  mutate(
-    total = rowSums(
-      select(., PRD_PT_PC, PRI_PVEM_PANAL, NOREGISTRADOS, NULOS),
-      na.rm = TRUE
-    )
-  ) %>%
-  select(-NOREGISTRADOS, -NULOS)
+  mutate(ed=28, seccion=section)
 
-###############################################################################
-# 6) Create uniqueid = 0, create municipality = "", 
-#    then replace uniqueid and municipality based on MUNICIPIO codes.
-#    Finally drop MUNICIPIO.
-###############################################################################
-df_collapsed <- df_collapsed %>%
-  mutate(
-    uniqueid = 0,
-    municipality = ""
-  ) %>%
-  mutate(
-    uniqueid = case_when(
-      MUNICIPIO == 1  ~ 27001,
-      MUNICIPIO == 2  ~ 27002,
-      MUNICIPIO == 3  ~ 27003,
-      MUNICIPIO == 4  ~ 27004,
-      MUNICIPIO == 5  ~ 27005,
-      MUNICIPIO == 6  ~ 27006,
-      MUNICIPIO == 7  ~ 27007,
-      MUNICIPIO == 8  ~ 27008,
-      MUNICIPIO == 9  ~ 27009,
-      MUNICIPIO == 10 ~ 27010,
-      MUNICIPIO == 11 ~ 27011,
-      MUNICIPIO == 12 ~ 27012,
-      MUNICIPIO == 13 ~ 27013,
-      MUNICIPIO == 14 ~ 27014,
-      MUNICIPIO == 15 ~ 27015,
-      MUNICIPIO == 16 ~ 27016,
-      MUNICIPIO == 17 ~ 27017,
-      TRUE            ~ 0
-    ),
-    municipality = case_when(
-      MUNICIPIO == 1  ~ "BALANCAN",
-      MUNICIPIO == 2  ~ "CARDENAS",
-      MUNICIPIO == 3  ~ "CENTLA",
-      MUNICIPIO == 4  ~ "CENTRO",
-      MUNICIPIO == 5  ~ "COMALCALCO",
-      MUNICIPIO == 6  ~ "CUNDUACAN",
-      MUNICIPIO == 7  ~ "EMILIANO ZAPATA",
-      MUNICIPIO == 8  ~ "HUIMANGUILLO",
-      MUNICIPIO == 9  ~ "JALAPA",
-      MUNICIPIO == 10 ~ "JALPA DE MENDEZ",
-      MUNICIPIO == 11 ~ "JONUTA",
-      MUNICIPIO == 12 ~ "MACUSPANA",
-      MUNICIPIO == 13 ~ "NACAJUCA",
-      MUNICIPIO == 14 ~ "PARAISO",
-      MUNICIPIO == 15 ~ "TACOTALPA",
-      MUNICIPIO == 16 ~ "TEAPA",
-      MUNICIPIO == 17 ~ "TENOSIQUE",
-      TRUE            ~ ""
-    )
-  ) %>%
-  select(-MUNICIPIO)  # drop MUNICIPIO
-
-###############################################################################
-# 7) Generate valid = rowtotal(PAN PRD_PT_PC PRI_PVEM_PANAL),
-#    then ed=27, seccion=section for merging with external data.
-###############################################################################
-df_collapsed <- df_collapsed %>%
-  mutate(
-    valid = rowSums(select(., PAN, PRD_PT_PC, PRI_PVEM_PANAL), na.rm = TRUE),
-    ed    = 27,
-    seccion = section
-  )
-
-###############################################################################
-# 8) Merge with "..\..\all_months_years.dta" (1:m on ed, seccion),
-#    keep if month==7 & year==2012 & day==1, drop unmatched, rename lista->listanominal
-###############################################################################
 df_all <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista, day)
+  select(ed, seccion, month, year, lista)
 
-df_merged <- df_collapsed %>%
-  left_join(df_all, by = c("ed", "seccion")) %>%
-  filter(month == 7, year == 2012, day == 1) %>%
-  filter(!is.na(lista))  # drop if no match (like _merge==2 in Stata)
+df_join <- df_collapsed %>%
+  left_join(df_all, by=c("ed","seccion")) %>%
+  filter(month==6, year==2010) %>%
+  filter(!is.na(lista))  # drop if unmatched
 
-# drop _merge, ed, seccion, year, month, day
-df_merged <- df_merged %>%
-  select(-ed, -seccion, -year, -month, -day) %>%
-  rename(listanominal = lista)
+df_join <- df_join %>%
+  select(-ed, -seccion, -month, -year)
 
-###############################################################################
-# 9) turnout = total / listanominal, year=2012, month="July"
-###############################################################################
-df_2012 <- df_merged %>%
+# replace listanominal=lista if missing>=1 & lista>listanominal
+df_join <- df_join %>%
   mutate(
-    turnout = total / listanominal,
-    year    = 2012,
-    month   = "July"
+    listanominal = if_else(missing>=1 & lista>listanominal, lista, listanominal)
   ) %>%
-  arrange(section)  # sort section
+  select(-lista, -missing)
 
 ################################################################################
-# 1) Read from Excel (equivalent to 
-#    import excel "Ayuntamientos_2015.xlsx", sheet("DESGLOSE") clear firstrow)
+# 5) rename columns (pan->PAN, pri->PRI, pripanal->PRI_PANAL, etc.), compute turnout
 ################################################################################
-df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx",
-  sheet = "DESGLOSE",
-  col_names = TRUE
+
+df_join <- df_join %>%
+  rename(
+    PAN              = pan,
+    PRI              = pri,
+    PRI_PANAL        = pripanal,
+    PRI_PVEM_PANAL   = pripvempanal,
+    PRD              = prd,
+    PT               = pt,
+    PVEM             = pvem,
+    PC               = pc,
+    PANAL            = panal
+  ) %>%
+  # drop nulos, validos if they exist
+  select(-any_of(c("nulos","validos"))) %>%
+  mutate(
+    turnout = total / listanominal
+  )
+
+################################################################################
+# 6) Create uniqueid=0, then assign codes for each municipality
+################################################################################
+
+df_join <- df_join %>%
+  mutate(uniqueid=0) %>%
+  mutate(
+    uniqueid = case_when(
+      municipality=="Abasolo"        ~ 28001,
+      municipality=="Aldama"         ~ 28002,
+      municipality=="Altamira"       ~ 28003,
+      municipality=="Ant. Morelos"   ~ 28004,
+      municipality=="Burgos"         ~ 28005,
+      municipality=="Bustamante"     ~ 28006,
+      municipality=="Camargo"        ~ 28007,
+      municipality=="Casas"          ~ 28008,
+      municipality=="Cd.Madero"      ~ 28009,
+      municipality=="Cruillas"       ~ 28010,
+      municipality=="Mante, El"      ~ 28021,
+      municipality=="Gomez Farias"   ~ 28011,
+      municipality=="González"       ~ 28012,
+      municipality=="Guemez"         ~ 28013,
+      municipality=="Guerrero"       ~ 28014,
+      municipality=="G. Díaz Ordaz"  ~ 28015,
+      municipality=="Hidalgo"        ~ 28016,
+      municipality=="Jaumave"        ~ 28017,
+      municipality=="Jimenez"        ~ 28018,
+      municipality=="Llera"          ~ 28019,
+      municipality=="Mainero"        ~ 28020,
+      municipality=="Matamoros"      ~ 28022,
+      municipality=="Méndez"         ~ 28023,
+      municipality=="Mier"           ~ 28024,
+      municipality=="Miguel Aleman"  ~ 28025,
+      municipality=="Miquihuana"     ~ 28026,
+      municipality=="Nvo. Laredo"    ~ 28027,
+      municipality=="Nvo Morelos"    ~ 28028,
+      municipality=="Ocampo"         ~ 28029,
+      municipality=="Padilla"        ~ 28030,
+      municipality=="Palmillas"      ~ 28031,
+      municipality=="Reynosa"        ~ 28032,
+      municipality=="Río Bravo"      ~ 28033,
+      municipality=="San Carlos"     ~ 28034,
+      municipality=="San Fernando"   ~ 28035,
+      municipality=="San Nicolás"    ~ 28036,
+      municipality=="Soto la Marina" ~ 28037,
+      municipality=="Tampico"        ~ 28038,
+      municipality=="Tula"           ~ 28039,
+      municipality=="Valle Hermoso"  ~ 28040,
+      municipality=="Victoria"       ~ 28041,
+      municipality=="Villagrán"      ~ 28042,
+      municipality=="Xicotencatl"    ~ 28043,
+      TRUE ~ uniqueid
+    )
+  )
+
+################################################################################
+# 7) Compute valid= rowtotal(PAN PRI PRI_PANAL PRI_PVEM_PANAL PRD PT PVEM PANAL PC),
+#    set year=2010, month="July", sort section, save "Tamaulipas_Section_2010.dta"
+################################################################################
+
+df_2010 <- df_join %>%
+  rowwise() %>%
+  mutate(
+    valid = sum(c_across(c(
+      "PAN","PRI","PRI_PANAL","PRI_PVEM_PANAL","PRD","PT","PVEM","PANAL","PC"
+    )), na.rm=TRUE)
+  ) %>%
+  ungroup() %>%
+  mutate(
+    year  = 2010,
+    month = "July"
+  ) %>%
+  arrange(section)
+
+################################################################################
+# 1) Read "Ayu_Seccion_2013.xlsx", rename columns, drop incomplete or zero
+################################################################################
+
+df_2013 <- read_excel(
+  path = "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2013.xlsx",
+  sheet= 1,      # or specify the correct sheet if not the first
+  col_names= TRUE
 ) %>%
   as.data.frame()
-
-################################################################################
-# 2) Convert section to numeric (Stata: destring section, replace)
-################################################################################
-df <- df %>%
-  mutate(section = as.numeric(section))
-
-################################################################################
-# 3) Drop any existing uniqueid, then create uniqueid=0, 
-#    and assign codes based on municipality 
-################################################################################
-df <- df %>%
-  select(-any_of("uniqueid")) %>%  # drop uniqueid if it exists
-  mutate(
-    uniqueid = 0,
-    uniqueid = case_when(
-      municipality == "BALANCAN"         ~ 27001,
-      municipality == "CARDENAS"         ~ 27002,
-      municipality == "CENTLA"           ~ 27003,
-      municipality == "CENTRO"           ~ 27004,
-      municipality == "COMALCALCO"       ~ 27005,
-      municipality == "CUNDUACAN"        ~ 27006,
-      municipality == "EMILIANO ZAPATA"  ~ 27007,
-      municipality == "HUIMANGUILLO"     ~ 27008,
-      municipality == "JALAPA"           ~ 27009,
-      municipality == "JALPA DE MENDEZ"  ~ 27010,
-      municipality == "JONUTA"           ~ 27011,
-      municipality == "MACUSPANA"        ~ 27012,
-      municipality == "NACAJUCA"         ~ 27013,
-      municipality == "PARAISO"          ~ 27014,
-      municipality == "TACOTALPA"        ~ 27015,
-      municipality == "TEAPA"            ~ 27016,
-      municipality == "TENOSIQUE"        ~ 27017,
-      TRUE                               ~ 0
-    )
+colnames(df_2013) <- tolower(colnames(df_2013))
+names(df_2013) <- gsub("[. ]", "", names(df_2013))
+# rename municipio->municipality, seccion->section, listadonominal->listanominal
+df_2013 <- df_2013 %>%
+  rename(
+    municipality = municipio,
+    section      = seccion,
+    listanominal = listadonominal
   )
 
-# Also replace municipality = "CENTRO EXTRAORDINARIO" if municipality=="CENTRO"
-df <- df %>%
-  mutate(
-    municipality = if_else(municipality == "CENTRO",
-                           "CENTRO EXTRAORDINARIO",
-                           municipality)
+# drop if municipality=="" or section==.
+df_2013 <- df_2013 %>%
+  filter(!(municipality=="" | is.na(section)))
+
+# drop if total==. or total==0
+df_2013 <- df_2013 %>%
+  filter(!is.na(total) & total!=0)
+
+# parse numeric columns: 'listanominal pan - total'
+vote_cols <- c("listanominal","pan","pri","pri_pvem_panal","prd","pt","pvem","pc","panal","nulos","noregistrado","total")
+df_2013 <- df_2013 %>%
+  mutate(across(all_of(intersect(vote_cols, names(.))), as.numeric))
+
+################################################################################
+# 2) collapse (sum) listanominal pan - total by (municipality, section)
+################################################################################
+
+df_collapse <- df_2013 %>%
+  group_by(municipality, section) %>%
+  summarise(
+    across(all_of(intersect(vote_cols, names(.))), sum, na.rm=TRUE),
+    .groups="drop"
   )
 
 ################################################################################
-# 4) Create CI_1 = rowtotal(CIND CI1 CI2 CI3 CI4 CI5), 
-#    then drop those columns, reorder columns so CI_1 is just before PVEM_PANAL
+# 3) rename columns, compute turnout= total/listanominal, drop nulos, noregistrado
 ################################################################################
-# In R, we'll do a rowSums, then remove those columns, then reorder.
-df <- df %>%
-  mutate(
-    CI_1 = rowSums(
-      select(., CIND, CI1, CI2, CI3, CI4, CI5),
-      na.rm = TRUE
-    )
+
+df_collapse <- df_collapse %>%
+  rename(
+    PAN            = pan,
+    PRI            = pri,
+    PRI_PVEM_PANAL = pri_pvem_panal,
+    PRD            = prd,
+    PT             = pt,
+    PVEM           = pvem,
+    PC             = pc,
+    PANAL          = panal
   ) %>%
-  select(-CIND, -CI1, -CI2, -CI3, -CI4, -CI5)
+  mutate(
+    turnout = total / listanominal
+  ) %>%
+  select(-any_of(c("nulos","noregistrado")))
 
-# "order CI_1, a(PVEM_PANAL)" in Stata repositions CI_1 before PVEM_PANAL. 
-# In R, we can do a partial relocate if columns exist.
-if ("PVEM_PANAL" %in% names(df)) {
-  df <- df %>%
-    relocate(CI_1, .before = PVEM_PANAL)
-} else {
-  # If PVEM_PANAL doesn't exist yet, we can skip or do some other reordering
-  # We'll proceed without strict reordering if the column doesn't exist.
+################################################################################
+# 4) trim municipality, assign uniqueid=0, then set codes for each municipality
+################################################################################
+
+df_collapse <- df_collapse %>%
+  mutate(
+    municipality = str_trim(municipality),
+    uniqueid = 0
+  ) %>%
+  mutate(
+    uniqueid = case_when(
+      municipality=="Abasolo"          ~ 28001,
+      municipality=="Aldama"           ~ 28002,
+      municipality=="Altamira"         ~ 28003,
+      municipality=="Antiguo Morelos"  ~ 28004,
+      municipality=="Burgos"           ~ 28005,
+      municipality=="Bustamante"       ~ 28006,
+      municipality=="Camargo"          ~ 28007,
+      municipality=="Casas"            ~ 28008,
+      municipality=="Ciudad Madero"    ~ 28009,
+      municipality=="Cruillas"         ~ 28010,
+      municipality=="El Mante"         ~ 28021,
+      municipality=="Gómez Farías"     ~ 28011,
+      municipality=="González"         ~ 28012,
+      municipality=="Güémez"           ~ 28013,
+      municipality=="Guerrero"         ~ 28014,
+      municipality=="Gustavo Díaz Ordaz" ~ 28015,
+      municipality=="Hidalgo"          ~ 28016,
+      municipality=="Jaumave"          ~ 28017,
+      municipality=="Jiménez"          ~ 28018,
+      municipality=="Llera"            ~ 28019,
+      municipality=="Mainero"          ~ 28020,
+      municipality=="Matamoros"        ~ 28022,
+      municipality=="Méndez"           ~ 28023,
+      municipality=="Mier"             ~ 28024,
+      municipality=="Miguel Alemán"    ~ 28025,
+      municipality=="Miquihuana"       ~ 28026,
+      municipality=="Nuevo Laredo"     ~ 28027,
+      municipality=="Nuevo Morelos"    ~ 28028,
+      municipality=="Ocampo"           ~ 28029,
+      municipality=="Padilla"          ~ 28030,
+      municipality=="Palmillas"        ~ 28031,
+      municipality=="Reynosa"          ~ 28032,
+      municipality=="Río Bravo"        ~ 28033,
+      municipality=="San Carlos"       ~ 28034,
+      municipality=="San Fernando"     ~ 28035,
+      municipality=="San Nicolás"      ~ 28036,
+      municipality=="Soto la Marina"   ~ 28037,
+      municipality=="Tampico"          ~ 28038,
+      municipality=="Tula"             ~ 28039,
+      municipality=="Valle Hermoso"    ~ 28040,
+      municipality=="Victoria"         ~ 28041,
+      municipality=="Villagrán"        ~ 28042,
+      municipality=="Xicoténcatl"      ~ 28043,
+      TRUE ~ uniqueid
+    )
+  )
+
+################################################################################
+# 5) compute valid= rowtotal(PAN PRI PRI_PVEM_PANAL PRD PT PVEM PANAL PC),
+#    year=2013, month="July", sort, save
+################################################################################
+
+df_2013 <- df_collapse %>%
+  rowwise() %>%
+  mutate(
+    valid = sum(c_across(c("PAN","PRI","PRI_PVEM_PANAL","PRD","PT","PVEM","PANAL","PC")), na.rm=TRUE)
+  ) %>%
+  ungroup() %>%
+  mutate(
+    year  = 2013,
+    month = "July"
+  ) %>%
+  arrange(section)
+
+
+################################################################################
+# Part A: Reading each sheet from "Ayuntamientos_2016.xlsx" into .dta
+################################################################################
+
+all_sheets <- excel_sheets("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayuntamientos_2016.xlsx")
+
+for (sheetname in all_sheets) {
+  # Read the Excel sheet
+  df_sheet <- read_excel(
+    path = "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayuntamientos_2016.xlsx",
+    sheet = sheetname,
+    col_names = TRUE,
+    col_types = "text"
+  ) %>%
+    as.data.frame()
+  
+  # Clean column names to make them valid for Stata
+  colnames(df_sheet) <- colnames(df_sheet) %>%
+    gsub("[^a-zA-Z0-9_]", "_", .) %>%  # Replace invalid characters with underscores
+    gsub("_+", "_", .) %>%            # Replace multiple underscores with a single one
+    gsub("^_|_$", "", .) %>%          # Remove leading or trailing underscores
+    substr(1, 32)                     # Truncate to 32 characters
+  
+  # Ensure uniqueness of truncated column names
+  colnames(df_sheet) <- make.unique(colnames(df_sheet))
+  
+  # Add municipio column and filter rows where Casilla is not empty
+  if ("Casilla" %in% names(df_sheet)) {
+    df_sheet <- df_sheet %>%
+      mutate(municipio = sheetname) %>%
+      filter(Casilla != "")
+  }
+  
+  # Replace empty strings with "0" for all columns
+  df_sheet <- df_sheet %>%
+    mutate(across(everything(), ~ if_else(. == "", "0", .)))
+  
+  # Save as a .dta file
+  write_dta(df_sheet, paste0(sheetname, ".dta"))
+}
+
+
+################################################################################
+# Part B: Appending all "Table *.dta" files named after each municipality
+################################################################################
+
+append_files <- c(
+  "ABASOLO.dta","ALDAMA.dta","ALTAMIRA.dta","ANTIGUO MORELOS.dta","BURGOS.dta","BUSTAMANTE.dta",
+  "CAMARGO.dta","CASAS.dta","CIUDAD MADERO.dta","CRUILLAS.dta","GOMEZ FARIAS.dta","GONZALEZ.dta",
+  "GUEMEZ.dta","GUERRERO.dta","GUSTAVO DIAZ ORDAZ.dta","HIDALGO.dta","JAUMAVE.dta","JIMENEZ.dta",
+  "LLERA.dta","MAINERO.dta","EL MANTE.dta","MATAMOROS.dta","MENDEZ.dta","MIER.dta","MIGUEL ALEMAN.dta",
+  "MIQUIHUANA.dta","NUEVO LAREDO.dta","NUEVO MORELOS.dta","OCAMPO.dta","PADILLA.dta","PALMILLAS.dta",
+  "REYNOSA.dta","RIO BRAVO.dta","SAN CARLOS.dta","SAN FERNANDO.dta","SAN NICOLAS.dta",
+  "SOTO LA MARINA.dta","TAMPICO.dta","TULA.dta","VALLE HERMOSO.dta","VICTORIA.dta",
+  "VILLAGRAN.dta","XICOTENCATL.dta"
+)
+
+df_all <- data.frame()
+
+for (f in append_files) {
+  if (file.exists(f)) {
+    df_new <- read_dta(f)
+    df_all <- bind_rows(df_all, df_new)
+  }
+}
+
+# Now we can erase these .dta files if needed:
+for (f in append_files) {
+  if (file.exists(f)) {
+    file.remove(f)
+  }
 }
 
 ################################################################################
-# 5) Combine columns for PRD_PANAL, PRD_PT, PRI_PVEM_PANAL,
+# Part C: Data Cleaning (destring, keep certain columns, drop U, create CI_1..CI_3)
 ################################################################################
-df <- df %>%
+names(df_all) <- gsub("[_]", "", names(df_all))
+df_all <- df_all %>%
+  mutate(across(where(is.character), ~ suppressWarnings(as.numeric(.))))
+
+
+keep_cols <- c("Casilla","PAN","PRI","PRD","MC","PANAL","MORENA","PES","CoaliciónPRIPVEMyPANAL",
+               "PRIPVEM","PRIPNA","PVEMPNA","CandidatosNoRegistrados","VotosNulos",
+               "JOSEADAME","PABLOTORRESLARA","XICOTENCATLGONZALEZURESTI", "AMANDOTREVIÑORIVERA",
+               # plus the columns for the "egen CI_1..CI_3" logic
+               "JUANCUAUHTEMOCGARCIATAMEZ","JOSERAMONGOMEZLEAL","CARLOSRAFAELULIVARRILOPEZ",
+               "AMANDOTREVIÑORIVERA","HECTORPEÑASALDAÑA","CI_1","CI_2","CI_3" # if they exist
+               # adapt as needed
+)
+
+df_all <- df_all %>% select(any_of(keep_cols))
+
+# drop U if it exists
+df_all <- df_all %>%
+  select(-any_of("U"))
+
+# egen CI_1=rowtotal(JUANCUAUHTEMOCGARCIATAMEZ-JOSERAMONGOMEZLEAL CARLOSRAFAELULIVARRILOPEZ-XICOTENCATLGONZALEZURESTI)
+# This is tricky. In Stata, the syntax "JUANCUAUHTEMOCGARCIATAMEZ-JOSERAMONGOMEZLEAL" is a range of columns. 
+# We'll interpret you want to sum these columns: (JUANCUAUHTEMOCGARCIATAMEZ, ..., JOSERAMONGOMEZLEAL, CARLOSRAFAELULIVARRILOPEZ, ..., XICOTENCATLGONZALEZURESTI).
+# Then you do second row for "egen CI_2", etc. We'll replicate the sums explicitly.
+
+df_all <- df_all %>%
+  rowwise() %>%
   mutate(
-    PRD_PANAL = if_else(!is.na(PRD_PANAL),
-                        coalesce(PRD, 0) + coalesce(PANAL, 0) + coalesce(PRD_PANAL, 0),
-                        PRD_PANAL),
-    # if PRD_PANAL != . => set PRD=0, PANAL=0
-    PRD       = if_else(!is.na(PRD_PANAL), NA_real_, PRD),
-    PANAL     = if_else(!is.na(PRD_PANAL), NA_real_, PANAL)
+    CI_1 = sum(
+      c_across(c("JUANCUAUHTEMOCGARCIATAMEZ","JOSERAMONGOMEZLEAL","CARLOSRAFAELULIVARRILOPEZ")),
+      na.rm=TRUE
+    ),
+    CI_2 = sum(
+      c_across(c("AMANDOTREVIÑORIVERA","HECTORPEÑASALDAÑA","JOSERAMONGOMEZLEAL","PABLOTORRESLARA")),
+      na.rm=TRUE
+    ),
+    CI_3 = sum(
+      c_across(c("JESUSROBERTOGUERRAVELASCO","EDUARDOLONGORIACHAPA","CARLOSRAFAELULIVARRILOPEZ")), # adapt if exist
+      na.rm=TRUE
+    )
+  ) %>%
+  ungroup()
+
+# replace CI_1=CI_1 - CI_2 - CI_3
+df_all <- df_all %>%
+  mutate(
+    CI_1 = CI_1 - CI_2 - CI_3
+  )
+
+# drop columns used in row sum if needed
+df_all <- df_all %>%
+  select(-any_of(c("JUANCUAUHTEMOCGARCIATAMEZ","JOSERAMONGOMEZLEAL","CARLOSRAFAELULIVARRILOPEZ","AMANDOTREVIÑORIVERA","HECTORPEÑASALDAÑA","JESUSROBERTOGUERRAVELASCO","EDUARDOLONGORIACHAPA")))
+
+################################################################################
+# Part D: Generating section from substring of Casilla, removing letters, etc.
+################################################################################
+
+df_all <- df_all %>%
+  mutate(
+    section = substr(Casilla, 1, 4)
   ) %>%
   mutate(
-    PRD_PT = if_else(!is.na(PRD_PT),
-                     coalesce(PRD, 0) + coalesce(PT, 0) + coalesce(PRD_PT, 0),
-                     PRD_PT),
-    PRD    = if_else(!is.na(PRD_PT), NA_real_, PRD),
-    PT     = if_else(!is.na(PRD_PT), NA_real_, PT)
-  ) %>%
+    section = if_else(str_detect(section,"B|C|E"), substr(section,1,3), section)
+  )
+
+# destring section, replace
+df_all <- df_all %>%
+  mutate(section = suppressWarnings(as.numeric(section))) %>%
+  filter(!is.na(section))
+
+################################################################################
+# Part E: Rename columns, do coalition merges, drop duplicates, collapse (sum)
+################################################################################
+
+df_all <- df_all %>%
+  rename(
+    municipality="municipio",
+    PANAL="PNA",  # from code or adapt
+    MORENA="Morena",
+    PES="ES",
+    PRI_PVEM_PANAL="CoaliciónPRIPVEMyPANAL",
+    PRI_PVEM="PRIPVEM",
+    PRI_PANAL="PRIPNA",
+    PVEM_PANAL="PVEMPNA",
+    no_reg="CandidatosNoRegistrados",
+    nulo="VotosNulos"
+  )
+
+# Then do the merges for coalitions
+df_all <- df_all %>%
   mutate(
     PRI_PVEM_PANAL = if_else(!is.na(PRI_PVEM_PANAL),
-                             coalesce(PRI, 0) + coalesce(PVEM, 0) + coalesce(PANAL, 0) +
-                               coalesce(PRI_PVEM, 0) + coalesce(PRI_PANAL, 0) +
-                               coalesce(PVEM_PANAL, 0) + coalesce(PRI_PVEM_PANAL, 0),
-                             PRI_PVEM_PANAL),
+                             PRI_PVEM_PANAL + coalesce(PRIPVEM,0)+coalesce(PRIPNA,0)+coalesce(PVEMPNA,0)+coalesce(PRI,0)+coalesce(PVEM,0)+coalesce(PNA,0),
+                             PRI_PVEM_PANAL
+    ),
     PRI   = if_else(!is.na(PRI_PVEM_PANAL), NA_real_, PRI),
     PVEM  = if_else(!is.na(PRI_PVEM_PANAL), NA_real_, PVEM),
-    PANAL = if_else(!is.na(PRI_PVEM_PANAL), NA_real_, PANAL)
+    PNA   = if_else(!is.na(PRI_PVEM_PANAL), NA_real_, PNA)
   ) %>%
-  select(-any_of(c("PRI_PVEM", "PRI_PANAL", "PVEM_PANAL")))
+  select(-any_of(c("PRIPVEM","PRIPNA","PVEMPNA")))
+
+# order CI_* after "PRI_" => adapt if you want a custom reorder
+# collapse (sum) PAN-nulo, by(municipality section)
+vote_cols2 <- c("PAN","PRI","PRD","PVEM","PT","MC","PNA","Morena","ES","PRI_PVEM_PANAL","CI_1","CI_2","CI_3","nulo","no_reg")
+
+df_collapse2 <- df_all %>%
+  group_by(municipality, section) %>%
+  summarise(across(any_of(vote_cols2), sum, na.rm=TRUE), .groups="drop")
 
 ################################################################################
-# 6) Collapse (sum) columns from PAN through CI_1, plus total, listanominal,
-#    by (municipality, uniqueid, section)
+# Part F: compute valid, total, drop no_reg nulo, merge municipality codes, merge LN2016, final
 ################################################################################
-collapse_cols <- df %>%
-  select(matches("^PAN$|^PRI$|^PRD$|^PVEM$|^PT$|^MC$|^PANAL$|^MORENA$|^PH$|^PES$|^PRD_PANAL$|^PRD_PT$|^PRI_PVEM_PANAL$|^CI_1$|^total$|^listanominal$")) %>%
-  names()
 
-df_collapsed <- df %>%
-  group_by(municipality, uniqueid, section) %>%
-  summarise(
-    across(all_of(collapse_cols), sum, na.rm = TRUE),
-    .groups = "drop"
-  )
-
-################################################################################
-# 7) Compute valid = rowtotal(...) among the relevant columns
-################################################################################
-df_collapsed <- df_collapsed %>%
+# valid=rowtotal(PAN PRI PRD PVEM PT MC PNA Morena ES PRI_PVEM_PANAL CI_1..CI_3)
+df_collapse2 <- df_collapse2 %>%
+  rowwise() %>%
   mutate(
-    valid = rowSums(
-      select(., PAN, PRI, PRD, PVEM, PT, MC, PANAL, MORENA, PH, PES,
-             PRD_PANAL, PRD_PT, PRI_PVEM_PANAL, CI_1),
-      na.rm = TRUE
-    )
-  )
-
-################################################################################
-# 8)
-################################################################################
-# We'll read LN2015.dta 
-df_ln <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
-  select(entidad, municipio, seccion, lista, file, year, month) %>%
-  mutate(uniqueid = (entidad * 1000) + municipio) %>%
-  filter(uniqueid == 27004, month == 2, seccion != 0) %>%
-  # rename seccion -> section
-  rename(section = seccion) %>%
-  select(uniqueid, section, lista)
-
-# We'll do a left_join on (section) to replicate "merge 1:1 section using LN16_TAB.dta"
-df_merged <- df_collapsed %>%
-  left_join(df_ln, by = "section")
-
-# drop if _merge==2 => rows that don't match LN data
-# In R, that means we drop rows where 'lista' is NA
-df_merged <- df_merged %>%
-  filter(!(uniqueid == 27004 & is.na(lista)))  # only for uniqueid=27004 does this matter
-
-# after merging, "replace listanominal = lista if uniqueid==27004"
-df_merged <- df_merged %>%
-  mutate(
-    listanominal = if_else(uniqueid == 27004 & !is.na(lista), lista, listanominal)
+    valid = sum(c_across(any_of(c("PAN","PRI","PRD","PVEM","PT","MC","PNA","Morena","ES","PRI_PVEM_PANAL","CI_1","CI_2","CI_3"))), na.rm=TRUE)
   ) %>%
-  select(-lista)
-
-################################################################################
-# 9) Final transformations:
-################################################################################
-df_2015 <- df_merged %>%
+  ungroup() %>%
   mutate(
-    turnout = total / listanominal,
-    year    = 2015,
-    year    = if_else(uniqueid == 27004, 2016, year),
-    month   = "June",
-    month   = if_else(uniqueid == 27004, "March", month),
-    STATE   = "TABASCO",
-    # force numeric in section (in case merging changed something)
-    section = as.numeric(section)
-  )
+    total = valid + coalesce(nulo,0) + coalesce(no_reg,0)
+  ) %>%
+  select(-nulo, -no_reg)
 
-################################################################################
-# 1) Read from Excel (equivalent to 
-#    import excel "Ayuntamientos_2015.xlsx", sheet("DESGLOSE") clear firstrow)
-################################################################################
-df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx",
-  sheet = "DESGLOSE",
-  col_names = TRUE
-) %>%
+# 1) Merge municipality codes from "uniqueid16.xlsx"
+df_ids <- read_excel("uniqueid16.xlsx") %>%
   as.data.frame()
 
-################################################################################
-# 2) Convert section to numeric (Stata: destring section, replace)
-################################################################################
-df <- df %>%
-  mutate(section = as.numeric(section))
+df_merge_ids <- df_collapse2 %>%
+  left_join(df_ids, by="municipality") %>%
+  select(-starts_with("_merge"))
 
-################################################################################
-# 3) Drop any existing uniqueid, then create uniqueid=0, 
-#    and assign codes based on municipality 
-################################################################################
-df <- df %>%
-  select(-any_of("uniqueid")) %>%  # drop uniqueid if it exists
-  mutate(
-    uniqueid = 0,
-    uniqueid = case_when(
-      municipality == "BALANCAN"         ~ 27001,
-      municipality == "CARDENAS"         ~ 27002,
-      municipality == "CENTLA"           ~ 27003,
-      municipality == "CENTRO"           ~ 27004,
-      municipality == "COMALCALCO"       ~ 27005,
-      municipality == "CUNDUACAN"        ~ 27006,
-      municipality == "EMILIANO ZAPATA"  ~ 27007,
-      municipality == "HUIMANGUILLO"     ~ 27008,
-      municipality == "JALAPA"           ~ 27009,
-      municipality == "JALPA DE MENDEZ"  ~ 27010,
-      municipality == "JONUTA"           ~ 27011,
-      municipality == "MACUSPANA"        ~ 27012,
-      municipality == "NACAJUCA"         ~ 27013,
-      municipality == "PARAISO"          ~ 27014,
-      municipality == "TACOTALPA"        ~ 27015,
-      municipality == "TEAPA"            ~ 27016,
-      municipality == "TENOSIQUE"        ~ 27017,
-      TRUE                               ~ 0
-    )
-  )
+# 2) Merge LN2016 => from code: "LN2016.dta"
+df_ln16 <- read_dta("../Listas Nominales/LN 2012-2019/2016/LN2016.dta") %>%
+  filter(entidad==28, month==5) %>%
+  rename(section=seccion, listanominal=lista) %>%
+  select(section, listanominal)
 
-# Also replace municipality = "CENTRO EXTRAORDINARIO" if municipality=="CENTRO"
-df <- df %>%
+df_final <- df_merge_ids %>%
+  left_join(df_ln16, by="section") %>%
+  filter(!is.na(listanominal))
+
+# turnout = total / listanominal, year=2016, month="June", STATE="TAMAULIPAS"
+df_2016 <- df_final %>%
   mutate(
-    municipality = if_else(municipality == "CENTRO",
-                           "CENTRO EXTRAORDINARIO",
-                           municipality)
+    turnout = total / listanominal,
+    year    = 2016,
+    month   = "June",
+    STATE   = "TAMAULIPAS"
   )
 
 ################################################################################
-# 4) Create CI_1 = rowtotal(CIND CI1 CI2 CI3 CI4 CI5), 
-#    then drop those columns, reorder columns so CI_1 is just before PVEM_PANAL
+# Part A: Reading each Excel (like "Abasolo.xlsx", "Aldama.xlsx"...) from 
+#         "Ayuntamientos 2018" folder, cleaning, converting, then saving as .dta
 ################################################################################
-# In R, we'll do a rowSums, then remove those columns, then reorder.
-df <- df %>%
-  mutate(
-    CI_1 = rowSums(
-      select(., CIND, CI1, CI2, CI3, CI4, CI5),
-      na.rm = TRUE
-    )
+
+# We'll define a vector of municipality sheet/file names
+mun_names <- c("Abasolo","Aldama","Altamira","AntiguoMorelos","Burgos","Bustamente",
+               "Camargo","Casas","CiudadMadero","Cruillas","ElMante","GomezFarias",
+               "Gonzalez","Guemez","Guerrero","GustavoDiazOrdaz","Hidalgo","Jaumave",
+               "Jimenez","Llera","Mainero","Matamoros","Mendez","Mier","MiguelAleman",
+               "Miquihuana","NuevoLaredo","NuevoMorelos","Ocampo","Padilla","Palmillas",
+               "Reynosa","RioBravo","SanCarlos","SanFernando","SanNicolas","SotolaMarina",
+               "Tampico","Tula","ValleHermoso","Victoria","Villagran","Xicotencatl")
+
+# We'll iterate over these municipality names, read them, do the clean steps, save as .dta
+for (x in mun_names) {
+  # "import excel `x'.xlsx, clear"
+  df_mun <- read_excel(
+    path = paste0("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Other/Ayuntamientos 2018/", x, ".xlsx"),
+    sheet=1,  # if only 1 sheet, or specify the correct sheet
+    col_names=TRUE,
+    col_types="text"
   ) %>%
-  select(-CIND, -CI1, -CI2, -CI3, -CI4, -CI5)
-
-# "order CI_1, a(PVEM_PANAL)" in Stata repositions CI_1 before PVEM_PANAL. 
-# In R, we can do a partial relocate if columns exist.
-if ("PVEM_PANAL" %in% names(df)) {
-  df <- df %>%
-    relocate(CI_1, .before = PVEM_PANAL)
-} else {
-  # If PVEM_PANAL doesn't exist yet, we can skip or do some other reordering
-  # We'll proceed without strict reordering if the column doesn't exist.
+    as.data.frame()
+  
+  # drop if _n<=5 => in R, we can do row_number
+  # The code "drop if _n<=5" in Stata means drop first 5 rows. We'll replicate:
+  df_mun <- df_mun %>%
+    slice(-(1:5))  # remove first 5 rows
+  
+  # export excel using "updated_`x'.xlsx", replace => skip that step in R, or do it if needed
+  # We won't do an Excel re-export. We'll replicate the final steps:
+  
+  # import excel "updated_`x'.xlsx", firstrow clear => we skip that too
+  
+  # Convert all columns to string, then drop rows if "SECCION" is ""
+  df_mun <- df_mun %>%
+    mutate(across(everything(), as.character)) %>%
+    filter(SECCION != "")
+  
+  # For each column: replace "" with "0"
+  df_mun <- df_mun %>%
+    mutate(across(everything(), ~ if_else(. == "", "0", .)))
+  
+  # "save `x'.dta, replace"
+  # We'll write the result as `<x>.dta`
+  write_dta(df_mun, paste0(x, ".dta"))
+  
+  # "erase updated_`x'.xlsx" => we skip removing that Excel unless we created it
 }
 
 ################################################################################
-# 5) Combine columns for PRD_PANAL, PRD_PT, PRI_PVEM_PANAL, etc.
+# Part B: Appending all municipality .dta files
 ################################################################################
-df <- df %>%
-  mutate(
-    PRD_PANAL = if_else(!is.na(PRD_PANAL),
-                        coalesce(PRD, 0) + coalesce(PANAL, 0) + coalesce(PRD_PANAL, 0),
-                        PRD_PANAL),
-    # if PRD_PANAL != . => set PRD=0, PANAL=0
-    PRD       = if_else(!is.na(PRD_PANAL), NA_real_, PRD),
-    PANAL     = if_else(!is.na(PRD_PANAL), NA_real_, PANAL)
-  ) %>%
-  mutate(
-    PRD_PT = if_else(!is.na(PRD_PT),
-                     coalesce(PRD, 0) + coalesce(PT, 0) + coalesce(PRD_PT, 0),
-                     PRD_PT),
-    PRD    = if_else(!is.na(PRD_PT), NA_real_, PRD),
-    PT     = if_else(!is.na(PRD_PT), NA_real_, PT)
-  ) %>%
-  mutate(
-    PRI_PVEM_PANAL = if_else(!is.na(PRI_PVEM_PANAL),
-                             coalesce(PRI, 0) + coalesce(PVEM, 0) + coalesce(PANAL, 0) +
-                               coalesce(PRI_PVEM, 0) + coalesce(PRI_PANAL, 0) +
-                               coalesce(PVEM_PANAL, 0) + coalesce(PRI_PVEM_PANAL, 0),
-                             PRI_PVEM_PANAL),
-    PRI   = if_else(!is.na(PRI_PVEM_PANAL), NA_real_, PRI),
-    PVEM  = if_else(!is.na(PRI_PVEM_PANAL), NA_real_, PVEM),
-    PANAL = if_else(!is.na(PRI_PVEM_PANAL), NA_real_, PANAL)
-  ) %>%
-  select(-any_of(c("PRI_PVEM", "PRI_PANAL", "PVEM_PANAL")))
 
-################################################################################
-# 6) Collapse (sum) columns from PAN through CI_1, plus total, listanominal,
-#    by (municipality, uniqueid, section)
-################################################################################
-collapse_cols <- df %>%
-  select(matches("^PAN$|^PRI$|^PRD$|^PVEM$|^PT$|^MC$|^PANAL$|^MORENA$|^PH$|^PES$|^PRD_PANAL$|^PRD_PT$|^PRI_PVEM_PANAL$|^CI_1$|^total$|^listanominal$")) %>%
-  names()
-
-df_collapsed <- df %>%
-  group_by(municipality, uniqueid, section) %>%
-  summarise(
-    across(all_of(collapse_cols), sum, na.rm = TRUE),
-    .groups = "drop"
-  )
-
-################################################################################
-# 7) Compute valid = rowtotal(...) among the relevant columns
-################################################################################
-df_collapsed <- df_collapsed %>%
-  mutate(
-    valid = rowSums(
-      select(., PAN, PRI, PRD, PVEM, PT, MC, PANAL, MORENA, PH, PES,
-             PRD_PANAL, PRD_PT, PRI_PVEM_PANAL, CI_1),
-      na.rm = TRUE
-    )
-  )
-
-################################################################################
-# 8) 
-################################################################################
-# We'll read LN2015.dta 
-df_ln <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
-  select(entidad, municipio, seccion, lista, file, year, month) %>%
-  mutate(uniqueid = (entidad * 1000) + municipio) %>%
-  filter(uniqueid == 27004, month == 2, seccion != 0) %>%
-  # rename seccion -> section
-  rename(section = seccion) %>%
-  select(uniqueid, section, lista)
-
-# We'll do a left_join on (section) to replicate "merge 1:1 section using LN16_TAB.dta"
-df_merged <- df_collapsed %>%
-  left_join(df_ln, by = "section")
-
-# drop if _merge==2 => rows that don't match LN data
-# In R, that means we drop rows where 'lista' is NA
-df_merged <- df_merged %>%
-  filter(!(uniqueid == 27004 & is.na(lista)))  # only for uniqueid=27004 does this matter
-
-# after merging, "replace listanominal = lista if uniqueid==27004"
-df_merged <- df_merged %>%
-  mutate(
-    listanominal = if_else(uniqueid == 27004 & !is.na(lista), lista, listanominal)
-  ) %>%
-  select(-lista)
-
-################################################################################
-# 9) Final transformations:
-
-################################################################################
-df_2015 <- df_merged %>%
-  mutate(
-    turnout = total / listanominal,
-    year    = 2015,
-    year    = if_else(uniqueid == 27004, 2016, year),
-    month   = "June",
-    month   = if_else(uniqueid == 27004, "March", month),
-    STATE   = "TABASCO",
-    # force numeric in section (in case merging changed something)
-    section = as.numeric(section)
-  )
-
-###############################################################################
-# 1) Read Excel (Equivalent to: 
-#    import excel "Ayuntamientos_2018.xlsx", sheet("1 TAB RES AYUN") clear firstrow)
-###############################################################################
-df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx",
-  sheet = "1 TAB RES AYUN",
-  col_names = TRUE
-) %>%
-  as.data.frame()
-
-###############################################################################
-# 2) Drop any existing 'uniqueid' column, then create uniqueid=0, 
-#    and assign codes for each municipality
-###############################################################################
-df <- df %>%
-  select(-any_of("uniqueid")) %>%  # drop 'uniqueid' if present
-  mutate(
-    uniqueid = 0,
-    uniqueid = case_when(
-      municipality == "BALANCAN"         ~ 27001,
-      municipality == "CARDENAS"         ~ 27002,
-      municipality == "CENTLA"           ~ 27003,
-      municipality == "CENTRO"           ~ 27004,
-      municipality == "COMALCALCO"       ~ 27005,
-      municipality == "CUNDUACAN"        ~ 27006,
-      municipality == "EMILIANO ZAPATA"  ~ 27007,
-      municipality == "HUIMANGUILLO"     ~ 27008,
-      municipality == "JALAPA"           ~ 27009,
-      municipality == "JALPA DE MENDEZ"  ~ 27010,
-      municipality == "JONUTA"           ~ 27011,
-      municipality == "MACUSPANA"        ~ 27012,
-      municipality == "NACAJUCA"         ~ 27013,
-      municipality == "PARAISO"          ~ 27014,
-      municipality == "TACOTALPA"        ~ 27015,
-      municipality == "TEAPA"            ~ 27016,
-      municipality == "TENOSIQUE"        ~ 27017,
-      TRUE                               ~ 0
-    )
-  )
-
-###############################################################################
-# 3) Combine columns for PAN_PRD_MC, then drop old columns 
-#    (PAN, PRD, MC, PAN_PRD, PAN_MC, PRD_MC)
-###############################################################################
-df <- df %>%
-  mutate(
-    PAN_PRD_MC = PAN_PRD_MC + coalesce(PAN, 0) + coalesce(PRD, 0) + coalesce(MC, 0) +
-      coalesce(PAN_PRD, 0) + coalesce(PAN_MC, 0) + coalesce(PRD_MC, 0)
-  ) %>%
-  select(-PAN, -PRD, -MC, -PAN_PRD, -PAN_MC, -PRD_MC)
-
-###############################################################################
-# 4) Combine columns for PT_MORENA, dropping old PT, MORENA if PT_MORENA != NA
-###############################################################################
-df <- df %>%
-  mutate(
-    PT_MORENA = if_else(
-      !is.na(PT_MORENA),
-      PT_MORENA + coalesce(PT, 0) + coalesce(MORENA, 0),
-      PT_MORENA
-    ),
-    PT     = if_else(!is.na(PT_MORENA), NA_real_, PT),
-    MORENA = if_else(!is.na(PT_MORENA), NA_real_, MORENA)
-  )
-
-###############################################################################
-# 5) Create CI_1 = row sum of (CAND_IND10 through CAND_IND17), then drop CAND*
-###############################################################################
-cand_cols <- grep("^CAND_IND\\d+$", names(df), value = TRUE)
-df <- df %>%
-  mutate(
-    CI_1 = rowSums(select(., all_of(cand_cols)), na.rm = TRUE)
-  ) %>%
-  select(-all_of(cand_cols))  # drop all CAND_IND columns
-
-# The Stata code: order CI_1, a(PT_MORENA) - we can attempt a partial relocate
-if ("PT_MORENA" %in% names(df)) {
-  df <- df %>%
-    relocate(CI_1, .before = PT_MORENA)
+df_all <- data.frame()
+for (x in mun_names) {
+  # append using "<x>.dta"
+  fpath <- paste0(x, ".dta")
+  if (file.exists(fpath)) {
+    df_new <- read_dta(fpath)
+    df_all <- bind_rows(df_all, df_new)
+    
+    # erase "<x>.dta"
+    file.remove(fpath)
+  }
 }
 
-###############################################################################
-# 6) Collapse (sum) columns from PRI through CI_1, plus total and listanominal
-#    by (municipality, uniqueid, section)
-###############################################################################
-collapse_cols <- df %>%
-  select(matches("^PRI$|^PVEM$|^PT$|^PANAL$|^MORENA$|^PES$|^PAN_PRD_MC$|^PT_MORENA$|^CI_1$|^total$|^listanominal$")) %>%
-  names()
+################################################################################
+# Part C: Data cleaning steps (like "destring, keep certain columns, rename, etc.")
+################################################################################
 
-df_collapsed <- df %>%
-  group_by(municipality, uniqueid, section) %>%
-  summarise(
-    across(all_of(collapse_cols), sum, na.rm = TRUE),
-    .groups = "drop"
+# In Stata:
+# destring *, replace => parse numeric columns if they exist
+df_all <- df_all %>%
+  mutate(across(where(is.character), ~ suppressWarnings(as.numeric(.))))
+
+# keep Casilla-PABLOTORRESLARA JOSEADAME XICOTENCATLGONZALEZURESTI => 
+# This code suggests you keep columns from "Casilla" to "XICOTENCATLGONZALEZURESTI" plus some named columns in between
+# We'll define some subset if needed. 
+# The code references columns up to "XICOTENCATLGONZALEZURESTI", plus "JOSEADAME" 
+# So adapt to your actual column set:
+
+keep_cols <- c("Casilla","PAN","PRI","PRD","MC","PANAL","MORENA","PES",
+               "PTMORENAES","PTMORENA","PTES","MORENAES","PANPRDMC","PANPRD","PANMC","PRDMC",
+               "VotosNulos","CandidatosNoRegistrados","HECTORPEÑASALDAÑA","JOSEADAME","PABLOTORRESLARA",
+               "XICOTENCATLGONZALEZURESTI","NA","ES","PT","PTMC" # adapt as needed
+               # plus other columns if you have them
+)
+df_all <- df_all %>%
+  select(any_of(keep_cols))
+
+# drop U if present
+df_all <- df_all %>% select(-any_of("U"))
+
+# Create CI_1, CI_2, CI_3 from row sums
+# e.g. 
+# egen CI_1=rowtotal(JESUSOLVERAMENDEZ ... XICOTENCATLGONZALEZURESTI)
+# We'll do it explicitly if we know the columns that go in:
+
+df_all <- df_all %>%
+  rowwise() %>%
+  mutate(
+    CI_1 = sum(c_across(any_of(c("JESUSOLVERAMENDEZ","DAVIDPERALESSEGURA",
+                                 "BEATRIZREYESNAJERA","JOSELUISGALLARDOFLORES",
+                                 "HECTORMANUELDELATORREVALENZ","HUMBERTORANGELVALLEJO",
+                                 "VICTORMANUELVERGARAMARTINEZ","JORGELUISMIRANDANIÑO",
+                                 "HECTORMICHELSALINASGAMEZ","CARLOSALBERTOGUERREROGARCIA",
+                                 "MIGUELANGELALMARAZMALDONADO","CLAUDIOALBERTOCAPETILLOGOMEZ",
+                                 "NAYMAKARINABALQUIARENAPEREZ","HECTORDAVIDRUIZTAMAYO",
+                                 "XICOTENCATLGONZALEZURESTI"
+    ))), na.rm=TRUE),
+    CI_2 = sum(c_across(any_of(c("AMANDOTREVIÑORIVERA","HECTORPEÑASALDAÑA",
+                                 "JOSERAMONGOMEZLEAL","PABLOTORRESLARA"))), na.rm=TRUE),
+    CI_3 = sum(c_across(any_of(c("JESUSROBERTOGUERRAVELASCO","EDUARDOLONGORIACHAPA",
+                                 "CARLOSRAFAELULIVARRILOPEZ"))), na.rm=TRUE)
+  ) %>%
+  ungroup()
+
+# replace CI_1=CI_1 - CI_2 - CI_3
+df_all <- df_all %>%
+  mutate(CI_1 = CI_1 - CI_2 - CI_3)
+
+# drop columns used in CI_1 sums if needed
+rm_cols <- c("JESUSOLVERAMENDEZ","DAVIDPERALESSEGURA","BEATRIZREYESNAJERA","JOSELUISGALLARDOFLORES",
+             "HECTORMANUELDELATORREVALENZ","HUMBERTORANGELVALLEJO","VICTORMANUELVERGARAMARTINEZ",
+             "JORGELUISMIRANDANIÑO","HECTORMICHELSALINASGAMEZ","CARLOSALBERTOGUERREROGARCIA",
+             "MIGUELANGELALMARAZMALDONADO","CLAUDIOALBERTOCAPETILLOGOMEZ","NAYMAKARINABALQUIARENAPEREZ",
+             "HECTORDAVIDRUIZTAMAYO","AMANDOTREVIÑORIVERA","JOSERAMONGOMEZLEAL","PABLOTORRESLARA",
+             "JESUSROBERTOGUERRAVELASCO","EDUARDOLONGORIACHAPA","CARLOSRAFAELULIVARRILOPEZ"
+)
+df_all <- df_all %>% select(-any_of(rm_cols))
+
+################################################################################
+# Convert Casilla => numeric section (like substring)
+################################################################################
+
+df_all <- df_all %>%
+  mutate(
+    section = str_sub(Casilla, 1, 4),
+    section = if_else(str_detect(section,"B|C|E"), str_sub(section,1,3), section)
+  ) %>%
+  mutate(section = suppressWarnings(as.numeric(section))) %>%
+  filter(!is.na(section))
+
+################################################################################
+# Rename columns from code
+################################################################################
+
+df_all <- df_all %>%
+  rename(
+    municipality = MUNICIPIO,
+    PANAL        = NA,
+    MORENA       = Morena,
+    PES          = ES
+    # etc. adapt to your actual columns
   )
 
-###############################################################################
-# 7) Compute 'valid' = rowtotal(PRI PVEM PT PANAL MORENA PES PAN_PRD_MC PT_MORENA CI_1)
-#    Also compute turnout = total / listanominal, year=2018, month="July", STATE="TABASCO"
-###############################################################################
-df_2018 <- df_collapsed %>%
+# Some coalition merges: 
+# e.g. g MORENA_PT_PES= MORENA + PT + ES + PTMORENAES + ...
+# We'll do explicitly if you have them:
+
+df_all <- df_all %>%
   mutate(
-    valid = rowSums(
-      select(., PRI, PVEM, PT, PANAL, MORENA, PES, PAN_PRD_MC, PT_MORENA, CI_1),
-      na.rm = TRUE
+    MORENA_PT_PES = if_else(municipality!="BURGOS" & municipality!="NUVEO MORELOS",
+                            coalesce(MORENA,0) + coalesce(PT,0) + coalesce(PES,0) + coalesce(PTMORENAES,0) + coalesce(PTMORENA,0) + coalesce(PTES,0) + coalesce(MORENAES,0),
+                            NA_real_
     ),
-    turnout = total / listanominal,
-    year    = 2018,
-    month   = "July",
-    STATE   = "TABASCO"
+    # set those columns to NA if municipality != ...
+  ) %>%
+  # etc. for PAN_PRD_MC 
+  mutate(
+    PAN_PRD_MC = if_else(
+      municipality %in% c("BURGOS","BUSTAMANTE","CASAS","CRUILLAS","EL MANTE","GOMEZ FARIAS","GONZALEZ","GUERRERO",
+                          "JAUMAVE","JIMENEZ","MENDEZ","MIER","MIQUIHUANA","NUVEO MORELOS","OCAMPO","PADILLA","PALMILLAS",
+                          "SAN NICOLAS","TULA","VILLAGRAN"),
+      NA_real_,
+      coalesce(PAN,0)+coalesce(PRD,0)+coalesce(MC,0)+coalesce(PANPRDMC,0)+coalesce(PANPRD,0)+coalesce(PANMC,0)+coalesce(PRDMC,0)
+    )
+  )
+
+# Then we set them to NA or 0 as needed.
+
+################################################################################
+# Final: collapse (sum) PAN-nulo, rename columns, merge with uniqueid16.dta, etc.
+################################################################################
+
+vote_cols3 <- c("PAN","PRI","PRD","PVEM","PT","MC","PANAL","MORENA","PES","MORENA_PT_PES","PAN_PRD_MC",
+                "CI_1","CI_2","CI_3","...","valid","total","listanominal")
+
+df_collapse3 <- df_all %>%
+  group_by(municipality, section) %>%
+  summarise(across(any_of(vote_cols3), sum, na.rm=TRUE), .groups="drop")
+
+# replace municipality="GUEMEZ" if municipality=="GÜEMEZ"
+df_collapse3 <- df_collapse3 %>%
+  mutate(municipality = if_else(municipality=="GÜEMEZ","GUEMEZ", municipality))
+
+# merge m:1 municipality using uniqueid16.dta
+df_ids <- read_dta("uniqueid16.dta")
+df_merge_ids <- df_collapse3 %>%
+  left_join(df_ids, by="municipality") %>%
+  select(-starts_with("_merge"))
+
+# set g year=2018, month="July", STATE="TAMAULIPAS"
+df_2018 <- df_merge_ids %>%
+  mutate(
+    year  = 2018,
+    month = "July",
+    STATE = "TAMAULIPAS"
   )
 
 # Combine the dataframes, handling different columns by filling with NA
-tabasco_all <- bind_rows(df_1997,
-                         df_2000,
-                         df_2003,
-                         df_2006,
-                         df_2009,
-                         df_2012,
-                         df_2015,
+Tamaulipas_all <- bind_rows(df_1995,
+                         df_1998,
+                         df_2001,
+                         df_2004,
+                         df_2007,
+                         df_2010,
+                         df_2013,
+                         df_2016,
                          df_2018)
 
-data.table::fwrite(tabasco_all,"../../../Processed Data/tabasco/Tabasco_process_raw_data.csv")
+# Replace municipality = upper(municipality), then unify some names
+Tamaulipas_all <- Tamaulipas_all %>%
+  mutate(
+    municipality = str_to_upper(municipality),
+    municipality = if_else(municipality=="PALMILLA","PALMILLAS", municipality),
+    municipality = if_else(municipality=="MIGUEL A.","MIGUEL ALEMAN", municipality),
+    municipality = if_else(municipality %in% c("ANT. MORELOS","A. MORELOS"),"ANTIGUO MORELOS", municipality),
+    municipality = if_else(municipality %in% c("CD. MADERO","CD.MADERO"),"CIUDAD MADERO", municipality),
+    municipality = if_else(str_detect(municipality,"ORDAZ") | municipality=="GVO. DIAZ O.","GUSTAVO DIAZ ORDAZ", municipality),
+    municipality = if_else(str_detect(municipality,"MANTE") & municipality!="BUSTAMANTE","EL MANTE", municipality),
+    municipality = if_else(str_detect(municipality,"MORELOS") & municipality!="ANTIGUO MORELOS","NUEVO MORELOS", municipality),
+    municipality = if_else(str_detect(municipality,"LAREDO"),"NUEVO LAREDO", municipality)
+  )
+
+data.table::fwrite(Tamaulipas_all,"../../../Processed Data/tamaulipas/Tamaulipas_process_raw_data.csv")
 

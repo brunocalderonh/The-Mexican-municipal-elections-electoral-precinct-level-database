@@ -24,27 +24,15 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 # Assuming your script is in 'Scripts/Script States/', go two levels up
 setwd(file.path(script_dir, ""))
 
-###############################################################################
-### PART X: Replicating the Stata snippet for Ayu_Seccion_1997_No_LN.csv
-###############################################################################
-
-
-# 1) Read CSV: "Ayu_Seccion_1997_No_LN.csv"
-df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
-colnames(df) <- tolower(colnames(df))
-##############################################################################
-# Load required libraries
-##############################################################################
-library(dplyr)
-library(readr)    # For CSV input
-library(readxl)   # For Excel input
-library(haven)    # For reading/saving Stata .dta files
-library(stringr)
-
 ##############################################################################
 # 1) Ayu_Seccion_2001_No_LN.csv
 ##############################################################################
-df_2001 <- read_csv("Ayu_Seccion_2001_No_LN.csv") %>%
+df_2001 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2001_No_LN.csv") 
+colnames(df_2001) <- tolower(colnames(df_2001))
+names(df_2001) <- gsub("[- ]", "", names(df_2001))
+
+
+df_2001 <- df_2001 %>%
   rename(
     municipality = municipio,
     section      = seccion
@@ -57,6 +45,7 @@ vars_2001 <- c("pan","pri","prd","pt","pvem","cdppn","psn","pas","pbs",
                "noregistrados","nulos","panprdpvem","panpvem","prdpt","ptpsn",
                "psnpbs","ptpascdppnpsn","ptpas","prdcdppn","panprd","ptpbs",
                "panprdptpvem","ptcdppnpsn","prdpvem","ptcdppnpbs")
+
 for (v in vars_2001) {
   if (v %in% names(df_2001)) {
     df_2001[[v]] <- as.numeric(df_2001[[v]])
@@ -177,9 +166,6 @@ df_2001 <- df_2001 %>%
     pbs        = ifelse(!is.na(ptcdppnpbs),0, pbs)
   )
 
-# Next, Stata does: collapse (sum) pan-ptcdppnpbs by(municipality section) => aggregator => omitted
-# Then it creates `total = rowtotal(...)`, drops if total==0 => we'll skip aggregator as requested.
-
 # We'll rename variables to e.g. PAN, PRI, PRD, ...
 df_2001 <- df_2001 %>%
   rename(
@@ -209,11 +195,8 @@ df_2001 <- df_2001 %>%
   # drop noregistrados nulos
   select(-noregistrados, -nulos)
 
-# Now merging with all_months_years, etc. We skip aggregator.
-
 # We replicate partial logic:
-df_all <- read_dta("C:/Users/Horacio/Dropbox/Turismo Electoral/all_months_years.dta") %>%
-  bind_rows(read_dta("C:/Users/jmarshall/Dropbox/Turismo Electoral/all_months_years.dta")) %>%
+df_all <- read_dta("../all_months_years.dta") %>%
   filter(ed==25, month==9, year==2001) %>%
   select(section=seccion, lista)
 
@@ -263,7 +246,12 @@ df_2001 <- df_2001 %>%
 ##############################################################################
 # 2) Ayu_Seccion_LN_2004.xlsx
 ##############################################################################
-df_ln_2004 <- read_excel("Ayu_Seccion_LN_2004.xlsx", sheet="Sheet1", col_names=TRUE) %>%
+df_ln_2004 <- read_excel("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_LN_2004.xlsx", 
+                         sheet="Sheet1", 
+                         col_names=TRUE)
+names(df_ln_2004) <- gsub("[- ]", "", names(df_ln_2004))
+
+df_ln_2004 <-df_ln_2004 %>%
   # rename SECCIÓN->SECCIN if needed
   # drop if SECCIN==.
   filter(!is.na(SECCIÓN)) %>%
@@ -278,7 +266,11 @@ df_ln_2004 <- read_excel("Ayu_Seccion_LN_2004.xlsx", sheet="Sheet1", col_names=T
 ##############################################################################
 # 3) Ayu_Seccion_2004_No_LN.csv
 ##############################################################################
-df_2004 <- read_csv("Ayu_Seccion_2004_No_LN.csv") %>%
+df_2004 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2004_No_LN.csv") 
+colnames(df_2004) <- tolower(colnames(df_2004))
+names(df_2004) <- gsub("[- ]", "", names(df_2004))
+
+df_2004 <- df_2004 %>%
   rename(municipality=municipio, section=seccion) %>%
   filter(!(municipality=="" & is.na(section)))
 
@@ -332,7 +324,7 @@ df_2004 <- df_2004 %>%
   select(-noregistrados,-nulos)
 
 # Merge with LN_2004
-df_ln_2004 <- read_dta("Ayu_Seccion_LN_2004.dta")
+
 df_2004 <- df_2004 %>%
   arrange(section) %>%
   left_join(df_ln_2004, by="section") %>%
@@ -342,12 +334,27 @@ df_2004 <- df_2004 %>%
   mutate(
     turnout = total/listanominal,
     uniqueid = case_when(
-      municipality=="AHOME"~25001,
-      # ...
-      municipality=="SINALOA"~25017,
-      TRUE~0
+      municipality=="AHOME"             ~ 25001,
+      municipality=="ANGOSTURA"         ~ 25002,
+      municipality=="BADIRAGUATO"       ~ 25003,
+      municipality=="CHOIX"             ~ 25007,
+      municipality=="CONCORDIA"         ~ 25004,
+      municipality=="COSALA"            ~ 25005,
+      municipality=="CULIACAN"          ~ 25006,
+      municipality=="EL FUERTE"         ~ 25010,
+      municipality=="ELOTA"             ~ 25008,
+      municipality=="ESCUINAPA"         ~ 25009,
+      municipality=="GUASAVE"           ~ 25011,
+      municipality=="MAZATLAN"          ~ 25012,
+      municipality=="MOCORITO"          ~ 25013,
+      municipality=="NAVOLATO"          ~ 25018,
+      municipality=="ROSARIO"           ~ 25014,
+      municipality=="SALVADOR ALVARADO" ~ 25015,
+      municipality=="SAN IGNACIO"       ~ 25016,
+      municipality=="SINALOA"           ~ 25017,
+      TRUE                              ~ 0
     )
-  )
+  ) 
 
 
 df_2004 <- df_2004 %>%
@@ -361,14 +368,17 @@ df_2004 <- df_2004 %>%
 ##############################################################################
 # 4) Ayu_Seccion_LN_2007.xlsx
 ##############################################################################
-df_ln_2007 <- read_excel("Ayu_Seccion_LN_2007.xlsx", sheet="Sheet1", col_names=TRUE) %>%
+df_ln_2007 <- read_excel("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_LN_2007.xlsx", sheet="Sheet1", col_names=TRUE) 
+
+names(df_ln_2007) <- gsub("[- ]", "", names(df_ln_2007))
+
+df_ln_2007 <- df_ln_2007 %>%
   filter(!is.na(SECCIÓN)) %>%
   rename(section=SECCIÓN, listanominal=LISTANOMINAL) %>%
   mutate(missing = (listanominal==0))
 
 
-df_all <- read_dta("C:/Users/Horacio/Dropbox/Turismo Electoral/all_months_years.dta") %>%
-  bind_rows(read_dta("C:/Users/jmarshall/Dropbox/Turismo Electoral/all_months_years.dta")) %>%
+df_all <- read_dta("../all_months_years.dta") %>%
   filter(ed==25, month==9, year==2007) %>%
   select(section=seccion, lista)
 
@@ -384,12 +394,17 @@ df_ln_2007 <- df_ln_2007 %>%
 ##############################################################################
 # 5) Ayu_Seccion_2007_No_LN.csv
 ##############################################################################
-df_2007 <- read_csv("Ayu_Seccion_2007_No_LN.csv") %>%
+df_2007 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2007_No_LN.csv")
+colnames(df_2007) <- tolower(colnames(df_2007))
+names(df_2007) <- gsub("[- ]", "", names(df_2007))
+
+df_2007 <- df_2007 %>% 
   rename(municipality=municipio, section=seccion) %>%
   filter(!(municipality=="" & is.na(section)))
 
 vars_2007 <- c("pan","pripanal","prd","pt","pvem","pc","pas","noregistrados",
                "nulos","pripanalprd","prdptpc","prdpt","pripanalpc","ptpas")
+
 for (v in vars_2007) {
   if (v %in% names(df_2007)) {
     df_2007[[v]] <- as.numeric(df_2007[[v]])
@@ -445,7 +460,7 @@ df_2007 <- df_2007 %>%
   select(-noregistrados, -nulos)
 
 # Merge with LN_2007
-df_ln_2007 <- read_dta("Ayu_Seccion_LN_2007.dta")
+
 df_2007 <- df_2007 %>%
   arrange(section) %>%
   left_join(df_ln_2007, by="section") %>%
@@ -455,12 +470,27 @@ df_2007 <- df_2007 %>%
   mutate(
     turnout = total/listanominal,
     uniqueid = case_when(
-      municipality=="AHOME" ~25001,
-      # ...
-      municipality=="SINALOA"~25017,
-      TRUE~0
+      municipality=="AHOME"             ~ 25001,
+      municipality=="ANGOSTURA"         ~ 25002,
+      municipality=="BADIRAGUATO"       ~ 25003,
+      municipality=="CHOIX"             ~ 25007,
+      municipality=="CONCORDIA"         ~ 25004,
+      municipality=="COSALA"            ~ 25005,
+      municipality=="CULIACAN"          ~ 25006,
+      municipality=="EL FUERTE"         ~ 25010,
+      municipality=="ELOTA"             ~ 25008,
+      municipality=="ESCUINAPA"         ~ 25009,
+      municipality=="GUASAVE"           ~ 25011,
+      municipality=="MAZATLAN"          ~ 25012,
+      municipality=="MOCORITO"          ~ 25013,
+      municipality=="NAVOLATO"          ~ 25018,
+      municipality=="ROSARIO"           ~ 25014,
+      municipality=="SALVADOR ALVARADO" ~ 25015,
+      municipality=="SAN IGNACIO"       ~ 25016,
+      municipality=="SINALOA"           ~ 25017,
+      TRUE                              ~ 0
     )
-  ) %>%
+  )  %>%
   mutate(
     year  = 2007,
     month = "October"
@@ -471,7 +501,12 @@ df_2007 <- df_2007 %>%
 ##############################################################################
 # 6) Ayu_Seccion_2010.csv
 ##############################################################################
-df_2010 <- read_csv("Ayu_Seccion_2010.csv") %>%
+df_2010 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2010.csv") 
+colnames(df_2010) <- tolower(colnames(df_2010))
+names(df_2010) <- gsub("[- ]", "", names(df_2010))
+names(df_2010) <- gsub("[. ]", "", names(df_2010))
+
+df_2010 <- df_2010 %>%
   rename(
     municipality = nombre_municipio,
     section      = seccion,
@@ -502,8 +537,7 @@ df_2010 <- df_2010 %>%
   )
 
 # merge with all_months_years => partial
-df_all <- read_dta("C:/Users/Horacio/Dropbox/Turismo Electoral/all_months_years.dta") %>%
-  bind_rows(read_dta("C:/Users/jmarshall/Dropbox/Turismo Electoral/all_months_years.dta")) %>%
+df_all <- read_dta("../all_months_years.dta") %>%
   filter(ed==25, month==6, year==2010) %>%
   select(section=seccion, lista)
 
@@ -526,10 +560,25 @@ df_2010 <- df_2010 %>%
   select(-noregistrados, -nulos) %>%
   mutate(
     uniqueid=case_when(
-      municipality=="AHOME"~25001,
-      # ...
-      municipality=="SINALOA"~25017,
-      TRUE~0
+      municipality=="AHOME"             ~ 25001,
+      municipality=="ANGOSTURA"         ~ 25002,
+      municipality=="BADIRAGUATO"       ~ 25003,
+      municipality=="CHOIX"             ~ 25007,
+      municipality=="CONCORDIA"         ~ 25004,
+      municipality=="COSALA"            ~ 25005,
+      municipality=="CULIACAN"          ~ 25006,
+      municipality=="EL FUERTE"         ~ 25010,
+      municipality=="ELOTA"             ~ 25008,
+      municipality=="ESCUINAPA"         ~ 25009,
+      municipality=="GUASAVE"           ~ 25011,
+      municipality=="MAZATLAN"          ~ 25012,
+      municipality=="MOCORITO"          ~ 25013,
+      municipality=="NAVOLATO"          ~ 25018,
+      municipality=="ROSARIO"           ~ 25014,
+      municipality=="SALVADOR ALVARADO" ~ 25015,
+      municipality=="SAN IGNACIO"       ~ 25016,
+      municipality=="SINALOA"           ~ 25017,
+      TRUE                              ~ 0
     ),
     year  = 2010,
     month = "July"
@@ -539,17 +588,35 @@ df_2010 <- df_2010 %>%
 ##############################################################################
 # 7) Ayu_Seccion_2013.dta
 ##############################################################################
-df_2013 <- read_dta("Ayu_Seccion_2013.dta") %>%
+df_2013 <- read_dta("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Other/Ayu_Seccion_2013.dta")
+
+
+df_2013 <- df_2013 %>%
   mutate(
     turnout = total/listanominal
   ) %>%
   select(-NoRegistrados, -Nulos) %>%
   mutate(
     uniqueid=case_when(
-      municipality=="AHOME"~25001,
-      # ...
-      municipality=="SINALOA"~25017,
-      TRUE~0
+      municipality=="AHOME"             ~ 25001,
+      municipality=="ANGOSTURA"         ~ 25002,
+      municipality=="BADIRAGUATO"       ~ 25003,
+      municipality=="CHOIX"             ~ 25007,
+      municipality=="CONCORDIA"         ~ 25004,
+      municipality=="COSALA"            ~ 25005,
+      municipality=="CULIACAN"          ~ 25006,
+      municipality=="EL FUERTE"         ~ 25010,
+      municipality=="ELOTA"             ~ 25008,
+      municipality=="ESCUINAPA"         ~ 25009,
+      municipality=="GUASAVE"           ~ 25011,
+      municipality=="MAZATLAN"          ~ 25012,
+      municipality=="MOCORITO"          ~ 25013,
+      municipality=="NAVOLATO"          ~ 25018,
+      municipality=="ROSARIO"           ~ 25014,
+      municipality=="SALVADOR ALVARADO" ~ 25015,
+      municipality=="SAN IGNACIO"       ~ 25016,
+      municipality=="SINALOA"           ~ 25017,
+      TRUE                              ~ 0
     )
   )
 
@@ -561,32 +628,10 @@ df_2013 <- df_2013 %>%
   ) %>%
   arrange(section)
 
-
-##############################################################################
-# 8) Append 2001,2004,2007,2010,2013 => Sinaloa_ALL.dta
-##############################################################################
-df_2001 <- read_dta("Sinaloa_Section_2001.dta")
-df_2004 <- read_dta("Sinaloa_Section_2004.dta")
-df_2007 <- read_dta("Sinaloa_Section_2007.dta")
-df_2010 <- read_dta("Sinaloa_Section_2010.dta")
-df_2013 <- read_dta("Sinaloa_Section_2013.dta")
-
-all_sin <- bind_rows(df_2001, df_2004, df_2007, df_2010, df_2013)
-
-file.remove("Sinaloa_Section_2001.dta")
-file.remove("Sinaloa_Section_2004.dta")
-file.remove("Sinaloa_Section_2007.dta")
-file.remove("Sinaloa_Section_2010.dta")
-file.remove("Sinaloa_Section_2013.dta")
-
-# winner logic => omitted
-# "gen PAN_winner=..., tab winner_counter => omitted
-write_dta(all_sin, "Sinaloa_ALL.dta", version=12)
-
 ##############################################################################
 # 9) Ayuntamientos_2016.xlsx
 ##############################################################################
-excel_2016 <- "Ayuntamientos_2016.xlsx"
+excel_2016 <- "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayuntamientos_2016.xlsx"
 sheet_names_2016 <- excel_sheets(excel_2016)
 
 for (sname in sheet_names_2016) {
@@ -761,13 +806,7 @@ df_2018 <- df_2018 %>%
   )
 
 
-##############################################################################
-# 11) Append Sinaloa_ALL.dta with 2016 + 2018 => Sinaloa_ALL_SALVADOR.dta
-##############################################################################
-df_all_sin <- read_dta("../../Precinct/Sinaloa_ALL.dta")
-
-
-df_combo <- bind_rows(df_all_sin, df_2016, df_2018) %>%
+df_combo <- bind_rows(df_2001, df_2004, df_2007, df_2010, df_2013, df_2016, df_2018) %>%
   mutate(
     municipality = case_when(
       municipality=="EL ROSARIO" ~ "ROSARIO",
