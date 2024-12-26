@@ -351,13 +351,17 @@ data_1997 <- data_1997 %>%
   summarise(across(c(PAN:total), 
                    sum, na.rm = TRUE), .groups = "drop")
 
-lista_nominal <- read.dta13("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta") %>% 
-  filter(state == "JALISCO" &
-           month == "December" &
-           year == 1997)
+# Merge with the dataset "ln_all_months_years.dta" using seccion (section) and ed
+lista_nominal <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta")
 
+lista_nominal <- lista_nominal %>% 
+  dplyr::filter(state == "JALISCO" & month == "January" & year == 1997)
+
+# Merge the datasets
 data_1997 <- data_1997 %>%
-  left_join(lista_nominal, by = c("section"))
+  dplyr::left_join(lista_nominal %>% dplyr::select(section,lista), by = c("section")) %>% 
+  dplyr::mutate(listanominal = lista) %>% 
+  dplyr::select(-lista)
 
 # drop _merge==2 not needed since we did left_join
 # drop _merge ed seccion year month
@@ -1516,9 +1520,6 @@ data_2012 <- data_2012 %>%
 
 #-------------------------------------------------------------
 # 4. Generate test variable and drop some variables as in Stata code
-#   gen test = COALPRIPVEM - PRI - PVEM - PRIPVEM + COALPTMC - PT - MC - PTMC
-#   sum test (just a check)
-#   drop PRI PVEM PRIPVEM PT MC PTMC test
 #-------------------------------------------------------------
 data_2012 <- data_2012 %>%
   mutate(test = coalpripvem - pri - pvem - pripvem + coalptmc - pt - mc - ptmc)
@@ -1527,37 +1528,14 @@ data_2012 <- data_2012 %>%
 data_2012 <- data_2012 %>% select(-pri, -pvem, -pripvem, -pt, -mc, -ptmc, -test)
 
 #-------------------------------------------------------------
-# 5. Rename NAL to PANAL, COALPRIPVEM to PRI_PVEM, COALPTMC to PT_PC, Boletas to listanominal
-#   gen total = Validos + NULOS + NO_REGISTRADO
-#-------------------------------------------------------------
-data_2012 <- data_2012 %>%
-  rename(PANAL = nal,
-         PRI_PVEM = coalpripvem,
-         PT_PC = coalptmc,
-         listanominal = boletas) %>%
-  mutate(total = validos + nulos + no_registrado)
-
-#-------------------------------------------------------------
 # 6. collapse (sum) PAN - listanominal total, by(municipality section)
 #   This means sum all variables from PAN through listanominal and total as well.
 #   Identify columns from PAN to listanominal + total.
 #-------------------------------------------------------------
-all_cols <- names(data_2012)
-start_var <- "pan"
-end_var <- "listanominal"
-start_pos <- match(start_var, all_cols)
-end_pos <- match(end_var, all_cols)
-vars_to_collapse <- all_cols[c(start_pos:end_pos, match("total", all_cols))]
 
 data_2012 <- data_2012 %>%
   group_by(municipality, section) %>%
-  summarize(across(all_of(vars_to_collapse), sum, na.rm=TRUE), .groups="drop")
-
-#-------------------------------------------------------------
-# 7. gen turnout = total/listanominal
-#-------------------------------------------------------------
-data_2012 <- data_2012 %>%
-  mutate(turnout = total / listanominal)
+  summarize(across(pan:no_registrado, sum, na.rm=TRUE), .groups="drop")
 
 #-------------------------------------------------------------
 # 8. Replace accented characters in municipality
@@ -1708,17 +1686,32 @@ data_2012 <- data_2012 %>%
   ))
 
 #-------------------------------------------------------------
-# 10. egen valid = rowtotal(PAN PRD PANAL PRI_PVEM PT_PC)
+# 11. Rename NAL to PANAL, COALPRIPVEM to PRI_PVEM, COALPTMC to PT_PC, Boletas to listanominal
+#   gen total = Validos + NULOS + NO_REGISTRADO
 #-------------------------------------------------------------
-valid_vars <- c("pan","prd","panal","pri_pvem","pt_pc")
-valid_vars <- intersect(valid_vars, names(data_2012))
 data_2012 <- data_2012 %>%
-  mutate(valid = rowSums(across(all_of(valid_vars)), na.rm=TRUE))
+  rename(PANAL = nal,
+         PRI_PVEM = coalpripvem,
+         PT_PC = coalptmc,
+         listanominal = boletas,
+         PAN = pan,
+         PRD = prd,) %>%
+  mutate(total = validos + nulos + no_registrado)
 
 #-------------------------------------------------------------
-# Omit municipal aggregation and ranks/winner steps.
-# (No mun_..., no rowranks, no winner generation)
+# 7. gen turnout = total/listanominal
 #-------------------------------------------------------------
+data_2012 <- data_2012 %>%
+  mutate(turnout = total / listanominal)
+
+#-------------------------------------------------------------
+# 10. egen valid = rowtotal(PAN PRD PANAL PRI_PVEM PT_PC)
+#-------------------------------------------------------------
+valid_vars <- c("pan","prd","PANAL","PRI_PVEM","PT_PC")
+valid_vars <- intersect(valid_vars, names(data_2012))
+
+data_2012 <- data_2012 %>%
+  mutate(valid = rowSums(across(all_of(valid_vars)), na.rm=TRUE))
 
 #-------------------------------------------------------------
 # 11. sort section
@@ -1742,11 +1735,6 @@ data_2012 <- data_2012 %>%
 data_2012 <- data_2012 %>%
   mutate(year = 2012,
          month = "July")
-
-data_2012 <- data_2012 %>%
-  rename(PAN = pan,
-         PRD = prd)
-
 
 #-------------------------------------------------------------
 #2015

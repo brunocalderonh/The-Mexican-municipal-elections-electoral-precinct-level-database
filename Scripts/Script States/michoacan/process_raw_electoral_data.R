@@ -313,41 +313,10 @@ data_1998 <- data_1998 %>%
   )
 
 # -------------------------------------------------------------------
-# 8. MERGE with "..\..\all_months_years.dta" by ed=16, seccion=section
-#    keep if month==9 & year==1998
-# -------------------------------------------------------------------
-data_1998 <- data_1998 %>%
-  mutate(ed=16, seccion=section)
-
-all_months <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista)
-
-data_1998 <- data_1998 %>%
-  left_join(all_months, by=c("ed","seccion")) %>%
-  filter(month==9 & year==1998)
-
-# drop if _merge==2 => not used in left_join
-# drop _merge, ed, seccion, year, month
-drops <- c("ed","seccion","year","month")
-data_1998 <- data_1998 %>%
-  select(-all_of(drops))
-
-# -------------------------------------------------------------------
-# 9. replace listanominal = lista if missing>=1
-# -------------------------------------------------------------------
-data_1998 <- data_1998 %>%
-  mutate(listanominal = if_else(missing >= 1, lista, listanominal))
-
-# drop missing, lista
-drop_vars <- c("missing","lista")
-drop_vars <- intersect(drop_vars, names(data_1998))
-data_1998 <- data_1998 %>% select(-all_of(drop_vars))
-
-# -------------------------------------------------------------------
 # 10. gen turnout = total/listanominal
 # -------------------------------------------------------------------
 data_1998 <- data_1998 %>%
-  mutate(turnout = total / listanominal)
+  mutate(turnout = ifelse(listanominal==0, NA, total / listanominal))
 
 # drop noregistrados nulos => if they exist
 extra_drop <- c("noregistrados","nulos")
@@ -371,9 +340,6 @@ data_1998 <- data_1998 %>%
     year=1998,
     month="November"
   )
-
-# drop municipality per code
-data_1998 <- data_1998 %>% select(-municipality)
 
 # -------------------------------------------------------------------
 # 1. READ CSV (Stata: insheet using "Ayu_Seccion_2001.csv")
@@ -2246,11 +2212,15 @@ all_data <- all_data %>%
     STATE="MICHOACAN"
   )
 
+#party validation!
+all_data <- all_data %>% 
+  dplyr::mutate(PH = ifelse(!is.na(PAN_PRD_PT_PANAL_PH) & PAN_PRD_PT_PANAL_PH>0 & PH >0, 0, PH))
+
 ###############################################################################
 ### PART 10. Merge LN2015 for listanominal
 ###############################################################################
 
-ln2015 <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
+ln2015 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
   filter(entidad==16, month==6) %>%
   mutate(uniqueid = (entidad*1000)+ municipio) %>%
   filter(seccion!=0) %>%

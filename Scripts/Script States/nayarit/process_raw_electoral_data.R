@@ -145,48 +145,32 @@ df1999$votosnulos <- NULL
 df1999$valid <- rowSums(df1999[, c("PRI","PVEM","PMEP","PARM","PPS","PAN_PRD_PT")], na.rm = TRUE)
 
 # Merge with all_months_years
-# We assume we have an R data frame all_my or a .dta file. Let's read from .dta:
-all_my <- read_dta("../../all_months_years.dta")  
-# or readRDS("../../all_months_years.rds")
+ln_all_months_years <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta")
+
+ln_all_months_years <- ln_all_months_years %>% 
+  dplyr::filter(state == "NAYARIT" & month == "March" & year == 1999)
 
 df1999$ed      <- 18
 df1999$seccion <- df1999$section
 
-temp_merged_99 <- merge(df1999,
-                        all_my[, c("ed","seccion","month","year","lista")],
-                        by.x = c("ed","seccion"),
-                        by.y = c("ed","seccion"),
-                        all.x = TRUE,
-                        all.y = FALSE)
+# Merge the datasets
+df1999 <- df1999 %>%
+  dplyr::left_join(ln_all_months_years %>% dplyr::select(section,lista), by = c("section")) %>% 
+  dplyr::mutate(listanominal = lista) %>% 
+  dplyr::select(-lista)
 
-temp_merged_99 <- subset(temp_merged_99, month == 6 & year == 1999)
-temp_merged_99 <- subset(temp_merged_99, !(is.na(month)))
+df1999$turnout <- df1999$total / df1999$listanominal
 
-temp_merged_99$ed      <- NULL
-temp_merged_99$seccion <- NULL
-temp_merged_99$month   <- NULL
-temp_merged_99$year    <- NULL
-
-names(temp_merged_99)[names(temp_merged_99) == "lista"] <- "listanominal"
-temp_merged_99$turnout <- temp_merged_99$total / temp_merged_99$listanominal
-
-temp_merged_99$year  <- 1999
-temp_merged_99$month <- "July"
+df1999$year  <- 1999
+df1999$month <- "July"
 
 # drop municipality for the next merge
 temp_merged_99$municipality <- NULL
 
-# Merge with 1996 minimal dataset (by section only)
-final1999 <- merge(temp_merged_99,
-                   df1996_merge,
-                   by = "section",
-                   all.x = TRUE,
-                   all.y = FALSE)
-
-final1999 <- subset(final1999, !(is.na(final1999$uniqueid) & is.na(final1999$municipality)))
+df1999 <- subset(df1999, !(is.na(df1999$uniqueid) & is.na(df1999$municipality)))
 
 # Sort by section
-final1999 <- final1999[order(final1999$section), ]
+df1999 <- df1999[order(df1999$section), ]
 
 ###############################################################################
 ## 4) 2002 DATA
@@ -494,7 +478,7 @@ temp_2011 <- temp_2011[order(temp_2011$section), ]
 
 df_96_99 <- rbind(
   df1996,
-  final1999
+  df1999
 )
 
 df_96_99_02 <- rbind(

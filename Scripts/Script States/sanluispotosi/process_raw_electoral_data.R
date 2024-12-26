@@ -29,7 +29,7 @@ setwd(file.path(script_dir, ""))
 ##############################################################################
 
 # Equivalent to: insheet using Ayu_Seccion_1997_No_LN.csv, clear
-df_1997 <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.csv") 
+df_1997 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.csv") 
 colnames(df_1997) <- tolower(colnames(df_1997))
 
 df_1997 <-df_1997 %>%
@@ -81,7 +81,7 @@ df_1997 <- df_1997 %>%
   )
 
 # Lines merging with all_months_years.dta
-df_all <- read_dta("../../all_months_years.dta") %>%
+df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
   select(ed, seccion, month, year, lista)
 
 df_1997 <- df_1997 %>%
@@ -129,14 +129,11 @@ df_1997 <- df_1997 %>%
 df_1997 <- df_1997 %>%
   mutate(runoff = (month == "August"))
 
-# Save
-write_dta(df_1997, "San_Luis_Potosi_Section_1997.dta", version=14)
-
 ##############################################################################
 # ============== 2) Runoffs 1997.xlsx  =======================================
 ##############################################################################
 
-df_runoff_1997 <- read_excel("Runoffs 1997.xlsx", sheet = "Sheet1",
+df_runoff_1997 <- read_excel("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Runoffs 1997.xlsx", sheet = "Sheet1",
                              range = "A4:O1019", col_names = TRUE) %>%
   rename(section = B) %>%
   filter(section != "") %>%
@@ -153,7 +150,7 @@ df_runoff_1997 <- df_runoff_1997 %>%
   ))
 
 # Then merging with all_months_years.dta => replicate partial logic
-df_all <- read_dta("../../all_months_years.dta") %>%
+df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
   filter(ed==24, month==7, year==1997) %>%
   rename(listanominal=lista, section=seccion) %>%
   select(section, listanominal)
@@ -177,12 +174,10 @@ df_runoff_1997 <- df_runoff_1997 %>%
     runoff= 1
   )
 
-write_dta(df_runoff_1997, "San_Luis_Potosi_Section_1997_runoff.dta", version=14)
-
 ##############################################################################
 # ============== 3) Ayu_Seccion_2000.csv  ====================================
 ##############################################################################
-df_2000 <- read_csv("Ayu_Seccion_2000.csv") %>%
+df_2000 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000.csv") %>%
   rename(municipality = municipio, section = seccion) %>%
   filter(!(municipality=="" & is.na(section))) %>%
   filter(!(is.na(total) | total==0))
@@ -217,6 +212,12 @@ df_2000 <- df_2000 %>%
   mutate(turnout = total / listanominal) %>%
   select(-nulos, -noreg)
 
+#party vote validation
+
+df_2000 <- df_2000 %>% 
+  dplyr::mutate(PVEM = ifelse(!is.na(PVEM_PCP) & PVEM_PCP>0 & PVEM >0, 0, PVEM),
+                PCP = ifelse(!is.na(PVEM_PCP) & PVEM_PCP>0 & PCP >0, 0, PCP))
+
 # uniqueid
 df_2000 <- df_2000 %>%
   mutate(uniqueid = case_when(
@@ -234,24 +235,13 @@ df_2000 <- df_2000 %>%
   mutate(
     year  = 2000,
     month = "July"
-  ) %>%
-  mutate(
-    month = ifelse(
-      municipality %in% c("AQUISMON RUNOFF", "CERRO DE SAN PEDRO RUNOFF", ... # and so on
-      ),
-      "August",
-      month
-    ),
-    municipality = ifelse(month=="August", paste(municipality, "RUNOFF"), municipality)
-  ) %>%
-  mutate(runoff = (month=="August"))
+  )
 
-write_dta(df_2000, "San_Luis_Potosi_Section_2000.dta", version=14)
 
 ##############################################################################
 # ============== 4) Ayu_Seccion_2003.csv  ====================================
 ##############################################################################
-df_2003 <- read_csv("Ayu_Seccion_2003.csv") %>%
+df_2003 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003.csv") %>%
   rename(municipality = municipio, section = seccion) %>%
   filter(!(municipality=="" & is.na(section))) %>%
   filter(!(is.na(total) | total==0))
@@ -293,12 +283,10 @@ df_2003 <- df_2003 %>%
     runoff= 0
   )
 
-write_dta(df_2003, "San_Luis_Potosi_Section_2003.dta", version=14)
-
 ##############################################################################
 # ============== 5) Runoffs 2003.xlsx  =======================================
 ##############################################################################
-df_runoff_2003 <- read_excel("Runoffs 2003.xlsx", sheet="Sheet1", range="A6:X902",
+df_runoff_2003 <- read_excel("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Runoffs 2003.xlsx", sheet="Sheet1", range="A6:X902",
                              col_names=TRUE) %>%
   # rename D->section, drop if E=="", rename F->listanominal, rename Votos->total, etc.
   mutate(across(everything(), ~ ifelse(.=="-", "0", .))) %>%
@@ -320,12 +308,10 @@ df_runoff_2003 <- df_runoff_2003 %>%
     runoff = 1
   )
 
-write_dta(df_runoff_2003, "San_Luis_Potosi_Section_2003_runoff.dta", version=14)
-
 ##############################################################################
 # ============== 6) Ayu_Seccion_2006.csv  ====================================
 ##############################################################################
-df_2006 <- read_csv("Ayu_Seccion_2006.csv") %>%
+df_2006 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006.csv") %>%
   rename(
     municipality = nombre_municipio,
     section      = seccion,
@@ -366,7 +352,7 @@ df_2006 <- df_2006 %>%
 ##############################################################################
 # ============== 7) Ayu_Seccion_2009.csv  ====================================
 ##############################################################################
-df_2009 <- read_csv("Ayu_Seccion_2009.csv") %>%
+df_2009 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.csv") %>%
   rename(
     municipality = nombre_municipio,
     section      = seccion,
@@ -405,7 +391,7 @@ df_2009 <- df_2009 %>%
 ##############################################################################
 # ============== 8) Ayu_Seccion_2012.dta  ====================================
 ##############################################################################
-df_2012 <- read_dta("Ayu_Seccion_2012.dta") %>%
+df_2012 <- read_dta("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.dta") %>%
   mutate(turnout = total/listanominal) %>%
   mutate(municipality = trimws(municipality)) %>%
   mutate(
@@ -447,7 +433,7 @@ all_slp <- bind_rows(all_slp, df_2006, df_2009, df_2012)
 # ============== 10) Ayuntamientos_2015.xlsx  ===============================
 ##############################################################################
 # Import each sheet, drop if Seccion=="", fill empty strings with "0", save .dta
-excel_file_2015 <- "Ayuntamientos_2015.xlsx"
+excel_file_2015 <- "../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx"
 sheet_names_2015 <- excel_sheets(excel_file_2015)
 
 for (sname in sheet_names_2015) {
@@ -506,8 +492,6 @@ all_2015 <- all_2015 %>%
     STATE = "SAN LUIS POTOSI"
   )
 
-write_dta(all_2015, "San_Luis_Potosi_Section_2015.dta")
-
 # The script also does "collapse (first) winner, by(municipality uniqueid)" => aggregator => omitted.
 
 # Then "use San_Luis_Potosi_Section_2015.dta, collapse => municipal => omitted aggregator"
@@ -521,7 +505,7 @@ for (f in files_2015) {
 # ============== 11) MunicipiosSLP_2018.xlsx  ===============================
 ##############################################################################
 # Similar approach for 2018
-excel_file_2018 <- "MunicipiosSLP_2018.xlsx"
+excel_file_2018 <- "../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/MunicipiosSLP_2018.xlsx"
 sheet_names_2018 <- excel_sheets(excel_file_2018)
 
 for (sname in sheet_names_2018) {
@@ -573,7 +557,7 @@ all_2018 <- all_2018 %>%
   )
 
 # Merge m:1 municipality using uniqueids.dta => replicate partial
-df_uniqueids <- read_dta("uniqueids.dta")  # created by code above
+df_uniqueids <- read_dta("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Other/uniqueids.dta")  # created by code above
 all_2018 <- all_2018 %>%
   left_join(df_uniqueids, by="municipality") %>%
   select(-municipality) %>%
@@ -592,7 +576,7 @@ all_2018 <- all_2018 %>%
   )
 
 # Merge ListadoNominalPREP2018 => replicate partial
-df_ln18 <- read_dta("../Listas Nominales/ListadoNominalPREP2018.dta") %>%
+df_ln18 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ListadoNominalPREP2018.dta") %>%
   filter(STATE=="SAN LUIS POTOSI") %>%
   rename(listanominal=ListadoNominalINE)
 

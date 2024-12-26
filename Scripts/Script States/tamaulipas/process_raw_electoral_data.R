@@ -152,26 +152,24 @@ df_collapse <- df_collapse %>%
 #    keep if month==9 & year==1998, drop unmatched, rename lista->listanominal
 ################################################################################
 
+# Merge with the dataset "ln_all_months_years.dta" using seccion (section) and ed
+ln_all_months_years <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta")
+
+ln_all_months_years <- ln_all_months_years %>% 
+  dplyr::filter(state == "TAMAULIPAS" & month == "March" & year == 1998)
+
+# Merge the datasets
 df_collapse <- df_collapse %>%
-  mutate(ed=28, seccion=section)
-
-df_all <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista) 
-
-df_join <- df_collapse %>%
-  left_join(df_all, by=c("ed","seccion")) %>%
-  filter(!is.na(lista)) %>%
-  select(-ed, -seccion, -year, -month)
-
-df_join <- df_join %>%
-  rename(listanominal = lista)
+  dplyr::left_join(ln_all_months_years %>% dplyr::select(section,lista), by = c("section")) %>% 
+  dplyr::mutate(listanominal = lista) %>% 
+  dplyr::select(-lista)
 
 ################################################################################
 # 7) gen turnout= total/listanominal, gen year=1998, month="November"
 #    save "Tamaulipas_Section_1998.dta"
 ################################################################################
 
-df_join <- df_join %>%
+df_join <- df_collapse %>%
   mutate(
     turnout = total / listanominal,
     year    = 1998,

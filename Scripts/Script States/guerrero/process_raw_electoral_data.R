@@ -206,16 +206,14 @@ collapsed_1996 <- collapsed_1996 %>%
                                 PRD_PartCardenista_PPS, PRD_PartCardenista, PRD_PartCardenista_PRT,
                                 PRD_PartCardenista_PVEM_PT)), na.rm = TRUE))
 
-lista_nominal <- read.dta13("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta") %>% 
-  filter(state == "GUERRERO") %>% 
-  filter(year == 1999 & month == "March")
+lista_nominal <- ln_all_months_years %>% 
+  dplyr::filter(state == "GUERRERO" & month == "March" & year == 1999)
 
+# Merge the datasets
 collapsed_1996 <- collapsed_1996 %>%
-  left_join(lista_nominal %>% select(section,lista), 
-            by = c("section" = "section"))
-  
-collapsed_1996 <- collapsed_1996 %>%
-  rename(listanominal=lista)
+  dplyr::left_join(ln_all_months_years %>% dplyr::select(section,lista), by = c("section")) %>% 
+  dplyr::mutate(listanominal = ifelse(year == 1996,lista,listanominal)) %>% 
+  dplyr::select(-lista)
 
 # Calculate turnout as total divided by listanominal
 collapsed_1996 <- collapsed_1996 %>%

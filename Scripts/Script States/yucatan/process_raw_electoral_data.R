@@ -2414,6 +2414,12 @@ df_2018 <- df_merged %>%
     STATE   = "YUCATAN"
   )
 
+#VALIDATION PARTY
+
+df_2018 <- df_2018 %>% 
+  dplyr::mutate(PT = ifelse(!is.na(PT_MORENA) & PT_MORENA>0 & PT >0, 0, PT),
+                MORENA = ifelse(!is.na(PT_MORENA) & PT_MORENA>0 & MORENA >0, 0, MORENA))
+
 # Combine the dataframes, handling different columns by filling with NA
 yucatan_all <- bind_rows(df_1995,
                          df_1998,

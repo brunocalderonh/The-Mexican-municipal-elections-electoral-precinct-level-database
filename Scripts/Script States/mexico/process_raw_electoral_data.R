@@ -480,20 +480,17 @@ data_2000 <- data_2000 %>%
 data_2000 <- data_2000 %>%
   mutate(ed=15, seccion=section)
 
-all_months <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista)
+# Merge with the dataset "ln_all_months_years.dta" using seccion (section) and ed
+all_months <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta")
 
+all_months <- all_months %>% 
+  dplyr::filter(state == "MEXICO" & month == "March" & year == 2000)
+
+# Merge the datasets
 data_2000 <- data_2000 %>%
-  left_join(all_months, by=c("ed","seccion")) %>%
-  filter(month==7 & year==2000)
-
-# drop if _merge==2 => in R, left_join does not produce _merge, so we only keep matched
-# drop _merge ed seccion year month
-drops <- c("ed","seccion","year","month")
-data_2000 <- data_2000 %>% select(-all_of(drops))
-
-# rename lista -> listanominal
-data_2000 <- data_2000 %>% rename(listanominal = lista)
+  dplyr::left_join(all_months %>% dplyr::select(section,lista), by = c("section")) %>% 
+  dplyr::mutate(listanominal = ifelse(year == 2000,lista,listanominal)) %>% 
+  dplyr::select(-lista)
 
 # -------------------------------------------------------------------------
 # 11. GEN turnout = total/listanominal
@@ -531,7 +528,7 @@ data_2003 <- data_2003 %>% arrange(section)
 # 4. merge section using Mapping_Section_2003.dta
 #    No merge key in R by default. We'll do a left_join on "section"
 # -------------------------------------------------------------------
-mapping_2003 <- read_dta("Mapping_Section_2003.dta")
+mapping_2003 <- read_dta("../../../Data/Raw Electoral Data/Mexico - 1996, 2000, 2003, 2006, 2009, 2012,2015,2018/Other/Mapping_Section_2003.dta")
 
 data_2003 <- data_2003 %>%
   left_join(mapping_2003, by="section")
@@ -743,7 +740,7 @@ data_2003 <- data_2003 %>%
 data_2003 <- data_2003 %>%
   mutate(ed=15, seccion=section)
 
-all_months <- read_dta("../../all_months_years.dta") %>%
+all_months <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta") %>% 
   select(ed, seccion, month, year, lista)
 
 data_2003 <- data_2003 %>%
@@ -1993,7 +1990,8 @@ data_2015 <- data_2015 %>%
 # 9. preserve / restore logic with LN2015 data
 #     read LN2015.dta, filter, rename
 # -------------------------------------------------------------------
-ln2015 <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
+
+ln2015 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
   filter(entidad==15 & month==6) %>%  # keep if entidad==15 & month==6
   mutate(uniqueid = (entidad*1000)+ municipio) %>%
   filter(seccion!=0) %>%
@@ -2004,22 +2002,13 @@ ln2015 <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
 # 10. merge 1:1 section using LN15_MEX.dta
 #     use Mexico_Section_2015.dta, then merge
 # -------------------------------------------------------------------
-data_2015 <- read_dta("Mexico_Section_2015.dta")
+data_2015 <- read_dta("../../../Data/Raw Electoral Data/Mexico - 1996, 2000, 2003, 2006, 2009, 2012,2015,2018/Mexico_Section_2015.dta")
 
 data_2015 <- data_2015 %>%
   left_join(ln15_mex, by="section")  # left_join = merge 1:1 section
 
 # rename lista -> listanominal
 data_2015 <- data_2015 %>% rename(listanominal = lista)
-
-# bys uniqueid: egen mun_listanominal= sum(listanominal)
-# => sum by uniqueid
-mln_sum <- data_2015 %>%
-  group_by(uniqueid) %>%
-  summarize(mun_listanominal = sum(listanominal, na.rm=TRUE), .groups="drop")
-
-data_2015 <- data_2015 %>%
-  left_join(mln_sum, by="uniqueid")
 
 # g turnout = total/listanominal
 data_2015 <- data_2015 %>%
@@ -2118,7 +2107,7 @@ data_2016 <- data_2016 %>%
 # 7. MERGE LN2016 data
 # -------------------------------------------------------------------
 # preserve/restore logic in Stata. We'll read LN2016 then join.
-ln2016 <- read_dta("../Listas Nominales/LN 2012-2019/2016/LN2016.dta") %>%
+ln2016 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2016/LN2016.dta") %>%
   filter(entidad==15, month==2) %>% # keep if entidad==15 & month==2
   select(seccion, lista) %>%
   rename(section=seccion, listanominal=lista)

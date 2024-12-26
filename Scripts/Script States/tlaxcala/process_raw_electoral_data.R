@@ -292,22 +292,26 @@ df_merged1 <- df_no_ln_collapse %>%
 # Part C: Merge with all_months_years (ed=29, month=10, year=2004), keep if matched
 ################################################################################
 
-
 df_merged2 <- df_merged1 %>%
   mutate(
     ed      = 29,
     seccion = section
   )
 
-df_all <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista) %>%
-  filter(month==10, year==2004) 
+# Merge with the dataset "ln_all_months_years.dta" using seccion (section) and ed
+ln_all_months_years <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta")
+
+ln_all_months_years <- ln_all_months_years %>% 
+  dplyr::filter(state == "TLAXCALA" & month == "December" & year == 2004)
+
+# Merge the datasets
+df_merged2 <- df_merged2 %>%
+  dplyr::left_join(ln_all_months_years %>% dplyr::select(section,lista), by = c("section")) %>% 
+  dplyr::mutate(listanominal = ifelse(year == 2007,lista,listanominal)) %>% 
+  dplyr::select(-lista)
 
 df_joined <- df_merged2 %>%
-  left_join(df_all, by=c("ed","seccion"))
-
-df_joined <- df_joined %>%
-  select(-ed, -seccion, -year, -month, -starts_with("_merge"))
+  select(-ed, -seccion, -year, -month)
 
 # "replace listanominal = lista if listanominal==."
 # in R, we do:
