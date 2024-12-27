@@ -55,7 +55,8 @@ data_1997 <- data_1997 %>%
             by = c("section" = "section")) %>%
   mutate(listanominal = ifelse(missing >= 1, lista, listanominal)) %>%
   select(-c(missing, lista, state, day, month, year))
-names(data_1997)
+
+
 # Rename parties and calculate turnout
 data_1997 <- data_1997 %>%
   select(-c("NO REG",NULOS)) %>% 
@@ -763,10 +764,8 @@ data_2012 <- data_2012 %>%
   mutate(uniqueid = unique_ids[municipality])
 
 ###########################################
-### Valid Votes
+### Valid Votes and total
 ###########################################
-# Stata:
-# egen valid = rowtotal(PAN PRI PRD PT PVEM PC PANAL PAN_PANAL PRI_PVEM)
 
 valid_parties <- c("PAN", "PRI", "PRD", "PT", "PVEM", "PC", "PANAL", "PAN_PANAL", "PRI_PVEM")
 
@@ -774,12 +773,28 @@ data_2012 <- data_2012 %>%
   mutate(valid = rowSums(across(all_of(valid_parties)), na.rm = TRUE))
 
 ###########################################
+### Lista nominal and turnout
+###########################################
+
+lista_nominal <- read.dta13("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta") %>% 
+  filter(state == "GUANAJUATO" &
+           month == "July" &
+           year == 2012)
+
+data_2012 <- data_2012 %>%
+  left_join(lista_nominal %>% select(section,lista), 
+            by = c("section" = "section")) %>%
+  mutate(listanominal = lista) %>%
+  select(-lista)
+
+###########################################
 ### Add Year and Month
 ###########################################
 
 data_2012_collapsed <- data_2012 %>%
   mutate(year = 2012,
-         month = "July")
+         month = "July",
+         turnout = total/listanominal)
 
 rm(data_2012)
 
@@ -894,7 +909,8 @@ data_2018 <- data_2018 %>%
 # Calculate valid votes and turnout
 data_2018_collapsed <- data_2018 %>%
   mutate(valid = rowSums(across(c(PAN, PRI, PRD, PVEM, PT, MC, PANAL, MORENA, PES, MORENA_PT_PES, CI_1, CI_2, CI_3)), na.rm = TRUE),
-         turnout = total / listanominal)
+         turnout = total / listanominal) %>% 
+  mutate(year = 2018)
 
 rm(data_2018)
 
@@ -908,6 +924,7 @@ guanajuato_all <- bind_rows(data_1997_collapsed,
                             data_2015_collapsed,
                             data_2018_collapsed) %>% 
   select(-c(NULO,NOREG,Nulos,Noregistrados))
+
 
 data.table::fwrite(guanajuato_all,"../../../Processed Data/Guanajuato/Guanajuato_process_raw_data.csv")
 

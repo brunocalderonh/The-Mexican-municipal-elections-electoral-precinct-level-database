@@ -1019,7 +1019,7 @@ data_2016 <- data_2016 %>%
   select(c(municipality,uniqueid,Sección,
            PAN,PT,MC,PANAL,MORENA,PES,PRI,
            PVEM,PRD,PRI_PVEM_PANAL,
-           CI_1,CI_2,CI_3))
+           CI_1,CI_2,CI_3,NOREGISTRADO,NULO,Nulos,VOTOSNULOS))
 
 # collapse (sum) after these transformations is complicated due to the complexity of the code. 
 # According to instructions, we omit mun_ and rowranks. The code does a final collapse after merges. We'll still do final collapse.
@@ -1041,7 +1041,7 @@ summary(data_2016)
 
 data_2016 <- data_2016 %>%
   group_by(municipality,uniqueid,section) %>% 
-  summarise(across(c(PAN:CI_3), sum, na.rm=TRUE), .groups="drop")
+  summarise(across(c(PAN:VOTOSNULOS), sum, na.rm=TRUE), .groups="drop")
 
 # rename lista to listanominal after merge
 data_2016 <- data_2016 %>%
@@ -1050,7 +1050,12 @@ data_2016 <- data_2016 %>%
   select(-lista) 
 
 data_2016 <- data_2016 %>%
-  mutate(year=2016, month="July")
+  mutate(year=2016, 
+         month="July") %>% 
+  rowwise() %>%
+  mutate(total = sum(c_across(c(PAN:VOTOSNULOS)),na.rm=TRUE)) %>%
+  mutate(turnout = total/listanominal) %>% 
+  select(-c(NOREGISTRADO,NULO,Nulos,VOTOSNULOS))
 
 # Next, read Ayu_Seccion_2016_Extraordinario.csv
 extra_data <- read_delim("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_2016_Extraordinario.csv", delim=",")

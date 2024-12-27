@@ -19,6 +19,7 @@ pacman::p_load (dplyr
 # Set working directory
 # Get the path of the current script
 script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
 # Set the working directory to the root of the repository
 # Assuming your script is in 'Scripts/Script States/', go two levels up
 setwd(file.path(script_dir, ""))
@@ -206,13 +207,16 @@ collapsed_1996 <- collapsed_1996 %>%
                                 PRD_PartCardenista_PPS, PRD_PartCardenista, PRD_PartCardenista_PRT,
                                 PRD_PartCardenista_PVEM_PT)), na.rm = TRUE))
 
-lista_nominal <- ln_all_months_years %>% 
+ln_all_months_years <- read.dta13("~/Documents/GitHub/Electoral-Clientelism/Data/Raw Electoral Data/Listas Nominales/all_months_years.dta")
+
+ln_all_months_years <- ln_all_months_years %>% 
   dplyr::filter(state == "GUERRERO" & month == "March" & year == 1999)
 
 # Merge the datasets
+
 collapsed_1996 <- collapsed_1996 %>%
   dplyr::left_join(ln_all_months_years %>% dplyr::select(section,lista), by = c("section")) %>% 
-  dplyr::mutate(listanominal = ifelse(year == 1996,lista,listanominal)) %>% 
+  dplyr::mutate(listanominal = lista) %>% 
   dplyr::select(-lista)
 
 # Calculate turnout as total divided by listanominal
@@ -698,16 +702,17 @@ data_2008 <- data_2008 %>% rename_with(tolower)
 
 data_2008 <- data_2008 %>%
   rename(municipality = nombre_municipio, 
-         section = seccion, 
-         listanominal = lista_nominal) %>%
+         section = seccion) %>%
   filter(!(municipality == "" & is.na(section))) %>%
+  mutate(listanominal = lista_nominal) %>% 
   mutate(across(listanominal:total, as.numeric)) %>%
-  filter(!is.na(total) & total != 0)
+  filter(!is.na(total) & total != 0) %>% 
+  select(-lista_nominal)
 
 # Collapse the data by municipality and section
 data_2008_collapsed <- data_2008 %>%
   group_by(municipality, section) %>%
-  summarise(across(listanominal:total, sum, na.rm = TRUE)) %>%
+  summarise(across(pan:listanominal, sum, na.rm = TRUE)) %>%
   rename(PAN = pan, 
          PRI = pri, 
          PRD = prd, 
@@ -1154,24 +1159,15 @@ uniqueid_map <- c("ACAPULCO DE JUAREZ"=12001, "ACATEPEC"=12076, "AHUACUOTZINGO"=
 see_data <- see_data %>%
   mutate(uniqueid = uniqueid_map[municipality])
 
-# collapse (sum) PAN - MORENA_ES total listanominal, by(municipality section uniqueid)
-# Identify columns PAN-MORENA_ES. Adjust as needed. Let's assume PAN through MORENA_ES and also total, listanominal exist.
-# Check columns. The code suggests we have PAN, PRI, PRD, ... up to MORENA_ES plus total and listanominal
-# We must sum these by municipality, section, uniqueid
 vars_to_collapse2 <- c("PAN","PRI","PRD","PVEM","PT","MC","PANAL","MORENA","PES","PPG","PIH","PCG","PSM","PSG",
                        "PAN_PRD","PRD_MC","MORENA_ES","PRI_PVEM","PAN_PRD_MC",
                        "CI_1","CI_2","CI_4","CI_5","CI_7","CI_8","CI_9","total","listanominal")
-# Adjust based on the original dataset. The code references PAN-MORENA_ES, which implies a range. We must ensure these columns exist.
-# If some columns don't exist yet (like from code?), ensure that all are present.
 
-# We will trust these columns are present after reading the data. If not, adjust accordingly.
 
 see_data_sum <- see_data %>%
   group_by(municipality, section, uniqueid) %>%
   summarise(across(all_of(vars_to_collapse2), sum, na.rm = TRUE), .groups = "drop")
 
-# m:1 merge by municipality in Stata means match merge on municipality, if duplicates can appear.
-# In R, just do a left_join (assuming see_data_sum is main data)
 see_data_sum <- see_data_sum %>%
   left_join(mun_data, by = "municipality")
 
@@ -1272,6 +1268,8 @@ guerrero_all <- bind_rows(data_1999_collapsed,
                             data_2012_collapsed,
                             data_2015_collapsed,
                             see_data_sum) 
+
+summary(guerrero_all)
 
 data.table::fwrite(guerrero_all,"../../../Processed Data/Guerrero/Guerrero_process_raw_data.csv")
 
