@@ -434,7 +434,7 @@ df_collapsed <- df_collapsed %>%
 #    keep if month==6 & year==1998, drop unmatched, rename lista->listanominal
 ################################################################################
 df_all_1 <- tryCatch({
-  read_dta("C:/Users/Horacio/Dropbox/Turismo Electoral/all_months_years.dta") 
+  read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") 
 }, error=function(e) NULL)
 
 merge_fn <- function(df_main, df_using) {

@@ -173,7 +173,7 @@ df_collapsed <- df_collapsed %>%
 # We'll attempt two merges, as in your code (capture merge ...).
 # If the file doesn't exist in both paths, adapt accordingly.
 df_all_1 <- tryCatch({
-  read_dta("C:/Users/Horacio/Dropbox/Turismo Electoral/all_months_years.dta")
+  read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") 
 }, error=function(e) NULL)
 
 # We'll define a function to do the merge if df_all is not NULL
