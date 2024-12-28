@@ -30,7 +30,8 @@ setwd(file.path(script_dir, ""))
 
 
 # 1) Read CSV: "Ayu_Seccion_1997_No_LN.csv"
-df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.csv", 
+               show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 
 # 2) rename municipio->municipality, seccion->section
@@ -147,20 +148,19 @@ df_collapsed <- df_collapsed %>%
   mutate(valid = sum(c_across(c("PAN","PRI","PRD","PartCardenista","PT","PVEM","PCM","PPS","PDM")), na.rm=TRUE)) %>%
   ungroup()
 
-all_months <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista) %>%
-  filter(month==1 & year==1997) %>% 
-  mutate(ed = 17, seccion = section)
+all_months <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") 
+
+all_months <- all_months %>%
+  filter(state == "MORELOS" &
+         month== "January" & 
+           year==1997 )
 
 df_collapsed <- df_collapsed %>%
-  left_join(all_months, by=c("ed","seccion"))
+  left_join(all_months, by=c("section"))
 
 # drop if _merge==2 => in R, we do not have _merge. But if some rows didn't match, they'd have NA. We'll just drop if 'lista' is NA:
 df_collapsed <- df_collapsed %>%
   filter(!is.na(lista))
-
-# drop _merge, ed, seccion, year, month (the Stata snippet does so)
-df_collapsed <- df_collapsed %>% select(-ed, -seccion, -year, -month)
 
 # rename lista -> listanominal
 df_collapsed <- df_collapsed %>%
@@ -236,31 +236,8 @@ df_collapsed <- df %>%
   group_by(municipality, section) %>%
   summarize(across(all_of(collapse_cols), sum, na.rm=TRUE), .groups="drop")
 
-# 9) g ed=17; g seccion=section; capture merge 1:m ed seccion using "..\..\all_months_years.dta" keepusing(month year lista)
-#    keep if month==7 & year==1997
-#    drop if _merge==2
-#    drop _merge ed seccion year month
-#    rename lista -> listanominal
+# 9)
 
-all_months <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista)%>%
-  filter(month==7 & year==1997) %>%
-  mutate(ed = 17, seccion = section)
-
-# mimic 1:m => left_join on (ed, seccion)
-df_collapsed <- df_collapsed %>%
-  left_join(all_months, by=c("ed","seccion"))
-
-# drop if _merge==2 => in R, there's no _merge, but if unmatched => NA in `lista`, so drop those:
-df_collapsed <- df_collapsed %>%
-  filter(!is.na(lista))
-
-# drop _merge ed seccion year month
-df_collapsed <- df_collapsed %>% select(-ed, -seccion, -year, -month)
-
-# rename lista -> listanominal
-# but we already have a column named listanominal from the collapsed. 
-# We'll store it: if "lista" in names => rename
 if("lista" %in% names(df_collapsed)) {
   df_collapsed <- df_collapsed %>%
     mutate(listanominal = if_else(missing >= 1, lista, listanominal)) %>%
@@ -290,7 +267,7 @@ df_collapsed <- df_collapsed %>%
 
 # drop noreg nulos
 df_collapsed <- df_collapsed %>%
-  select(-noreg, -nulos)
+  select(-nulos)
 
 # 11) gen uniqueid=0, replace if ...
 df_collapsed <- df_collapsed %>%
@@ -360,7 +337,8 @@ rm(df)
 
 # 1) Read Excel: 'Extraordinario 2001.xlsx', sheet="Sheet1", first row as headers
 #    Stata: import excel "Extraordinario 2001.xlsx", sheet("Sheet1") firstrow clear
-df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Extraordinario 2001.xlsx", sheet = "Sheet1", col_names = TRUE)
+df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Extraordinario 2001.xlsx", 
+                 sheet = "Sheet1", col_names = TRUE)
 
 # 2) rename SECCIÓN->section, SUMA->total, LISTA->listanominal
 #    In R:
@@ -419,16 +397,12 @@ df <- df %>%
     municipality = municipio,
     section      = sección
   )
-# *rename listanominal nominal is commented in Stata, ignoring in R
 
 # 3) drop if municipality=="" & section==.
 df <- df %>%
   filter(!(municipality == "" & is.na(section)))
 
 # 4) drop if total==. | total==0 
-#    => we must ensure 'total' exists; if not we create it soon. 
-#    But in your snippet, we see `drop if total==. | total==0` BEFORE we do destring or collapse. 
-#    Possibly 'total' is already in CSV? We'll do it as snippet says:
 df <- df %>%
   filter(!(is.na(total) | total==0))
 
@@ -516,25 +490,21 @@ df_collapsed <- df_collapsed %>%
   mutate(valid = sum(c_across(c("PAN","PRI","PRD","UDM","PVEM","PC","PSN","PAS","PMP","PLM","PFC")), na.rm=TRUE)) %>%
   ungroup()
 
-# 10) g ed=17, g seccion=section => merging with all_months_years.dta
-#     keep if month==7 & year==2003, drop if _merge==2, rename lista->listanominal
-df_collapsed <- df_collapsed %>%
-  mutate(ed=17, seccion=section)
+# 10)merging with lista nominal
 
-all_months <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista) %>%
-  filter(month==7 & year==2003)
+all_months <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") 
+
+all_months <- all_months %>%
+  filter(state == "MORELOS" &
+           month== "July" & 
+           year==2003 )
 
 df_collapsed <- df_collapsed %>%
-  left_join(all_months, by=c("ed","seccion"))
+  left_join(all_months, by=c("section"))
 
 # drop if _merge==2 => in R we check if matched => filter out any NA in `lista` 
 df_collapsed <- df_collapsed %>%
   filter(!is.na(lista))
-
-# drop _merge ed seccion year month
-df_collapsed <- df_collapsed %>%
-  select(-ed, -seccion, -year, -month)
 
 # rename lista->listanominal
 df_collapsed <- df_collapsed %>%
@@ -964,43 +934,6 @@ df_collapsed <- df %>%
   group_by(municipality, section) %>%
   summarize(across(all_of(collapse_vars), sum, na.rm=TRUE), .groups="drop")
 
-
-# If we have 'c_pri_panal' and 'cc_pri_panal' columns:
-if("c_pri_panal" %in% names(df_collapsed) && "cc_pri_panal" %in% names(df_collapsed)) {
-  df_collapsed <- df_collapsed %>%
-    mutate(
-      c_pri_panal = if_else(c_pri_panal==0 & cc_pri_panal!=0, cc_pri_panal, c_pri_panal)
-    ) %>%
-    select(-cc_pri_panal)
-}
-
-if("c_prd_pt_pc" %in% names(df_collapsed) && "cc_prd_pt_pc" %in% names(df_collapsed)) {
-  # snippet doesn't mention 'replace c_prd_pt_pc= cc_prd_pt_pc', but let's see if we need it:
-  # The snippet says: rename c_prd_pt_pc -> PRD_PT_PC
-  # We do that rename after we handle 'cc_prd_pt_pc' if it exists.
-  # Possibly we do the same logic: if c_prd_pt_pc==0 & cc_prd_pt_pc!=0 => c_prd_pt_pc= cc_prd_pt_pc
-  # The snippet doesn't explicitly say that, but let's do the snippet exactly:
-  
-  # The snippet does not have a line for c_prd_pt_pc = cc_prd_pt_pc => we skip.
-  # We'll just drop cc_prd_pt_pc if snippet says so? The snippet doesn't mention dropping it?
-  # Actually the snippet doesn't mention "replace c_prd_pt_pc=..." or "drop cc_prd_pt_pc".
-  # We'll just rename c_prd_pt_pc -> PRD_PT_PC below and also rename cc_prd_pt_pc -> ???
-  
-  message("Snippet does not mention how to handle cc_prd_pt_pc explicitly, skipping any 'replace' line.")
-}
-
-# Similarly for c_prd_pc, c_pvem_panal, c_pri_pvem => check if cc_ version exists => snippet doesn't mention it.
-# We'll skip.
-
-# 6) now we drop pri_panal prd_pt_pc prd_pc pvem_panal pri_pvem => if they exist before rename?
-#    The snippet says "drop pri_panal prd_pt_pc prd_pc pvem_panal pri_pvem"
-#    But actually the snippet is ambiguous: we see "drop pri_panal prd_pt_pc prd_pc pvem_panal pri_pvem" 
-#    *before* the rename lines. Possibly those are old columns to remove. We'll replicate that exactly:
-
-to_drop <- c("pri_panal","prd_pt_pc","prd_pc","pvem_panal","pri_pvem")
-df_collapsed <- df_collapsed %>%
-  select(-any_of(to_drop))
-
 # 7) rename c_pri_panal -> PRI_PANAL, c_prd_pt_pc -> PRD_PT_PC, c_prd_pc->PRD_PC, c_pvem_panal->PVEM_PANAL, c_pri_pvem->PRI_PVEM
 df_collapsed <- df_collapsed %>%
   rename_with(~"PRI_PANAL", .cols="c_pri_panal") %>%
@@ -1021,7 +954,7 @@ df_collapsed <- df_collapsed %>%
     PANAL = panal,
     PSD   = psd
   )
-
+names(df_collapsed)
 # 8) egen total= rowtotal(PAN PRI PRD PT PC PVEM PANAL PSD PRI_PANAL PRD_PT_PC PRD_PC PVEM_PANAL PRI_PVEM nulos)
 #    => let's do rowwise sum ignoring NA, then snippet says 'drop nulos'
 df_collapsed <- df_collapsed %>%
@@ -1101,26 +1034,22 @@ df_collapsed <- df_collapsed %>%
          PT = ifelse(PRD_PT_PC>0, 0, PT),
          PC = ifelse(PRD_PT_PC>0, 0, PC)) 
 
-# 11) g ed=17, g seccion=section
-# capture merge 1:m ed seccion using "..\..\all_months_years.dta", keepusing(month year lista day)
-# keep if month==7 & year==2012 & day==1
-# drop if _merge==2
-# rename lista -> listanominal
-df_collapsed <- df_collapsed %>%
-  mutate(ed=17, seccion=section)
+# 11) Lista Nominal
 
-all_months <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista, day)%>%
-  filter(month==7 & year==2012 & day==1)
 
-df_collapsed <- df_collapsed %>%
-  left_join(all_months, by=c("ed","seccion"))
+all_months <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") 
+
+all_months <- all_months %>%
+  filter(state == "MORELOS" &
+           month== "July" & 
+           year==2012 ) %>% 
+  select(section,lista)
 
 df_collapsed <- df_collapsed %>%
-  select(-ed, -seccion, -year, -month, -day)
-df_collapsed <- df_collapsed %>%
-  mutate(listanominal = coalesce(listanominal, lista)) %>%
-  select(-lista)
+  left_join(all_months, by=c("section"))
+
+df_collapsed <- df_collapsed %>% 
+  rename(listanominal = lista)
 
 # 12) gen turnout= total/listanominal
 df_collapsed <- df_collapsed %>%
@@ -1142,7 +1071,8 @@ df_2012 <- df_collapsed %>%
 
 # 1) Read Excel: 'Ayuntamientos_2015.xlsx' with first row as headers
 #    Stata: import excel "Ayuntamientos_2015.xlsx", firstrow clear
-df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx", col_names = TRUE)
+df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx", 
+                 col_names = TRUE)
 
 # 2) replace PRI=. if C_PRI_PVEM_PANAL!=.
 #    => if there's a non-missing C_PRI_PVEM_PANAL, set PRI to NA
@@ -1200,326 +1130,269 @@ df_2015 <- df_collapsed %>%
   mutate(
     year=2015,
     month="June",
-    STATE="MORELOS"
+    turnout = total/listanominal
   )
+names(df_2015)
 
-###############################################################################
-### PART X: Replicating the Stata snippet for "Ayuntamientos_2018.xlsx" in R
-###############################################################################
+####### 2018
 
-###############################################################################
-### PART X: Translating Stata snippet for "Ayuntamientos_2018.xlsx" into R
-###############################################################################
+all_sheets <- excel_sheets("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx")
+sheet_index <- seq_along(all_sheets)
 
-library(readxl)
-library(dplyr)
-library(haven)
-
-# 1) "import excel using 'Ayuntamientos_2018.xlsx', describe" 
-#    => in R, we can list sheets with excel_sheets(...).
-all_sheets <- excel_sheets("Ayuntamientos_2018.xlsx")
-
-# 2) The Stata snippet loops over each sheet:
-#    forvalues sheet=1/`=r(N_worksheet)' {
-#       clear
-#       local sheetname=r(worksheet_`sheet')
-#       import excel "Ayuntamientos_2018.xlsx", sheet("`sheetname'") clear firstrow allstring
-#       drop if uniqueid==""
-#       foreach x of varlist * {
-#         replace `x'="0" if `x'==""
-#       }
-#       save "`sheetname'.dta", replace
-#    }
-#
-# In R, we replicate that logic:
-sheet_index <- seq_along(all_sheets)  # 1 through number of sheets
-
-for(i in sheet_index) {
+for (i in sheet_index) {
   sheetname <- all_sheets[i]
   message(paste("Processing sheet:", sheetname))
   
-  # read Excel sheet, all as character initially
+  # Read Excel
   df_sheet <- read_excel(
-    "Ayuntamientos_2018.xlsx", 
+    "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx", 
     sheet = sheetname, 
     col_names = TRUE
   )
   
-  # drop if uniqueid==""
-  # (ensure there's a 'uniqueid' column in df_sheet)
-  if(!"uniqueid" %in% names(df_sheet)) {
-    # If there's no 'uniqueid', skip or decide what to do
+  # If there's no uniqueid column, skip
+  if (!"uniqueid" %in% names(df_sheet)) {
     message("Sheet: ", sheetname, " has no 'uniqueid' column, skipping.")
     next
   }
-  df_sheet <- df_sheet %>% 
+  
+  # Filter out empty uniqueid
+  df_sheet <- df_sheet %>%
     filter(uniqueid != "")
   
-  # for each var in varlist *, if any cell is "", replace with "0"
-  # i.e. "replace `x'="0" if `x'=="" 
-  # in R, we'll do a loop over columns
-  for(cn in names(df_sheet)) {
-    # force column to character so we can safely replace
+  # Convert empty strings to "0"
+  for (cn in names(df_sheet)) {
     df_sheet[[cn]] <- as.character(df_sheet[[cn]])
-    df_sheet[[cn]][df_sheet[[cn]]==""] <- "0"
+    df_sheet[[cn]][df_sheet[[cn]] == ""] <- "0"
   }
   
-  # save "`sheetname'.dta", replace
-  # We'll sanitize sheetname for file naming if needed
+  # 1) Replace invalid chars with underscores
+  # 2) Truncate to 32 chars to satisfy Stata .dta limit
+  df_sheet <- df_sheet %>%
+    rename_with(function(x) {
+      # Step 1: replace all non-alphanumeric with underscores:
+      x <- gsub("[^A-Za-z0-9_]", "_", x)
+      # Step 2: truncate to 32 characters
+      substr(x, 1, 32)
+    })
+  
+  # Save as .dta
   file_out <- paste0(gsub("[^A-Za-z0-9_]", "_", sheetname), ".dta")
-  haven::write_dta(df_sheet, file_out)
+  write_dta(df_sheet, file_out)
   message(paste("Wrote:", file_out))
 }
 
-# 3) "clear" => in R, we don't typically do that, but let's move on
-
-# 4) The snippet appends using "reporte (1).dta", "reporte (2).dta", ...
-#    We'll assume we have a list of file names. Then we read them all and combine 
+# 1) We'll define the list of files to append:
 files_to_append <- c(
-  "reporte (1).dta","reporte (2).dta","reporte (3).dta","reporte (4).dta",
-  "reporte (5).dta","reporte (6).dta","reporte (7).dta","reporte (8).dta",
-  "reporte (9).dta","reporte (10).dta","reporte (11).dta","reporte (12).dta",
-  "reporte (13).dta","reporte (14).dta","reporte (15).dta","reporte (16).dta",
-  "reporte (17).dta","reporte (18).dta","reporte (19).dta","reporte (20).dta",
-  "reporte (21).dta","reporte (22).dta","reporte (23).dta","reporte (24).dta",
-  "reporte (25).dta","reporte (26).dta","reporte (27).dta","reporte (28).dta",
-  "reporte (29).dta","reporte (30).dta","reporte (31).dta","reporte (32).dta",
-  "reporte (33).dta"
+  "reporte__1_.dta","reporte__2_.dta","reporte__3_.dta","reporte__4_.dta",
+  "reporte__5_.dta","reporte__6_.dta","reporte__7_.dta","reporte__8_.dta",
+  "reporte__9_.dta","reporte__10_.dta","reporte__11_.dta","reporte__12_.dta",
+  "reporte__13_.dta","reporte__14_.dta","reporte__15_.dta","reporte__16_.dta",
+  "reporte__17_.dta","reporte__18_.dta","reporte__19_.dta","reporte__20_.dta",
+  "reporte__21_.dta","reporte__22_.dta","reporte__23_.dta","reporte__24_.dta",
+  "reporte__25_.dta","reporte__26_.dta","reporte__27_.dta","reporte__28_.dta",
+  "reporte__29_.dta","reporte__30_.dta","reporte__31_.dta","reporte__32_.dta",
+  "reporte__33_.dta"
 )
 
+## 2) Append them into a single data frame
 df_appended <- NULL
-for(ff in files_to_append) {
+for (ff in files_to_append) {
   message("Reading and appending: ", ff)
   temp_df <- read_dta(ff)
-  # We'll combine
-  df_appended <- if(is.null(df_appended)) temp_df else dplyr::bind_rows(df_appended, temp_df)
+  df_appended <- if (is.null(df_appended)) {
+    temp_df
+  } else {
+    bind_rows(df_appended, temp_df)
+  }
 }
 
-# 5) destring *, replace => in R: we convert all columns to numeric if possible
+# Suppose your data frame is called df_all
+# We'll remove the prefix "votos_" from each column name
+names(df_appended) <- sub("^votos_", "", names(df_appended))
+
+## 3) Convert columns from character to numeric if possible ("destring")
 df_all <- df_appended %>%
-  mutate(across(everything(), ~ {
-    # if it's character, convert to numeric
-    if(is.character(.x)) suppressWarnings(as.numeric(.x)) else .x
+  mutate(across(pan:cand_ind_del_pueblo_para_e, ~ {
+    if (is.character(.)) suppressWarnings(as.numeric(.)) else .
   }))
 
-rm(df_appended)
-
-# 3)transformations:
-
-df_all <- df_all %>%
-  mutate(across(everything(), ~ if_else(is.character(.x), 
-                                        suppressWarnings(as.numeric(.x)), 
-                                        as.numeric(.x)), 
-                .names = "orig_{.col}"))
-
-# 4) rename "votos*" => 
-names(df_all) <- sub("^votos", "", names(df_all))
-
-# 5) drop Z AA AB AC AF Y, if present
-cols_to_drop <- c("Z","AA","AB","AC","AF","Y")
-df_all <- df_all %>% select(-any_of(cols_to_drop))
-
-# 6) rename (pan pri prd pvem pt mc na psd morena es humanista) 
-#    => (PAN PRI PRD PVEM PT MC PANAL PSD MORENA PES PH)
-rename_map <- c(
-  "pan"       ="PAN",
-  "pri"       ="PRI",
-  "prd"       ="PRD",
-  "pvem"      ="PVEM",
-  "pt"        ="PT",
-  "mc"        ="MC",
-  "na"        ="PANAL",
-  "psd"       ="PSD",
-  "morena"    ="MORENA",
-  "es"        ="PES",
-  "humanista" ="PH"
-)
-for(old_n in names(rename_map)) {
-  if(old_n %in% names(df_all)) {
-    new_n <- rename_map[[old_n]]
-    df_all <- df_all %>% rename(!!new_n := all_of(old_n))
-  }
+##############################################################################
+# Step 2: Create PT_MORENA_PES by merging columns like cc_pt_morena_pes,
+#         config_cc_pt_morena, etc.
+##############################################################################
+# Initialize PT_MORENA_PES to NA_real_ if it doesn't exist
+if (!"PT_MORENA_PES" %in% names(df_all)) {
+  df_all <- df_all %>% mutate(PT_MORENA_PES = NA_real_)
 }
 
-# 7) rename (no_registrados num_votos_nulos TotaldeVotos ListaNominal) => (no_reg nulo total listanominal)
-rename_map2 <- c(
-  "no_registrados"  ="no_reg",
-  "num_votos_nulos" ="nulo",
-  "TotaldeVotos"    ="total",
-  "ListaNominal"    ="listanominal"
-)
-for(old_n in names(rename_map2)) {
-  if(old_n %in% names(df_all)) {
-    new_n <- rename_map2[[old_n]]
-    df_all <- df_all %>% rename(!!new_n := all_of(old_n))
-  }
-}
-
-# 8) Next snippet lines for merging columns with cc_prd_pvem_psd etc.
-#    We'll handle them step by step:
-#    "gen PRD_PVEM_PSD=."
-df_all <- df_all %>%
-  mutate(
-    PRD_PVEM_PSD = NA_real_
-  )
-
-# replace PRD_PVEM_PSD = cc_prd_pvem_psd + PRD + PSD + PVEM + config_cc_prd_pvem + config_cc_prd_psd + config_cc_pvem_psd if cc_prd_pvem_psd!=.
-# plus zero out PRD, PSD, PVEM accordingly
-if("cc_prd_pvem_psd" %in% names(df_all)) {
+# If cc_pt_morena_pes columns exist
+if ("cc_pt_morena_pes" %in% names(df_all)) {
   df_all <- df_all %>%
     mutate(
-      PRD_PVEM_PSD = if_else(!is.na(cc_prd_pvem_psd),
-                             coalesce(PRD_PVEM_PSD,0) + coalesce(cc_prd_pvem_psd,0)
-                             + coalesce(PRD,0) + coalesce(PSD,0) + coalesce(PVEM,0)
-                             + coalesce(config_cc_prd_pvem,0) + coalesce(config_cc_prd_psd,0)
-                             + coalesce(config_cc_pvem_psd,0),
-                             PRD_PVEM_PSD
+      PT_MORENA_PES = if_else(
+        !is.na(cc_pt_morena_pes),
+        coalesce(PT_MORENA_PES, 0) +
+          coalesce(cc_pt_morena_pes, 0) +
+          coalesce(config_cc_pt_morena, 0) +
+          coalesce(config_cc_pt_pes, 0) +
+          coalesce(config_cc_morena_pes, 0) +
+          coalesce(morena, 0) +
+          coalesce(pt, 0) +
+          coalesce(es, 0),
+        PT_MORENA_PES
       ),
-      PRD  = if_else(!is.na(cc_prd_pvem_psd), NA_real_, PRD),
-      PSD  = if_else(!is.na(cc_prd_pvem_psd), NA_real_, PSD),
-      PVEM = if_else(!is.na(cc_prd_pvem_psd), NA_real_, PVEM)
+      # Zero out / set NA the individual columns if cc_pt_morena_pes is not NA
+      morena = if_else(!is.na(cc_pt_morena_pes), NA_real_, morena),
+      es    = if_else(!is.na(cc_pt_morena_pes), NA_real_, es),
+      pt     = if_else(!is.na(cc_pt_morena_pes), NA_real_, pt)
     ) %>%
-    select(-any_of(c("config_cc_prd_pvem","config_cc_prd_psd","config_cc_pvem_psd")))
+    # optionally drop the used columns
+    select(-any_of(c("cc_pt_morena_pes","config_cc_pt_morena","config_cc_pt_pes","config_cc_morena_pes")))
 }
 
-# 9) PT_MORENA_PES => combining various columns if cc_pt_morena_pes != .
-df_all <- df_all %>% mutate(PT_MORENA_PES=NA_real_)
-
-if("cc_pt_morena_pes" %in% names(df_all)) {
+# If "coal_pt_morena_pes" also exists, do the same logic:
+if ("coal_pt_morena_pes" %in% names(df_all)) {
   df_all <- df_all %>%
     mutate(
-      PT_MORENA_PES = if_else(!is.na(cc_pt_morena_pes),
-                              coalesce(PT_MORENA_PES,0) + coalesce(cc_pt_morena_pes,0)
-                              + coalesce(config_cc_pt_morena,0) + coalesce(config_cc_pt_pes,0)
-                              + coalesce(config_cc_morena_pes,0) + coalesce(MORENA,0)
-                              + coalesce(PT,0) + coalesce(PES,0),
-                              PT_MORENA_PES),
-      MORENA= if_else(!is.na(cc_pt_morena_pes), NA_real_, MORENA),
-      PES  = if_else(!is.na(cc_pt_morena_pes), NA_real_, PES),
-      PT   = if_else(!is.na(cc_pt_morena_pes), NA_real_, PT)
-    )
-}
-
-# also "replace PT_MORENA_PES = coal_pt_morena_pes + ..." => if coal_pt_morena_pes!=.
-if("coal_pt_morena_pes" %in% names(df_all)) {
-  df_all <- df_all %>%
-    mutate(
-      PT_MORENA_PES = if_else(!is.na(coal_pt_morena_pes),
-                              coalesce(PT_MORENA_PES,0) + coalesce(coal_pt_morena_pes,0)
-                              + coalesce(config_coal_pt_morena,0) + coalesce(config_coal_pt_pes,0)
-                              + coalesce(config_coal_morena_pes,0) + coalesce(MORENA,0)
-                              + coalesce(PT,0) + coalesce(PES,0),
-                              PT_MORENA_PES
+      PT_MORENA_PES = if_else(
+        !is.na(coal_pt_morena_pes),
+        coalesce(PT_MORENA_PES, 0) +
+          coalesce(coal_pt_morena_pes, 0) +
+          coalesce(config_coal_pt_morena, 0) +
+          coalesce(config_coal_pt_pes, 0) +
+          coalesce(config_coal_morena_pes, 0) +
+          coalesce(morena, 0) +
+          coalesce(pt, 0) +
+          coalesce(es, 0),
+        PT_MORENA_PES
       ),
-      MORENA= if_else(!is.na(coal_pt_morena_pes), NA_real_, MORENA),
-      PES  = if_else(!is.na(coal_pt_morena_pes), NA_real_, PES),
-      PT   = if_else(!is.na(coal_pt_morena_pes), NA_real_, PT)
-    )
+      morena = if_else(!is.na(coal_pt_morena_pes), NA_real_, morena),
+      es    = if_else(!is.na(coal_pt_morena_pes), NA_real_, es),
+      pt     = if_else(!is.na(coal_pt_morena_pes), NA_real_, pt)
+    ) %>%
+    select(-any_of(c("coal_pt_morena_pes","config_coal_pt_morena","config_coal_pt_pes","config_coal_morena_pes")))
 }
 
-df_all <- df_all %>%
-  select(-any_of(c("config_cc_pt_morena","config_cc_pt_pes","config_cc_morena_pes",
-                   "coal_pt_morena_pes","config_coal_pt_morena","config_coal_pt_pes",
-                   "config_coal_morena_pes")))
+##############################################################################
+# Step 3: Create/merge PAN_MC similarly
+##############################################################################
+if (!"PAN_MC" %in% names(df_all)) {
+  df_all <- df_all %>% mutate(PAN_MC = NA_real_)
+}
 
-# 10) gen PAN_MC => if cc_pan_mc!=.
-df_all <- df_all %>% mutate(PAN_MC=NA_real_)
-
-if("cc_pan_mc" %in% names(df_all)) {
+if ("cc_pan_mc" %in% names(df_all)) {
   df_all <- df_all %>%
     mutate(
-      PAN_MC = if_else(!is.na(cc_pan_mc), coalesce(PAN_MC,0)+coalesce(cc_pan_mc,0)+coalesce(PAN,0)+coalesce(MC,0),
-                       PAN_MC),
-      PAN = if_else(!is.na(cc_pan_mc), NA_real_, PAN),
-      MC  = if_else(!is.na(cc_pan_mc), NA_real_, MC)
+      PAN_MC = if_else(
+        !is.na(cc_pan_mc),
+        coalesce(PAN_MC,0) + coalesce(cc_pan_mc,0) + coalesce(pan,0) + coalesce(mc,0),
+        PAN_MC
+      ),
+      pan = if_else(!is.na(cc_pan_mc), NA_real_, pan),
+      mc  = if_else(!is.na(cc_pan_mc), NA_real_, mc)
     ) %>%
     select(-cc_pan_mc)
 }
 
-# 11) gen PRD_PSD => if coal_prd_psd!=.
-df_all <- df_all %>% mutate(PRD_PSD=NA_real_)
+##############################################################################
+# Step 4: Create/merge PRD_PSD
+##############################################################################
+if (!"PRD_PSD" %in% names(df_all)) {
+  df_all <- df_all %>% mutate(PRD_PSD=NA_real_)
+}
 
-if("coal_prd_psd" %in% names(df_all)) {
+if ("coal_prd_psd" %in% names(df_all)) {
   df_all <- df_all %>%
     mutate(
-      PRD_PSD = if_else(!is.na(coal_prd_psd), coalesce(PRD_PSD,0)+coalesce(coal_prd_psd,0)+coalesce(PRD,0)+coalesce(PSD,0),
-                        PRD_PSD),
-      PRD= if_else(!is.na(coal_prd_psd), NA_real_, PRD),
-      PSD= if_else(!is.na(coal_prd_psd), NA_real_, PSD)
+      PRD_PSD = if_else(
+        !is.na(coal_prd_psd),
+        coalesce(PRD_PSD,0) + coalesce(coal_prd_psd,0) + coalesce(prd,0) + coalesce(psd,0),
+        PRD_PSD
+      ),
+      prd = if_else(!is.na(coal_prd_psd), NA_real_, prd),
+      psd = if_else(!is.na(coal_prd_psd), NA_real_, psd)
     ) %>%
     select(-coal_prd_psd)
 }
 
-# 12) gen coalpanmc=PAN_MC!=., coalprdpsd=PRD_PSD!=., coalpbt=PT_MORENA_PES!=., coalprdpvempsd=PRD_PVEM_PSD!=.
+##############################################################################
+# Step 5: Possibly "gen CI_1=..." or rename cand_ind columns, summing them to CI_1 / CI_2 / CI_3
+##############################################################################
+# For example, if we have cand_ind_luis*, cand_ind_juntos*, etc.
+# We'll do rowSums into CI_1, CI_2, CI_3. If columns do not exist, rowSums returns zero.
+
+cand_1_cols <- c("cand_ind_luis_granados_a_c","cand_ind_juntos_para_atlat",
+                 "cand_ind_juntos_a_renovar_","cand_ind_es_el_tiempo_de_l",
+                 "cand_ind_ayala_de_mis_amor","cand_ind_todos_somos_coatl")
 df_all <- df_all %>%
   mutate(
-    coalpanmc       = !is.na(PAN_MC),
-    coalprdpsd      = !is.na(PRD_PSD),
-    coalpbt         = !is.na(PT_MORENA_PES),
-    coalprdpvempsd  = !is.na(PRD_PVEM_PSD)
-  )
-
-# drop cc_pan_mc coal_prd_psd cc_pt_morena_pes cc_prd_pvem_psd => we already did
-# snippet is repeated
-
-# 13) rename cand_ind_* => * => means convert cand_ind_.*
-df_all <- df_all %>%
-  mutate(
-    CI_1 = 0,
-    CI_2 = 0,
-    CI_3 = 0
-  )
-
-# 14) snippet adds to CI_1 from various columns (like luis_granados_a_c + fuerza_independie...). We'll replicate 
-#    if these columns exist:
-
-cand_1_cols <- c("luis_granados_a_c","fuerza_independie","todos_juntos_por_",
-                 "ptix_a_c","zeus_el_destructo")
-df_all <- df_all %>%
-  mutate(
-    CI_1 = CI_1 + rowSums(across(all_of(intersect(cand_1_cols, names(df_all))), ~coalesce(.x,0)), na.rm=TRUE)
+    CI_1 = rowSums(across(any_of(cand_1_cols)), na.rm=TRUE)
   ) %>%
   select(-any_of(cand_1_cols))
 
-# Similarly for CI_2, CI_3, or additional columns per snippet lines. We'll replicate thoroughly if we have them.
+cand_2_cols <- c("cand_ind_raul_aguirre_espi",
+                 "cand_ind_movimiento_indepe",
+                 "cand_ind_unidos_por_huitzi")
+df_all <- df_all %>%
+  mutate(
+    CI_2 = rowSums(across(any_of(cand_2_cols)), na.rm=TRUE)
+  ) %>%
+  select(-any_of(cand_2_cols))
 
-# Then snippet merges more columns into CI_1, dropping them after. We'll do that logic if they exist. We'll skip details for brevity.
+cand_3_cols <- c("cand_ind_miguel_angel_tova",
+                 "cand_ind_zeus_el_destructo",
+                 "cand_ind_reconstruccion_hu")
 
-# 15) snippet "collapse (sum) PAN-CI_3 total listanominal (first) coalpanmc coalprdpsd coalpbt coalprdpvempsd, by(municipality section uniqueid)"
-collapse_cols2 <- c("PAN","PRI","PRD","PVEM","PT","MC","PANAL","PSD","MORENA","PES","PH",
-                    "PRD_PVEM_PSD","PT_MORENA_PES","PAN_MC","PRD_PSD","CI_1","CI_2","CI_3",
-                    "total","listanominal","coalpanmc","coalprdpsd","coalpbt","coalprdpvempsd")
+df_all <- df_all %>%
+  mutate(
+    CI_3 = rowSums(across(any_of(cand_3_cols)), na.rm=TRUE)
+  ) %>%
+  select(-any_of(cand_3_cols))
 
-collapse_cols2 <- intersect(collapse_cols2, names(df_all))
+##############################################################################
+# Step 6: Final "collapse (sum) ..." by (municipality, section, uniqueid)
+##############################################################################
+# We'll define the columns to sum
+final_cols <- c("pan","pri","prd","pvem","pt","mc","na","psd","morena","es","humanista",
+                "PT_MORENA_PES","PAN_MC","PRD_PSD","PRD_PVEM_PSD",
+                "CI_1","CI_2","CI_3","Total_de_Votos","Lista_Nominal")
 
-df_collapsed2 <- df_all %>%
+final_cols <- intersect(final_cols, names(df_all))
+
+df_2018_collapsed <- df_all %>%
   group_by(municipality, section, uniqueid) %>%
-  summarize(
-    across(all_of(collapse_cols2), sum, na.rm=TRUE, .names="{.col}"),
-    .groups="drop"
-  )
+  summarise(across(all_of(final_cols), sum, na.rm=TRUE), .groups="drop") %>% 
+  rename("PAN"="pan",
+         "PRI"="pri",
+         "PRD"="prd",
+         "PVEM"="pvem",
+         "PT"="pt",
+         "MC"="mc",
+         "PANAL"="na",
+         "PSD"="psd",
+         "MORENA"="morena",
+         "PES"="es",
+         "PH"="humanista",
+         "total"="Total_de_Votos",
+         "listanominal"="Lista_Nominal")
 
-# 16) egen valid= rowtotal(...). Then sum for each var by uniqueid, inverse, turnout, rowranks, winner logic, etc.
-df_collapsed2 <- df_collapsed2 %>%
+# Then compute valid, turnout, year=2018, etc.
+df_2018_collapsed <- df_2018_collapsed %>%
   rowwise() %>%
-  mutate(valid = sum(c_across(c("PAN","PRI","PRD","PVEM","PT","MC","PANAL","PSD","MORENA","PES","PH",
-                                "PRD_PVEM_PSD","PT_MORENA_PES","PAN_MC","PRD_PSD","CI_1","CI_2","CI_3")),
-                     na.rm=TRUE)) %>%
+  mutate(
+    valid = sum(c_across(any_of(c("PAN","PRI","PRD","PVEM","PT","MC","PANAL","PSD","MORENA","PES","PH",
+                                  "PT_MORENA_PES","PAN_MC","PRD_PSD","PRD_PVEM_PSD","CI_1","CI_2","CI_3"))),
+                na.rm=TRUE),
+    turnout = total / listanominal,
+    year    = 2018,
+    month   = "July",
+    STATE   = "MORELOS",
+    section = as.numeric(section),
+    uniqueid = as.numeric(uniqueid)
+  ) %>%
   ungroup()
 
-# turnout = total/listanominal; 
-df_collapsed2 <- df_collapsed2 %>%
-  mutate(
-    turnout     = total/listanominal
-  )
-
-# g year=2018, month="July", STATE="MORELOS"
-df_2018 <- df_collapsed2 %>%
-  mutate(
-    year=2018,
-    month="July",
-    STATE="MORELOS"
-  )
 
 # Combine the dataframes, handling different columns by filling with NA
 morelos_all <- bind_rows(df_1997,
@@ -1530,7 +1403,9 @@ morelos_all <- bind_rows(df_1997,
                            df_2009,
                            df_2012,
                            df_2015,
-                           df_2018)
-
+                         df_2018_collapsed) %>% 
+  dplyr::select(-c(day,month,state,noregistrados,nulos,STATE)) %>% 
+  dplyr::mutate(turnout = ifelse(listanominal == 0, NA, turnout))
+summary(morelos_all)
 data.table::fwrite(morelos_all,"../../../Processed Data/Morelos/Morelos_process_raw_data.csv")
 
