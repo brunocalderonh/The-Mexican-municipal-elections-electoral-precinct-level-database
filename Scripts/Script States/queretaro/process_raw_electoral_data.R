@@ -27,6 +27,8 @@ setwd(file.path(script_dir, ""))
 ayu_seccion_1997 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997.csv",
                           encoding = "Latin-1")
 colnames(ayu_seccion_1997) <- tolower(colnames(ayu_seccion_1997))
+# Remove "-" and spaces
+names(ayu_seccion_1997) <- gsub("[- ]", "", names(ayu_seccion_1997))
 # Rename columns
 ayu_seccion_1997 <- ayu_seccion_1997 %>%
   rename(
@@ -104,12 +106,15 @@ data_1997 <- ayu_seccion_1997 %>%
 
 
 # Read the CSV file
-ayu_seccion_2000 <- read_csv("Ayu_Seccion_2000.csv")
-
+ayu_seccion_2000 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000.csv",
+                          encoding = "Latin-1")
+colnames(ayu_seccion_2000) <- tolower(colnames(ayu_seccion_2000))
+# Remove "-" and spaces
+names(ayu_seccion_2000) <- gsub("[- ]", "", names(ayu_seccion_2000))
 # Rename variables
 ayu_seccion_2000 <- ayu_seccion_2000 %>%
   rename(municipality = municipio,
-         section = seccin)
+         section = sección)
 
 # Drop rows where `municipality` is empty and `section` is missing
 ayu_seccion_2000 <- ayu_seccion_2000 %>%
@@ -203,13 +208,16 @@ data_2000 <- ayu_seccion_2000 %>%
   mutate(turnout = total / listanominal)
 
 # Read the CSV file (replace the file path with your actual path)
-queretaro_2003 <- read.csv("Ayu_Seccion_2003.csv", stringsAsFactors = FALSE)
-
+queretaro_2003 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003.csv", stringsAsFactors = FALSE,
+                           encoding = "Latin-1")
+colnames(queretaro_2003) <- tolower(colnames(queretaro_2003))
+# Remove "-" and spaces
+names(queretaro_2003) <- gsub("[- ]", "", names(queretaro_2003))
 # Rename columns
 queretaro_2003 <- queretaro_2003 %>%
   rename(
     municipality = municipio,
-    section = seccin
+    section = sección
   )
 
 # Drop rows with missing municipality and section or invalid total values
@@ -271,7 +279,7 @@ queretaro_2003 <- queretaro_2003 %>%
     municipality == "SAN JUAN DEL RxCDO" ~ 22016,
     municipality == "TEQUISQUIAPAN" ~ 22017,
     municipality == "TOLIMxC1N" ~ 22018,
-    TRUE ~ uniqueid  # If the municipality doesn't match, keep the original uniqueid
+    TRUE ~ NA  # If the municipality doesn't match, keep the original uniqueid
   ))
 
 # Create 'valid' as the row sum of specified party columns
@@ -286,7 +294,11 @@ data_2003 <- queretaro_2003 %>%
   )
 
 # Load the CSV file into R
-ayuntamiento_2006 <- read_csv("Ayu_Seccion_2006.csv")
+ayuntamiento_2006 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006.csv",
+                           encoding = "Latin-1")
+colnames(ayuntamiento_2006) <- tolower(colnames(ayuntamiento_2006))
+# Remove "-" and spaces
+names(ayuntamiento_2006) <- gsub("[- ]", "", names(ayuntamiento_2006))
 
 # Clean and rename the columns
 ayuntamiento_2006 <- ayuntamiento_2006 %>%
@@ -345,7 +357,7 @@ queretaro_2006 <- queretaro_2006 %>%
     municipality == "San Juan del Río" ~ 22016,
     municipality == "Tequisquiapan" ~ 22017,
     municipality == "Tolimán" ~ 22018,
-    TRUE ~ 0
+    TRUE ~ NA
   ))
 
 # Calculate `valid` as the row total of relevant vote columns
@@ -361,7 +373,11 @@ data_2006 <- data_2006 %>%
   arrange(section)
 
 # Load the CSV data
-ayuntamiento_2009 <- read_csv("Ayu_Seccion_2009.csv")
+ayuntamiento_2009 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.csv",
+                           encoding = "Latin-1")
+colnames(ayuntamiento_2009) <- tolower(colnames(ayuntamiento_2009))
+# Remove "-" and spaces
+names(ayuntamiento_2009) <- gsub("[- ]", "", names(ayuntamiento_2009))
 
 # Rename columns
 ayuntamiento_2009 <- ayuntamiento_2009 %>%
@@ -394,7 +410,7 @@ ayuntamiento_2009_collapsed <- ayuntamiento_2009_collapsed %>%
     PVEM = pvem,
     PC = convergencia,
     PSD = psd,
-    PANAL = na
+    PANAL = "v9"
   )
 
 # Generate turnout column
@@ -448,7 +464,10 @@ data_2009 <- data %>%
   arrange(section)
 
 # Load the dataset (assuming the file is in CSV format)
-data <- read_excel("Ayu_Seccion_2012.xlsx")
+data <- read_xlsx("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.xlsx")
+colnames(data) <- tolower(colnames(data))
+# Remove "-" and spaces
+names(data) <- gsub("[- ]", "", names(data))
 
 # Drop rows where municipality or section is empty or total is missing/zero
 data <- data %>%
@@ -461,8 +480,16 @@ data <- data %>%
 
 # Rename columns
 data <- data %>%
-  rename(PAN = pan, PRI = pri, PRD = prd, PT = pt, PVEM = pvem, PC = mc, PANAL = na, 
-         PRI_PVEM_PANAL = pripvemna, PRI_PVEM = pripvem, PRI_PANAL = prina)
+  rename(PAN = pan, 
+         PRI = pri, 
+         PRD = prd, 
+         PT = pt, 
+         PVEM = pvem, 
+         PC = mc, 
+         PANAL = "na", 
+         PRI_PVEM_PANAL = pripvemna, 
+         PRI_PVEM = pripvem, 
+         PRI_PANAL = prina)
 
 # Create 'uniqueid' based on municipality names
 data <- data %>%
@@ -492,29 +519,31 @@ data <- data %>%
 data <- data %>%
   mutate(valid = rowSums(across(c(PAN, PRI, PRD, PC, PANAL, PVEM, PT, PRI_PVEM_PANAL, PRI_PVEM, PRI_PANAL)), na.rm = TRUE))
 
-# Turnout and municipal turnout
-data <- data %>%
-  mutate(turnout = total / listanominal)
+# 11) Lista Nominal
 
-# Merge external data (if available)
-merge_data <- read_excel("all_months_years.dta")  # Replace with appropriate function for the file
-data <- merge(data, merge_data %>% filter(month == 7, year == 2012, day == 1), by.x = c("ed", "seccion"), by.y = c("ed", "section"))
+all_months <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") 
+
+all_months <- all_months %>%
+  filter(state == "QUERETARO" &
+           month== "July" & 
+           year==2012 ) %>% 
+  select(section,lista)
+
+data <- data %>%
+  left_join(all_months, by=c("section"))
+
+data <- data %>% 
+  rename(listanominal = lista)
 
 # Adjust columns after merge
-data <- data %>%
-  rename(listanominal = lista) %>%
-  mutate(turnout = total / listanominal)
-
-# Finalize with year, month, and save the output
 data_2012 <- data %>%
-  mutate(year = 2012, month = "July") %>%
-  arrange(section)
+  mutate(turnout = total / listanominal)
 
 # Append all data sets together
 all_data <- bind_rows(data1997, data2000, data2003, data2006, data2009, data2012)
 
 # Load Excel file to get sheet names
-file_path <- "Municipios_2015.xlsx"
+file_path <- "../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Municipios_2015.xlsx"
 sheets <- excel_sheets(file_path)
 
 # Loop through all sheets, load the data, and clean it
@@ -570,17 +599,15 @@ data <- all_data %>%
 data <- data %>%
   rename(section = SECCIÓN)
 
-# Reorder columns so that 'PVEM_PANAL' to 'PRI_PVEM_PANAL_PT' come before 'PRI_PT'
-# Adjust the column names as needed
-# Assuming 'a(PRI_PT)' means you want 'PRI_PT' as the first column, reorder as follows:
-
-data <- data %>%
-  select(PVEM_PANAL:PRI_PVEM_PANAL_PT, PRI_PT, everything())  # Adjust as necessary
-
 # Rename 'PANAL_PT' to 'PT_PANAL'
 data <- data %>%
   rename(PT_PANAL = PANAL_PT)
 
+## 3) Convert columns from character to numeric if possible ("destring")
+data <- data %>%
+  mutate(across(-municipality, ~ {
+    if (is.character(.)) suppressWarnings(as.numeric(.)) else .
+  }))
 
 # Replace PRI_PVEM_PANAL based on the sum of relevant columns
 data <- data %>%
@@ -670,7 +697,7 @@ data_2015 <- data_2015 %>%
   filter(uniqueid != 22008)
 
 # Load the Lista Nominal data for 2015
-ln2015 <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
+ln2015 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
   # Keep only rows where entidad == 22 (Queretaro) and month == 6 (June)
   filter(entidad == 22, month == 6, seccion != 0) %>%
   # Create the uniqueid and keep the necessary columns
@@ -696,8 +723,10 @@ data_2015 <- data_2015 %>%
   mutate(turnout = total / listanominal)
 
 # Load the CSV file for Huimilpan extraordinary election
-data <- read_csv("huimilpan.csv")
-
+data <- read_csv("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/huimilpan.csv")
+colnames(data) <- tolower(colnames(data))
+# Remove "-" and spaces
+names(data) <- gsub("[- ]", "", names(data))
 # Rename 'seccion' to 'section'
 data <- data %>%
   rename(section = seccion)
@@ -747,7 +776,7 @@ data <- data %>%
   mutate(valid = rowSums(across(c(PES, MORENA, PT, PRI_PVEM_PANAL, PAN_PRD)), na.rm = TRUE))
 
 # Load the lista nominal data for November 2015 (Querétaro, Huimilpan only)
-ln2015 <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
+ln2015 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
   filter(entidad == 22, month == 11, year == 2015) %>%
   rename(section = seccion, listanominal = lista) %>%
   select(section, listanominal)
@@ -774,8 +803,9 @@ data_2015_extra <- data %>%
   )
 
 # Step 1: Load and Clean the Election Data
-data <- read_excel("Municipios_2018.xlsx", sheet = "Municipios")
-
+data <- read_excel("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Municipios_2018.xlsx", sheet = "Municipios")
+# Remove "-" and spaces
+names(data) <- gsub("-", "", names(data))
 # Combine coalitions for MORENA, PT, PES
 data <- data %>%
   mutate(
@@ -793,8 +823,7 @@ data <- data %>%
     PAN = ifelse(!is.na(PAN_PRD_MC), NA, PAN),
     PRD = ifelse(!is.na(PAN_PRD_MC), NA, PRD),
     MC = ifelse(!is.na(PAN_PRD_MC), NA, MC)
-  ) %>%
-  select(-PRD_MC, -PAN_PRD, -PAN_MC)
+  ) 
 
 # Handle PAN_PRD and PAN_MC
 data <- data %>%
@@ -889,7 +918,8 @@ data <- data %>%
 
 # Step: Add additional columns for the year, month, and state
 data_2018 <- data %>%
-  mutate(year = 2018, month = "July", STATE = "QUERETARO")
+  mutate(year = 2018, month = "July", STATE = "QUERETARO") %>% 
+  select(-c(NUM_BOLETAS_SOBRANTES,NUM_ESCRITOS,BOLETAS_OTRA_ELECCION,STATE))
 #######################################################################
 
 # Combine the datasets
@@ -902,12 +932,10 @@ combined_data <- bind_rows(data_2015, data_2015_extra, data_2018)
 # Append the newly combined data
 data_master <- bind_rows(data_master, combined_data)
 
-# Remove the intermediate file
-file.remove("Queretaro_Section_15_18.dta")
-
 # Replace the municipality names to uppercase
 data_master <- data_master %>%
   mutate(municipality = toupper(municipality))
 
+data.table::fwrite(data_master,"../../../Processed Data/Queretaro/Queretaro_process_raw_data.csv")
 
 
