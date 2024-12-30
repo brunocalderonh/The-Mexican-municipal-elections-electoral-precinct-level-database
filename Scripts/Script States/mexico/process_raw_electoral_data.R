@@ -24,7 +24,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, ""))
 
 # --------------------------------------------------------------------------------
-# 1. Read CSV Data (Stata: insheet using ...)
+# 1. Read CSV Data
 # --------------------------------------------------------------------------------
 data_1996 <- read_csv("../../../Data/Raw Electoral Data/Mexico - 1996, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1996_No_LN.csv", show_col_types = FALSE)
 
@@ -261,7 +261,7 @@ data_1996 <- data_1996 %>%
     month = "November")
 
 # -------------------------------------------------------------------------
-# 1. READ CSV (Stata: insheet using Ayu_Seccion_2000_No_LN.csv)
+# 1. READ CSV 
 # -------------------------------------------------------------------------
 data_2000 <- read_csv("../../../Data/Raw Electoral Data/Mexico - 1996, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000_No_LN.csv", show_col_types = FALSE)
 # Convert column names to lowercase
@@ -509,7 +509,6 @@ data_2000 <- data_2000 %>%
 
 # -------------------------------------------------------------------
 # 1. Read CSV
-#    Stata: insheet using Ayu_Seccion_2003_No_LN.csv
 # -------------------------------------------------------------------
 data_2003 <- read_csv("../../../Data/Raw Electoral Data/Mexico - 1996, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003_No_LN.csv", show_col_types = FALSE)
 
@@ -825,7 +824,7 @@ extra_2003 <- extra_2003 %>%
   )
 
 # -------------------------------------------------------------------
-# 1. READ CSV (Stata: insheet using Ayu_Seccion_2006.csv)
+# 1. READ CSV
 # -------------------------------------------------------------------
 data_2006 <- read_csv("../../../Data/Raw Electoral Data/Mexico - 1996, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006.csv", show_col_types = FALSE)
 
@@ -1015,7 +1014,7 @@ data_2006 <- data_2006 %>%
 data_2006 <- data_2006 %>%
   rename(
     PAN        = pan,
-    PRI_PVEM   = alianza,  # Stata code: rename alianza PRI_PVEM
+    PRI_PVEM   = alianza, 
     PRD        = prd,
     PC         = pc,
     PT         = pt,
@@ -1192,7 +1191,7 @@ data_2006 <- data_2006 %>%
   arrange(section)
 
 # -------------------------------------------------------------------
-# 1. READ CSV (Stata: insheet using Ayu_Seccion_2009.csv)
+# 1. READ CSV
 # -------------------------------------------------------------------
 data_2009 <- read_csv("../../../Data/Raw Electoral Data/Mexico - 1996, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.csv", show_col_types = FALSE)
 
@@ -1515,7 +1514,6 @@ data_2009 <- data_2009 %>%
 
 # -------------------------------------------------------------------
 # 1. READ EXCEL
-#   In Stata: import excel "Ayu_Seccion_2012.xlsx", sheet("CASILLAS_AYUNTAMIENTOS_2012") firstrow clear
 # -------------------------------------------------------------------
 data_2012 <- read_excel(
   "../../../Data/Raw Electoral Data/Mexico - 1996, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.xlsx", 
@@ -1536,14 +1534,8 @@ data_2012 <- data_2012 %>%
   )
 
 # -------------------------------------------------------------------
-# 3. Additional Renaming from Stata:
-#   PRIPVEMPANAL  -> PRI_PVEM_PANAL
-#   PRDPTMC       -> PRD_PT_PC
-#   PRDPT         -> PRD_PT
-#   PRDMC         -> PRD_PC
-#   PRMC          -> PT_PC
-#   MC            -> PC
-# -------------------------------------------------------------------
+# 3. Additional Renaming
+-----------------------------------------
 data_2012 <- data_2012 %>%
   rename(
     PRI_PVEM_PANAL = PRIPVEMPANAL,
@@ -1749,7 +1741,7 @@ data_2012 <- data_2012 %>%
   arrange(section)
 
 # -------------------------------------------------------------------
-# 1. Read Excel (Stata: import excel "Ayuntamientos_2015.xlsx" ...)
+# 1. Read Excel
 # -------------------------------------------------------------------
 data_2015 <- read_excel("../../../Data/Raw Electoral Data/Mexico - 1996, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx", sheet="Aytto x secccion", guess_max = 100000)
 
@@ -1896,7 +1888,6 @@ data_2015 <- data_2015 %>%
 
 # -------------------------------------------------------------------
 # 4. Convert all string columns to numeric if possible
-#    Stata: destring *, replace
 # -------------------------------------------------------------------
 data_2015 <- data_2015 %>%
   mutate(across(everything(), ~ suppressWarnings(as.numeric(as.character(.)))))
@@ -2016,7 +2007,7 @@ data_2015 <- data_2015 %>%
     turnout = total / listanominal)
 
 # -------------------------------------------------------------------
-# 1. IMPORT EXCEL (Stata: import excel "Extraordinario 2016.xlsx")
+# 1. IMPORT EXCEL
 # -------------------------------------------------------------------
 data_2016 <- read_excel("../../../Data/Raw Electoral Data/Mexico - 1996, 2000, 2003, 2006, 2009, 2012,2015,2018/Extraordinario 2016.xlsx", sheet="Sheet1", guess_max=100000)
 
@@ -2106,7 +2097,6 @@ data_2016 <- data_2016 %>%
 # -------------------------------------------------------------------
 # 7. MERGE LN2016 data
 # -------------------------------------------------------------------
-# preserve/restore logic in Stata. We'll read LN2016 then join.
 ln2016 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2016/LN2016.dta") %>%
   filter(entidad==15, month==2) %>% # keep if entidad==15 & month==2
   select(seccion, lista) %>%
@@ -2135,13 +2125,12 @@ data_2016 <- data_2016 %>%
   arrange(uniqueid, section)
 
 # -------------------------------------------------------------------
-# 1. READ EXCEL (Stata: import excel "Ayuntamientos_2018.xlsx")
+# 1. READ EXCEL
 # -------------------------------------------------------------------
 data_2018 <- read_excel("../../../Data/Raw Electoral Data/Mexico - 1996, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx", sheet="Ayuntamientos", guess_max=100000)
 
 # -------------------------------------------------------------------
 # 2. CONVERT allstring -> numeric
-#    Stata: destring *, replace
 # -------------------------------------------------------------------
 data_2018 <- data_2018 %>%
   mutate(across(id_seccion:total, ~ suppressWarnings(as.numeric(as.character(.)))))
@@ -2431,5 +2420,5 @@ Edo_mexico_all <- bind_rows(data_1996,
                             data_2015,
                             data_2016)#extra elections
 
-data.table::fwrite(Edo_mexico_all,"../../../Processed Data/Mexico/Mexico_process_raw_data.csv")
+data.table::fwrite(Edo_mexico_all,"../../../Processed Data/mexico/mexico_process_raw_data.csv")
 

@@ -400,7 +400,7 @@ df_collapsed <- df_collapsed %>%
 #
 #    Then:
 #      keep if month==7 & year==1997
-#      drop if _merge==2 (in Stata means drop rows only in "using")
+#      drop if _merge==2 
 #      drop _merge ed seccion year month
 ###############################################################################
 # Read the external .dta
@@ -409,7 +409,7 @@ df_using <- read_dta("../../all_months_years.dta") %>%
 
 # Perform the merge. 
 # We'll do a left_join to preserve rows in df_collapsed, and then
-# filter out rows that don't match (which in Stata would be _merge==2).
+# filter out rows that don't match
 df_merged <- df_collapsed %>%
   left_join(df_using, by = c("ed", "seccion")) %>%
   # drop the rows with no match from the "using" side
@@ -489,7 +489,7 @@ df_collapsed <- df %>%
   )
 
 ################################################################################
-# 5) Rename variables to match the Stata script
+# 5) Rename variables to match
 ################################################################################
 df_collapsed <- df_collapsed %>%
   rename(
@@ -638,7 +638,7 @@ df <- df %>%
   mutate(across(pan:listanominal, as.numeric))
 
 ################################################################################
-# 4) Create dummy variables to track whether combined columns exist (!= . in Stata)
+# 4) Create dummy variables to track whether combined columns exist 
 #    For instance: gen dummy_PAN_PRD = 1 if pan_prd != .
 ################################################################################
 df <- df %>%
@@ -709,7 +709,7 @@ df <- df %>%
     prd    = if_else(dummy_PRD_PT == 1, 0, prd),
     pt     = if_else(dummy_PRD_PT == 1, 0, pt)
   ) %>%
-  # Finally, drop the pard column (Stata: drop pard)
+  # Finally, drop the pard column
   select(-pard)
 
 ################################################################################
@@ -749,7 +749,7 @@ df_collapsed <- df_collapsed %>%
   filter(total != 0)
 
 ################################################################################
-# 8) Rename columns to uppercase or combined names (Stata style)
+# 8) Rename columns to uppercase or combined names 
 ################################################################################
 df_collapsed <- df_collapsed %>%
   rename(
@@ -784,7 +784,6 @@ df_collapsed <- df_collapsed %>%
 
 ################################################################################
 # 10) Generate uniqueid = 0, then replace based on municipality 
-#     (Using case_when for each municipality; replicate the Stata logic).
 ################################################################################
 df_collapsed <- df_collapsed %>%
   mutate(
@@ -870,7 +869,6 @@ df_collapsed <- df_collapsed %>%
 
 ################################################################################
 # 11) Recreate 'valid' as rowtotal(...) for final parties, plus year/month
-#     Sort by section, then save as Stata
 ################################################################################
 df_2003 <- df_collapsed %>%
   mutate(
@@ -896,7 +894,7 @@ df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 20
   as.data.frame()  # optional, to ensure a regular data frame
 colnames(df) <- tolower(colnames(df))
 ################################################################################
-# 2) Rename columns to match Stata code (municipio -> municipality, 
+# 2) Rename columns to match (municipio -> municipality, 
 #    casilla -> section, totalvotos -> total)
 ################################################################################
 df <- df %>%
@@ -937,7 +935,7 @@ df_collapsed <- df %>%
   )
 
 ################################################################################
-# 6) Rename columns per the Stata code
+# 6) Rename columns 
 #    pan -> PAN, pri -> PRI, pripanal -> PRI_PANAL, prdpt -> PRD_PT,
 #    pvem -> PVEM, convergencia -> PC, alternativa -> PAS
 ################################################################################
@@ -1103,12 +1101,6 @@ df <- df %>%
 # 3) For each var in (PAN_PANAL, PRI_PVEM, PRD_PT, PRD_PC, PRD_PT_PC),
 #    by municipality: egen COAL_var = sum(var), then COAL_var = (COAL_var>0)
 #
-#    In Stata, "bys municipality: egen COAL_`var' = sum(`var')"
-#    means "within each municipality, sum var over all rows, then copy that sum
-#    to each row of that municipality."
-#    Then "replace COAL_`var' = (COAL_`var'>0)" makes it 1 if sum>0, else 0.
-#
-#    In R, we can group_by(municipality) and create COAL_var similarly.
 ###############################################################################
 coal_vars <- c("PAN_PANAL", "PRI_PVEM", "PRD_PT", "PRD_PC", "PRD_PT_PC")
 
@@ -1128,8 +1120,6 @@ for (v in coal_vars) {
 ###############################################################################
 # 4) "Things are added up in the excel" 
 #    If the coalition is 1, set the original columns to missing (NA).
-#    Stata code: replace PAN = . if COAL_PAN_PANAL==1
-#    etc.
 ###############################################################################
 df <- df %>%
   mutate(
@@ -1181,9 +1171,6 @@ df <- df %>%
     )
   )
 
-# "collapse (sum) PAN - total, by(municipality section)" in Stata
-# means sum all columns from PAN through 'total' grouped by municipality & section.
-# We'll do that in R with group_by + summarise across:
 collapse_cols <- c("PAN", "PRI", "PRD", "PT", "PVEM", "PC", "PANAL", "PAN_PANAL",
                    "PRI_PVEM", "PRD_PT", "PRD_PC", "PRD_PT_PC",
                    "VOTOSNULOS", "total")
@@ -1407,8 +1394,6 @@ df <- df %>%
 
 ################################################################################
 # 3) Reorder columns so uniqueid is adjacent to (MUNICIPIO). 
-#    In Stata: order uniqueid, a(MUNICIPIO)
-#    We'll do something similar in R by just rearranging:
 ################################################################################
 df <- df %>%
   relocate(uniqueid, .before = municipality)
@@ -1436,7 +1421,6 @@ df <- df %>%
 
 ################################################################################
 # 5) Create CI_1 = row sum of (JFC RFMM CMR CAVL), then drop them
-#    (Stata: egen CI_1 = rowtotal(JFC RFMM CMR CAVL); drop JFC RFMM CMR CAVL)
 ################################################################################
 df <- df %>%
   mutate(
@@ -1468,7 +1452,6 @@ df <- df %>%
 
 ################################################################################
 # 7) Collapse (sum) from PAN through CI_1, by (municipality uniqueid section)
-#    (Stata: collapse (sum) PAN-CI_1, by(municipality uniqueid section))
 ################################################################################
 collapse_vars <- c("PAN", "PRI", "PRD", "PVEM", "PT", "MC", "PANAL", "MORENA", 
                    "PH", "PES", "PRI_PVEM_PANAL", "CI_1", "nulo", "no_reg")
@@ -1488,8 +1471,6 @@ df_collapsed <- df_collapsed %>%
 
 ################################################################################
 # 9) Create 'valid' = rowtotal(...) then total = valid + nulo + no_reg
-#    (Stata: egen valid = rowtotal(...); gen total= valid + nulo + no_reg)
-#    then drop nulo, no_reg
 ################################################################################
 df_collapsed <- df_collapsed %>%
   mutate(
@@ -1508,7 +1489,6 @@ df_collapsed <- df_collapsed %>%
 
 # (A) Read LN2015.dta
 df_ln <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
-  # replicate the Stata logic
   filter(entidad == 26, month == 6) %>%
   mutate(
     uniqueid = (entidad * 1000) + municipio
@@ -1524,9 +1504,6 @@ df_ln <- df_ln %>%
 df_merged <- df_collapsed %>%
   left_join(df_ln, by = c("uniqueid", "section"))
 
-# Stata: drop if _merge==2 means drop rows that exist in LN15_SON but not in main
-# In a left_join, we won't get extra rows from LN. If we want to drop rows 
-# that didn't find a match in LN, we do:
 df_merged <- df_merged %>% filter(!is.na(lista))
 
 # rename lista -> listanominal
@@ -1554,7 +1531,7 @@ df_merged <- df_merged %>%
   )
 
 ################################################################################
-# 12) Reorder columns, sort by uniqueid/section, save as Stata
+# 12) Reorder columns, sort by uniqueid/section,
 ################################################################################
 df_2015 <- df_merged %>%
   relocate(STATE, municipality, uniqueid, section, year, month) %>%
@@ -1564,7 +1541,6 @@ df_2015 <- df_merged %>%
 # 1) Read Excel
 ###############################################################################
 df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx", sheet = "Sheet1") %>%
-  # In Stata: drop uniqueid
   select(-any_of("uniqueid"))
 
 ###############################################################################
@@ -1652,7 +1628,6 @@ df <- df %>%
 
 ###############################################################################
 # 3) Reorder columns so 'uniqueid' is before 'municipality'
-#    (Stata: order uniqueid, a(municipality))
 ###############################################################################
 df <- df %>%
   relocate(uniqueid, .before = municipality)
@@ -1697,7 +1672,6 @@ df <- df %>%
 
 ###############################################################################
 # 7) Rename CAND_* columns to CI_* 
-#    (Stata: rename CAND_* CI_*)
 ###############################################################################
 # Suppose we have columns like CAND_1, CAND_2, ... that we want to rename to CI_1, CI_2, ...
 # We'll do a generic approach that if a column name starts with "CAND_", rename it to "CI_".
@@ -1747,9 +1721,6 @@ df <- df %>%
 
 ###############################################################################
 # 11) Collapse (sum) PAN - VOTOS_NULOS plus listanominal by (municipality uniqueid section)
-#    (Stata: collapse (sum) PAN-VOTOS_NULOS listanominal, by(municipality uniqueid section))
-#
-#    We'll sum all columns from PAN through VOTOS_NULOS and also 'listanominal'.
 ###############################################################################
 collapse_vars <- df %>%
   select(matches("^PAN$|^PRI$|^PRD$|^PT$|^PVEM$|^MC$|^PANAL$|^MORENA$|^PES$|^MAS$|^PAN_PRD$|^PRI_PVEM_PANAL$|^PT_MORENA_PES$|^CI_1$|^VOTOS_NULOS$|^CANDIDATO_NO_REGISTRADO$"),

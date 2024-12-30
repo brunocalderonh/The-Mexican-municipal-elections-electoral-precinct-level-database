@@ -59,7 +59,7 @@ df_collapsed <- df %>%
   )
 
 ################################################################################
-# 5) Rename columns (like Stata rename pan->PAN, pri->PRI, etc.)
+# 5) Rename columns 
 ################################################################################
 df_collapsed <- df_collapsed %>%
   rename(
@@ -71,8 +71,6 @@ df_collapsed <- df_collapsed %>%
     PartCardenista  = pc,
     PPS             = pps,
     PDM             = pdm
-    # 'nulos' was dropped in Stata, so if you have 'nulos' in df, remove it:
-    # select(-nulos)
   ) %>%
   select(-any_of("nulos"))  # drop nulos if it exists
 
@@ -118,20 +116,11 @@ df_collapsed <- df_collapsed %>%
 # 9) Merge with all_months_years.dta (like "capture merge 1:m ed seccion using ..."),
 #    keep only month==12, year==1997, rename lista->listanominal
 ################################################################################
-# In Stata:
-#   g ed=27
-#   g seccion=section
-#   merge 1:m ed seccion using all_months_years.dta, keepusing(month year lista)
-#   keep if month==12 & year==1997
-#   drop if _merge==2
-#   drop _merge ed seccion year month
-#   rename lista listanominal
 
 # We'll do something similar in R, reading the external .dta:
 df_all <- read_dta("../../all_months_years.dta") %>%
   select(ed, seccion, month, year, lista) %>%
   # filter to ed=27 afterwards or we'll merge first and then filter
-  # We'll do it after merge, to replicate Stata's step order
   rename(section = seccion)
 
 # add ed=27, reassign "section" from our df_collapsed
@@ -149,7 +138,6 @@ df_merged <- df_collapsed %>%
 df_merged <- df_merged %>%
   filter(month == 12, year == 1997)
 
-# drop rows that don't match (Stata's "drop if _merge==2")
 # after a left_join, no extra rows from "using". If we want to
 # drop rows that didn't find a match (which would have NA in 'lista'),
 # we do:
@@ -198,7 +186,6 @@ df <- df %>%
 
 ################################################################################
 # 3) Convert (pan through total) to numeric 
-#    (like "destring pan - total, replace" in Stata)
 ################################################################################
 df <- df %>%
   mutate(across(pan:total, as.numeric))
@@ -295,7 +282,7 @@ df_all <- read_dta("../../all_months_years.dta") %>%
 df_merged <- df_collapsed %>%
   left_join(df_all, by = c("ed", "seccion"))
 
-# Drop rows that had no match (Stata: drop if _merge==2). In left_join, 
+# In left_join, 
 # we remove rows with NA in 'lista' to emulate that behavior:
 df_merged <- df_merged %>%
   filter(!is.na(lista))
@@ -353,7 +340,6 @@ df <- df %>%
 
 ################################################################################
 # 5) Collapse (sum) missing, listanominal, pan - total by municipality, section
-#    (Stata: collapse (sum) missing listanominal pan - total, by(municipality section))
 ################################################################################
 df_collapsed <- df %>%
   group_by(municipality, section) %>%
@@ -366,13 +352,6 @@ df_collapsed <- df %>%
 # 6) Merge with all_months_years (ed=27, seccion=section), keep only 
 #    month==9 & year==2003, drop unmatched, then rename 'lista' -> 'listanominal'
 ################################################################################
-# In Stata:
-#    g ed=27
-#    g seccion=section
-#    merge 1:m ed seccion using "..\..\all_months_years.dta", keepusing(month year lista)
-#    keep if month==9 & year==2003
-#    drop if _merge==2
-#    drop _merge ed seccion year month
 
 df_collapsed <- df_collapsed %>%
   mutate(
@@ -386,7 +365,7 @@ df_all <- read_dta("../../all_months_years.dta") %>%
 df_merged <- df_collapsed %>%
   left_join(df_all, by = c("ed", "seccion")) %>%
   filter(month == 9, year == 2003) %>%
-  filter(!is.na(lista)) %>%   # drop if no match (Stata: drop if _merge==2)
+  filter(!is.na(lista)) %>% 
   select(-ed, -seccion, -year, -month)
 
 # rename lista -> listanominal
@@ -497,11 +476,6 @@ df <- read_excel(
 names(df) <- gsub("[- ]", "", names(df))
 ################################################################################
 # 2) Rename columns and convert municipality to uppercase without accents
-#
-#    In Stata:
-#      rename MUNICIPIO municipality
-#      replace municipality=upper(subinstr(municipality, "á", "a",.))
-#      ... etc.
 ################################################################################
 df <- df %>%
   rename(municipality = MUNICIPIO) %>%
@@ -514,8 +488,6 @@ df <- df %>%
     municipality = toupper(municipality)
   )
 
-# Now rename SECCIÓN -> SECCIN (Stata had `capture rename SECCIÓN SECCIN`)
-# Then rename SECCIN -> section
 df <- df %>%
   rename(section = SECCIÓN)
 
@@ -536,9 +508,6 @@ df <- df %>%
     PAS          = ALTERNATIVA,
     noregistrados = CANDIDATOSNOREGISTRADOS,
     nulos        = VOTOSNULOS
-    # Stata: capture rename VOTACIÓNTOTAL VOTACINTOTAL => rename VOTACINTOTAL total
-    # If your sheet has exactly "VOTACIÓNTOTAL" or "VOTACINTOTAL", adapt accordingly:
-    # We'll assume the final name to be 'total'
   ) %>%
   rename(total = VOTACIÓNTOTAL)
 
@@ -551,10 +520,6 @@ df <- df %>%
 
 ################################################################################
 # 5) Collapse (sum) PAN - total by municipality, section
-#    In Stata: collapse (sum) PAN - total , by(municipality section)
-#
-#    That means we sum all columns from PAN through 'total' by municipality, section.
-#    Let's identify the columns that fall in that range.
 ################################################################################
 # Suppose your data has columns named PAN, PRI, PVEM, PRD_PT, etc. up to 'total'.
 # We'll find those columns automatically. Make sure "PAN" is the leftmost, 
@@ -601,8 +566,7 @@ df_collapsed <- df_collapsed %>%
   )
 
 ################################################################################
-# 8) Compute valid = rowtotal(PAN PRI PRD_PT PVEM PANAL PAS) in Stata
-#    We'll replicate with rowSums. Then set ed=27, seccion=section for merging.
+# 8) Compute valid = rowtotal(PAN PRI PRD_PT PVEM PANAL PAS)
 ################################################################################
 # If you have a PRD column, add it to the row-sum. 
 # Your script doesn't rename PRD. Possibly the column is absent or included in PRD_PT?
@@ -627,7 +591,7 @@ df_all <- read_dta("../../all_months_years.dta") %>%
 df_merged <- df_collapsed %>%
   left_join(df_all, by = c("ed", "seccion")) %>%
   filter(month == 9, year == 2006) %>%
-  filter(!is.na(lista))  # drop if no match (Stata: drop if _merge==2)
+  filter(!is.na(lista))  # drop if no match
 
 df_merged <- df_merged %>%
   select(-ed, -seccion, -year, -month) %>%
@@ -674,7 +638,7 @@ df <- df %>%
 ###############################################################################
 # 4) Collapse: sum(pan - total), but take the "first" for listanominal,
 #    by (municipality, section).
-#    In Stata: collapse (sum) pan - total (first) listanominal, by(...)
+
 ###############################################################################
 df_collapsed <- df %>%
   group_by(municipality, section) %>%
@@ -760,7 +724,7 @@ df_2009 <- df_collapsed %>%
     year  = 2009,
     month = "October"
   ) %>%
-  arrange(section)  # sort by section (Stata: sort section)
+  arrange(section)  # sort by section
 
 ###############################################################################
 # 1) Read Excel 
@@ -773,7 +737,7 @@ df <- read_excel(
   as.data.frame()  # optional: ensure a standard data.frame
 
 ###############################################################################
-# 2) Drop rows where MUNICIPIO==. (in Stata). 
+# 2) Drop rows where MUNICIPIO==.
 #    Then rename SECCION -> section, drop CASILLA
 ###############################################################################
 df <- df %>%
@@ -783,10 +747,6 @@ df <- df %>%
 
 ###############################################################################
 # 3) Create PRD_PT_PC, PRI_PVEM_PANAL, drop old coalition columns
-#    In Stata:
-#      gen PRD_PT_PC = CC_PRD_PT_PC + PRD + PT + PC
-#      gen PRI_PVEM_PANAL = CC_PRI_PVEM_PANAL + PRI + PVEM + PANAL
-#      drop CC_PRD_PT_PC PRD PT PC CC_PRI_PVEM_PANAL PRI PVEM PANAL
 ###############################################################################
 df <- df %>%
   mutate(
@@ -800,8 +760,6 @@ df <- df %>%
 
 ###############################################################################
 # 4) Collapse (sum) columns from PAN to PRI_PVEM_PANAL by (MUNICIPIO, section)
-#    In Stata:
-#    collapse (sum) PAN - PRI_PVEM_PANAL, by (MUNICIPIO section)
 ###############################################################################
 # Let's identify columns from PAN to PRI_PVEM_PANAL automatically:
 col_range <- df %>%
@@ -900,7 +858,7 @@ df_all <- read_dta("../../all_months_years.dta") %>%
 df_merged <- df_collapsed %>%
   left_join(df_all, by = c("ed", "seccion")) %>%
   filter(month == 7, year == 2012, day == 1) %>%
-  filter(!is.na(lista))  # drop if no match (like _merge==2 in Stata)
+  filter(!is.na(lista))  # drop if no match 
 
 # drop _merge, ed, seccion, year, month, day
 df_merged <- df_merged %>%
@@ -930,7 +888,7 @@ df <- read_excel(
   as.data.frame()
 
 ################################################################################
-# 2) Convert section to numeric (Stata: destring section, replace)
+# 2) Convert section to numeric
 ################################################################################
 df <- df %>%
   mutate(section = as.numeric(section))
@@ -987,7 +945,6 @@ df <- df %>%
   ) %>%
   select(-CIND, -CI1, -CI2, -CI3, -CI4, -CI5)
 
-# "order CI_1, a(PVEM_PANAL)" in Stata repositions CI_1 before PVEM_PANAL. 
 # In R, we can do a partial relocate if columns exist.
 if ("PVEM_PANAL" %in% names(df)) {
   df <- df %>%
@@ -1110,7 +1067,7 @@ df <- read_excel(
   as.data.frame()
 
 ################################################################################
-# 2) Convert section to numeric (Stata: destring section, replace)
+# 2) Convert section to numeric
 ################################################################################
 df <- df %>%
   mutate(section = as.numeric(section))
@@ -1167,7 +1124,7 @@ df <- df %>%
   ) %>%
   select(-CIND, -CI1, -CI2, -CI3, -CI4, -CI5)
 
-# "order CI_1, a(PVEM_PANAL)" in Stata repositions CI_1 before PVEM_PANAL. 
+# "order CI_1, a(PVEM_PANAL)"
 # In R, we can do a partial relocate if columns exist.
 if ("PVEM_PANAL" %in% names(df)) {
   df <- df %>%
@@ -1354,8 +1311,7 @@ df <- df %>%
     CI_1 = rowSums(select(., all_of(cand_cols)), na.rm = TRUE)
   ) %>%
   select(-all_of(cand_cols))  # drop all CAND_IND columns
-
-# The Stata code: order CI_1, a(PT_MORENA) - we can attempt a partial relocate
+e
 if ("PT_MORENA" %in% names(df)) {
   df <- df %>%
     relocate(CI_1, .before = PT_MORENA)
@@ -1402,5 +1358,5 @@ tabasco_all <- bind_rows(df_1997,
                          df_2015,
                          df_2018)
 
-data.table::fwrite(tabasco_all,"../../../Processed Data/tabasco/Tabasco_process_raw_data.csv")
+data.table::fwrite(tabasco_all,"../../../Processed Data/tabasco/tabasco_process_raw_data.csv")
 

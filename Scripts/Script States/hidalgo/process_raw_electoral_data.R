@@ -26,8 +26,6 @@ setwd(file.path(script_dir, ""))
 ###########################################
 ### Read and Prepare Data
 ###########################################
-# Stata:
-# insheet using Ayu_Seccion_1996.csv, clear
 
 data_1996 <- read.csv("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_1996.csv")
 
@@ -44,9 +42,6 @@ data_1996 <- data_1996 %>%
   filter(!(municipality == "" & section == "."))
 
 # Convert columns pan - total to numeric
-# Stata: destring listanominal pan - total, replace
-# Identify the columns from pan through total. Adjust if needed:
-# Suppose columns between pan and total are pan, pri, prd, pc, pt, pvem, nulos, total
 num_vars <- c("listanominal","pan","pri","prd","pc","pt","pvem","nulos","total")
 
 data_1996 <- data_1996 %>%
@@ -59,7 +54,6 @@ data_1996 <- data_1996 %>%
 ###########################################
 ### Collapse (Sum) by Municipality, Section
 ###########################################
-# Stata: collapse (sum) listanominal pan - total, by (municipality section)
 # Summation over municipality and section
 data_1996 <- data_1996 %>%
   group_by(municipality, section) %>%
@@ -96,9 +90,8 @@ data_1996 <- data_1996 %>%
 ###########################################
 ### Assign Unique IDs for Municipalities
 ###########################################
-# Stata creates uniqueid=0 and then replaces based on municipality name
 data_1996 <- data_1996 %>%
-  mutate(uniqueid = 0)
+  mutate(uniqueid = NA)
 
 # Create a named vector for uniqueid mapping:
 unique_ids <- c("ACATLAN"=13001,"ACAXOCHITLAN"=13002,"ACTOPAN"=13003,
@@ -267,7 +260,6 @@ data_1999 <- data_1999 %>%
 ###########################################
 ### Step 1: Read Data
 ###########################################
-# Stata: insheet using Ayu_Seccion_2002.csv, clear
 data_2002 <- read.csv("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_2002.csv")
 
 # Convert column names to lowercase
@@ -392,7 +384,6 @@ data_2002 <- data_2002 %>%
 ###########################################
 ### Step 1: Import Data
 ###########################################
-# Stata: import delimited using Ayu_Seccion_2005.csv, clear
 data_2005 <- fread("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_2005.csv",
                    encoding = "Latin-1")
 
@@ -518,7 +509,6 @@ data_2005 <- data_2005 %>%
 ###########################################
 ### Step 1: Import Data
 ###########################################
-# Stata: insheet using Ayu_Seccion_2008.csv, clear
 data_2008 <- fread("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_2008.csv")
 
 # Convert column names to lowercase
@@ -659,7 +649,6 @@ data_2008 <- data_2008 %>%
 ###########################################
 ### Step 1: Import Excel
 ###########################################
-# Stata: import excel "Ayu_Seccion_2011.xlsx", sheet("Ayu_Seccion_2011") firstrow clear
 data_2011 <- read_excel("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_2011.xlsx", sheet = "Ayu_Seccion_2011")
 
 ###########################################
@@ -1090,7 +1079,7 @@ Hidalgo_all <- bind_rows(data_1996,
                          data_2016,
                          extra_data) 
 
-data.table::fwrite(Hidalgo_all,"../../../Processed Data/Hidalgo/Hidalgo_process_raw_data.csv")
+data.table::fwrite(Hidalgo_all,"../../../Processed Data/hidalgo/hidalgo_process_raw_data.csv")
 
 
 

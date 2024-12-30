@@ -392,7 +392,7 @@ df_listanom <- df_listanom %>%
   arrange(section)
 
 ################################################################################
-# 2) Read "Ayu_Seccion_2010_No_LN.csv" (Stata: insheet), rename, drop empties, 
+# 2) Read "Ayu_Seccion_2010_No_LN.csv" rename, drop empties, 
 #    drop if total==. or 0, parse numeric, collapse, handle coalition columns
 ################################################################################
 
@@ -482,8 +482,6 @@ df_collapsed <- df_collapsed %>%
   ) %>%
   select(-prdptpc)
 
-# sum pan - pc pan_panal - prd_pt_pc => just a check in Stata code, we won't replicate "sum" 
-# drop dummy_*, pri pvem prv 
 df_collapsed <- df_collapsed %>%
   select(-starts_with("dummy_"), -pri, -pvem, -prv)
 
@@ -1042,7 +1040,7 @@ df_all_sub <- df_all %>%
   filter(month==6, year==2013)
 
 
-# We'll do left_join => in Stata code it's 1:m. We'll replicate as best as possible:
+# We'll do left_join => 
 df_merged <- df_main %>%
   left_join(df_all_sub, by=c("ed","seccion"))
 
@@ -1070,10 +1068,6 @@ df_2013 <- df_merged %>%
 ################################################################################
 # 1) Reading "Ayuntamientos_2016.xlsx" sheets, converting to .dta
 ################################################################################
-
-# In Stata:
-# import excel "Ayuntamientos_2016.xlsx", describe
-# forvalues sheet=1/`=r(N_worksheet)' { ... }
 
 # In R, we replicate that logic by discovering all sheets in "Ayuntamientos_2016.xlsx"
 all_sheets <- readxl::excel_sheets("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/Other/Ayuntamientos_2016.xlsx")
@@ -1601,6 +1595,6 @@ veracruz_all <- bind_rows(df_2004,
                           df_2018_collapsed
                           )
 
-data.table::fwrite(veracruz_all,"../../../Processed Data/veracruz/Veracruz_process_raw_data.csv")
+data.table::fwrite(veracruz_all,"../../../Processed Data/veracruz/veracruz_process_raw_data.csv")
 
 

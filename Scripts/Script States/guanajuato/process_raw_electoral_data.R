@@ -101,7 +101,7 @@ data_2000 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000,
 # Convert column names to lowercase
 data_2000 <- data_2000 %>% rename_with(tolower)
 
-# Rename variables to match Stata code
+# Rename variables
 data_2000 <- data_2000 %>%
   rename(municipality = nom_mpio,
          section = seccion) %>%
@@ -151,7 +151,7 @@ data_2000 <- data_2000 %>%
 ### Party Aggregation
 ###########################################
 
-# Create dummy variables by municipality as in Stata
+# Create dummy variables by municipality
 data_2000 <- data_2000 %>%
   group_by(municipality) %>%
   mutate(dummy_prd_pt_pas_cd = sum(prd_pt_pas_cd > 0),
@@ -162,7 +162,7 @@ data_2000 <- data_2000 %>%
          dummy_prd_pt_pas = as.numeric(dummy_prd_pt_pas > 0),
          dummy_prd_pas_cd = as.numeric(dummy_prd_pas_cd > 0))
 
-# Replace and aggregate votes as in Stata
+# Replace and aggregate votes
 data_2000 <- data_2000 %>%
   mutate(
     prd_pt_pas_cd = if_else(dummy_prd_pt_pas_cd == 1, prd_pt_pas_cd + prd + pt + pas + pcd, prd_pt_pas_cd),
@@ -204,7 +204,7 @@ data_2000 <- data_2000 %>%
          PCD = pcd,
          PSN = psn,
          PARM = parm,
-         PC = cdppn,  # cdppn is renamed to PC per Stata code
+         PC = cdppn,  # cdppn is renamed to PC 
          PDS = ds,
          PRD_PT_PAS_PCD = prd_pt_pas_cd,
          PRD_PT_PAS = prd_pt_pas,
@@ -292,20 +292,8 @@ data_2003 <- data_2003 %>%
   summarise(across(all_of(num_cols), sum, na.rm = TRUE), .groups = "drop")
 
 ###########################################
-### Rename Parties as in Stata
+### Rename Parties
 ###########################################
-# rename pan PAN
-# rename pri PRI
-# rename prd PRD
-# rename pt PT
-# rename pvem PVEM
-# rename c PC
-# rename psn PSN
-# rename pas PAS
-# rename mp MexicoPosible
-# rename plm PLM
-# rename fc FC
-
 data_2003 <- data_2003 %>%
   rename(PAN = pan,
          PRI = pri,
@@ -553,7 +541,6 @@ data_2009 <- data_2009 %>%
 data_2009 <- data_2009 %>% rename_with(tolower) 
 
 # Convert columns to numeric
-# Based on Stata code: pan - psd pcomun total comn mayoria
 num_cols_2009 <- c("listanominal","pan","pri",
                    "prd","pt","pvem","conv",
                    "v13","psd","pcomun",
@@ -569,7 +556,6 @@ data_2009 <- data_2009 %>%
 
 # Coalition formation steps:
 # dummy_pan_pvem, dummy_prd_pvem, dummy_pri_prd, dummy_pri_prd_pvem, dummy_pri_pvem
-# We'll replicate the logic as in Stata.
 
 data_2009 <- data_2009 %>%
   mutate(dummy_pan_pvem = ifelse(municipality == "JERECUARO", 1, 0),
@@ -624,7 +610,7 @@ data_2009 <- data_2009 %>%
          pcomun = ifelse(dummy_pri_pvem == 1, 0, pcomun)) %>%
   select(-dummy_pri_pvem)
 
-# Drop comn, pcomun, mayoria as in Stata
+# Drop comn, pcomun, mayoria
 data_2009 <- data_2009 %>%
   select(-comn, -pcomun, -mayoria)
 
@@ -689,7 +675,7 @@ rm(data_2009)
 ###########################################
 data_2012 <- read_dta("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Other/Ayu_Seccion_2012.dta") %>%
   rename(section = Casilla,
-         PANAL = `NA`)  # 'NA' is a reserved word in R, ensure the variable was actually named 'NA' in Stata. Adjust if needed.
+         PANAL = `NA`)
 
 ###########################################
 ### Compute Total Votes
@@ -732,8 +718,6 @@ data_2012 <- data_2012 %>%
 ###########################################
 ### Collapse by Municipality and Section
 ###########################################
-# Stata:
-# collapse (sum) PAN - PRI_PVEM total, by (municipality section)
 
 # Identify all variables from PAN to PRI_PVEM plus total:
 vars_to_collapse <- c("PAN", "PRI", "PRD", "PT", "PVEM", "PC", "PANAL", "PAN_PANAL", "PRI_PVEM", "Noregistrados", "Nulos", "total")
@@ -745,7 +729,6 @@ data_2012 <- data_2012 %>%
 ###########################################
 ### Unique ID Assignment
 ###########################################
-# Stata assigns uniqueid based on municipality
 
 unique_ids <- c("ABASOLO" = 11001, "ACAMBARO" = 11002, "APASEO EL ALTO" = 11004, "APASEO EL GRANDE" = 11005, 
                 "ATARJEA" = 11006, "CELAYA" = 11007, "COMONFORT" = 11009, "CORONEO" = 11010, "CORTAZAR" = 11011, 
@@ -926,5 +909,5 @@ guanajuato_all <- bind_rows(data_1997_collapsed,
   select(-c(NULO,NOREG,Nulos,Noregistrados))
 
 
-data.table::fwrite(guanajuato_all,"../../../Processed Data/Guanajuato/Guanajuato_process_raw_data.csv")
+data.table::fwrite(guanajuato_all,"../../../Processed Data/guanajuato/guanajuato_process_raw_data.csv")
 

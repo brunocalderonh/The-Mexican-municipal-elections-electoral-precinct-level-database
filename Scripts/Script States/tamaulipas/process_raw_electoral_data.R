@@ -28,7 +28,6 @@ setwd(file.path(script_dir, ""))
 # 1) Read "Ayu_Seccion_1998_No_LN.csv", rename columns, drop empties, parse numeric
 ################################################################################
 
-# In Stata: insheet using Ayu_Seccion_1998_No_LN.csv, clear
 df_tam <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_1998_No_LN.csv", 
                    show_col_types=FALSE) 
 colnames(df_tam) <- tolower(colnames(df_tam))
@@ -337,7 +336,7 @@ df_collapse <- df_collapse %>%
   )
 
 ################################################################################
-# 4) replace total=. if total==0 (in Stata code)
+# 4) replace total=. if total==0 
 ################################################################################
 
 df_collapse <- df_collapse %>%
@@ -620,7 +619,6 @@ df_2007 <-df_2007 %>%
   filter(!(is.na(total) | total==0))               # drop if total==. | total==0
 
 # Convert columns from pan through total to numeric
-# In Stata, 'destring listanominal pan - total, replace'
 vote_cols <- c("listanominal","pan","pri","prd","pt","pvem","pc","prdpt","pas","total")
 df_2007 <- df_2007 %>%
   mutate(across(all_of(intersect(vote_cols, names(.))), as.numeric))
@@ -1061,7 +1059,6 @@ for (sheetname in all_sheets) {
   ) %>%
     as.data.frame()
   
-  # Clean column names to make them valid for Stata
   colnames(df_sheet) <- colnames(df_sheet) %>%
     gsub("[^a-zA-Z0-9_]", "_", .) %>%  # Replace invalid characters with underscores
     gsub("_+", "_", .) %>%            # Replace multiple underscores with a single one
@@ -1142,9 +1139,8 @@ df_all <- df_all %>%
   select(-any_of("U"))
 
 # egen CI_1=rowtotal(JUANCUAUHTEMOCGARCIATAMEZ-JOSERAMONGOMEZLEAL CARLOSRAFAELULIVARRILOPEZ-XICOTENCATLGONZALEZURESTI)
-# This is tricky. In Stata, the syntax "JUANCUAUHTEMOCGARCIATAMEZ-JOSERAMONGOMEZLEAL" is a range of columns. 
-# We'll interpret you want to sum these columns: (JUANCUAUHTEMOCGARCIATAMEZ, ..., JOSERAMONGOMEZLEAL, CARLOSRAFAELULIVARRILOPEZ, ..., XICOTENCATLGONZALEZURESTI).
-# Then you do second row for "egen CI_2", etc. We'll replicate the sums explicitly.
+# We'll interpret we want to sum these columns: (JUANCUAUHTEMOCGARCIATAMEZ, ..., JOSERAMONGOMEZLEAL, CARLOSRAFAELULIVARRILOPEZ, ..., XICOTENCATLGONZALEZURESTI).
+# Then we do second row for "egen CI_2", etc. We'll replicate the sums explicitly.
 
 df_all <- df_all %>%
   rowwise() %>%
@@ -1299,7 +1295,6 @@ for (x in mun_names) {
     as.data.frame()
   
   # drop if _n<=5 => in R, we can do row_number
-  # The code "drop if _n<=5" in Stata means drop first 5 rows. We'll replicate:
   df_mun <- df_mun %>%
     slice(-(1:5))  # remove first 5 rows
   
@@ -1345,8 +1340,6 @@ for (x in mun_names) {
 # Part C: Data cleaning steps (like "destring, keep certain columns, rename, etc.")
 ################################################################################
 
-# In Stata:
-# destring *, replace => parse numeric columns if they exist
 df_all <- df_all %>%
   mutate(across(where(is.character), ~ suppressWarnings(as.numeric(.))))
 
@@ -1510,5 +1503,5 @@ Tamaulipas_all <- Tamaulipas_all %>%
     municipality = if_else(str_detect(municipality,"LAREDO"),"NUEVO LAREDO", municipality)
   )
 
-data.table::fwrite(Tamaulipas_all,"../../../Processed Data/tamaulipas/Tamaulipas_process_raw_data.csv")
+data.table::fwrite(Tamaulipas_all,"../../../Processed Data/tamaulipas/tamaulipas_process_raw_data.csv")
 

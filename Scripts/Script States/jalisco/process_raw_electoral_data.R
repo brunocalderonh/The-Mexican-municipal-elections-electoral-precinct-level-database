@@ -55,8 +55,6 @@ if("votaron" %in% names(data_1995)) {
 
 #-------------------------------------------------------------
 # 5. Generate total = rowtotal(pan pri pps prd pfcrn parm pdm pt pvem ppj nulos)
-# rowtotal in Stata sums these variables per observation.
-# Check if these variables exist and sum them.
 vars_for_total <- c("pan","pri","pps","prd","pfcrn","parm","pdm","pt","pvem","ppj","nulos")
 vars_for_total <- intersect(vars_for_total, names(data_1995))
 data_1995 <- data_1995 %>%
@@ -83,17 +81,9 @@ data_1995 <- data_1995 %>%
   summarise(across(c(listanominal:total), 
                    sum, na.rm = TRUE), .groups = "drop")
 #-------------------------------------------------------------
-# 12. Rename parties as per the Stata code
-#   pan -> PAN
-#   pri -> PRI
-#   prd -> PRD
-#   pfcrn -> PartCardenista
-#   pt -> PT
-#   pvem -> PVEM
-#   parm -> PARM
-#   pps -> PPS
-#   pdm -> PD
-#   ppj -> PPJ
+# 12. Rename parties
+#-------------------------------------------------------------
+
 data_1995 <- data_1995 %>%
   rename(PAN = pan,
          PRI = pri,
@@ -138,9 +128,6 @@ data_1995 <- data_1995 %>% arrange(section)
 # 1. Import Excel data (Ayu_Seccion_1997_No_LN.xlsx)
 #--------------------------------------------
 data_1997 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.xlsx") 
-# The Stata code used `import excel ... firstrow case(lower)` which implies:
-# - first row is header (done by default in read_excel if headers exist)
-# - convert to lowercase: we can ensure column names are lowercase:
 names(data_1997) <- tolower(names(data_1997))
 
 #--------------------------------------------
@@ -154,14 +141,6 @@ data_1997 <- data_1997 %>%
 # Drop observations if municipality = "" & section = NA
 data_1997 <- data_1997 %>% filter(!(municipality == "" & is.na(section)))
 
-# The Stata code had a commented line to drop if total==. | total==0. 
-# We leave it as is since it's commented out in Stata.
-
-# Ensure numeric variables are actually numeric
-# Stata destring: convert pan - total to numeric if needed
-# If these are already numeric from Excel, this might not be necessary.
-# If they're character, do:
-names(data_1997)
 vars_to_num <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","total")
 data_1997 <- data_1997 %>% mutate(across(all_of(vars_to_num), as.numeric))
 
@@ -192,7 +171,6 @@ data_1997 <- data_1997 %>%
 
 #--------------------------------------------
 # 5. Generate uniqueid for each municipality
-#    In Stata, a large set of replace statements were used. Here, we use case_when.
 #--------------------------------------------
 data_1997 <- data_1997 %>%
   mutate(uniqueid = NA) %>%
@@ -336,11 +314,6 @@ data_1997 <- data_1997 %>%
 #--------------------------------------------
 # 6. Merge with another dataset (all_months_years.dta)
 #--------------------------------------------
-# According to Stata code:
-# gen ed = 14
-# gen seccion = section
-# merge 1:m ed seccion using "..\..\all_months_years.dta", keepusing(month year lista)
-
 data_1997 <- data_1997 %>%
   mutate(seccion = section)
 
@@ -517,7 +490,6 @@ lista_nominal <- read.dta13("../../../Data/Raw Electoral Data/Listas Nominales/l
 data_2000 <- data_2000 %>%
   left_join(lista_nominal, by = c("section"))
 names(data_2000)
-# Stata code drops _merge==2, but in R left_join we simply keep matched
 # Next, drop ed, seccion, year, month
 data_2000 <- data_2000 %>%
   select(-seccion, -year, -month, -state)
@@ -576,7 +548,7 @@ data_2003_main <- read_csv(
   show_col_types = FALSE
 )
 
-# Convert all columns to numeric where possible (like Stata's destring).
+# Convert all columns to numeric where possible
 data_2003_main <- data_2003_main %>%
   mutate(across(everything(), ~ suppressWarnings(as.numeric(.))))
 
@@ -642,7 +614,7 @@ data_2003 <- data_2003 %>%
   summarize(across(all_of(vars_collapse), sum, na.rm=TRUE), .groups="drop")
 
 # -----------------------------------------------------
-# 7. Rename party variables as in Stata
+# 7. Rename party variables
 # -----------------------------------------------------
 data_2003 <- data_2003 %>%
   rename(
@@ -863,8 +835,6 @@ data_2003 <- data_2003 %>%
 
 #-------------------------------------------------------------
 # 1. Import Excel data (Ayu_Seccion_2006_No_LN.xlsx)
-#    Stata: import excel ..., firstrow case(lower)
-#    In R: read_excel automatically takes the first row as header if it looks like headers.
 #-------------------------------------------------------------
 data_2006 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006_No_LN.xlsx")
 names(data_2006) <- tolower(names(data_2006)) # convert column names to lowercase to match case(lower)
@@ -884,7 +854,6 @@ data_2006 <- data_2006 %>% filter(!is.na(total) & total != 0)
 
 #-------------------------------------------------------------
 # 3. Convert pan - total to numeric if needed
-#   Stata: destring pan - total
 #-------------------------------------------------------------
 vars_to_num <- c("pan","pri","prd-pt","pc","pvem","panal","pas","total")
 vars_to_num <- intersect(vars_to_num, names(data_2006))
@@ -1076,8 +1045,6 @@ data_2006 <- data_2006 %>%
 
 #-------------------------------------------------------------
 # 9. * Drop duplicated section numbers
-#   Stata: duplicates tag section, g(tag); drop if tag>0
-# In R, we can identify duplicates and remove them.
 #-------------------------------------------------------------
 data_2006 <- data_2006 %>%
   group_by(section) %>%
@@ -1208,8 +1175,7 @@ data_2009 <- data_2009 %>%
          dummy_ptpc = if_else(dummy_ptpc > 0, 1, dummy_ptpc))
 
 #-------------------------------------------------------------
-# 9. Adjust values based on dummy variables as in Stata code
-#   PRI_PANAL adjustments
+# 9. Adjust values based on dummy variables
 #-------------------------------------------------------------
 data_2009 <- data_2009 %>%
   mutate(pri = if_else(dummy_pripanal == 1, 0, pri),
@@ -1462,7 +1428,6 @@ data_2009 <- data_2009 %>% arrange(section)
 
 #-------------------------------------------------------------
 # 1. Import Excel data
-#   Stata: import excel "Ayu_Seccion_2012.xlsx", sheet("CasillaXCasilla") firstrow clear
 #-------------------------------------------------------------
 data_2012 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.xlsx", 
                         sheet = "CasillaXCasilla")
@@ -1506,12 +1471,6 @@ data_2012 <- data_2012 %>%
 
 #-------------------------------------------------------------
 # 3. Drop duplicated sections with zero votes
-#   drop if section==995 & muni=="SAN PEDRO TLAQUEPAQUE"
-#   etc.
-# Check if 'muni' or 'municipality' used. The code uses 'muni'
-# The original code: drop if section==995 & muni=="SAN PEDRO TLAQUEPAQUE"
-# 'muni' not defined previously, might be a typo in Stata code. 
-# The municipality variable is 'municipality'. We'll assume 'muni' = 'municipality'.
 #-------------------------------------------------------------
 data_2012 <- data_2012 %>%
   filter(!(section == 995 & municipality == "SAN PEDRO TLAQUEPAQUE")) %>%
@@ -1519,7 +1478,7 @@ data_2012 <- data_2012 %>%
   filter(!(section == 2486 & municipality == "GUADALAJARA"))
 
 #-------------------------------------------------------------
-# 4. Generate test variable and drop some variables as in Stata code
+# 4. Generate test variable and drop some variables
 #-------------------------------------------------------------
 data_2012 <- data_2012 %>%
   mutate(test = coalpripvem - pri - pvem - pripvem + coalptmc - pt - mc - ptmc)
@@ -1899,16 +1858,12 @@ pacman::p_load(dplyr, haven, readxl, stringr, tidyr, data.table)
 
 # ------------------------------------------------------------------
 # 1. IMPORT EXCEL DATA 2018
-#   Stata: import excel "Ayuntamientos_2018.xlsx", sheet("Ayuntamientos") clear firstrow allstring
 # ------------------------------------------------------------------
 data_2018 <- read_excel(
   "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx", 
   sheet = "Ayuntamientos",
   guess_max = 100000  # to handle large sheets
 )
-
-# Because Stata used 'allstring', we might have characters everywhere:
-# We'll transform variables as needed below.
 
 # ------------------------------------------------------------------
 # 2. DATA CLEANING & BASIC MANIPULATIONS
@@ -1922,9 +1877,6 @@ if ("CASILLA" %in% names(data_2018)) {
   data_2018 <- data_2018 %>% select(-CASILLA)
 }
 
-# rename poll_station CASILLA
-# In the original Stata code, poll_station was renamed CASILLA.
-# Check if you have a column "poll_station" in your Excel. 
 if ("poll_station" %in% names(data_2018)) {
   data_2018 <- data_2018 %>% rename(CASILLA = poll_station)
 }
@@ -2012,8 +1964,6 @@ data_2018 <- data_2018 %>%
   )
 
 # rename NA -> PANAL if needed
-# In Stata, "rename NA PANAL" is a tricky line if there's a column literally named "NA".
-# We skip unless you have a column "NA".
 if("NA" %in% names(data_2018)) {
   data_2018 <- data_2018 %>% rename(PANAL = `NA`)
 }
@@ -2066,7 +2016,7 @@ jalisco_all <- bind_rows(data_1997,
                             data_2015,
                             data_2018)
 
-data.table::fwrite(jalisco_all,"../../../Processed Data/Jalisco/Jalisco_process_raw_data.csv")
+data.table::fwrite(jalisco_all,"../../../Processed Data/jalisco/jalisco_process_raw_data.csv")
 
 
 

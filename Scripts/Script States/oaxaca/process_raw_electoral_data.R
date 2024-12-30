@@ -39,8 +39,6 @@ df1998 <- df1998 %>%
   filter(!(Municipio == "Total del Municipio:" | Cve == ""))
 
 # 3) Replace Municipio with previous row's value if Cve matches
-#    Stata: replace Municipio = Municipio[_n-1] if Cve==Cve[_n-1]
-#    In R, we can do a small loop or use dplyr::fill approach with a grouping by Cve.
 df1998 <- df1998 %>%
   group_by(Cve) %>%
   tidyr::fill(Municipio, .direction = "down") %>%
@@ -80,7 +78,7 @@ df1998 <- df1998 %>%
 df1998 <- df1998 %>%
   mutate(turnout = total / listanominal)
 
-# 10) Remove Spanish accents from municipality (subinstr in Stata)
+# 10) Remove Spanish accents from municipality 
 df1998$municipality <- df1998$municipality %>%
   str_replace_all("á", "a") %>%
   str_replace_all("é", "e") %>%
@@ -376,7 +374,7 @@ df2010 <- df2010[order(df2010$section),]
 
 df_98_10 <- bind_rows(df1998, df2001, df2004, df2007, df2010)
 
-# In Stata: drop if section==416, recast str244 municipality
+
 df_98_10 <- subset(df_98_10, section!=416)
 
 ###############################################################################
@@ -414,12 +412,6 @@ df_list_2 <- lapply(sheet_list_2, function(sh){
 df2013_part2 <- bind_rows(df_list_2)
 
 df2013 <- bind_rows(df2013_part1, df2013_part2)
-
-# Then we append dtto I, dtto II, dtto IV, etc. 
-# Actually, your Stata code "append using 'Dtto I.dta', 'Dtto II.dta'..." 
-# suggests these are saved as .dta. In R, you might do them similarly, 
-# or we can assume df2013 above is the final appended version. 
-# We'll replicate the final steps:
 
 df2013 <- df2013 %>%
   rename(
@@ -566,7 +558,6 @@ df2016 <- df2016 %>%
 
 # Merge with uniqueids from "uniqueids.xlsx" sheet("2016") if you want:
 unique16 <- read_excel("uniqueids.xlsx", sheet="2016")
-# In the Stata code: merge m:1 municipality using uniqueids16.dta
 # We'll do typical R merge:
 df2016 <- left_join(df2016, unique16, by=c("municipality"="municipality"))
 # Then drop _merge, rename municipality2-> municipality
@@ -593,7 +584,6 @@ df2016$STATE <- "OAXACA"
 ###############################################################################
 df2017 <- read_excel("EXTRAORDINARIO_2017.xlsx", sheet="excel", col_types="text")
 
-# 'split CASILLA, p("-")' in Stata => separate CASILLA into c("CASILLA1","CASILLA2",...) by "-"
 df2017 <- df2017 %>%
   tidyr::separate(CASILLA, into=c("CASILLA1","CASILLA2"), sep="-", fill="right")
 
@@ -664,4 +654,4 @@ df_al <- bind_rows(df_98_10, df_14_18)
 df_all$uniqueid[df_all_salvador$municipality=="SANTIAGO NILTEPEC"] <- 20066
 df_all$municipality <- toupper(df_all_salvador$municipality)
 
-data.table::fwrite(df_all,"../../../Processed Data/OaxacaOaxaca_process_raw_data.csv")
+data.table::fwrite(df_all,"../../../Processed Data/oaxaca/oaxaca_process_raw_data.csv")

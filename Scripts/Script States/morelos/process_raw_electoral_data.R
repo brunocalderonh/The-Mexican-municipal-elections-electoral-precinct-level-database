@@ -25,7 +25,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, ""))
 
 ###############################################################################
-### PART X: Replicating the Stata snippet for Ayu_Seccion_1997_No_LN.csv
+### Ayu_Seccion_1997_No_LN.csv
 ###############################################################################
 
 
@@ -60,8 +60,6 @@ df <- df %>%
   filter(!is.na(total) & total != 0)
 
 # 6) destring pan-nulos
-#    In Stata, “destring pan - nulos, replace” means convert them to numeric.
-#    We assume they might already be read as numeric by read_csv, but just to be sure:
 to_destring <- c("pan","pri","prd","pc","pt","pvem","pcm","pps","pdm","no registrados","nulos")
 
 for(cn in to_destring) {
@@ -181,10 +179,10 @@ rm(df_collapsed)
 rm(df)
 
 ###############################################################################
-### PART X: Replicating the Stata snippet for Ayu_Seccion_2000.csv in R
+### Ayu_Seccion_2000.csv in R
 ###############################################################################
 
-# 1) Read CSV. In Stata: "insheet using Ayu_Seccion_2000.csv, clear"
+# 1) Read CSV
 df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 # 2) rename municipio->municipality, seccion->section
@@ -332,11 +330,10 @@ df_2000 <- df_collapsed %>%
 rm(df_collapsed)
 rm(df)
 ###############################################################################
-### PART X: Replicating the Stata snippet for "Extraordinario 2001.xlsx" in R
+### "Extraordinario 2001.xlsx"
 ###############################################################################
 
 # 1) Read Excel: 'Extraordinario 2001.xlsx', sheet="Sheet1", first row as headers
-#    Stata: import excel "Extraordinario 2001.xlsx", sheet("Sheet1") firstrow clear
 df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Extraordinario 2001.xlsx", 
                  sheet = "Sheet1", col_names = TRUE)
 
@@ -384,10 +381,10 @@ rm(df_collapsed)
 rm(df)
 
 ###############################################################################
-### PART X: Replicating the Stata snippet for "Ayu_Seccion_2003_No_LN.csv" in R
+### Ayu_Seccion_2003_No_LN.csv
 ###############################################################################
 
-# 1) Read CSV: Stata has "insheet using Ayu_Seccion_2003_No_LN.csv, clear"
+# 1) Read CSV
 df <- fread("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003_No_LN.csv", 
                encoding = "Latin-1")
 colnames(df) <- tolower(colnames(df))
@@ -528,11 +525,10 @@ df_2003 <- df_collapsed %>%
 rm(df_collapsed)
 rm(df)
 ###############################################################################
-### PART X: Replicating the Stata snippet for "Ayu_Seccion_2006.csv" in R
+### "Ayu_Seccion_2006.csv" 
 ###############################################################################
 
 # 1) Read CSV
-#    Stata: insheet using Ayu_Seccion_2006.csv, clear
 df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006.csv", show_col_types = FALSE)
 
 colnames(df) <- tolower(colnames(df))
@@ -707,11 +703,10 @@ rm(df_collapsed)
 rm(df)
 
 ###############################################################################
-### PART X: Replicating the Stata snippet for "Ayu_Seccion_2009.csv" in R
+### Ayu_Seccion_2009.csv
 ###############################################################################
 
 # 1) Read CSV
-#    Stata: insheet using "Ayu_Seccion_2009.csv", clear
 df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 # Remove "-" and spaces
@@ -811,7 +806,6 @@ df_collapsed <- df_collapsed %>%
     pt      = if_else(dummy_prd_pt_pc==1, 0, pt),
     pc      = if_else(dummy_prd_pt_pc==1, 0, pc)
   ) %>%
-  # There's a small snippet error: `drop dummy_prd_pt` might be a Stata leftover
   select(-dummy_prd_pt_pc)
 
 ###############################################################################
@@ -908,10 +902,9 @@ rm(df_collapsed)
 rm(df)
 
 ###############################################################################
-### PART X: Replicating the Stata snippet for "Ayu_Seccion_2012.csv" in R
+### Ayu_Seccion_2012.csv
 ###############################################################################
 # 1) Read CSV
-#    Stata: insheet using Ayu_Seccion_2012.csv, clear
 df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 # 2) replace municipality = subinstr(municipality,"*","",.)
@@ -1066,11 +1059,10 @@ df_2012 <- df_collapsed %>%
   arrange(section)
 
 ###############################################################################
-### PART X: Replicating the Stata snippet for "Ayuntamientos_2015.xlsx" in R
+### Ayuntamientos_2015.xlsx
 ###############################################################################
 
-# 1) Read Excel: 'Ayuntamientos_2015.xlsx' with first row as headers
-#    Stata: import excel "Ayuntamientos_2015.xlsx", firstrow clear
+# 1) Read Exce
 df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx", 
                  col_names = TRUE)
 
@@ -1406,6 +1398,6 @@ morelos_all <- bind_rows(df_1997,
                          df_2018_collapsed) %>% 
   dplyr::select(-c(day,month,state,noregistrados,nulos,STATE)) %>% 
   dplyr::mutate(turnout = ifelse(listanominal == 0, NA, turnout))
-summary(morelos_all)
-data.table::fwrite(morelos_all,"../../../Processed Data/Morelos/Morelos_process_raw_data.csv")
+
+data.table::fwrite(morelos_all,"../../../Processed Data/morelos/morelos_process_raw_data.csv")
 

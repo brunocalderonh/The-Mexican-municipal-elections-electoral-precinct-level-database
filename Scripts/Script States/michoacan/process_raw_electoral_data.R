@@ -48,7 +48,6 @@ data_1995 <- data_1995 %>%
 
 # -------------------------------------------------------------------
 # 4. Convert columns from pan to nulos into numeric
-#    Stata: destring pan - nulos
 # -------------------------------------------------------------------
 # Find columns from "pan" through "nulos"
 all_cols   <- names(data_1995)
@@ -80,9 +79,6 @@ needed_for_total <- intersect(needed_for_total, names(data_1995))
 
 data_1995 <- data_1995 %>%
   mutate(total = rowSums(across(all_of(needed_for_total)), na.rm=TRUE))
-
-# (Optional) drop if total==. | total==0 if you want to replicate Stata logic exactly.
-# The code is commented in Stata, so we skip.
 
 # -------------------------------------------------------------------
 # 7. RENAME party variables
@@ -246,7 +242,7 @@ data_1995 <- data_1995 %>%
   )
 
 # -------------------------------------------------------------------
-# 1. READ CSV (Stata: insheet using Ayu_Seccion_1998_Half_Missing.csv)
+# 1. READ CSV
 # -------------------------------------------------------------------
 data_1998 <- read_csv("../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018/Ayu_Seccion_1998_Half_Missing.csv", show_col_types = FALSE)
 # Convert column names to lowercase
@@ -273,7 +269,6 @@ data_1998 <- data_1998 %>%
 
 # -------------------------------------------------------------------
 # 4. Convert columns from pan through total to numeric
-#    Stata: destring pan - total
 # -------------------------------------------------------------------
 all_cols <- names(data_1998)
 start_var <- "pan"
@@ -342,7 +337,7 @@ data_1998 <- data_1998 %>%
   )
 
 # -------------------------------------------------------------------
-# 1. READ CSV (Stata: insheet using "Ayu_Seccion_2001.csv")
+# 1. READ CSV
 # -------------------------------------------------------------------
 data_2001 <- read_csv("../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018/Ayu_Seccion_2001.csv", show_col_types = FALSE)
 # Convert column names to lowercase
@@ -553,7 +548,6 @@ data_2001 <- data_2001 %>%
 
 # -------------------------------------------------------------------
 # 1. IMPORT EXCEL
-#    Stata: import excel "resultados_electorales_2005.xls", sheet("Ayuntamiento, por Casilla, 2005") cellrange(A7:K36) firstrow clear
 # -------------------------------------------------------------------
 data_2005 <- read_excel(
   "../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018/resultados_electorales_2005.xls",
@@ -592,9 +586,7 @@ data_2005 <- data_2005 %>%
   select(-...1, -...2)
 
 # -------------------------------------------------------------------
-# 5. RENAME columns to match Stata code
-#    rename ListaNominal -> listanominal
-#    rename VotosTotales -> total
+# 5. RENAME columns 
 # -------------------------------------------------------------------
 # Adjust as needed if your actual column names differ:
 data_2005 <- data_2005 %>%
@@ -687,19 +679,11 @@ data_2005 <- data_2005 %>%
 
 # -------------------------------------------------------------------
 # 1. IMPORT EXCEL
-#    Stata: import excel Ayu_Seccion_2007.xlsx, clear firstrow case(lower)
 # -------------------------------------------------------------------
 data_2007 <- read_excel("../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018/Ayu_Seccion_2007.xlsx", sheet = 1, # adjust if needed
                         col_names = TRUE) %>%
   # "case(lower)" might suggest we convert colnames to lowercase:
   rename_with(tolower)
-names(data_2007)
-# For clarity, check what columns you have. 
-# We'll proceed assuming columns match the Stata references:
-#   municipio -> municipality
-#   seccion   -> section
-#   listanom  -> listanominal
-# etc.
 
 # -------------------------------------------------------------------
 # 2. RENAME municipio -> municipality, seccion -> section
@@ -746,8 +730,7 @@ data_2007 <- data_2007 %>%
   filter(!(is.na(total) | total==0))
 
 # -------------------------------------------------------------------
-# 4. DESTRING (Stata: destring listanominal - cc_pri_pvem_pna total)
-#    In R: convert relevant columns to numeric if needed
+# 4. DESTRING 
 # -------------------------------------------------------------------
 # We'll guess listanominal might be "listanominal" or something similar
 # If we want to convert everything from 'listanominal' to 'cc_pri_pvem_pna' plus 'total', 
@@ -847,7 +830,6 @@ if("cc_pan_pna" %in% names(data_2007)) {
 if("cc_pan_pri" %in% names(data_2007)) {
   data_2007 <- data_2007 %>%
     mutate(
-      # Stata code: replace cc_pan_pri = pan + pri + cc_pan_pri if cc_pan_pri>0
       cc_pan_pri = if_else(cc_pan_pri>0, coalesce(pan,0) + coalesce(pri,0) + cc_pan_pri, cc_pan_pri),
       pan = if_else(cc_pan_pri>0, 0, pan),
       pri = if_else(cc_pan_pri>0, 0, pri)
@@ -1064,7 +1046,6 @@ data_2007 <- data_2007 %>%
 
 # -------------------------------------------------------------------
 # 1. IMPORT EXCEL
-#    Stata: import excel "resultados_2008.xls", sheet("Ayuntamiento Yurécuaro ") cellrange(A8:L46) firstrow clear
 # -------------------------------------------------------------------
 data_2008 <- read_excel(
   "../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018/resultados_2008.xls",
@@ -1169,7 +1150,7 @@ data_2008 <- data_2008 %>%
   )
 
 # -------------------------------------------------------------------
-# 1. READ DTA (Stata: use Ayu_Seccion_2011.dta, clear)
+# 1. READ DTA
 # -------------------------------------------------------------------
 # Adjust file path to your local environment:
 data_2011 <- read_dta("../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018/Other/Ayu_Seccion_2011.dta")
@@ -1324,8 +1305,6 @@ data_2011 <- data_2011 %>%
 # We'll assume 'C_PRD_PT' might be a column. 
 # Check if it exists:
 if("C_PRD_PT" %in% names(data_2011)) {
-  # sum command in Stata is just to inspect. 
-  # We'll replicate logic: replace PRD_PT with C_PRD_PT if it's non-zero:
   data_2011 <- data_2011 %>%
     mutate(
       PRD_PT = if_else(!is.na(C_PRD_PT) & C_PRD_PT!=0 & PRD_PT==0, C_PRD_PT, PRD_PT)
@@ -1417,7 +1396,6 @@ data_2011 <- data_2011 %>%
 
 # -------------------------------------------------------------------
 # 1. IMPORT EXCEL
-#    Stata: import excel "Resultados_electorales_extraordinaria_2012.xlsx", sheet("morelia2012_bd") cellrange(A8:S904) firstrow clear
 # -------------------------------------------------------------------
 data_2012 <- read_excel(
   "../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018/Resultados_electorales_extraordinaria_2012.xlsx",
@@ -1560,7 +1538,7 @@ data_2008 <- data_2008 %>%
   )
 
 ###############################################################################
-### 1. Import Excel (Stata: import excel "SAHUAYO ELECCION EXTRAORDINARIA.xlsx" ...)
+### 1. Import Excel extraordinary elections
 ###############################################################################
 data_sahuayo <- read_excel(
   "../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018/SAHUAYO ELECCION EXTRAORDINARIA.xlsx",
@@ -1724,7 +1702,6 @@ for (sheetname in sheet_list) {
 ### PART X: CLEAR & APPEND MULTIPLE .DTA FILES IN R
 ###############################################################################
 
-# 2) Define the list of .dta files in the same order as your Stata `append using` lines
 files_to_append <- c(
   "Hoja1 (2).dta", "Hoja1 (3).dta", "Hoja1 (4).dta", "Hoja1 (5).dta", "Hoja1 (6).dta",
   "Hoja1 (7).dta", "Hoja1 (8).dta", "Hoja1 (9).dta", "Hoja1 (10).dta", "Hoja1 (11).dta",
@@ -1823,7 +1800,6 @@ message("Now continuing with `all_hoja`...")
 
 ###############################################################################
 ### 1. We assume you already have `df` in memory (the appended data).
-###    We replicate your Stata lines that set `uniqueid` based on `municipality`.
 ###############################################################################
 
 # "gen uniqueid=0"
@@ -2074,17 +2050,11 @@ if("PNA" %in% names(df)) {
 # For rename `*PMC` -> `*MC`, we can do:
 names(df) <- gsub("PMC$", "MC", names(df))
 
-###############################################################################
-### 3) "order coal*, a(PT_MORENA)" and 
-###    "order PAN_PRD_MC PAN_MC PAN_PRD PRD_MC PRD_PVEM PT_MORENA CI_*, a(PES)"
-###    - This changes variable order in Stata, not essential in R. We can skip or reorder if we want.
-###############################################################################
 
 ###############################################################################
 ### 4) collapse (sum) PAN-CI_2 NOREG NULO (first) coal*, by (municipality section uniqueid)
 ###    In R, let's define a group_by() and summarize().
 ###############################################################################
-# Stata code suggests summing columns from "PAN" through "CI_2", plus NOREG, NULO, and 'coal*' columns.
 # We'll identify these columns if they exist. Then do a "by (municipality, section, uniqueid)"
 
 group_vars <- c("municipality","section","uniqueid")
@@ -2174,7 +2144,7 @@ michoacan_all <- bind_rows(data_1995,
                             data_sahuayo,
                             data_2018)
 
-data.table::fwrite(michoacan_all,"../../../Processed Data/Michoacan/Michoacan_process_raw_data.csv")
+data.table::fwrite(michoacan_all,"../../../Processed Data/michoacan/michoacan_process_raw_data.csv")
 
 
 

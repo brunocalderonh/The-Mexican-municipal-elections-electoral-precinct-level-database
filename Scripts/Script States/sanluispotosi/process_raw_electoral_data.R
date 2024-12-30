@@ -36,7 +36,7 @@ df_1997 <-df_1997 %>%
   rename(
     municipality = municipio,
     section      = seccion
-    # listanominal = nominal  # (commented out because it’s commented in Stata)
+    # listanominal = nominal  # (commented out)
   ) %>%
   filter(!(municipality == "" & is.na(section))) %>%
   filter(!(is.na(total) | total == 0))
@@ -49,7 +49,6 @@ for (v in num_vars) {
   }
 }
 
-# In Stata: collapse (sum) pan - total, by(municipality section) => omitted aggregator
 # So we skip aggregator. We keep the data as is.
 
 # rename pan->PAN, pri->PRI, etc.

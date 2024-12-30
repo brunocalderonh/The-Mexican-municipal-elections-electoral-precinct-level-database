@@ -1146,7 +1146,7 @@ merge_data <- ayuntamientos_2017 %>%
   select(municipio, municipality, uniqueid) %>%
   distinct()
 
-# Save the intermediate data (to mimic saving and erasing "merge.dta" in Stata)
+# Save the intermediate data
 write.csv(merge_data, "merge.csv", row.names = FALSE)
 
 # Step 2: Import the second Excel file

@@ -108,7 +108,7 @@ data <- data %>%
 data <- data %>%
   filter(municipality != "" & section != "", !is.na(total) & total != 0)
 
-# Step 4: Convert string variables to numeric (destring equivalent in Stata)
+# Step 4: Convert string variables to numeric 
 # Assuming `listanominal`, `pan`, `total`, and other similar variables are numeric but stored as character
 numeric_vars <- c("listanominal", "pan", "pri", "prd", "pvem", "pt", "mexicoposible", "total")
 

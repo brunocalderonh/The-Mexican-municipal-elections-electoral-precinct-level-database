@@ -1055,8 +1055,6 @@ data_2015_collapsed <- data_2015_collapsed %>%
 
 #------------------------------------------------------------
 # Step 1: Import communal candidates 2018.xlsx, sheet MUNCAND
-# Stata:
-# import excel "communal candidates 2018.xlsx", sheet("MUNCAND") firstrow clear
 
 mun_data <- fread("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/communal_candidates_2018.csv")
 
@@ -1232,10 +1230,6 @@ see_data_sum <- see_data_sum %>%
 # order PAN_PRD PRD_MC MORENA_PES PRI_PVEM PAN_PRD_MC a(PSG)
 # Reordering columns in R:
 col_order <- c("PSG", "PAN_PRD", "PRD_MC", "MORENA_PES", "PRI_PVEM", "PAN_PRD_MC")
-# "a(PSG)" in Stata means place these vars after PSG. 
-# We'll just ensure they're in a desired order. Adjust as needed.
-# Let's put PSG first then these after PSG.
-# Actually we can just ensure PSG comes first, then the others:
 existing_cols <- names(see_data_sum)
 # We want PSG at the start, then the rest of the columns:
 col_order_final <- c("PSG", setdiff(existing_cols, "PSG"))
@@ -1271,7 +1265,7 @@ guerrero_all <- bind_rows(data_1999_collapsed,
 
 summary(guerrero_all)
 
-data.table::fwrite(guerrero_all,"../../../Processed Data/Guerrero/Guerrero_process_raw_data.csv")
+data.table::fwrite(guerrero_all,"../../../Processed Data/guerrero/guerrero_process_raw_data.csv")
 
 
 

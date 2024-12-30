@@ -28,7 +28,7 @@ data <- fread("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007,
               encoding = "Latin-1")
 colnames(data) <- tolower(colnames(data))
 names(data) <- gsub("[- ]", "", names(data))
-# Rename columns to match Stata code
+# Rename columns 
 data <- data %>%
   rename(
     municipality = municipio,
@@ -43,7 +43,7 @@ data <- data %>%
 data <- data %>%
   filter(!is.na(total) & total != 0)
 
-# Convert specific columns from character to numeric (destring in Stata)
+# Convert specific columns from character to numeric
 data <- data %>%
   mutate(across(pan:total, as.numeric))
 
@@ -354,7 +354,7 @@ data <- data %>%
 data <- data %>%
   filter(!is.na(total) & total != 0)
 
-# Convert columns from character to numeric (similar to destring in Stata)
+# Convert columns from character to numeric 
 data <- data %>%
   mutate(across(pan:listanominal, as.numeric))
 
@@ -734,7 +734,7 @@ data <- data %>%
 data <- data %>%
   filter(!is.na(total) & total != 0)
 
-# Convert specified columns from character to numeric (similar to destring in Stata)
+# Convert specified columns from character to numeric
 data <- data %>%
   mutate(across(pan:conv, as.numeric)) %>%
   mutate(across(c(total, listanominal), as.numeric))
@@ -1021,7 +1021,7 @@ data <- data %>%
 data <- data %>%
   filter(!is.na(total) & total != 0)
 
-# Convert specified columns from character to numeric (similar to destring in Stata)
+# Convert specified columns from character to numeric 
 data <- data %>%
   mutate(across(pan:listanominal, as.numeric))
 
@@ -1294,7 +1294,7 @@ data_2007 <- collapsed_data %>%
 data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/ResultadosDeLaElecciónVotaciónXCasilla Aytos extra. 2008.xlsx", sheet = "ayto", range = "A7:R25", col_names = TRUE)
 # Remove "-" and spaces
 names(data) <- gsub("[. ]", "", names(data))
-# Convert all columns to numeric (similar to destring in Stata)
+# Convert all columns to numeric
 data <- data %>%
   mutate(across(everything(), as.numeric))
 
@@ -1357,7 +1357,7 @@ data <- data %>%
 data <- data %>%
   filter(!is.na(total) & total != 0)
 
-# Convert specified columns from character to numeric (similar to destring in Stata)
+# Convert specified columns from character to numeric
 data <- data %>%
   mutate(across(c(pan_prd_pc_panal:pt, total, listanominal), as.numeric))
 
@@ -1382,11 +1382,11 @@ collapsed_data <- collapsed_data %>%
 collapsed_data <- collapsed_data %>%
   mutate(
     municipality = str_replace_all(municipality, c("Á" = "A", "É" = "E", "Í" = "I", "Ó" = "O", "Ú" = "U", "Ñ" = "N")),
-    municipality = str_to_title(municipality),  # Equivalent to 'proper' in Stata
+    municipality = str_to_title(municipality),
     municipality = str_trim(municipality)       # Remove leading and trailing spaces
   )
 
-# The resulting 'collapsed_data' matches the operations in your Stata code
+# The resulting 'collapsed_data'
 
 # Initialize 'uniqueid' with 0
 collapsed_data <- collapsed_data %>%
@@ -1708,7 +1708,7 @@ data <- data %>%
 data <- data %>%
   filter(!(is.na(municipality) & is.na(section)))
 
-# Convert 'section' to numeric (similar to destring in Stata)
+# Convert 'section' to numeric 
 data <- data %>%
   mutate(section = as.numeric(section))
 
@@ -1724,7 +1724,7 @@ data <- data %>%
 data <- data %>%
   mutate(municipality = str_trim(municipality))
 
-# Convert specified columns from character to numeric (similar to destring in Stata)
+# Convert specified columns from character to numeric
 data <- data %>%
   mutate(across(c(PAN_PRD_PANAL_CPP, listanominal), as.numeric))
 
@@ -1737,7 +1737,7 @@ collapsed_data <- data %>%
 collapsed_data <- collapsed_data %>%
   mutate(
     municipality = str_replace_all(municipality, c("á" = "a", "é" = "e", "í" = "i", "ó" = "o", "ú" = "u", "ñ" = "n")),
-    municipality = str_to_title(municipality) # Proper case equivalent in Stata
+    municipality = str_to_title(municipality)
   )
 
 # Merge with 'Coaliciones_2013.dta' on 'municipality'
@@ -1777,7 +1777,7 @@ collapsed_data <- collapsed_data %>%
 collapsed_data <- collapsed_data %>%
   mutate(turnout = total / listanominal)
 
-# The resulting 'collapsed_data' matches the operations in your Stata code
+# The resulting 'collapsed_data' 
 
 # Initialize 'uniqueid' column with 0
 collapsed_data <- collapsed_data %>%
@@ -2415,7 +2415,7 @@ prep_data <- prep_data %>% filter(STATE == "PUEBLA")
 # Merge puebla_data with prep_data using "section" column
 puebla_data_2018 <- puebla_data_2018 %>%
   left_join(prep_data, by = "section") %>%
-  filter(!is.na(ListadoNominalINE))  # Drop rows where no match was found (equivalent to `_merge==2` in Stata)
+  filter(!is.na(ListadoNominalINE))  # Drop rows where no match was found 
 
 # Drop the temporary saved data
 unlink("PUE_LN18.rds")

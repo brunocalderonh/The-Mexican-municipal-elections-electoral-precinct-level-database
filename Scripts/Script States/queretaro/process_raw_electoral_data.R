@@ -312,7 +312,7 @@ ayuntamiento_2006 <- ayuntamiento_2006 %>%
   filter(!(is.na(municipality) | is.na(section))) %>%
   filter(!(is.na(total) | total == 0))
 
-# Convert relevant columns to numeric (equivalent to Stata's 'destring')
+# Convert relevant columns to numeric
 ayuntamiento_2006 <- ayuntamiento_2006 %>%
   mutate(across(c(PAN:listanominal), as.numeric))
 
@@ -735,7 +735,7 @@ data <- data %>%
 data <- data %>%
   filter(!is.na(pri))
 
-# Convert all columns to numeric (equivalent to destring in Stata)
+# Convert all columns to numeric
 data <- data %>%
   mutate(across(everything(), as.numeric))
 # Create PRI_PVEM_PANAL and PAN_PRD coalitions
@@ -936,6 +936,6 @@ data_master <- bind_rows(data_master, combined_data)
 data_master <- data_master %>%
   mutate(municipality = toupper(municipality))
 
-data.table::fwrite(data_master,"../../../Processed Data/Queretaro/Queretaro_process_raw_data.csv")
+data.table::fwrite(data_master,"../../../Processed Data/queretaro/queretaro_process_raw_data.csv")
 
 

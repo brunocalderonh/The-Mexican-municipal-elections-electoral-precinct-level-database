@@ -52,7 +52,6 @@ df_tlx <- df_tlx %>%
 
 # Convert columns (e.g., pri through nulos) to numeric
 # We'll identify them by name or by the range of columns that correspond.
-# In Stata, code is: destring pri - nulos, replace
 # We'll do partial approach if we know the columns:
 vote_cols <- c("pri","pan","prd","pt","pvem","partidodemocrata","psn","pc","pas","pcdt","pjs","nulos")
 df_tlx <- df_tlx %>%
@@ -84,7 +83,7 @@ df_collapsed <- df_tlx %>%
   )
 
 ################################################################################
-# 2) Rename columns to match Stata code
+# 2) Rename columns 
 ################################################################################
 df_collapsed <- df_collapsed %>%
   rename(
@@ -209,7 +208,6 @@ df_collapsed <- df_collapsed %>%
 df_all <- read_dta("../../all_months_years.dta") %>%
   select(ed, seccion, month, year, lista)
 
-# We'll do a left_join => in Stata it's "capture merge 1:m ed seccion"
 df_merged <- df_collapsed %>%
   left_join(df_all, by=c("ed","seccion"))
 
@@ -236,12 +234,6 @@ df_2001<- df_merged %>%
 ################################################################################
 # Part A: Read "Ayu_Seccion_2004_LN.csv", rename seccion->section, sort, save .dta
 ################################################################################
-
-# In Stata:
-# insheet using Ayu_Seccion_2004_LN.csv, clear
-# rename seccion section
-# sort section
-# save Ayu_Seccion_2004_LN.dta, replace
 
 df_ln <- read_csv("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016/Ayu_Seccion_2004_LN.csv", show_col_types=FALSE) 
 
@@ -333,7 +325,6 @@ if ("listanominal" %in% names(df_joined)) {
 # Part D: Rename columns, compute turnout=total/listanominal, drop columns, assign uniqueid
 ################################################################################
 
-# rename columns as per Stata
 df_final <- df_joined %>%
   rename(
     PAN               = pan,
@@ -503,7 +494,6 @@ df_tlax <- df_tlax %>%
 ################################################################################
 # 4) Collapse (sum) columns, by (municipality, section)
 ################################################################################
-# The Stata code: 
 #   collapse (sum) PRI - total, by(municipality section)
 # meaning sum all columns from PRI to total. We'll do a partial approach.
 
@@ -634,7 +624,6 @@ df_tlax10 <- read_csv("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 200
 colnames(df_tlax10) <- tolower(colnames(df_tlax10))
 names(df_tlax10) <- gsub("[- ]", "", names(df_tlax10))
 # parse columns from panpna to total as numeric
-# In Stata: destring panpna - total , replace
 # We'll identify them explicitly or do a partial approach:
 vote_cols <- c("panpna","pripvem","pri","prips","prdpc","prdpcpt","prdpcpt2",
                "prdpt","prdpt2","ptpc","pt","convergencia","pvem","pac","pp","plt","ppt","ps","nulos")
@@ -659,7 +648,7 @@ df_collapsed <- df_tlax10 %>%
   summarise(across(all_of(intersect(collapse_cols, names(.))), sum, na.rm=TRUE), .groups="drop")
 
 ################################################################################
-# 3) Coalition logic: referencing various "sum" commands and replacements in Stata
+# 3) Coalition logic
 ################################################################################
 
 # * We'll replicate the logic from your code:
@@ -870,7 +859,6 @@ df_july2013 <- df_july2013 %>%
   )
 
 # 3) Collapse (sum) from PAN through 'valid', by (municipality, section, Coalition)
-#    In Stata: collapse (sum) PAN - valid, by(municipality section Coalition)
 vote_cols <- names(df_july2013)
 # We'll identify the columns from "PAN" to "valid" if needed, or do an explicit list
 # For clarity, let's do an explicit approach if known.
@@ -1216,7 +1204,6 @@ df_all <- df_all %>%
 # collapse (sum) by (municipality, section): columns from PAN to PVEM_PS
 collapse_cols2 <- names(df_all)
 # We'll guess you want from "PAN" through "PVEM_PS". Adapt as needed.
-# In Stata: collapse (sum) PAN-PVEM_PS, by(municipality section)
 
 df_collapsed <- df_all %>%
   group_by(municipality, section) %>%
@@ -1356,5 +1343,5 @@ tlaxcala_all <- bind_rows(df_2001,
                           df_final
                           )
 
-data.table::fwrite(tlaxcala_all,"../../../Processed Data/tlaxcala/Tlaxcala_process_raw_data.csv")
+data.table::fwrite(tlaxcala_all,"../../../Processed Data/tlaxcala/tlaxcala_process_raw_data.csv")
 

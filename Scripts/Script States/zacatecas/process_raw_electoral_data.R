@@ -39,8 +39,6 @@ names(df) <- gsub("[- ]", "", names(df))
 ################################################################################
 # 2) Rename columns, drop rows if municipality=="" & section missing,
 #    and drop rows if total is missing or zero.
-#    (Stata: drop if municipality=="" & section==.)
-#            drop if total==. | total==0
 ################################################################################
 df <- df %>%
   rename(
@@ -60,7 +58,6 @@ df <- df %>%
 
 ################################################################################
 # 4) Collapse (sum) pan - total, by(municipality section)
-#    (Stata: collapse (sum) pan - total , by (municipality section))
 ################################################################################
 df_collapsed <- df %>%
   group_by(municipality, section) %>%
@@ -68,7 +65,6 @@ df_collapsed <- df %>%
 
 ################################################################################
 # 5) Rename columns, then drop nulos, noreg if they exist
-#    (Stata: rename pan->PAN, pri->PRI, etc., drop nulos noreg)
 ################################################################################
 df_collapsed <- df_collapsed %>%
   rename(
@@ -185,7 +181,7 @@ merge_fn <- function(df_main, df_all) {
   df_merge
 }
 
-# drop unmatched (Stata: drop if _merge==2). In a left_join, we can remove rows
+# drop unmatched. In a left_join, we can remove rows
 # that have NA in 'lista' (the merged column)
 df_merged <- df_merged %>% filter(!is.na(lista))
 
@@ -217,7 +213,7 @@ names(df) <- gsub("[- ]", "", names(df))
 ################################################################################
 # 2) Rename columns, remove rows if municipality = "" & section is NA,
 #    or if total is NA or zero.
-#    Stata: drop if municipality=="" & section==.
+#    drop if municipality=="" & section==.
 #            drop if total==. | total==0
 ################################################################################
 df <- df %>%
@@ -239,14 +235,13 @@ df <- df %>%
 
 ################################################################################
 # 4) Collapse (sum) pan - total by (municipality, section)
-#    Stata: collapse (sum) pan - total , by(municipality section)
 ################################################################################
 df_collapsed <- df %>%
   group_by(municipality, section) %>%
   summarise(across(pan:total, sum, na.rm = TRUE), .groups = "drop")
 
 ################################################################################
-# 5) Rename columns (Stata rename pan->PAN, pri->PRI, prd->PRD, etc.)
+# 5) Rename columns (pan->PAN, pri->PRI, prd->PRD, etc.)
 #    Then drop noregistrados, nulos
 ################################################################################
 df_collapsed <- df_collapsed %>%
@@ -277,7 +272,6 @@ df_collapsed <- df_collapsed %>%
       municipality == "CALERA"               ~ 32005,
       municipality == "CAÑITAS"              ~ 32006,
       # If partial match for "CA" and "ITAS" within the string
-      # (Stata uses strpos(...)>0 logic):
       str_detect(municipality, "CA") & str_detect(municipality, "ITAS") ~ 32006,
       municipality == "CHALCHIHUITES"        ~ 32009,
       municipality == "CONCEPCION DEL ORO"   ~ 32007,
@@ -367,7 +361,7 @@ merge_fn <- function(df_main, df_all) {
 }
 
 df_merged <- df_merged  %>%
-  filter(!is.na(lista))  # drop if no match, i.e. _merge==2 in Stata
+  filter(!is.na(lista))  
 
 # drop _merge, ed, seccion, year, month
 df_merged <- df_merged %>%
@@ -420,7 +414,6 @@ df <- df %>%
 
 ################################################################################
 # 5) Collapse (sum) listanominal, pan - total by (municipality, section)
-#    (In Stata: collapse (sum) listanominal pan - total, by (municipality section))
 ################################################################################
 df_collapsed <- df %>%
   group_by(municipality, section) %>%
@@ -431,7 +424,7 @@ df_collapsed <- df %>%
   )
 
 ################################################################################
-# 6) Rename columns as in Stata code
+# 6) Rename columns 
 ################################################################################
 df_collapsed <- df_collapsed %>%
   rename(
@@ -565,7 +558,7 @@ df <- df %>%
 
 ###############################################################################
 # 4) Collapse (sum) listanominal, pan - total by municipality, section
-#    (Stata: collapse (sum) listanominal pan - total , by (municipality section))
+#    (: collapse (sum) listanominal pan - total , by (municipality section))
 ###############################################################################
 df_collapsed <- df %>%
   group_by(municipality, section) %>%
@@ -576,7 +569,7 @@ df_collapsed <- df %>%
   )
 
 ###############################################################################
-# 5) Rename columns to final forms (Stata rename pan->PAN, pri->PRI, etc.)
+# 5) Rename columns to final forms (rename pan->PAN, pri->PRI, etc.)
 ###############################################################################
 df_collapsed <- df_collapsed %>%
   rename(
@@ -702,14 +695,12 @@ df <- df %>%
 
 ################################################################################
 # 3) Convert listanominal, pan through total to numeric 
-#    (Stata: destring listanominal pan - total, replace)
 ################################################################################
 df <- df %>%
   mutate(across(c(listanominal, pan:total), as.numeric))
 
 ################################################################################
 # 4) Collapse (sum) listanominal, pan - total by (municipality, section)
-#    (Stata: collapse (sum) listanominal pan - total , by (municipality section))
 ################################################################################
 df_collapsed <- df %>%
   group_by(municipality, section) %>%
@@ -857,8 +848,7 @@ df_2010 <- df_collapsed %>%
   arrange(section)
 
 ################################################################################
-# 1) Read Excel (equivalent to Stata: 
-#    import excel "CASILLAS_AYUNTAMIENTOS_2013.xlsx", sheet("CASILLAS_AYUNTAMIENTOS_2013") firstrow clear)
+# 1) Read Excel
 ################################################################################
 df <- read_excel(
   path = "../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/CASILLAS_AYUNTAMIENTOS_2013.xlsx",
@@ -923,7 +913,6 @@ df <- df %>%
 
 ################################################################################
 # 6) Collapse (sum) listanominal, PRI - total by (municipality, section)
-#    (Stata: collapse (sum) listanominal PRI - total, by (municipality section))
 ################################################################################
 collapse_vars <- df %>%
   select(listanominal:total) %>%  # from listanominal through total
@@ -938,7 +927,7 @@ df_collapsed <- df %>%
 
 ################################################################################
 # 7) turnout = total/listanominal
-#    drop Nulos if present (Stata: drop Nulos)
+#    drop Nulos if present 
 ################################################################################
 df_collapsed <- df_collapsed %>%
   mutate(turnout = total / listanominal) %>%
@@ -1118,7 +1107,7 @@ df <- df %>%
   )
 
 ################################################################################
-# 3) Reorder columns so uniqueid is before municipality (Stata: order uniqueid, a(municipality))
+# 3) Reorder columns so uniqueid is before municipality 
 ################################################################################
 df <- df %>%
   relocate(uniqueid, .before = municipality)
@@ -1130,9 +1119,7 @@ df <- df %>%
   filter(Dtto != "")
 
 ################################################################################
-# 5) Destring all columns (Stata: destring *, replace)
-#    In R, we typically do more targeted numeric conversions. But if you want to
-#    attempt them all, be cautious about columns that won't parse as numeric.
+# 5) Destring all columns
 ################################################################################
 df <- df %>%
   mutate(across(everything(), ~ suppressWarnings(as.numeric(.))))
@@ -1155,12 +1142,6 @@ df_collapsed <- df %>%
 
 ################################################################################
 # 7) Recreate CI_1, CI_2, CI_3. Then adjust CI_1 as CI_1 - CI_2 - CI_3
-#    Stata code:
-#      egen CI_1=rowtotal(CI1-CI18)
-#      egen CI_2=rowtotal(CI9 CI14 CI18)
-#      gen CI_3=CI13
-#      replace CI_1=CI_1-CI_2-CI_3
-#      drop CI1-CI18
 ################################################################################
 # We'll assume columns CI1, CI2, ... CI18 exist. Let's gather them:
 ci_cols <- paste0("CI", 1:18)
@@ -1341,14 +1322,6 @@ df <- df %>%
 
 ################################################################################
 # 6) Generate the alliances and rename columns
-#    Stata code:
-#      g PAN_PRD_PT = D + F + G + L + M + N + O
-#      g PRI_PVEM_PANAL = E + H + J + P + Q + R + S
-#      rename I MC
-#      rename K PES
-#      rename T CI_1
-#      rename U CI_3
-#      rename V CI_2
 ################################################################################
 df <- df %>%
   mutate(
@@ -1369,8 +1342,6 @@ df <- df %>%
 
 ################################################################################
 # 7) Collapse (sum) columns by (municipality, uniqueid, section)
-#    (Stata: collapse (sum) PAN_PRD_PT PRI_PVEM_PANAL MC PES CI_1 CI_2 CI_3
-#            listanominal total, by(municipality uniqueid section))
 ################################################################################
 df_collapsed <- df %>%
   group_by(municipality, uniqueid, section) %>%
@@ -1478,15 +1449,12 @@ df <- df %>%
 
 ################################################################################
 # 3) Reorder columns so 'uniqueid' is before municipality 
-#    (Stata: order uniqueid, a(municipality))
 ################################################################################
 df <- df %>%
   relocate(uniqueid, .before = municipality)
 
 ################################################################################
 # 4) Rename "*ES*" => "*PES*"
-#    Stata: rename *ES* *PES*
-#    We'll replicate via rename_with and regex
 ################################################################################
 df <- df %>%
   rename_with(

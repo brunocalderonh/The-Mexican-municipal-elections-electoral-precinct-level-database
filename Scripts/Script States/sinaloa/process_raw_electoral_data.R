@@ -813,5 +813,5 @@ df_combo <- bind_rows(df_2001, df_2004, df_2007, df_2010, df_2013, df_2016, df_2
     )
   )
 
-data.table::fwrite(df_combo,"../../../Processed Data/sinaloa/Sinaloa_process_raw_data.csv")
+data.table::fwrite(df_combo,"../../../Processed Data/sinaloa/sinaloa_process_raw_data.csv")
 

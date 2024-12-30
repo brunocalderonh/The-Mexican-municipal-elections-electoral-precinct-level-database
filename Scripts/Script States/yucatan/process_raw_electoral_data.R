@@ -32,7 +32,7 @@ colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
 
 ###############################################################################
-# 2) Rename columns to match Stata code:
+# 2) Rename columns
 #    municipio -> municipality
 #    secc -> section
 #    emitidos -> total
@@ -54,7 +54,6 @@ df <- df %>%
 
 ###############################################################################
 # 4) Convert (pan through listanominal) to numeric 
-#    (like "destring pan - listanominal, replace" in Stata)
 ###############################################################################
 # We'll assume columns pan through listanominal exist in your data.
 df <- df %>%
@@ -62,7 +61,6 @@ df <- df %>%
 
 ###############################################################################
 # 5) Collapse (sum) pan - listanominal by (municipality, section)
-#    (In Stata: collapse (sum) pan - listanominal, by(municipality section))
 ###############################################################################
 df_collapsed <- df %>%
   group_by(municipality, section) %>%
@@ -93,7 +91,7 @@ df_collapsed <- df_collapsed %>%
   mutate(turnout = total / listanominal)
 
 ###############################################################################
-# 8) Drop 'nulos' if it exists (Stata: drop nulos)
+# 8) Drop 'nulos'
 ###############################################################################
 df_collapsed <- df_collapsed %>%
   select(-any_of("nulos"))
@@ -264,7 +262,7 @@ df <- df %>%
   )
 
 ################################################################################
-# 4) Destring pan through nulos & total (Stata: destring  pan - nulos total, replace)
+# 4) Destring pan through nulos & total 
 ################################################################################
 df <- df %>%
   mutate(across(c(pan, pri, prd, pt, pvem, noregistrados, nulos, total),
@@ -272,7 +270,6 @@ df <- df %>%
 
 ################################################################################
 # 5) Collapse (sum) pan-nulos total by (municipality, section)
-#    (Stata: collapse (sum) pan-nulos total, by(municipality section))
 ################################################################################
 df_collapsed <- df %>%
   group_by(municipality, section) %>%
@@ -778,7 +775,6 @@ df <- df %>%
 
 ################################################################################
 # 4) Destring (listanominal through total), then collapse by municipality, section
-#    (Stata: destring listanominal - total, replace; collapse (sum) listanominal - total...)
 ################################################################################
 df <- df %>%
   mutate(across(listanominal:total, as.numeric))
@@ -990,7 +986,6 @@ df <- df %>%
 
 ################################################################################
 # 4) Collapse (sum) listanominal, pan - total by (municipality, section)
-#    (Stata: collapse (sum) listanominal pan - total, by(municipality section))
 ################################################################################
 df_collapsed <- df %>%
   group_by(municipality, section) %>%
@@ -1197,7 +1192,7 @@ df <- df %>%
   filter(!(is.na(total) | total == 0))
 
 ################################################################################
-# 3) Convert (listanominal, pan through total) to numeric (Stata: destring ...)
+# 3) Convert (listanominal, pan through total) to numeric
 ################################################################################
 df <- df %>%
   mutate(across(c(listanominal, pan:total), as.numeric))
@@ -1213,9 +1208,6 @@ df_collapsed <- df %>%
 ################################################################################
 # 5) Merge PRI & PVEM into pripvem for specific municipalities:
 #    if municipality in certain list => pripvem = pri + pvem + pripvem; then zero out pri, pvem
-#    e.g. (Stata: replace pripvem=pri + pvem + pripvem if municipality=="CELESTÍN" ... or ... "DZIDZANTÍN" etc.)
-#
-#    We'll define a character vector of those municipality names, then do the sums.
 ################################################################################
 merge_pri_pvem_munis <- c(
   "CELESTÍN", "DZIDZANTÍN", "ESPITA", "IZAMAL", "KANASÍN", "MERIDA",
@@ -1457,8 +1449,6 @@ df_main <- read_excel(
 names(df_main) <- gsub("[- ]", "", names(df_main))
 ################################################################################
 # 6) Drop if Municipio==""; 
-#    "count if Listanominal==." is just a check in Stata, not needed in R 
-#    rename Municipio->municipality, Seccin->section, Listanominal->listanominal, TOTAL->total
 ################################################################################
 df_main <- df_main %>%
   filter(Municipio != "") %>%
@@ -1495,23 +1485,12 @@ df_coalition2 <- read_dta("Coaltion_2012.dta")
 df_merged <- df_main %>%
   left_join(df_coalition2, by="municipality")
 
-# drop _merge in Stata => in R, we just remove rows with no match (if needed).
-# If you truly want to replicate Stata's "merge m:1", 
-# you might keep duplicates or handle them differently. 
-# We'll assume we want to keep all from df_main. 
-# If you want to drop unmatched, do:
 df_merged <- df_merged %>%
   filter(!is.na(df_merged[[ "c_PRI_PVEM" ]])) # or any "c_" column
 
 ################################################################################
-# 9) Next part in Stata is code for computing combined columns 
+# 9) computing combined columns 
 #    (PRI_PVEM, PRI_PVEM_PSD, PRD_MC, etc.) using the c_ flags. 
-#    However, the user commented out a portion 
-#    (the "foreach party in PRI_PVEM..." blocks).
-#    They then create t_PRI_PVEM, t_PRI_PVEM_PSD, etc. based on c_ flags,
-#    zero out certain columns if c_ flags are 1, etc.
-#
-#    We'll replicate the lines that are not commented.
 ################################################################################
 
 df_merged <- df_merged %>%

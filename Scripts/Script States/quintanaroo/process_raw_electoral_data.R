@@ -49,7 +49,6 @@ df_1999 <- df_1999 %>%
   filter(!is.na(section), total != 0)
 
 # Convert pan through total to numeric
-# (In Stata: destring pan - total, replace)
 num_vars <- c("pan","pri","prd","pt","pvem","noregistrados","nulos",
               "total","listanominal")
 for (v in num_vars) {
@@ -569,7 +568,6 @@ for (sname in sheet_names_2016) {
   
   # Save to .dta (similar to "save `sheetname'.dta, replace")
   # We'll name it something like "Table 2.dta", "Table 4.dta", etc.
-  # but in Stata code, each sheet had the name "Table X.dta".
   # If your sheet name is actually "Table 2", then do:
   # (Better is to make the filename R-friendly, e.g. replace spaces with underscores)
   
@@ -579,8 +577,6 @@ for (sname in sheet_names_2016) {
 }
 
 # --- Step 2: Append the .dta files read from each sheet ---
-# The Stata code specifically appends a set of "Table X.dta" files. 
-# We'll replicate that logic in R by reading them and row-binding.
 
 # Example: 
 files_to_append_2016 <- c(
@@ -612,7 +608,7 @@ for (f in files_to_append_2016) {
 # --- Step 3: Convert all columns to numeric (similar to "destring *, replace") ---
 all_2016[] <- lapply(all_2016, function(x) as.numeric(as.character(x)))
 
-# --- Step 4: Rename variables (Stata rename) ---
+# --- Step 4: Rename variables  ---
 # rename (SECCION CNR VN VT ES NA CI) (section no_reg nulo total PES PANAL CI_1)
 all_2016 <- all_2016 %>%
   rename(
@@ -653,7 +649,6 @@ all_2016 <- all_2016 %>%
 
 # Keep lines that read LN and merge:
 # Merging LN2016
-# preserve/restore is just a backup step in Stata; in R we’ll do a separate read.
 
 # We assume "municipality" and "uniqueid" exist in your data. 
 # If they do not exist yet, adapt as needed.
@@ -668,7 +663,6 @@ ln2016 <- read_dta("../Listas Nominales/LN 2012-2019/2016/LN2016.dta") %>%
 ln2016 <- ln2016 %>%
   rename(section = seccion)
 
-# 1:1 merge on section (the Stata code does just "merge 1:1 section using LN16_QROO.dta")
 # We do not have "municipality" + "uniqueid" here, but let's replicate as best as possible:
 all_2016 <- all_2016 %>%
   left_join(ln2016, by = "section")
@@ -788,7 +782,6 @@ all_2018 <- all_2018 %>%
 # --- Step 3: Merge with LN18_QROO (ListadoNominalPREP2018.dta) ---
 ln2018 <- read_dta("../Listas Nominales/ListadoNominalPREP2018.dta") %>%
   filter(STATE == "QUINTANA ROO") %>%
-  # The Stata code merges on (STATE section). We do the same:
   select(STATE, section, ListadoNominalINE)
 
 all_2018 <- all_2018 %>%
@@ -804,5 +797,5 @@ all_2018 <- all_2018 %>%
 
 final_data <- bind_rows(all_data,all_2016, all_2018)
 
-data.table::fwrite(final_data,"../../../Processed Data/quintanaroo/Quintanaroo_process_raw_data.csv")
+data.table::fwrite(final_data,"../../../Processed Data/quintanaroo/quintanaroo_process_raw_data.csv")
 

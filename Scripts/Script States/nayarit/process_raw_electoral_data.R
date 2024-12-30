@@ -101,7 +101,7 @@ df1996$month <- "July"
 df1996_merge <- df1996[, c("municipality","section","uniqueid")]
 df1996_merge <- df1996_merge[order(df1996_merge$section), ]
 
-# Also, drop if total == NA or total==0 (per the final lines in your Stata code)
+# Also, drop if total == NA or total==0 
 df1996 <- subset(df1996, !is.na(total) & total != 0)
 
 ###############################################################################
@@ -186,7 +186,6 @@ names(df2002)[names(df2002) == "seccion"]          <- "section"
 
 df2002 <- subset(df2002, !(municipality == "" & is.na(section)))
 
-# Stata code drops if total==. or total==0 after some transformations
 # We'll do it carefully, but first ensure 'total' is numeric:
 df2002$total <- as.numeric(df2002$total)
 df2002 <- subset(df2002, !is.na(total) & total != 0)
@@ -524,7 +523,6 @@ df2014 <- subset(df2014, municipality != "" & !is.na(municipality))
 
 # Convert known numeric columns if needed; for example:
 # Suppose these columns exist: Sección, etc.
-# We'll rename as the original Stata code:
 names(df2014)[names(df2014) == "Sección"]       <- "section"
 names(df2014)[names(df2014) == "CandidatoNoReg"]<- "no_reg"
 names(df2014)[names(df2014) == "VotosNulos"]    <- "nulo"
@@ -551,7 +549,6 @@ df2014$uniqueid[df2014$municipality == "TEPIC"]               <- 18017
 df2014$uniqueid[df2014$municipality == "TUXPAN"]              <- 18018
 df2014$uniqueid[df2014$municipality == "XALISCO"]             <- 18008
 
-# Stata code: collapse (sum) PRI_PVEM_PANAL-CI_1, by(municipality uniqueid section)
 # We'll skip that aggregator step.
 
 # Add year/month/state
@@ -611,6 +608,6 @@ df_final <- bind_rows(df_1996_2011, df_14_17)
 # Now df_final is the full municipality-section panel for 1996–2011 + 2014 + 2017
 # at the municipality-section level, skipping aggregator, ranking, and winner.
 
-data.table::fwrite(df_final,"../../../Processed Data/Nayarit/Nayarit_process_raw_data.csv")
+data.table::fwrite(df_final,"../../../Processed Data/nayarit/nayarit_process_raw_data.csv")
 
 
