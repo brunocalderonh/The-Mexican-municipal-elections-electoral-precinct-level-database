@@ -12,8 +12,6 @@ library(stringr)
 library(ggplot2)
 library(stargazer)
 
-
-
 # Get the path of the current script
 script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 
@@ -35,7 +33,6 @@ unzipped_file <- file.path(temp_dir, "all_states_final.csv")
 
 #final db
 db <- read_csv(unzipped_file)  # Use read_csv for CSV files
-
 
 #COMPUTE BASIC STATS OF ELECTIONS AND SUCH
 # Number of unique municipal elections (unique combinations of `mun_code` and `year`)
@@ -106,7 +103,6 @@ percent_precincts_affected_case3 <- (nrow(case3_df) / nrow(db)) * 100
 cat("Case 3:\n")
 cat("Number of municipal elections:", num_municipal_elections_case3, "\n")
 cat("Percentage of precincts affected:", percent_precincts_affected_case3, "%\n\n")
-
 
 
 # Case 4: Valid value in researched_incumbent_party and no value in incumbent_vote (manual cases for which we did not find a valid match)
@@ -267,7 +263,7 @@ graph <- db %>%
   )
 
 # Plot with x-axis showing every 5 years
-ggplot(graph, aes(x = year, y = proportion_with_coalition)) +
+q <- ggplot(graph, aes(x = year, y = proportion_with_coalition)) +
   geom_line() +
   geom_point() +
   scale_x_continuous(breaks = seq(min(graph$year, na.rm = TRUE), max(graph$year, na.rm = TRUE), by = 5)) +  # Show only every 5 years
@@ -276,7 +272,8 @@ ggplot(graph, aes(x = year, y = proportion_with_coalition)) +
   theme(axis.text.x = element_text( face = "bold", size = 15),  # Make x-axis (years) bold
         axis.text.y = element_text(size = 15, face = "bold")) # Increase font size of legend labels  # Make y-axis (state names) bold
 
-
+#Save plot with high DPI
+ggsave("Figures/Figure_2.png", plot = q, width = 10, height = 8, dpi = 400)
 
 ##### Heatmap #####
 
@@ -314,7 +311,7 @@ held_elections_data <- held_elections_data %>%
     fill_category = case_when(
       str_detect(mun, "EXTRAORDINARIO") ~ "Extraordinary Elections",
       elections_held == 1 ~ "Elections Held",
-      TRUE ~ "No Elections"
+      TRUE ~ "No Elections Held"
     )
   )
 
@@ -339,3 +336,28 @@ ggplot(held_elections_data, aes(x = year, y = reorder(state_name, desc(state_nam
     legend.text = element_text(size = 13)  # Increase font size of legend labels
   )
 
+# Step 7: Update the ggplot to use the new `fill_category` column
+p <- ggplot(held_elections_data, aes(x = year, y = reorder(state_name, desc(state_name)), fill = fill_category)) +
+  geom_tile(color = "black", size = 0.3) +  # Add black border to all tiles
+  scale_fill_manual(
+    values = c(
+      "No Elections Held" = "grey70",  # Change "No Elections" to "No Elections Held"
+      "Elections Held" = "black",
+      "Extraordinary Elections" = "red"
+    ),
+    name = "Elections Held"
+  ) +
+  scale_x_continuous(breaks = seq(min(held_elections_data$year), max(held_elections_data$year), by = 1)) +  # Display all years
+  labs(x = "", y = "") +  # Remove axis labels
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, face = "bold", size = 13),  # Make x-axis (years) bold
+    axis.text.y = element_text(size = 13, face = "bold"),  # Increase y-axis text size and make it bold
+    legend.title = element_text(size = 13, face = "bold"),  # Make legend title bold and larger
+    legend.text = element_text(size = 13),  # Increase font size of legend labels
+    legend.key = element_rect(color = "black", fill = NA)  # Ensure legend keys have a visible border
+  )
+
+p
+# Save plot with high DPI
+ggsave("Figures/Figure_1.png", plot = p, width = 10, height = 8, dpi = 400)
