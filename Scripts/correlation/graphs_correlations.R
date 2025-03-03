@@ -273,10 +273,9 @@ q <- ggplot(graph, aes(x = year, y = proportion_with_coalition)) +
         axis.text.y = element_text(size = 15, face = "bold")) # Increase font size of legend labels  # Make y-axis (state names) bold
 
 #Save plot with high DPI
-ggsave("Figures/Figure_2.png", plot = q, width = 10, height = 8, dpi = 400)
+#ggsave("Figures/Figure_2.png", plot = q, width = 10, height = 8, dpi = 400)
 
 ##### Heatmap #####
-
 
 # Step 2: Create a mapping for state names
 state_names <- c(
@@ -294,7 +293,7 @@ state_names <- c(
 # Step 3: Summarize to check for elections held
 held_elections_data <- db %>%
   group_by(state_code, mun, year) %>%
-  summarize(elections_held = any(!is.na(incumbent_party_vote) & incumbent_party_vote > 0), .groups = 'drop')
+  summarize(elections_held = any(total > 0), .groups = 'drop')
 
 # Step 4: Convert elections_held to numeric (0 or 1)
 held_elections_data$elections_held <- as.numeric(held_elections_data$elections_held)
@@ -310,30 +309,9 @@ held_elections_data <- held_elections_data %>%
   mutate(
     fill_category = case_when(
       str_detect(mun, "EXTRAORDINARIO") ~ "Extraordinary Elections",
-      elections_held == 1 ~ "Elections Held",
+      elections_held == 1 ~ "Ordinary Elections",
       TRUE ~ "No Elections Held"
     )
-  )
-
-# Step 7: Update the ggplot to use the new `fill_category` column
-ggplot(held_elections_data, aes(x = year, y = reorder(state_name, desc(state_name)), fill = fill_category)) +
-  geom_tile(color = "white") +
-  scale_fill_manual(
-    values = c(
-      "No Elections" = "white",
-      "Elections Held" = "black",
-      "Extraordinary Elections" = "red"
-    ),
-    name = "Elections Held"
-  ) +
-  scale_x_continuous(breaks = seq(min(held_elections_data$year), max(held_elections_data$year), by = 1)) +  # Display all years
-  labs(x = "", y = "") +  # Remove axis labels
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = 0.5, face = "bold", size = 13),  # Make x-axis (years) bold
-    axis.text.y = element_text(size = 13, face = "bold"),  # Increase y-axis text size and make it bold
-    legend.title = element_text(size = 13, face = "bold"),  # Make legend title bold and larger
-    legend.text = element_text(size = 13)  # Increase font size of legend labels
   )
 
 # Step 7: Update the ggplot to use the new `fill_category` column
@@ -341,8 +319,8 @@ p <- ggplot(held_elections_data, aes(x = year, y = reorder(state_name, desc(stat
   geom_tile(color = "black", size = 0.3) +  # Add black border to all tiles
   scale_fill_manual(
     values = c(
-      "No Elections Held" = "grey70",  # Change "No Elections" to "No Elections Held"
-      "Elections Held" = "black",
+      #"No Elections Held" = "grey70",  # Change "No Elections" to "No Elections Held"
+      "Ordinary Elections" = "black",
       "Extraordinary Elections" = "red"
     ),
     name = "Elections Held"
