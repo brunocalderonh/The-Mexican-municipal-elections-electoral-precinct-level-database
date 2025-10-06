@@ -486,13 +486,201 @@ collapsed_2019 <- collapsed_2019 %>%
                 uniqueid = as.numeric(uniqueid)
   )
 
+####################################
+### PROCESSING DATA FOR 2021 ----
+####################################
+
+# Define the folder path
+folder_path <- "../../../new_data/raw/ags/2021/"
+
+# Process all Excel files from 1 to 11
+for (x in 1:11) {
+  
+  # Load the original Excel file, skip first two rows, and convert columns to character for cleaning
+  file_path <- paste0(folder_path, "COMPUTO_MUNICIPIO_", x, ".xlsx")
+  data <- read_excel(file_path, skip = 2) %>%
+    mutate(across(everything(), as.character))
+  
+  # Drop the first two rows (already skipped in the previous step)
+  data <- data %>% filter(row_number() > 2)
+  
+  # Save the cleaned data as a new Excel file
+  cleaned_file_path <- paste0(folder_path, "COMPUTO_MUNICIPIO_", x, "_clean.xlsx")
+  write.xlsx(data, cleaned_file_path)
+  
+  # Reload the cleaned data and add uniqueid column
+  data <- read_excel(cleaned_file_path)
+  data <- data %>%
+    mutate(uniqueid = ifelse(x > 9, paste0("10", x), paste0("100", x)))
+  
+  # Save the cleaned dataset as RDS
+  saveRDS(data, file = paste0("dataset_", x, ".rds"))
+  
+  # Remove the temporary cleaned file
+  file.remove(cleaned_file_path)
+}
+
+# Append all the datasets into one
+combined_data <- NULL
+
+for (x in 1:11) {
+  temp_data <- readRDS(paste0("dataset_", x, ".rds"))
+  combined_data <- bind_rows(combined_data, temp_data)
+  file.remove(paste0("dataset_", x, ".rds"))  # Erase the individual dataset file after appending
+}
+
+# Clean up Casillas and other variables
+combined_data <- combined_data %>%
+  dplyr::filter(Casillas != "" & Casillas != "TOTAL") %>%
+  separate(Casillas, into = c("section"), sep = " ", remove = FALSE) %>%
+  rename_with(~ gsub("NAA", "PANAL", .x)) %>% 
+  dplyr::mutate(across(everything(), as.numeric))
+
+names(combined_data)
+
+# Collapse the data by municipality, uniqueid, and section, summing columns
+collapsed_data <- combined_data %>%
+  dplyr::group_by(uniqueid,section) %>%
+  dplyr::summarise(across(c(PAN:TOTAL,
+                            CAND_IND1, CAND_IND2), sum, na.rm = TRUE))
+
+collapsed_data <- collapsed_data %>%
+  dplyr::rename(
+    nulos = NUM_VOTOS_NULOS,
+    no_reg = NUM_VOTOS_CAN_NREG,
+    CI_1 = CAND_IND2, 
+    CI_2 = CAND_IND1, 
+    total = TOTAL,
+    PAN_PRD = CO_PAN_PRD,
+    PT_MORENA_PANAL = CO_PT_MORENA_PANAL)
+
+# Load the Lista Nominal 2021 data and filter by criteria
+ln_2021 <- read_excel("../../../new_data/raw/listnom/listanom_pef21.xlsx", skip = 3, 
+                      col_names = c("state_code", "district_code", "mun_code", 
+                                    "section", "col_e", "col_f", "col_g", "col_h", 
+                                    "col_i", "col_j", "col_k", "col_l",
+                                    "listanominal", "col_n", "col_o", "col_p")) %>%
+  dplyr::select(state_code, mun_code, section, listanominal) %>% 
+  dplyr::filter(state_code == 1) %>%
+  dplyr::select(section,listanominal)
+
+collapsed_data$section <- as.numeric(collapsed_data$section)
+
+# Merge Lista Nominal data with the collapsed data
+collapsed_2021 <- collapsed_data %>%
+  left_join(ln_2021, by = "section")
+
+# Calculate the valid votes
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(valid = rowSums(across(c(PAN:MORENA_PANAL, CI_1, CI_2)), na.rm = TRUE),
+                turnout = total / listanominal,  # Case-sensitive column names
+                year = 2021,
+                month = "June",
+                uniqueid = as.numeric(uniqueid)
+  )
+
+
+#####################################
+### PROCESSING DATA FOR 2024 ----
+#####################################
+
+# Define the folder path
+folder_path <- "../../../new_data/raw/ags/2024/"
+
+# Process all Excel files from 1 to 11
+for (x in 1:11) {
+  
+  # Load the original Excel file, skip first two rows, and convert columns to character for cleaning
+  file_path <- paste0(folder_path, "Resumen_General_Cómputos_", x, ".xlsx")
+  data <- read_excel(file_path) %>%
+    mutate(across(everything(), as.character))
+  
+  # Save the cleaned data as a new Excel file
+  cleaned_file_path <- paste0(folder_path, "COMPUTO_MUNICIPIO_", x, "_clean.xlsx")
+  write.xlsx(data, cleaned_file_path)
+  
+  # Reload the cleaned data and add uniqueid column
+  data <- read_excel(cleaned_file_path)
+  data <- data %>%
+    mutate(uniqueid = ifelse(x > 9, paste0("10", x), paste0("100", x)))
+  
+  # Save the cleaned dataset as RDS
+  saveRDS(data, file = paste0("dataset_", x, ".rds"))
+  
+  # Remove the temporary cleaned file
+  file.remove(cleaned_file_path)
+}
+
+# Append all the datasets into one
+combined_data <- NULL
+
+for (x in 1:11) {
+  temp_data <- readRDS(paste0("dataset_", x, ".rds"))
+  combined_data <- bind_rows(combined_data, temp_data)
+  file.remove(paste0("dataset_", x, ".rds"))  # Erase the individual dataset file after appending
+}
+
+# Clean up Casillas and other variables
+combined_data <- combined_data %>%
+  dplyr::filter(Casilla != "" & Casilla != "TOTAL") %>%
+  separate(Casilla, into = c("section"), sep = " ", remove = FALSE) %>%
+  dplyr::mutate(across(everything(), as.numeric))
+
+names(combined_data)
+
+# Collapse the data by municipality, uniqueid, and section, summing columns
+collapsed_data <- combined_data %>%
+  dplyr::group_by(uniqueid,section) %>%
+  dplyr::summarise(across(c(PAN:VOTOS_NULOS, TOTAL,
+                            CI1, CI2, CI3), sum, na.rm = TRUE))
+
+collapsed_data <- collapsed_data %>%
+  dplyr::rename(
+    nulos = VOTOS_NULOS,
+    no_reg = CAN_NO_REG,
+    PAN_PRI_PRD= `PAN-PRI-PRD`,
+    PAN_PRI= `PAN-PRI`,
+    PRI_PRD= `PRI-PRD`,
+    PAN_PRD= `PAN-PRD`,
+    CI_1 = CI1, 
+    CI_2 = CI2,
+    CI_3 = CI3,
+    total = TOTAL)
+
+# Load the Lista Nominal 2024 data and filter by criteria
+ln_2024 <- read_excel("../../../new_data/raw/listnom/listanom_pef24.xlsx", skip = 2, 
+                      col_names = c("state_code", "district_code", "mun_code", 
+                                    "section", "col_e", "col_f", "col_g", "col_h", 
+                                    "col_i", "col_j", "col_k", "listanominal")) %>%
+  dplyr::select(state_code, mun_code, section, listanominal) %>% 
+  dplyr::filter(state_code == 1) %>%
+  dplyr::select(section,listanominal)
+
+collapsed_data$section <- as.numeric(collapsed_data$section)
+
+# Merge Lista Nominal data with the collapsed data
+collapsed_2024 <- collapsed_data %>%
+  left_join(ln_2024, by = "section")
+
+# Calculate the valid votes
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(valid = rowSums(across(c(PAN, PRI, PRD, PT, PVEM, MC, MORENA, PAN_PRI_PRD, PAN_PRI, PAN_PRD, PRI_PRD, CI_1, CI_2, CI_3)), na.rm = TRUE),
+                turnout = total / listanominal,  # Case-sensitive column names
+                year = 2024,
+                month = "June",
+                uniqueid = as.numeric(uniqueid)
+  )
+
+
 # Combine the dataframes, handling different columns by filling with NA
 Aguascalientes_all <- bind_rows(collapsed_2004,
                                 collapsed_2007,
                                 collapsed_2010,
                                 collapsed_2013,
                                 collapsed_2016,
-                                collapsed_2019)
+                                collapsed_2019,
+                                collapsed_2021,
+                                collapsed_2024)
 
 data.table::fwrite(Aguascalientes_all,"../../../Processed Data/aguascalientes/aguascalientes_process_raw_data.csv")
 
