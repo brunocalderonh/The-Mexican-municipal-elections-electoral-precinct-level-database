@@ -28,7 +28,7 @@ setwd(file.path(script_dir, ""))
 #####################################
 
 # Load the 2004 data
-data_2004 <- read_csv("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019/Ayu_Seccion_2004.csv")
+data_2004 <- read_csv("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_2004.csv")
 # Check column names for case sensitivity
 names(data_2004)
 
@@ -98,7 +98,7 @@ summary(collapsed_2004)
 #####################################
 
 # Load the 2007 data
-data_2007 <- read_csv("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019/Ayu_Seccion_2007.csv")
+data_2007 <- read_csv("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_2007.csv")
 
 # Check column names for case sensitivity
 names(data_2007)
@@ -172,7 +172,7 @@ summary(collapsed_2007)
 #####################################
 
 # Load the 2010 data
-data_2010 <- read_csv("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019/Ayu_Seccion_2010.csv")
+data_2010 <- read_csv("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_2010.csv")
 
 # Check column names for case sensitivity
 names(data_2010)
@@ -247,7 +247,7 @@ rm(data_2010)
 #####################################
 
 # Load the 2013 data from Excel
-data_2013 <- read_excel("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019/CASILLAS_AYUNTAMIENTOS_2013.xls", sheet = "Ayuntamientos")
+data_2013 <- read_excel("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/CASILLAS_AYUNTAMIENTOS_2013.xls", sheet = "Ayuntamientos")
 
 # Check the column names for case sensitivity
 names(data_2013)
@@ -294,7 +294,7 @@ collapsed_2013 <- data_2013 %>%
   dplyr::summarise(across(c(PAN, PRI, PRD, PT, PVEM, MC, PNA, `PAN-PRD`, `PRI-PVEM`, total,VN), sum, na.rm = TRUE))
 
 # Merge with the dataset "ln_all_months_years.dta" using seccion (section) and ed
-data_all <- read_dta("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019/Other/ln_all_months_years.dta")
+data_all <- read_dta("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/Other/ln_all_months_years.dta")
 
 data_all <- data_all %>% 
   dplyr::filter(state == "AGUASCALIENTES" & month == "June" & year == 2013)  # Keep only records for June 2013
@@ -335,7 +335,7 @@ names(collapsed_2013)
 ####################################
 
 # Load the 2016 data
-data_2016 <- read_excel("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019/Municipales2016.xlsx")
+data_2016 <- read_excel("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/Municipales2016.xlsx")
 
 # Rename columns
 data_2016 <- data_2016 %>%
@@ -400,7 +400,7 @@ rm(ln_data_2016)
 ####################################
 
 # Define the folder path
-folder_path <- "../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019/"
+folder_path <- "../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/"
 
 # Process all Excel files from 1 to 11
 for (x in 1:11) {
@@ -491,7 +491,7 @@ collapsed_2019 <- collapsed_2019 %>%
 ####################################
 
 # Define the folder path
-folder_path <- "../../../new_data/raw/ags/2021/"
+folder_path <- "../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024//2021/"
 
 # Process all Excel files from 1 to 11
 for (x in 1:11) {
@@ -555,7 +555,7 @@ collapsed_data <- collapsed_data %>%
     PT_MORENA_PANAL = CO_PT_MORENA_PANAL)
 
 # Load the Lista Nominal 2021 data and filter by criteria
-ln_2021 <- read_excel("../../../new_data/raw/listnom/listanom_pef21.xlsx", skip = 3, 
+ln_2021 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef21.xlsx", skip = 3, 
                       col_names = c("state_code", "district_code", "mun_code", 
                                     "section", "col_e", "col_f", "col_g", "col_h", 
                                     "col_i", "col_j", "col_k", "col_l",
@@ -585,7 +585,7 @@ collapsed_2021 <- collapsed_2021 %>%
 #####################################
 
 # Define the folder path
-folder_path <- "../../../new_data/raw/ags/2024/"
+folder_path <- "../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/2024/"
 
 # Process all Excel files from 1 to 11
 for (x in 1:11) {
@@ -648,7 +648,7 @@ collapsed_data <- collapsed_data %>%
     total = TOTAL)
 
 # Load the Lista Nominal 2024 data and filter by criteria
-ln_2024 <- read_excel("../../../new_data/raw/listnom/listanom_pef24.xlsx", skip = 2, 
+ln_2024 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef24.xlsx", skip = 2, 
                       col_names = c("state_code", "district_code", "mun_code", 
                                     "section", "col_e", "col_f", "col_g", "col_h", 
                                     "col_i", "col_j", "col_k", "listanominal")) %>%

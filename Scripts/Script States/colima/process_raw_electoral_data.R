@@ -25,7 +25,7 @@ setwd(file.path(script_dir, ""))
 
 #######################-------------------1994---------------###############################
 
-ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1994_No_LN.csv")
+ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1994_No_LN.csv")
 colnames(ayu_seccion) <- tolower(colnames(ayu_seccion))
 # Step 2: Rename columns
 ayu_seccion <- ayu_seccion %>%
@@ -111,7 +111,7 @@ collapsed_1994 <- collapsed_1994 %>%
 #######################-------------------1997---------------###############################
 
 # Step 1: Load the CSV file
-ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997.csv")
+ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997.csv")
 colnames(ayu_seccion) <- tolower(colnames(ayu_seccion))
 colnames(ayu_seccion) <- gsub("\\.", "", colnames(ayu_seccion))
 # Step 2: Rename columns
@@ -190,7 +190,7 @@ collapsed_1997 <- collapsed_1997 %>%
 
 #######################-------------------2000---------------###############################
 
-ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000_No_LN.csv")
+ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000_No_LN.csv")
 colnames(ayu_seccion) <- tolower(colnames(ayu_seccion))
 colnames(ayu_seccion) <- gsub("\\.", "", colnames(ayu_seccion))
 # Step 2: Rename columns
@@ -289,7 +289,7 @@ collapsed_2000 <- collapsed_2000 %>%
 
 
 # Step 1: Load the CSV file
-ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003.csv")
+ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv")
 colnames(ayu_seccion) <- gsub("\\.", "", colnames(ayu_seccion))
 # Step 2: Rename columns
 ayu_seccion <- ayu_seccion %>%
@@ -358,7 +358,7 @@ collapsed_2003 <- collapsed_2003 %>%
 #######################-------------------2006---------------###############################
 
 # Step 1: Load the CSV file
-ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006.csv")
+ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.csv")
 colnames(ayu_seccion) <- tolower(colnames(ayu_seccion))
 colnames(ayu_seccion) <- gsub("\\.", "", colnames(ayu_seccion))
 # Step 2: Rename columns
@@ -431,7 +431,7 @@ collapsed_2006 <- collapsed_2006 %>%
 #######################-------------------2009---------------###############################
 
 # Step 1: Load the CSV file
-ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.csv")
+ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.csv")
 colnames(ayu_seccion) <- tolower(colnames(ayu_seccion))
 colnames(ayu_seccion) <- gsub("\\.", "", colnames(ayu_seccion))
 
@@ -514,7 +514,7 @@ collapsed_2009 <- collapsed_2009 %>%
 #######################-------------------2012---------------###############################
 
 # Step 1: Load the dataset
-ayu_seccion <- read_dta("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Other/Ayu_Seccion_2012.dta")
+ayu_seccion <- read_dta("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Other/Ayu_Seccion_2012.dta")
 
 # Step 2: Drop empty rows and rows where `total` is missing or zero
 ayu_seccion <- ayu_seccion %>%
@@ -590,7 +590,7 @@ collapsed_2012 <- collapsed_2012 %>%
 process_sheet <- function(sheet_name, municipality_name, uniqueid) {
   # Load the Excel sheet
   data <- read_excel(
-    "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/RESULTADOS ELECTORALES DE AYUNTAMIENTO ELECCION 2014-2015.xls",
+    "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/RESULTADOS ELECTORALES DE AYUNTAMIENTO ELECCION 2014-2015.xls",
     sheet = sheet_name,
     na = "",
     guess_max = 10000
@@ -617,7 +617,7 @@ process_sheet <- function(sheet_name, municipality_name, uniqueid) {
     group_by(municipality, uniqueid, section) %>%
     summarize(across(listanominal:total, sum, na.rm = TRUE), .groups = "drop") # Collapse by municipality, uniqueid, and section
   
-  write_dta(data, paste0("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/",municipality_name, "_PS.dta"))
+  write_dta(data, paste0("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/",municipality_name, "_PS.dta"))
 }
 
 # Process each sheet
@@ -634,16 +634,16 @@ process_sheet("VILLA DE ALVAREZ", "VILLA DE ALVAREZ", 6010)
 
 # Step 2: Append all the processed files
 file_list <- c(
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/ARMERIA_PS.dta", 
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/COLIMA_PS.dta", 
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/COMALA_PS.dta",
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/COQUIMATLAN_PS.dta", 
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/CUAUHTEMOC_PS.dta", 
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/IXTLAHUACAN_PS.dta",
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/MANZANILLO_PS.dta", 
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/MINATITLAN_PS.dta", 
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/TECOMAN_PS.dta",
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/VILLA DE ALVAREZ_PS.dta"
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/ARMERIA_PS.dta", 
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/COLIMA_PS.dta", 
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/COMALA_PS.dta",
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/COQUIMATLAN_PS.dta", 
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/CUAUHTEMOC_PS.dta", 
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/IXTLAHUACAN_PS.dta",
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/MANZANILLO_PS.dta", 
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/MINATITLAN_PS.dta", 
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/TECOMAN_PS.dta",
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/VILLA DE ALVAREZ_PS.dta"
 )
 
 # Load and append all files into a single dataframe
@@ -691,7 +691,7 @@ file.remove(file_list)
 #######################-------------------2018---------------###############################
 
 # Step 1: Load the Excel file
-data <- read_excel("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/1 COL RES AYUN.xlsx", sheet = "Reporte_Casillas_Ayuntamientos", na = "", guess_max = 10000)
+data <- read_excel("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1 COL RES AYUN.xlsx", sheet = "Reporte_Casillas_Ayuntamientos", na = "", guess_max = 10000)
 colnames(data) <- tolower(colnames(data))
 colnames(data) <- gsub(" ", "", colnames(data))
 colnames(data) <- gsub("-", "", colnames(data))
@@ -760,15 +760,144 @@ collapsed_2018 <- collapsed_2018 %>%
     month = "July",
     STATE = "COLIMA")
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset from the CSV
+data_2021 <- read_csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/2021_SEE_AYUN_COL_CAS.csv")
+
+names(data_2021)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NUM_VOTOS_CAN_NREG,
+                nulos = NUM_VOTOS_NULOS,
+                valid = NUM_VOTOS_VALIDOS) %>%
+  rename_with(~ gsub("CAND_IND", "CI_", .x), starts_with("cand_ind")) %>% 
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality)
+  )
+
+# Assign uniqueids
+data_2021 <- data_2021 %>%
+  mutate(
+    uniqueid = case_when(
+      municipality == "ARMERIA" ~ 6001,
+      municipality == "COLIMA" ~ 6002,
+      municipality == "COMALA" ~ 6003,
+      municipality == "COQUIMATLAN" ~ 6004,
+      municipality == "CUAUHTEMOC" ~ 6005,
+      municipality == "IXTLAHUACAN" ~ 6006,
+      municipality == "MANZANILLO" ~ 6007,
+      municipality == "MINATITLAN" ~ 6008,
+      municipality == "TECOMAN" ~ 6009,
+      municipality == "VILLA DE ALVAREZ" ~ 6010,
+      TRUE ~ 0
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:listanominal), 
+                          sum, na.rm = TRUE))
+
+# Calculate final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2021,
+    month = "June"
+  )
+
+####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset from the CSV
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/Base_Ayuntamientos_de_2024.csv", locale = locale(encoding = "latin1"))
+
+names(data_2024)
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO_LOCAL,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL_CASILLA,
+                total = TOTAL_VOTOS,
+                no_reg = NO_REGISTRADOS,
+                nulos = NUM_VOTOS_NULOS,
+                valid = NUMERO_VOTOS_VALIDOS,
+                FXM = FPM) %>%
+  rename_with(~ gsub("CAND_IND_", "CI_", .x), starts_with("cand_ind")) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(str_extract(section, "^\\d+"))
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>%
+  mutate(
+    uniqueid = case_when(
+      municipality == "ARMERIA" ~ 6001,
+      municipality == "COLIMA" ~ 6002,
+      municipality == "COMALA" ~ 6003,
+      municipality == "COQUIMATLAN" ~ 6004,
+      municipality == "CUAUHTEMOC" ~ 6005,
+      municipality == "IXTLAHUACAN" ~ 6006,
+      municipality == "MANZANILLO" ~ 6007,
+      municipality == "MINATITLAN" ~ 6008,
+      municipality == "TECOMAN" ~ 6009,
+      municipality == "VILLA DE ALVAREZ" ~ 6010,
+      TRUE ~ 0
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(listanominal:total), 
+                          sum, na.rm = TRUE))
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2024,
+    month = "June"
+  )
+
 # Combine the dataframes, handling different columns by filling with NA
 Colima_all <- bind_rows(collapsed_1994,
-                                collapsed_1997,
-                                collapsed_2000,
-                                collapsed_2003,
-                                collapsed_2006,
-                                collapsed_2009,
-                                collapsed_2012,
-                                collapsed_2015,
-                                collapsed_2018)
+                        collapsed_1997,
+                        collapsed_2000,
+                        collapsed_2003,
+                        collapsed_2006,
+                        collapsed_2009,
+                        collapsed_2012,
+                        collapsed_2015,
+                        collapsed_2018,
+                        collapsed_2021,
+                        collapsed_2024
+)
 
 data.table::fwrite(Colima_all,"../../../Processed Data/colima/colima_process_raw_data.csv")

@@ -31,7 +31,7 @@ setwd(file.path(script_dir, ""))
 
 
 df_listanom <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/Lisado Nominal 2004.xlsx",
+  path = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Lisado Nominal 2004.xlsx",
   sheet = "Sheet1",
   col_names = TRUE
 ) %>%
@@ -54,7 +54,7 @@ df_listanom <- df_listanom %>%
 #    rename columns, drop if municipality=="" & section missing,
 #    destring columns pan-nulos, collapse by (municipality, section)
 ################################################################################
-df_ayusec <- read_csv("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/Ayu_Seccion_2004_No_LN.csv", show_col_types = FALSE) 
+df_ayusec <- read_csv("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Ayu_Seccion_2004_No_LN.csv", show_col_types = FALSE) 
 colnames(df_ayusec) <- tolower(colnames(df_ayusec))
 names(df_ayusec) <- gsub("[- ]", "", names(df_ayusec))
 
@@ -360,7 +360,7 @@ df_2004 <- df_merged %>%
 ################################################################################
 
 df_listanom <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/Lisado Nominal 2010.xlsx",
+  path = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Lisado Nominal 2010.xlsx",
   sheet = "Sheet1",
   col_names = TRUE
 ) %>%
@@ -396,7 +396,7 @@ df_listanom <- df_listanom %>%
 #    drop if total==. or 0, parse numeric, collapse, handle coalition columns
 ################################################################################
 
-df_ayusec <- read_csv("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/Ayu_Seccion_2010_No_LN.csv", show_col_types = FALSE) 
+df_ayusec <- read_csv("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Ayu_Seccion_2010_No_LN.csv", show_col_types = FALSE) 
 colnames(df_ayusec) <- tolower(colnames(df_ayusec))
 names(df_ayusec) <- gsub("[- ]", "", names(df_ayusec))
 df_ayusec <- df_ayusec %>%
@@ -761,7 +761,7 @@ df_2010 <- df_merged %>%
 # 1) Read "Ayu_Seccion_2013_No_LN.dta" into R
 #    (Equivalent to: use Ayu_Seccion_2013_No_LN.dta, clear)
 ################################################################################
-df_main <- read_dta("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/Other/Ayu_Seccion_2013_No_LN.dta")
+df_main <- read_dta("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/Ayu_Seccion_2013_No_LN.dta")
 
 ################################################################################
 # 2) Rename columns: MC -> PC, PFCRN -> PartCardenista
@@ -1070,12 +1070,12 @@ df_2013 <- df_merged %>%
 ################################################################################
 
 # In R, we replicate that logic by discovering all sheets in "Ayuntamientos_2016.xlsx"
-all_sheets <- readxl::excel_sheets("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/Other/Ayuntamientos_2016.xlsx")
+all_sheets <- readxl::excel_sheets("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/Ayuntamientos_2016.xlsx")
 
 for (sheetname in all_sheets) {
   # Read the sheet, all columns as strings
   df_sheet <- read_excel(
-    path    = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/Other/Ayuntamientos_2016.xlsx",
+    path    = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/Ayuntamientos_2016.xlsx",
     sheet   = sheetname,
     col_names = TRUE,
     col_types = "text"
@@ -1179,12 +1179,12 @@ df_all <- df_all %>%
 # 3) Another set: "AyuntamientosB" folder, "Ayuntamientos_2016b.xlsx", reading multiple sheets
 ################################################################################
 
-all_sheets_b <- readxl::excel_sheets("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/Other/AyuntamientosB/Ayuntamientos_2016b.xlsx")
+all_sheets_b <- readxl::excel_sheets("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/AyuntamientosB/Ayuntamientos_2016b.xlsx")
 
 for (sheetname in all_sheets_b) {
   # Read the sheet, all columns as strings
   df_sheet_b <- read_excel(
-    path = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/Other/AyuntamientosB/Ayuntamientos_2016b.xlsx",
+    path = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/AyuntamientosB/Ayuntamientos_2016b.xlsx",
     sheet = sheetname,
     col_names = TRUE,
     col_types = "text"
@@ -1249,8 +1249,8 @@ df_b_all <- df_b_all %>%
 # 4) Now returning to parent directory, read "Veracruz_Section_2017.dta", append "Veracruz_Section_2016b.dta"
 ################################################################################
 
-df_ver1 <- read_dta("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/Other/AyuntamientosB/Veracruz_Section_2017b.dta")
-df_ver2 <- read_dta("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/Other/AyuntamientosB/Veracruz_Section_2016b.dta")
+df_ver1 <- read_dta("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/AyuntamientosB/Veracruz_Section_2017b.dta")
+df_ver2 <- read_dta("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/AyuntamientosB/Veracruz_Section_2016b.dta")
 
 df_ver <- bind_rows(df_ver1, df_ver2)
 
@@ -1448,7 +1448,7 @@ df_collapsed <- df_collapsed %>%
 ################################################################################
 
 # We'll replicate with a simpler approach:
-df_uniqueids <- read_excel("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/uniqueids.xlsx") %>%
+df_uniqueids <- read_excel("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/uniqueids.xlsx") %>%
   as.data.frame() %>% dplyr::select(-MUN)
 
 df_merged <- df_collapsed %>%
@@ -1495,7 +1495,7 @@ df_2017 <- df_final %>%
 
 # 1) Read the Excel from cellrange(A7:AM138), firstrow, etc.
 df_2018 <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016/VERACRUZ_EXTRAORDINARIAMPAL_2018.xlsx",
+  path = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/VERACRUZ_EXTRAORDINARIAMPAL_2018.xlsx",
   sheet = "VERACRUZ_EXTRAORDINARIAMPAL_201",
   range = "A7:AM138",
   col_names = TRUE
@@ -1587,14 +1587,462 @@ df_2018_collapsed <- df_2018_collapsed %>%
     month= "March"
   )
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset from the excel
+data_2021 <- read_csv("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/21/Ayuntamiento 2021_Concentrado por Casilla.csv")
+
+# Load extraordinary election data
+tlaco <- read_excel("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/22 ext/BD_PE2022.xls", sheet = "Tlacotepec") %>% 
+  dplyr::mutate(municipio = "TLACOTEPEC")
+ama <- read_excel("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/22 ext/BD_PE2022.xls", sheet = "Amatitlán") %>% 
+  dplyr::mutate(municipio = "AMATITLAN")
+chico <- read_excel("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/22 ext/BD_PE2022.xls", sheet = "Chiconamel") %>% 
+  dplyr::mutate(municipio = "CHICONAMEL")
+jesus <- read_excel("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/22 ext/BD_PE2022.xls", sheet = "Jesús Carranza") %>% 
+  dplyr::mutate(municipio = "JESUS CARRANZA")
+
+# Match formats
+data_ext <- bind_rows(tlaco, ama, chico, jesus) %>% 
+  dplyr::rename(
+    ID_CASILLA     = id,
+    municipality   = municipio,
+    section        = seccion,
+    ID_DISTRITO_LOCAL = distrito,
+    total          = total,
+    PAN            = pan,
+    PRI            = pri,
+    PRD            = prd,
+    PVEM           = verde,
+    PT             = pt,
+    MORENA         = morena,
+    TXVER          = `todos x ver`,
+    PODEMOS        = podemos,
+    PFCRN          = cardenista,
+    PES            = pes,
+    RSP            = rsp,
+    PT_MORENA      = `pt/morena`,
+    no_reg         = cnr,
+    nulos          = vn
+  ) %>% 
+  dplyr::mutate(
+    MC = coalesce(mov_ciud, mov_ciu),
+    UC = as.numeric(coalesce(`unidad ciud`, unidad))
+  ) %>%
+  dplyr::select(-mov_ciud, -mov_ciu, -unidad, -`unidad ciud`)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NUM_VOTOS_CAN_NREG,
+                valid = NUM_VOTOS_VALIDOS,
+                nulos = NUM_VOTOS_NULOS,
+                PFCRN = PC) %>%
+  rename_with(~ gsub("CAND_IND", "CI_", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0) %>% 
+  dplyr::filter(!municipality %in% c("TLACOTEPEC", "AMATITLAN", "CHICONAMEL", "JESUS CARRANZA"))
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "ACAJETE"                ~ 30001,
+      municipality == "ACATLAN"               ~ 30002,
+      municipality == "ACAYUCAN"              ~ 30003,
+      municipality == "ACTOPAN"               ~ 30004,
+      municipality == "ACULA"                 ~ 30005,
+      municipality == "ACULTZINGO"            ~ 30006,
+      municipality == "AGUA DULCE"            ~ 30204,
+      municipality == "ALAMO TEMAPACHE"       ~ 30160,
+      municipality == "ALPATLAHUAC"           ~ 30008,
+      municipality == "ALTO LUCERO DE GUTIERREZ BARRIOS"           ~ 30009,
+      municipality == "ALTOTONGA"             ~ 30010,
+      municipality == "ALVARADO"              ~ 30011,
+      municipality == "AMATITLAN"             ~ 30012,
+      municipality == "AMATLAN DE LOS REYES"  ~ 30014,
+      municipality == "ANGEL R. CABADA"       ~ 30015,
+      municipality == "APAZAPAN"              ~ 30017,
+      municipality == "AQUILA"                ~ 30018,
+      municipality == "ASTACINGA"             ~ 30019,
+      municipality == "ATLAHUILCO"            ~ 30020,
+      municipality == "ATOYAC"                ~ 30021,
+      municipality == "ATZACAN"               ~ 30022,
+      municipality == "ATZALAN"               ~ 30023,
+      municipality == "AYAHUALULCO"           ~ 30025,
+      municipality == "BANDERILLA"            ~ 30026,
+      municipality == "BENITO JUAREZ"         ~ 30027,
+      municipality == "BOCA DEL RIO"          ~ 30028,
+      municipality == "CALCAHUALCO"           ~ 30029,
+      municipality == "CAMARON DE TEJEDA"     ~ 30007,
+      municipality == "CAMERINO Z. MENDOZA"   ~ 30030,
+      municipality == "CARLOS A. CARRILLO"    ~ 30208,
+      municipality == "CARRILLO PUERTO"       ~ 30031,
+      municipality == "CASTILLO DE TEAYO"     ~ 30157,
+      municipality == "CATEMACO"              ~ 30032,
+      municipality == "CAZONES DE HERRERA"    ~ 30033,
+      municipality == "CERRO AZUL"            ~ 30034,
+      municipality == "CHACALTIANGUIS"        ~ 30054,
+      municipality == "CHALMA"                ~ 30055,
+      municipality == "CHICONAMEL"            ~ 30056,
+      municipality == "CHICONQUIACO"          ~ 30057,
+      municipality == "CHICONTEPEC"           ~ 30058,
+      municipality == "CHINAMECA"             ~ 30059,
+      municipality == "CHINAMPA DE GOROSTIZA" ~ 30060,
+      municipality == "CHOCAMAN"              ~ 30062,
+      municipality == "CHONTLA"               ~ 30063,
+      municipality == "CHUMATLAN"             ~ 30064,
+      municipality == "CITLALTEPETL"           ~ 30035,
+      municipality == "COACOATZINTLA"         ~ 30036,
+      municipality == "COAHUITLAN"            ~ 30037,
+      municipality == "COATEPEC"              ~ 30038,
+      municipality == "COATZACOALCOS"         ~ 30039,
+      municipality == "COATZINTLA"            ~ 30040,
+      municipality == "COETZALA"              ~ 30041,
+      municipality == "COLIPA"                ~ 30042,
+      municipality == "COMAPA"                ~ 30043,
+      municipality == "CORDOBA"               ~ 30044,
+      municipality == "COSAMALOAPAN"          ~ 30045,
+      municipality == "COSAUTLAN DE CARVAJAL" ~ 30046,
+      municipality == "COSCOMATEPEC"          ~ 30047,
+      municipality == "COSOLEACAQUE"          ~ 30048,
+      municipality == "COTAXTLA"              ~ 30049,
+      municipality == "COXQUIHUI"             ~ 30050,
+      municipality == "COYUTLA"               ~ 30051,
+      municipality == "CUICHAPA"              ~ 30052,
+      municipality == "CUITLAHUAC"            ~ 30053,
+      municipality == "EL HIGO"               ~ 30205,
+      municipality == "EMILIANO ZAPATA"       ~ 30065,
+      municipality == "ESPINAL"               ~ 30066,
+      municipality == "FILOMENO MATA"         ~ 30067,
+      municipality == "FORTIN"                ~ 30068,
+      municipality == "GUTIERREZ ZAMORA"      ~ 30069,
+      municipality == "HIDALGOTITLAN"         ~ 30070,
+      municipality == "HUATUSCO"              ~ 30071,
+      municipality == "HUAYACOCOTLA"          ~ 30072,
+      municipality == "HUEYAPAN DE OCAMPO"    ~ 30073,
+      municipality == "HUILOAPAN DE CUAUHTEMOC"             ~ 30074,
+      municipality == "IGNACIO DE LA LLAVE"   ~ 30075,
+      municipality == "ILAMATLAN"             ~ 30076,
+      municipality == "ISLA"                  ~ 30077,
+      municipality == "IXCATEPEC"             ~ 30078,
+      municipality == "IXHUACAN DE LOS REYES" ~ 30079,
+      municipality == "IXHUATLAN DE MADERO"   ~ 30083,
+      str_detect(municipality, "IXHUATLAN DEL CAF") ~ 30080,
+      municipality == "IXHUATLAN DEL SURESTE" ~ 30082,
+      municipality == "IXHUATLANCILLO"        ~ 30081,
+      municipality == "IXMATLAHUACAN"         ~ 30084,
+      municipality == "IXTACZOQUITLAN"        ~ 30085,
+      municipality == "JALACINGO"             ~ 30086,
+      municipality == "JALCOMULCO"            ~ 30088,
+      municipality == "JALTIPAN"              ~ 30089,
+      municipality == "JAMAPA"                ~ 30090,
+      municipality == "JESUS CARRANZA"        ~ 30091,
+      municipality == "JILOTEPEC"             ~ 30093,
+      municipality == "JOSE AZUETA"           ~ 30169,
+      municipality == "JUAN RODRIGUEZ CLARA"  ~ 30094,
+      municipality == "JUCHIQUE DE FERRER"    ~ 30095,
+      municipality == "LA ANTIGUA"            ~ 30016,
+      municipality == "LA PERLA"              ~ 30127,
+      municipality == "LANDERO Y COSS"        ~ 30096,
+      municipality == "LAS CHOAPAS"           ~ 30061,
+      municipality == "LAS MINAS"             ~ 30107,
+      municipality == "LAS VIGAS DE RAMIREZ"             ~ 30132,
+      municipality == "LERDO DE TEJADA"       ~ 30097,
+      municipality == "LOS REYES"             ~ 30137,
+      municipality == "MAGDALENA"             ~ 30098,
+      municipality == "MALTRATA"              ~ 30099,
+      municipality == "MANLIO FABIO ALTAMIRANO" ~ 30100,
+      municipality == "MARIANO ESCOBEDO"      ~ 30101,
+      municipality == "MARTINEZ DE LA TORRE"  ~ 30102,
+      municipality == "MECATLAN"              ~ 30103,
+      municipality == "MECAYAPAN"             ~ 30104,
+      municipality == "MEDELLIN DE BRAVO"             ~ 30105,
+      municipality == "MIAHUATLAN"            ~ 30106,
+      municipality == "MINATITLAN"            ~ 30108,
+      municipality == "MISANTLA"             ~ 30109,
+      municipality == "MIXTLA DE ALTAMIRANO"  ~ 30110,
+      municipality == "MOLOACAN"              ~ 30111,
+      municipality == "NANCHITAL DE LAZARO CARDENAS DEL RIO" ~ 30206,
+      municipality == "NAOLINCO"              ~ 30112,
+      municipality == "NARANJAL"              ~ 30113,
+      municipality == "NARANJOS AMATLAN"      ~ 30013,
+      municipality == "NAUTLA"                ~ 30114,
+      municipality == "NOGALES"               ~ 30115,
+      municipality == "OLUTA"                 ~ 30116,
+      municipality == "OMEALCA"               ~ 30117,
+      municipality == "ORIZABA"               ~ 30118,
+      municipality == "OTATITLAN"             ~ 30119,
+      municipality == "OTEAPAN"               ~ 30120,
+      municipality == "OZULUAMA"              ~ 30121,
+      municipality == "PAJAPAN"               ~ 30122,
+      municipality == "PANUCO"                ~ 30123,
+      municipality == "PAPANTLA"              ~ 30124,
+      municipality == "PASO DE OVEJAS"        ~ 30126,
+      municipality == "PASO DEL MACHO"        ~ 30125,
+      municipality == "PEROTE"                ~ 30128,
+      municipality == "PLATON SANCHEZ"        ~ 30129,
+      municipality == "PLAYA VICENTE"         ~ 30130,
+      municipality == "POZA RICA DE HIDALGO"             ~ 30131,
+      municipality == "PUEBLO VIEJO"          ~ 30133,
+      municipality == "PUENTE NACIONAL"       ~ 30134,
+      municipality == "RAFAEL DELGADO"        ~ 30135,
+      municipality == "RAFAEL LUCIO"          ~ 30136,
+      municipality == "RIO BLANCO"            ~ 30138,
+      municipality == "SALTABARRANCA"         ~ 30139,
+      municipality == "SAN ANDRES TENEJAPAN"  ~ 30140,
+      municipality == "SAN ANDRES TUXTLA"     ~ 30141,
+      municipality == "SAN JUAN EVANGELISTA"  ~ 30142,
+      municipality == "SAN RAFAEL"            ~ 30211,
+      municipality == "SANTIAGO SOCHIAPAN"    ~ 30212,
+      municipality == "SANTIAGO TUXTLA"       ~ 30143,
+      municipality == "SAYULA DE ALEMAN"      ~ 30144,
+      municipality == "SOCHIAPA"              ~ 30146,
+      municipality == "SOCONUSCO"             ~ 30145,
+      municipality == "SOLEDAD ATZOMPA"       ~ 30147,
+      municipality == "SOLEDAD DE DOBLADO"    ~ 30148,
+      municipality == "SOTEAPAN"              ~ 30149,
+      municipality == "TAMALIN"               ~ 30150,
+      municipality == "TAMIAHUA"              ~ 30151,
+      municipality == "TAMPICO ALTO"          ~ 30152,
+      municipality == "TANCOCO"               ~ 30153,
+      municipality == "TANTIMA"               ~ 30154,
+      municipality == "TANTOYUCA"             ~ 30155,
+      municipality == "TATAHUICAPAN DE JUAREZ"          ~ 30209,
+      municipality == "TATATILA"              ~ 30156,
+      municipality == "TECOLUTLA"             ~ 30158,
+      municipality == "TEHUIPANGO"            ~ 30159,
+      municipality == "TEMPOAL"               ~ 30161,
+      municipality == "TENAMPA"               ~ 30162,
+      municipality == "TENOCHTITLAN"          ~ 30163,
+      municipality == "TEOCELO"               ~ 30164,
+      municipality == "TEPATLAXCO"            ~ 30165,
+      municipality == "TEPETLAN"              ~ 30166,
+      municipality == "TEPETZINTLA"           ~ 30167,
+      municipality == "TEQUILA"               ~ 30168,
+      municipality == "TEXCATEPEC"            ~ 30170,
+      municipality == "TEXHUACAN"             ~ 30171,
+      municipality == "TEXISTEPEC"            ~ 30172,
+      municipality == "TEZONAPA"              ~ 30173,
+      municipality == "TIERRA BLANCA"         ~ 30174,
+      municipality == "TIHUATLAN"             ~ 30175,
+      municipality == "TLACHICHILCO"          ~ 30180,
+      municipality == "TLACOJALPAN"           ~ 30176,
+      municipality == "TLACOLULAN"            ~ 30177,
+      municipality == "TLACOTALPAN"           ~ 30178,
+      municipality == "TLACOTEPEC"   ~ 30179,
+      municipality == "TLALIXCOYAN"           ~ 30181,
+      municipality == "TLALNELHUAYOCAN"       ~ 30182,
+      municipality == "TLALTETELA"            ~ 30024,
+      municipality == "TLAPACOYAN"            ~ 30183,
+      municipality == "TLAQUILPA"             ~ 30184,
+      municipality == "TLILAPAN"              ~ 30185,
+      municipality == "TOMATLAN"              ~ 30186,
+      municipality == "TONAYAN"               ~ 30187,
+      municipality == "TOTUTLA"               ~ 30188,
+      municipality == "TRES VALLES"           ~ 30207,
+      municipality == "TUXPAN"                ~ 30189,
+      municipality == "TUXTILLA"              ~ 30190,
+      municipality == "URSULO GALVAN"         ~ 30191,
+      municipality == "UXPANAPA"              ~ 30210,
+      municipality == "VEGA DE ALATORRE"      ~ 30192,
+      municipality == "VERACRUZ"              ~ 30193,
+      municipality == "VILLA ALDAMA"          ~ 30194,
+      municipality == "XALAPA"                ~ 30087,
+      municipality == "XICO"                  ~ 30092,
+      municipality == "XOXOCOTLA"             ~ 30195,
+      municipality == "YANGA"                 ~ 30196,
+      municipality == "YECUATLA"              ~ 30197,
+      municipality == "ZACUALPAN"             ~ 30198,
+      municipality == "ZARAGOZA"              ~ 30199,
+      municipality == "ZENTLA"                ~ 30200,
+      municipality == "ZONGOLICA"             ~ 30201,
+      municipality == "ZONTECOMATLAN"         ~ 30202,
+      municipality == "ZOZOCOLCO DE HIDALGO"             ~ 30203,
+      TRUE                                    ~ NA
+    )
+  )
+
+# Assign uniqueids for ext
+data_ext <- data_ext %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "AMATITLAN"             ~ 30012,
+      municipality == "TLACOTEPEC"   ~ 30179,
+      municipality == "JESUS CARRANZA"        ~ 30091,
+      municipality == "CHICONAMEL"            ~ 30056,
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+collapsed_ext <- data_ext %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(no_reg,nulos, PAN:PT_MORENA, total, PRD:UC), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Build a lsitanominal lookup from 2021 and join it into collapsed_ext
+ln_lookup <- collapsed_2021 %>%
+  select(municipality, uniqueid, section, listanominal) %>%
+  distinct()
+
+collapsed_ext <- collapsed_ext %>%
+  left_join(ln_lookup, by = c("municipality","uniqueid","section"))
+
+#Combine df
+collapsed_2021 <- collapsed_2021 %>% 
+  filter(!municipality %in% c("AMATITLAN", "TLACOTEPEC", "JESUS CARRANZA", "CHICONAMEL"))
+
+collapsed_2021 <- bind_rows(collapsed_2021, collapsed_ext)
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = case_when(
+      municipality %in% c("AMATITLAN", "TLACOTEPEC", "JESUS CARRANZA", "CHICONAMEL") ~ 2022,
+      TRUE ~ 2021
+    ),
+    month = case_when(
+      municipality %in% c("AMATITLAN", "TLACOTEPEC", "JESUS CARRANZA", "CHICONAMEL") ~ "March",
+      TRUE ~ "June"
+    )
+  )
+
+#####################################
+### PROCESSING DATA FOR 2025 -------
+#####################################
+library(purrr)
+library(tibble)
+
+# Set file path
+file_path <- "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/25/Proceso_Electoral_Veracruz2025_Municipal.xlsx"
+
+# First, let's explore the Excel file structure
+# Get all sheet names
+sheet_names <- excel_sheets(file_path)
+print("Available sheets:")
+print(sheet_names)
+
+# Filter for municipality sheets (assuming they follow "Municipio_X" pattern)
+municipio_sheets <- sheet_names[grepl("^Municipio_\\d+$", sheet_names)]
+print(paste("Found", length(municipio_sheets), "municipality sheets"))
+
+# Function to read and process each municipality sheet
+read_municipio <- function(sheet_name, file_path) {
+  tryCatch({
+    # Read the sheet
+    data <- read_excel(file_path, sheet = sheet_name)
+    
+    # Add municipality identifier
+    municipio_id <- gsub("Municipio_", "", sheet_name)
+    data$municipio_id <- as.numeric(municipio_id)
+    data$sheet_name <- sheet_name
+    
+    # Add basic info about the data
+    cat("Sheet:", sheet_name, "- Rows:", nrow(data), "- Columns:", ncol(data), "\n")
+    
+    return(data)
+  }, error = function(e) {
+    cat("Error reading sheet", sheet_name, ":", e$message, "\n")
+    return(NULL)
+  })
+}
+
+# Read all municipality sheets
+cat("\n=== Reading all municipality sheets ===\n")
+data_2025_cons <- map_dfr(municipio_sheets, ~read_municipio(.x, file_path))
+
+# Rename columns
+data_2025 <- data_2025_cons %>%
+  dplyr::rename(municipality = municipio,
+                section = seccion,
+                listanominal = listaNominal,
+                total = sumaTotal,
+                no_reg = CNR,
+                nulos = VN,
+                PAN               = pan,
+                PRI               = pri,
+                PVEM              = verde,
+                PT                = pt,
+                MC                = mc,
+                MORENA            = morena,
+                no_reg            = CNR,
+                nulos             = VN,
+                total             = sumaTotal,
+                uniqueid          = municipio_id,
+                sheet_name        = sheet_name,
+                PVEM_MORENA       = `verde-morena`,
+                CI_1  = nlr,
+                CI_2  = mall,
+                CI_3  = ahr,
+                CI_4  = rrg,
+                CI_5  = vgh,
+                CI_6  = apm,
+                CI_7  = fcl,
+                CI_8  = lcc,
+                CI_9  = ydlacz,
+                CI_10 = lygt,
+                CI_11 = sht,
+                CI_12 = jcr,
+                CI_13 = sst,
+                CI_14 = magm,
+                CI_15 = jcmc) %>%
+  dplyr::mutate(
+    section = as.numeric(section),
+    uniqueid =  30000 + municipality
+  ) %>% 
+  dplyr::filter(section > 0 & section < 9999)
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2025 <- data_2025 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(listanominal, PAN:total, PVEM_MORENA:CI_15), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2025 <- collapsed_2025 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(c(PAN:MORENA, PVEM_MORENA:CI_15)), na.rm = TRUE),
+    year = 2025,
+    month = "June"
+  )
+
+
 # Combine the dataframes, handling different columns by filling with NA
 veracruz_all <- bind_rows(df_2004,
                           df_2010,
                           df_2013,
                           df_2017,
-                          df_2018_collapsed
-                          )
+                          df_2018_collapsed,
+                          collapsed_2021,
+                          collapsed_2025
+)
 
 data.table::fwrite(veracruz_all,"../../../Processed Data/veracruz/veracruz_process_raw_data.csv")
-
-

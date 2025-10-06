@@ -29,7 +29,7 @@ setwd(file.path(script_dir, ""))
 ###########################################
 
 # Load the 1996 dataset
-data_1996 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/Ayu_Seccion_1996_No_LN.csv")
+data_1996 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayu_Seccion_1996_No_LN.csv")
 
 # Convert column names to lowercase
 data_1996 <- data_1996 %>% rename_with(tolower)
@@ -207,7 +207,7 @@ collapsed_1996 <- collapsed_1996 %>%
                                 PRD_PartCardenista_PPS, PRD_PartCardenista, PRD_PartCardenista_PRT,
                                 PRD_PartCardenista_PVEM_PT)), na.rm = TRUE))
 
-ln_all_months_years <- read.dta13("~/Documents/GitHub/Electoral-Clientelism/Data/Raw Electoral Data/Listas Nominales/all_months_years.dta")
+ln_all_months_years <- read.dta13("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta")
 
 ln_all_months_years <- ln_all_months_years %>% 
   dplyr::filter(state == "GUERRERO" & month == "March" & year == 1999)
@@ -232,7 +232,7 @@ summary(collapsed_1996)
 ###########################################
 
 # Step 1: Read the 1999 CSV data
-data_1999 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/Ayu_Seccion_1999_No_LN.csv")
+data_1999 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayu_Seccion_1999_No_LN.csv")
 
 # Convert column names to lowercase
 data_1999 <- data_1999 %>% rename_with(tolower)
@@ -390,7 +390,7 @@ data_1999_collapsed <- data_1999_collapsed %>%
 
 # Step 1: Read the 2002 CSV data
 
-pdln12_data <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/Other/INE-CI141-2014 Horacio Larreguy Arbesu/pdln12_edms_PEL_2002_2005.xls", sheet = "pdln12_edms")
+pdln12_data <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Other/INE-CI141-2014 Horacio Larreguy Arbesu/pdln12_edms_PEL_2002_2005.xls", sheet = "pdln12_edms")
 
 # Keep rows where 'FECHA' equals "20021006"
 pdln12_data <- pdln12_data %>%
@@ -406,7 +406,7 @@ pdln12_collapsed <- pdln12_data %>%
   summarise(listanominal = sum(listanominal, na.rm = TRUE))
 
 # Step 2: Process the 2002 CSV data (Ayu_Seccion_2002_No_LN.csv)
-data_2002 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/Ayu_Seccion_2002_No_LN.csv")
+data_2002 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayu_Seccion_2002_No_LN.csv")
 
 # Rename columns
 data_2002 <- data_2002 %>%
@@ -555,7 +555,7 @@ data_2002_collapsed <- data_2002_collapsed %>%
 ###########################################
 
 # Read Excel file for 2005
-listanominal_2005 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/Other/INE-CI141-2014 Horacio Larreguy Arbesu/pdln12_edms_PEL_2002_2005.xls", 
+listanominal_2005 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Other/INE-CI141-2014 Horacio Larreguy Arbesu/pdln12_edms_PEL_2002_2005.xls", 
                                 sheet = "pdln12_edms")
 
 # Filter data to keep only the relevant date
@@ -567,7 +567,7 @@ listanominal_2005 <- listanominal_2005 %>%
   summarise(listanominal = sum(listanominal, na.rm = TRUE))
 
 # Read the 2005 CSV data
-data_2005 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/Ayu_Seccion_2005_No_LN.csv") 
+data_2005 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayu_Seccion_2005_No_LN.csv") 
 
 # Convert column names to lowercase
 data_2005 <- data_2005 %>% rename_with(tolower)
@@ -696,7 +696,7 @@ data_2005_collapsed <- data_2005_collapsed %>%
 ###########################################
 
 # Read the 2008 CSV data
-data_2008 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/Ayu_Seccion_2008.csv") 
+data_2008 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayu_Seccion_2008.csv") 
 # Convert column names to lowercase
 data_2008 <- data_2008 %>% rename_with(tolower)
 
@@ -831,7 +831,7 @@ data_2008_collapsed <- data_2008_collapsed %>%
 ###########################################
 
 # Read Excel data for 2009 special elections
-data_2009 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/Resultados_eleccion_extraordinaria_2009.xls", sheet = "Extra Malinaltepec", range = "A8:J40") 
+data_2009 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Resultados_eleccion_extraordinaria_2009.xls", sheet = "Extra Malinaltepec", range = "A8:J40") 
 names(data_2009)
 
 data_2009 <- data_2009 %>%
@@ -875,7 +875,7 @@ data_2009_collapsed <- data_2009_collapsed %>%
 ###########################################
 
 # Read the 2012 Excel data
-data_2012 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/Ayu_Seccion_2012.xlsx", sheet = "Sheet1") %>%
+data_2012 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.xlsx", sheet = "Sheet1") %>%
   rename(municipality = MUNICIPIO, section = SECCION, total = TOTALES) %>%
   filter(!(municipality == "" | section == "" | is.na(total) | total == 0))
 
@@ -999,7 +999,7 @@ summary(data_2012_collapsed)
 ###########################################
 ### Step 1: Process 2015 Data
 ###########################################
-data_2015 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/Ayuntamientos_Gro_2015.xlsx", 
+data_2015 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayuntamientos_Gro_2015.xlsx", 
                         sheet = "Ayuntamientos") %>%
   mutate(across(uniqueid:"coal prd pt pan", as.numeric))
 
@@ -1056,7 +1056,7 @@ data_2015_collapsed <- data_2015_collapsed %>%
 #------------------------------------------------------------
 # Step 1: Import communal candidates 2018.xlsx, sheet MUNCAND
 
-mun_data <- fread("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/communal_candidates_2018.csv")
+mun_data <- fread("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/communal_candidates_2018.csv")
 
 # Step 3: For each var in PAN_PRD_MC - MORENA_ES,
 # replace var=0 if var==. and var=1 if var>0
@@ -1079,7 +1079,7 @@ mun_data <- mun_data %>%
 
 #------------------------------------------------------------
 # Step 6: import delimited "2018_SEE_GRO_CAS_AYUN.csv"
-see_data <- fread("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018/2018_SEE_GRO_CAS_AYUN.csv")
+see_data <- fread("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2018_SEE_GRO_CAS_AYUN.csv")
 
 names(see_data)
 # replace PAN_PRD = v39 if PAN_PRD==.
@@ -1254,18 +1254,296 @@ see_data_sum <- see_data_sum %>%
 
 summary(see_data_sum)
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset from the excel
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/21/2021_SEE_AYUN_GRO_SECCI‡N.xlsx", skip = 6) %>% 
+  filter(!MUNICIPIO == "ILIATENCO")
+
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/21/2021_SEE_AYUN_GRO_CAS_ILIATENCO.xlsx", skip = 6)
+
+data_2021 <- bind_rows(data_2021,
+                       data_ext)
+
+names(data_2021)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NUM_VOTOS_CAN_NREG,
+                nulos = NUM_VOTOS_NULOS,
+                valid = NUM_VOTOS_VALIDOS,
+                FXM = FXP) %>%
+  rename_with(~ gsub("CAND_IND", "CI_", .x), starts_with("cand_ind")) %>% 
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  )
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(uniqueid = case_when(
+    municipality == "ACAPULCO DE JUAREZ" ~ 12001,
+    municipality == "ACATEPEC" ~ 12076,
+    municipality == "AHUACUOTZINGO" ~ 12002,
+    municipality == "AJUCHITLAN DEL PROGRESO" ~ 12003,
+    municipality == "ALCOZAUCA DE GUERRERO" ~ 12004,
+    municipality == "ALPOYECA" ~ 12005,
+    municipality == "APAXTLA" ~ 12006,
+    municipality == "ARCELIA" ~ 12007,
+    municipality == "ATENANGO DEL RIO" ~ 12008,
+    municipality == "ATLAMAJALCINGO DEL MONTE" ~ 12009,
+    municipality == "ATLIXTAC" ~ 12010,
+    municipality == "ATOYAC DE ALVAREZ" ~ 12011,
+    municipality == "AYUTLA DE LOS LIBRES" ~ 12012,
+    municipality == "AZOYU" ~ 12013,
+    municipality == "BENITO JUAREZ" ~ 12014,
+    municipality == "BUENAVISTA DE CUELLAR" ~ 12015,
+    municipality == "CHILAPA DE ALVAREZ" ~ 12028,
+    municipality == "CHILPANCINGO DE LOS BRAVO" ~ 12029,
+    municipality == "COAHUAYUTLA DE JOSE MA IZAZAGA" ~ 12016,
+    municipality == "COCULA" ~ 12017,
+    municipality == "COPALA" ~ 12018,
+    municipality == "COPALILLO" ~ 12019,
+    municipality == "COPANATOYAC" ~ 12020,
+    municipality == "COYUCA DE BENITEZ" ~ 12021,
+    municipality == "COYUCA DE CATALAN" ~ 12022,
+    municipality == "CUAJINICUILAPA" ~ 12023,
+    municipality == "CUALAC" ~ 12024,
+    municipality == "CUAUTEPEC" ~ 12025,
+    municipality == "CUETZALA DEL PROGRESO" ~ 12026,
+    municipality == "CUTZAMALA DE PINZON" ~ 12027,
+    municipality == "EDUARDO NERI" ~ 12075,
+    municipality == "FLORENCIO VILLARREAL" ~ 12030,
+    municipality == "GENERAL CANUTO A. NERI" ~ 12031,
+    municipality == "GENERAL HELIODORO CASTILLO" ~ 12032,
+    municipality == "HUAMUXTITLAN" ~ 12033,
+    municipality == "HUITZUCO DE LOS FIGUEROA" ~ 12034,
+    municipality == "IGUALA DE LA INDEPENDENCIA" ~ 12035,
+    municipality == "IGUALAPA" ~ 12036,
+    municipality == "IXCATEOPAN DE CUAUHTEMOC" ~ 12037,
+    municipality == "JUAN R. ESCUDERO" ~ 12039,
+    municipality == "LA UNION DE ISIDORO MONTES DE OCA" ~ 12068,
+    municipality == "LEONARDO BRAVO" ~ 12040,
+    municipality == "MALINALTEPEC" ~ 12041,
+    municipality == "MARTIR DE CUILAPAN" ~ 12042,
+    municipality == "METLATONOC" ~ 12043,
+    municipality == "MOCHITLAN" ~ 12044,
+    municipality == "OLINALA" ~ 12045,
+    municipality == "OMETEPEC" ~ 12046,
+    municipality == "PEDRO ASCENCIO ALQUISIRAS" ~ 12047,
+    municipality == "PETATLAN*" ~ 12048,
+    municipality == "PETATLAN" ~ 12048,
+    municipality == "PILCAYA" ~ 12049,
+    municipality == "PUNGARABATO" ~ 12050,
+    municipality == "QUECHULTENANGO" ~ 12051,
+    municipality == "SAN LUIS ACATLAN" ~ 12052,
+    municipality == "SAN MARCOS" ~ 12053,
+    municipality == "SAN MIGUEL TOTOLAPAN" ~ 12054,
+    municipality == "TAXCO DE ALARCON" ~ 12055,
+    municipality == "TECOANAPA" ~ 12056,
+    municipality == "TECPAN DE GALEANA" ~ 12057,
+    municipality == "TELOLOAPAN" ~ 12058,
+    municipality == "TEPECOACUILCO DE TRUJANO" ~ 12059,
+    municipality == "TETIPAC" ~ 12060,
+    municipality == "TIXTLA DE GUERRERO" ~ 12061,
+    municipality == "TLACOACHISTLAHUACA" ~ 12062,
+    municipality == "TLACOAPA" ~ 12063,
+    municipality == "TLALCHAPA" ~ 12064,
+    municipality == "TLALIXTAQUILLA DE MALDONADO" ~ 12065,
+    municipality == "TLAPA DE COMONFORT" ~ 12066,
+    municipality == "TLAPEHUALA" ~ 12067,
+    municipality == "XALPATLAHUAC" ~ 12069,
+    municipality == "XOCHIHUEHUETLAN" ~ 12070,
+    municipality == "XOCHISTLAHUACA" ~ 12071,
+    municipality == "ZAPOTITLAN TABLAS" ~ 12072,
+    municipality == "JOSE AZUETA" ~ 12038,
+    municipality == "ZIRANDARO" ~ 12073,
+    municipality == "ZITLALA" ~ 12074,
+    municipality == "MARQUELIA" ~ 12077,
+    municipality == "COCHOAPA EL GRANDE" ~ 12078,
+    municipality == "ILIATENCO" ~ 12081,
+    municipality == "JOSE JOAQUIN DE HERRERA" ~ 12079,
+    municipality == "JUCHITAN" ~ 12080,
+    municipality == "ZIHUATANEJO DE AZUETA" ~ 12038,
+    TRUE ~ NA
+  ))
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:listanominal, PVEM_MORENA), 
+                          sum, na.rm = TRUE))
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2021,
+    month = case_when(
+      municipality == "ILIATENCO" ~ "November",
+      TRUE ~ "June"
+    )
+  )
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset from the CSV
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/24/2024_SEE_AYUN_GRO_CAS.csv")
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NUM_VOTOS_CAN_NREG,
+                nulos = NUM_VOTOS_NULOS,
+                valid = NUM_VOTOS_VALIDOS,
+                FXM = FXMG,
+                MAGRO = MA,
+                PRG = REGENERACION
+  ) %>%
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(uniqueid = case_when(
+    municipality == "ACAPULCO DE JUAREZ" ~ 12001,
+    municipality == "ACATEPEC" ~ 12076,
+    municipality == "AHUACUOTZINGO" ~ 12002,
+    municipality == "AJUCHITLAN DEL PROGRESO" ~ 12003,
+    municipality == "ALCOZAUCA DE GUERRERO" ~ 12004,
+    municipality == "ALPOYECA" ~ 12005,
+    municipality == "APAXTLA" ~ 12006,
+    municipality == "ARCELIA" ~ 12007,
+    municipality == "ATENANGO DEL RIO" ~ 12008,
+    municipality == "ATLAMAJALCINGO DEL MONTE" ~ 12009,
+    municipality == "ATLIXTAC" ~ 12010,
+    municipality == "ATOYAC DE ALVAREZ" ~ 12011,
+    municipality == "AYUTLA DE LOS LIBRES" ~ 12012,
+    municipality == "AZOYU" ~ 12013,
+    municipality == "BENITO JUAREZ" ~ 12014,
+    municipality == "BUENAVISTA DE CUELLAR" ~ 12015,
+    municipality == "CHILAPA DE ALVAREZ" ~ 12028,
+    municipality == "CHILPANCINGO DE LOS BRAVO" ~ 12029,
+    municipality == "COAHUAYUTLA DE JOSE MA IZAZAGA" ~ 12016,
+    municipality == "COCULA" ~ 12017,
+    municipality == "COPALA" ~ 12018,
+    municipality == "COPALILLO" ~ 12019,
+    municipality == "COPANATOYAC" ~ 12020,
+    municipality == "COYUCA DE BENITEZ" ~ 12021,
+    municipality == "COYUCA DE CATALAN" ~ 12022,
+    municipality == "CUAJINICUILAPA" ~ 12023,
+    municipality == "CUALAC" ~ 12024,
+    municipality == "CUAUTEPEC" ~ 12025,
+    municipality == "CUETZALA DEL PROGRESO" ~ 12026,
+    municipality == "CUTZAMALA DE PINZON" ~ 12027,
+    municipality == "EDUARDO NERI" ~ 12075,
+    municipality == "FLORENCIO VILLARREAL" ~ 12030,
+    municipality == "GENERAL CANUTO A. NERI" ~ 12031,
+    municipality == "GENERAL HELIODORO CASTILLO" ~ 12032,
+    municipality == "HUAMUXTITLAN" ~ 12033,
+    municipality == "HUITZUCO DE LOS FIGUEROA" ~ 12034,
+    municipality == "IGUALA DE LA INDEPENDENCIA" ~ 12035,
+    municipality == "IGUALAPA" ~ 12036,
+    municipality == "IXCATEOPAN DE CUAUHTEMOC" ~ 12037,
+    municipality == "JUAN R. ESCUDERO" ~ 12039,
+    municipality == "LA UNION DE ISIDORO MONTES DE OCA" ~ 12068,
+    municipality == "LEONARDO BRAVO" ~ 12040,
+    municipality == "MALINALTEPEC" ~ 12041,
+    municipality == "MARTIR DE CUILAPAN" ~ 12042,
+    municipality == "METLATONOC" ~ 12043,
+    municipality == "MOCHITLAN" ~ 12044,
+    municipality == "OLINALA" ~ 12045,
+    municipality == "OMETEPEC" ~ 12046,
+    municipality == "PEDRO ASCENCIO ALQUISIRAS" ~ 12047,
+    municipality == "PETATLAN*" ~ 12048,
+    municipality == "PETATLAN" ~ 12048,
+    municipality == "PILCAYA" ~ 12049,
+    municipality == "PUNGARABATO" ~ 12050,
+    municipality == "QUECHULTENANGO" ~ 12051,
+    municipality == "SAN LUIS ACATLAN" ~ 12052,
+    municipality == "SAN MARCOS" ~ 12053,
+    municipality == "SAN MIGUEL TOTOLAPAN" ~ 12054,
+    municipality == "TAXCO DE ALARCON" ~ 12055,
+    municipality == "TECOANAPA" ~ 12056,
+    municipality == "TECPAN DE GALEANA" ~ 12057,
+    municipality == "TELOLOAPAN" ~ 12058,
+    municipality == "TEPECOACUILCO DE TRUJANO" ~ 12059,
+    municipality == "TETIPAC" ~ 12060,
+    municipality == "TIXTLA DE GUERRERO" ~ 12061,
+    municipality == "TLACOACHISTLAHUACA" ~ 12062,
+    municipality == "TLACOAPA" ~ 12063,
+    municipality == "TLALCHAPA" ~ 12064,
+    municipality == "TLALIXTAQUILLA DE MALDONADO" ~ 12065,
+    municipality == "TLAPA DE COMONFORT" ~ 12066,
+    municipality == "TLAPEHUALA" ~ 12067,
+    municipality == "XALPATLAHUAC" ~ 12069,
+    municipality == "XOCHIHUEHUETLAN" ~ 12070,
+    municipality == "XOCHISTLAHUACA" ~ 12071,
+    municipality == "ZAPOTITLAN TABLAS" ~ 12072,
+    municipality == "JOSE AZUETA" ~ 12038,
+    municipality == "ZIRANDARO" ~ 12073,
+    municipality == "ZITLALA" ~ 12074,
+    municipality == "MARQUELIA" ~ 12077,
+    municipality == "COCHOAPA EL GRANDE" ~ 12078,
+    municipality == "ILIATENCO" ~ 12081,
+    municipality == "JOSE JOAQUIN DE HERRERA" ~ 12079,
+    municipality == "JUCHITAN" ~ 12080,
+    municipality == "ZIHUATANEJO DE AZUETA" ~ 12038,
+    TRUE ~ NA
+  ))
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:listanominal), 
+                          sum, na.rm = TRUE))
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2024,
+    month = "June"
+  )
+
 guerrero_all <- bind_rows(data_1999_collapsed,
-                            data_2002_collapsed,
-                            data_2005_collapsed,
-                            data_2008_collapsed,
-                            data_2009_collapsed,
-                            data_2012_collapsed,
-                            data_2015_collapsed,
-                            see_data_sum) 
+                          data_2002_collapsed,
+                          data_2005_collapsed,
+                          data_2008_collapsed,
+                          data_2009_collapsed,
+                          data_2012_collapsed,
+                          data_2015_collapsed,
+                          see_data_sum,
+                          collapsed_2021,
+                          collapsed_2024) 
 
 summary(guerrero_all)
 
 data.table::fwrite(guerrero_all,"../../../Processed Data/guerrero/guerrero_process_raw_data.csv")
-
-
 

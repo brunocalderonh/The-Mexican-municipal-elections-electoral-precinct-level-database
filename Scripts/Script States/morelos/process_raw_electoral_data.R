@@ -30,7 +30,7 @@ setwd(file.path(script_dir, ""))
 
 
 # 1) Read CSV: "Ayu_Seccion_1997_No_LN.csv"
-df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.csv", 
+df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997_No_LN.csv", 
                show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 
@@ -183,7 +183,7 @@ rm(df)
 ###############################################################################
 
 # 1) Read CSV
-df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 # 2) rename municipio->municipality, seccion->section
 df <- df %>%
@@ -334,7 +334,7 @@ rm(df)
 ###############################################################################
 
 # 1) Read Excel: 'Extraordinario 2001.xlsx', sheet="Sheet1", first row as headers
-df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Extraordinario 2001.xlsx", 
+df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Extraordinario 2001.xlsx", 
                  sheet = "Sheet1", col_names = TRUE)
 
 # 2) rename SECCIÓN->section, SUMA->total, LISTA->listanominal
@@ -385,7 +385,7 @@ rm(df)
 ###############################################################################
 
 # 1) Read CSV
-df <- fread("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003_No_LN.csv", 
+df <- fread("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003_No_LN.csv", 
                encoding = "Latin-1")
 colnames(df) <- tolower(colnames(df))
 # 2) rename municipio->municipality, seccin->section
@@ -529,7 +529,7 @@ rm(df)
 ###############################################################################
 
 # 1) Read CSV
-df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.csv", show_col_types = FALSE)
 
 colnames(df) <- tolower(colnames(df))
 # Remove "-" and spaces
@@ -707,7 +707,7 @@ rm(df)
 ###############################################################################
 
 # 1) Read CSV
-df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 # Remove "-" and spaces
 names(df) <- gsub("[- ]", "", names(df))
@@ -905,7 +905,7 @@ rm(df)
 ### Ayu_Seccion_2012.csv
 ###############################################################################
 # 1) Read CSV
-df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 # 2) replace municipality = subinstr(municipality,"*","",.)
 #    i.e. remove asterisk from 'municipality'
@@ -1063,7 +1063,7 @@ df_2012 <- df_collapsed %>%
 ###############################################################################
 
 # 1) Read Exce
-df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx", 
+df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2015.xlsx", 
                  col_names = TRUE)
 
 # 2) replace PRI=. if C_PRI_PVEM_PANAL!=.
@@ -1128,7 +1128,7 @@ names(df_2015)
 
 ####### 2018
 
-all_sheets <- excel_sheets("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx")
+all_sheets <- excel_sheets("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx")
 sheet_index <- seq_along(all_sheets)
 
 for (i in sheet_index) {
@@ -1137,7 +1137,7 @@ for (i in sheet_index) {
   
   # Read Excel
   df_sheet <- read_excel(
-    "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx", 
+    "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx", 
     sheet = sheetname, 
     col_names = TRUE
   )
@@ -1386,16 +1386,684 @@ df_2018_collapsed <- df_2018_collapsed %>%
   ungroup()
 
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Process Morelos 2021 data
+# to combine multiple municipal election files into a single dataset
+
+library(readr)
+library(dplyr)
+library(purrr)
+library(stringr)
+library(fs)
+
+# Define the base path for Morelos 2021 data
+base_path <- "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/"
+
+# Main processing function for Morelos municipalities
+process_morelos_elections <- function(base_path) {
+  
+  # Step 1: Find all CSV files in the directory
+  csv_files <- dir_ls(base_path, 
+                      regexp = "\\.csv$", 
+                      type = "file") %>%
+    # Filter out temporary files
+    .[!str_detect(path_file(.), "^~")]
+  
+  cat("Found", length(csv_files), "CSV files\n")
+  
+  # Step 2: Extract municipality names from filenames
+  file_info <- tibble(
+    file_path = csv_files,
+    filename = path_file(file_path),
+    # Extract municipality name from complex filename pattern
+    municipality_raw = filename %>%
+      str_remove("\\.csv$") %>%
+      str_remove("^Registro de Computos ") %>%
+      str_remove(" Morelos Proceso Electoral 2020-2021 IMPEPAC$") %>%
+      str_to_upper() %>%
+      str_trim()
+  )
+  
+  # Step 3: Preview the file structure
+  cat("\nFile structure preview:\n")
+  print(file_info %>% select(filename, municipality_raw) %>% head(10))
+  
+  # Step 4: Function to safely read each CSV file
+  read_csv_safely <- function(file_path, municipality) {
+    tryCatch({
+      
+      # Read the CSV file with robust parsing
+      data <- read_csv(file_path, 
+                       locale = locale(encoding = "UTF-8"),
+                       col_types = cols(.default = col_character()),
+                       na = c("", "NA", "N/A", "-"))
+      
+      # Skip if data is empty
+      if(nrow(data) == 0) {
+        cat("Warning: Empty file:", file_path, "\n")
+        return(NULL)
+      }
+      
+      # Clean column names (remove spaces, special characters)
+      names(data) <- names(data) %>%
+        str_trim() %>%
+        str_replace_all("\\s+", "_") %>%
+        str_replace_all("[^A-Za-z0-9_]", "") %>%
+        str_to_upper()
+      
+      # Add metadata columns
+      data <- data %>%
+        mutate(
+          source_file = basename(file_path),
+          municipality = municipality,
+          .before = 1
+        )
+      
+      return(data)
+      
+    }, error = function(e) {
+      cat("Error reading file:", file_path, "\n")
+      cat("Error message:", e$message, "\n")
+      return(NULL)
+    })
+  }
+  
+  # Step 5: Process all files
+  cat("\nProcessing files...\n")
+  
+  all_data <- file_info %>%
+    mutate(
+      data = map2(file_path, municipality_raw, read_csv_safely)
+    ) %>%
+    filter(!map_lgl(data, is.null))  # Remove failed reads
+  
+  # Step 6: Check column consistency before binding
+  cat("\nChecking column consistency...\n")
+  
+  # Get all unique column names across files
+  all_columns <- all_data %>%
+    pull(data) %>%
+    map(names) %>%
+    unlist() %>%
+    unique() %>%
+    sort()
+  
+  cat("Total unique columns found:", length(all_columns), "\n")
+  cat("Sample columns:", paste(head(all_columns, 10), collapse = ", "), "\n")
+  
+  # Function to standardize columns across all datasets
+  standardize_columns <- function(df, standard_cols) {
+    # Add missing columns as NA
+    missing_cols <- setdiff(standard_cols, names(df))
+    for(col in missing_cols) {
+      df[[col]] <- NA_character_
+    }
+    # Reorder columns to match standard order
+    df[standard_cols]
+  }
+  
+  # Step 7: Standardize and combine all data
+  cat("\nStandardizing and combining data...\n")
+  
+  standardized_data <- all_data %>%
+    mutate(
+      data_std = map(data, ~standardize_columns(.x, all_columns))
+    )
+  
+  combined_data <- standardized_data %>%
+    pull(data_std) %>%
+    bind_rows()
+  
+  cat("Successfully processed", nrow(all_data), "files\n")
+  cat("Combined dataset has", nrow(combined_data), "rows and", ncol(combined_data), "columns\n")
+  
+  return(list(
+    combined_data = combined_data,
+    file_info = all_data,
+    failed_files = file_info %>% 
+      anti_join(all_data, by = "file_path") %>% 
+      pull(file_path),
+    column_summary = all_columns
+  ))
+}
+
+# Function to inspect file structure before processing
+inspect_morelos_files <- function(base_path, n_files = 3) {
+  
+  csv_files <- dir_ls(base_path, regexp = "\\.csv$") %>%
+    .[!str_detect(path_file(.), "^~")]
+  
+  cat("Inspecting first", n_files, "files:\n\n")
+  
+  for(i in 1:min(n_files, length(csv_files))) {
+    cat("File", i, ":", path_file(csv_files[i]), "\n")
+    
+    tryCatch({
+      # Read first few rows to understand structure
+      sample_data <- read_csv(csv_files[i], n_max = 5, 
+                              col_types = cols(.default = col_character()))
+      
+      cat("  Columns:", paste(names(sample_data), collapse = ", "), "\n")
+      cat("  Dimensions:", nrow(sample_data), "x", ncol(sample_data), "\n")
+      
+      # Show sample of first column
+      if(ncol(sample_data) > 0 && nrow(sample_data) > 0) {
+        cat("  Sample values from first column:", 
+            paste(sample_data[[1]][1:min(3, nrow(sample_data))], collapse = ", "), "\n")
+      }
+      cat("\n")
+      
+    }, error = function(e) {
+      cat("  Error:", e$message, "\n\n")
+    })
+  }
+}
+
+# Function to post-process the combined data
+post_process_morelos <- function(combined_data) {
+  
+  processed_data <- combined_data
+  
+  # Convert numeric columns (adjust column patterns based on your data)
+  numeric_patterns <- c("VOTOS", "TOTAL", "CASILLA", "SECCION", "LISTA")
+  
+  for(pattern in numeric_patterns) {
+    numeric_cols <- names(processed_data)[str_detect(names(processed_data), pattern)]
+    for(col in numeric_cols) {
+      processed_data[[col]] <- as.numeric(processed_data[[col]])
+    }
+  }
+  
+  # Clean municipality names
+  if("municipality" %in% names(processed_data)) {
+    processed_data <- processed_data %>%
+      mutate(municipality = str_to_upper(str_trim(municipality)))
+  }
+  
+  return(processed_data)
+}
+
+# Municipality name standardization for Morelos
+standardize_morelos_municipalities <- function(municipality_names) {
+  municipality_names %>%
+    str_to_upper() %>%
+    str_trim() %>%
+    # Handle common variations
+    str_replace("ZACUALPAN DE AMILPAS", "ZACUALPAN DE AMILPAS") %>%
+    str_replace("CUERNAVACA", "CUERNAVACA") %>%
+    # Add more standardizations as needed
+    str_squish()
+}
+
+# Execution instructions
+cat("EXECUTION PLAN FOR MORELOS 2021 ELECTION DATA:\n")
+cat(strrep("=", 50), "\n\n")
+
+cat("Step 1: Inspect files\n")
+cat("inspect_morelos_files(base_path)\n\n")
+
+cat("Step 2: Process all files\n")
+cat("results <- process_morelos_elections(base_path)\n\n")
+
+cat("Step 3: Post-process and clean data\n")
+cat("final_data <- post_process_morelos(results$combined_data)\n\n")
+
+cat("Step 4: Export results\n")
+cat("write_csv(final_data, 'morelos_2021_combined.csv')\n\n")
+
+inspect_morelos_files(base_path)
+results <- process_morelos_elections(base_path)
+final_data <- post_process_morelos(results$combined_data)
+
+output_path <- "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/"
+write.csv(results$combined_data, paste0(output_path, "morelos_2021_combined.csv"), row.names = FALSE)
+
+# Load the 2021 dataset
+data_2021 <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/morelos_2021_combined.csv") %>% 
+  mutate(listanominal = LNOMINAL + L_NOMINAL)
+
+names(data_2021)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(section = SECCION,
+                total = TOTVOTOS,
+                no_reg = NO_REGISTRADOS,
+                nulos = NUM_VOTOS_NULOS,
+                PANAL = "NA",
+                FXM = FPM,
+                PH = HUMANISTA,
+                CI_1 = CAND_IND_AGUSTIN_TOLEDANO_AMARO,
+                CI_2 = CAND_IND_CELSO_NIETO_ESTRADA,
+                CI_3 = CAND_IND_PEDRO_ANTONIO_MONTENEGRO_MORGADO,
+                MORENA_PANAL_ES_CC = CC_MORENA_NA_ES, # CC Candidatura Comun
+                PAN_PH_CC = CC_PAN_HUMANISTA,
+                PAN_PSD_CC = CC_PAN_PSD,
+                PRD_PSD_CC = CC_PRD_PSD,
+                PRD_PRI = COAL_PRD_PRI,
+                MORENA_ES_CC = CONFIG_CC_MORENA_ES,
+                MORENA_PANAL_CC = CONFIG_CC_MORENA_NA,
+                PANAL_ES_CC = CONFIG_CC_NA_ES) %>%
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0) %>% 
+  select(municipality, section,
+         PAN, PRI, PRD, PT, PVEM, MC, MORENA,
+         APM, BC, ES, FM, FXM, FUTURO, PH, MAS, MP, PANAL, PAS, PES, 
+         PODEMOS, PSD, RPM, RSP, CI_1, CI_2, CI_3,
+         MORENA_PANAL_ES_CC, PAN_PH_CC, PAN_PSD_CC, PRD_PSD_CC, PRD_PRI, MORENA_ES_CC,
+         MORENA_PANAL_CC, PANAL_ES_CC,
+         no_reg, nulos, total, listanominal
+  ) %>% 
+  mutate(
+    across(c(section, PAN, PRI, PRD, PT, PVEM, MC, MORENA,
+             APM, BC, ES, FM, FXM, FUTURO, PH, MAS, MP, PANAL, PAS, PES, 
+             PODEMOS, PSD, RPM, RSP, CI_1, CI_2, CI_3,
+             MORENA_PANAL_ES_CC, PAN_PH_CC, PAN_PSD_CC, PRD_PSD_CC, PRD_PRI, 
+             MORENA_ES_CC, MORENA_PANAL_CC, PANAL_ES_CC,
+             no_reg, nulos, total, listanominal), 
+           as.numeric)
+  )
+
+# Generate uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality=="AMACUZAC" ~ 17001,
+      municipality=="ATLATLAHUCAN" ~ 17002,
+      municipality=="AXOCHIAPAN" ~ 17003,
+      municipality=="AYALA" ~ 17004,
+      municipality=="COATLAN DEL RIO" ~ 17005,
+      municipality=="CUAUTLA" ~ 17006,
+      municipality=="CUERNAVACA" ~ 17007,
+      municipality=="EMILIANO ZAPATA" ~ 17008,
+      municipality=="HUITZILAC" ~ 17009,
+      municipality=="JANTETELCO" ~ 17010,
+      municipality=="JIUTEPEC" ~ 17011,
+      municipality=="JOJUTLA" ~ 17012,
+      municipality=="JONACATEPEC" ~ 17013,
+      municipality=="MAZATEPEC" ~ 17014,
+      municipality=="MIACATLAN" ~ 17015,
+      municipality=="OCUITUCO" ~ 17016,
+      municipality=="PUENTE DE IXTLA" ~ 17017,
+      municipality=="TEMIXCO" ~ 17018,
+      municipality=="TEMOAC" ~ 17033,
+      municipality=="TEPALCINGO" ~ 17019,
+      municipality=="TEPOZTLAN" ~ 17020,
+      municipality=="TETECALA" ~ 17021,
+      municipality=="TETELA DEL VOLCAN" ~ 17022,
+      municipality=="TLALNEPANTLA" ~ 17023,
+      municipality=="TLALTIZAPAN" ~ 17024,
+      municipality=="TLAQUILTENANGO" ~ 17025,
+      municipality=="TLAYACAPAN" ~ 17026,
+      municipality=="TOTOLAPAN" ~ 17027,
+      municipality=="XOCHITEPEC" ~ 17028,
+      municipality=="YAUTEPEC" ~ 17029,
+      municipality=="YECAPIXTLA" ~ 17030,
+      municipality=="ZACATEPEC" ~ 17031,
+      municipality=="ZACUALPAN" ~ 17032,
+      TRUE ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:listanominal), 
+                          sum, na.rm = TRUE))
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    valid = sum(c_across(PAN:PANAL_ES_CC), na.rm = TRUE),
+    turnout = total/listanominal,
+    year = 2021,
+    month = "June"
+  )
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Morelos 2024 Data Processor
+# to combine multiple municipal election files into a single dataset
+
+# Load required libraries
+library(tidyverse)
+library(readxl)
+library(writexl)
+
+# Set working directory to your data folder
+# Adjust this path to match your directory structure
+base_path <- "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/24/"
+
+# Function to safely read files (handles both CSV and Excel formats)
+safe_read_file <- function(file_path) {
+  tryCatch({
+    # Check file extension
+    file_ext <- tools::file_ext(file_path)
+    
+    if (file_ext %in% c("csv", "CSV")) {
+      # Try different encodings for CSV files
+      df <- tryCatch({
+        read.csv(file_path, stringsAsFactors = FALSE, encoding = "UTF-8")
+      }, error = function(e) {
+        tryCatch({
+          read.csv(file_path, stringsAsFactors = FALSE, encoding = "latin1")
+        }, error = function(e2) {
+          read.csv(file_path, stringsAsFactors = FALSE)
+        })
+      })
+    } else if (file_ext %in% c("xlsx", "xls", "XLSX", "XLS")) {
+      # For Excel files, read the first sheet by default
+      df <- read_excel(file_path, sheet = 1)
+    } else {
+      warning(paste("Unknown file format for:", basename(file_path)))
+      return(NULL)
+    }
+    
+    # Add municipality identifier based on filename
+    municipality <- extract_municipality_name(basename(file_path))
+    df$municipality <- municipality
+    df$source_file <- basename(file_path)
+    
+    # Standardize column names (convert to lowercase, replace spaces with underscores)
+    names(df) <- tolower(gsub("[^A-Za-z0-9]", "_", names(df)))
+    names(df) <- gsub("_+", "_", names(df))  # Remove multiple underscores
+    names(df) <- gsub("^_|_$", "", names(df))  # Remove leading/trailing underscores
+    
+    return(df)
+    
+  }, error = function(e) {
+    warning(paste("Failed to read file:", basename(file_path), "- Error:", e$message))
+    return(NULL)
+  })
+}
+
+# Function to extract municipality name from filename
+extract_municipality_name <- function(filename) {
+  # Remove file extension
+  name <- tools::file_path_sans_ext(filename)
+  
+  # Try to extract municipality name (usually appears after "COMPUTOS" or similar)
+  # This is a basic extraction - you might need to adjust based on your filename patterns
+  if (grepl("COMPUTOS", name, ignore.case = TRUE)) {
+    # Split by spaces and look for the word after "COMPUTOS"
+    parts <- strsplit(name, "\\s+")[[1]]
+    computos_index <- grep("COMPUTOS", parts, ignore.case = TRUE)
+    if (length(computos_index) > 0 && computos_index[1] < length(parts)) {
+      return(toupper(parts[computos_index[1] + 1]))
+    }
+  }
+  
+  # Fallback: return the first word of the filename
+  first_word <- strsplit(name, "\\s+")[[1]][1]
+  return(toupper(gsub("[^A-Za-z]", "", first_word)))
+}
+
+# Function to find and process all election files
+process_morelos_elections <- function(directory_path) {
+  cat("Looking for election files in:", directory_path, "\n")
+  
+  # Find all CSV and Excel files
+  file_patterns <- c("*.csv", "*.CSV", "*.xlsx", "*.xls", "*.XLSX", "*.XLS")
+  all_files <- c()
+  
+  for (pattern in file_patterns) {
+    files <- list.files(directory_path, pattern = glob2rx(pattern), 
+                        full.names = TRUE, recursive = TRUE)
+    all_files <- c(all_files, files)
+  }
+  
+  if (length(all_files) == 0) {
+    stop("No CSV or Excel files found in the specified directory")
+  }
+  
+  cat("Found", length(all_files), "files:\n")
+  for (file in all_files) {
+    cat("  -", basename(file), "\n")
+  }
+  
+  # Read all files
+  cat("\nReading files...\n")
+  all_data <- list()
+  
+  for (i in seq_along(all_files)) {
+    cat("Processing file", i, "of", length(all_files), ":", basename(all_files[i]), "\n")
+    df <- safe_read_file(all_files[i])
+    
+    if (!is.null(df) && nrow(df) > 0) {
+      all_data[[i]] <- df
+    }
+  }
+  
+  # Remove NULL entries
+  all_data <- all_data[!sapply(all_data, is.null)]
+  
+  if (length(all_data) == 0) {
+    stop("No data could be read from any files")
+  }
+  
+  cat("Successfully read", length(all_data), "files\n")
+  
+  # Check column compatibility before binding
+  cat("\nChecking column compatibility...\n")
+  all_columns <- unique(unlist(lapply(all_data, names)))
+  
+  # Show column summary
+  column_counts <- table(unlist(lapply(all_data, names)))
+  cat("Column frequency across files:\n")
+  print(sort(column_counts, decreasing = TRUE))
+  
+  # Standardize columns - add missing columns as NA
+  for (i in seq_along(all_data)) {
+    missing_cols <- setdiff(all_columns, names(all_data[[i]]))
+    if (length(missing_cols) > 0) {
+      for (col in missing_cols) {
+        all_data[[i]][[col]] <- NA
+      }
+    }
+    # Reorder columns to match
+    all_data[[i]] <- all_data[[i]][all_columns]
+  }
+  
+  # Combine all data
+  cat("\nCombining data...\n")
+  combined_data <- bind_rows(all_data)
+  
+  cat("Combined dataset dimensions:", nrow(combined_data), "rows x", ncol(combined_data), "columns\n")
+  cat("Municipalities included:", paste(unique(combined_data$municipality), collapse = ", "), "\n")
+  
+  return(combined_data)
+}
+
+# Main execution
+cat("=== Morelos Municipal Elections Data Processor ===\n\n")
+
+# Process all files
+combined_elections <- process_morelos_elections(base_path)
+
+# Show summary statistics
+cat("\n=== DATA SUMMARY ===\n")
+cat("Total records:", nrow(combined_elections), "\n")
+cat("Total columns:", ncol(combined_elections), "\n")
+cat("Municipalities:", length(unique(combined_elections$municipality)), "\n")
+cat("Source files:", length(unique(combined_elections$source_file)), "\n")
+
+# Display first few rows
+cat("\n=== SAMPLE DATA ===\n")
+print(head(combined_elections, 3))
+
+# Save the combined dataset
+output_csv <- file.path(dirname(base_path), "morelos_elections_combined.csv")
+
+cat("\n=== SAVING RESULTS ===\n")
+
+# Save as CSV
+write.csv(combined_elections, output_csv, row.names = FALSE, fileEncoding = "UTF-8")
+cat("CSV saved to:", output_csv, "\n")
+
+summary_file <- file.path(dirname(base_path), "processing_summary.csv")
+write.csv(summary_stats, summary_file, row.names = FALSE)
+cat("Processing summary saved to:", summary_file, "\n")
+
+cat("\n=== PROCESS COMPLETED SUCCESSFULLY ===\n")
+
+# Load the 2024 dataset
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/morelos_2024_combined.csv") %>% 
+  dplyr::mutate(seccion = as.numeric(seccion)) %>% 
+  dplyr::filter(seccion > 0)
+
+names(data_2024)
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(section = seccion,
+                listanominal = l_nominal,
+                total = tot_votos,
+                no_reg = no_registrados,
+                nulos = num_votos_nulos,
+                PAN = pan,
+                PRI = pri,
+                PRD = prd,
+                PVEM = pvem,
+                PT = pt,
+                MC = mc,
+                MORENA = morena,
+                PANAL = na,
+                PES = pes,
+                MAS = mas,
+                MP = progresa,
+                RSP = rsp,
+                PAN_PRI_PRD_RSP = c_pan_pri_prd_rsp,
+                MORENA_NA_PES_MAS = c_morena_na_pes_mas,
+                PAN_PRI_PRD = c_pan_pri_prd,
+                PAN_PRI_RSP = c_pan_pri_rsp,
+                PAN_PRD_RSP = c_pan_prd_rsp,
+                PRI_PRD_RSP = c_pri_prd_rsp,
+                MORENA_PANAL_PES = c_morena_na_pes,
+                MORENA_PANAL_MAS = c_morena_na_mas,
+                MORENA_PES_MAS = c_morena_pes_mas,
+                PANAL_PES_MAS = c_na_pes_mas,
+                PAN_PRI = c_pan_pri,
+                PAN_PRD = c_pan_prd,
+                PAN_RSP = c_pan_rsp,
+                PRI_PRD = c_pri_prd,
+                PRI_RSP = c_pri_rsp,
+                PRD_RSP = c_prd_rsp,
+                MORENA_PANAL = c_morena_na,
+                MORENA_PES = c_morena_pes,
+                MORENA_MAS = c_morena_mas,
+                PANAL_PES = c_na_pes,
+                NA_MAS = c_na_mas,
+                PES_MAS = c_pes_mas,
+                MC_MP = c_mc_progresa,
+                CI_1 = cand_ind_luis_armando_jaime_maldonado,
+                CI_2 = cand_ind_andres_tapia_franco,
+                CI_3 = cand_ind_perseo_quiroz_rendon) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    municipality = case_when(
+      municipality == "COATLÁN" ~ "COATLAN DEL RIO",
+      municipality == "EMILIANO" ~ "EMILIANO ZAPATA",
+      municipality == "PUENTE" ~ "PUENTE DE IXTLA",
+      municipality == "TEPOZTLÁN" ~ "TEPOZTLAN",
+      municipality == "TETELA" ~ "TETELA DEL VOLCAN",
+      municipality == "TLALTIZAPÁN" ~ "TLALTIZAPAN",
+      municipality == "TOTOLAPÁN" ~ "TOTOLAPAN", 
+      municipality == "ZACUALPÁN" ~ "ZACUALPAN",
+      TRUE ~ municipality
+    )
+  )
+
+# Generate uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality=="AMACUZAC" ~ 17001,
+      municipality=="ATLATLAHUCAN" ~ 17002,
+      municipality=="AXOCHIAPAN" ~ 17003,
+      municipality=="AYALA" ~ 17004,
+      municipality=="COATLAN DEL RIO" ~ 17005,
+      municipality=="CUAUTLA" ~ 17006,
+      municipality=="CUERNAVACA" ~ 17007,
+      municipality=="EMILIANO ZAPATA" ~ 17008,
+      municipality=="HUITZILAC" ~ 17009,
+      municipality=="JANTETELCO" ~ 17010,
+      municipality=="JIUTEPEC" ~ 17011,
+      municipality=="JOJUTLA" ~ 17012,
+      municipality=="JONACATEPEC" ~ 17013,
+      municipality=="MAZATEPEC" ~ 17014,
+      municipality=="MIACATLAN" ~ 17015,
+      municipality=="OCUITUCO" ~ 17016,
+      municipality=="PUENTE DE IXTLA" ~ 17017,
+      municipality=="TEMIXCO" ~ 17018,
+      municipality=="TEMOAC" ~ 17033,
+      municipality=="TEPALCINGO" ~ 17019,
+      municipality=="TEPOZTLAN" ~ 17020,
+      municipality=="TETECALA" ~ 17021,
+      municipality=="TETELA DEL VOLCAN" ~ 17022,
+      municipality=="TLALNEPANTLA" ~ 17023,
+      municipality=="TLALTIZAPAN" ~ 17024,
+      municipality=="TLAQUILTENANGO" ~ 17025,
+      municipality=="TLAYACAPAN" ~ 17026,
+      municipality=="TOTOLAPAN" ~ 17027,
+      municipality=="XOCHITEPEC" ~ 17028,
+      municipality=="YAUTEPEC" ~ 17029,
+      municipality=="YECAPIXTLA" ~ 17030,
+      municipality=="ZACATEPEC" ~ 17031,
+      municipality=="ZACUALPAN" ~ 17032,
+      TRUE ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:PRD_RSP, MORENA_NA_PES_MAS:CI_3, no_reg:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    valid = sum(c_across(PAN:CI_3), na.rm = TRUE),
+    turnout = total/listanominal,
+    year = 2024,
+    month = "June"
+  )
+
 # Combine the dataframes, handling different columns by filling with NA
 morelos_all <- bind_rows(df_1997,
-                           df_2000,
-                           df_2001,#extraordinary
-                           df_2003,
-                           df_2006,
-                           df_2009,
-                           df_2012,
-                           df_2015,
-                         df_2018_collapsed) %>% 
+                         df_2000,
+                         df_2001,#extraordinary
+                         df_2003,
+                         df_2006,
+                         df_2009,
+                         df_2012,
+                         df_2015,
+                         df_2018_collapsed,
+                         collapsed_2021,
+                         collapsed_2024) %>% 
   dplyr::select(-c(day,month,state,noregistrados,nulos,STATE)) %>% 
   dplyr::mutate(turnout = ifelse(listanominal == 0, NA, turnout))
 

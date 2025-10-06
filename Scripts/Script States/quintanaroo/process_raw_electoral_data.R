@@ -30,14 +30,14 @@ setwd(file.path(script_dir, ""))
 
 
 # 1) 
-df <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 ##############################################################################
 # 1) AYUNTAMIENTO 1999
 ##############################################################################
 # Equivalent to: insheet using Ayu_Seccion_1999.csv, clear
 
-df_1999 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018/Ayu_Seccion_1999.csv") 
+df_1999 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_1999.csv") 
 colnames(df_1999) <- tolower(colnames(df_1999))
 df_1999 <- df_1999 %>%
   # rename municipio -> municipality, seccion -> section
@@ -162,7 +162,7 @@ df_1999 <- df_1999[order(df_1999$section), ]
 ##############################################################################
 # 2) AYUNTAMIENTO 2002
 ##############################################################################
-df_2002 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018/Ayu_Seccion_2002_No_Municipios.csv")
+df_2002 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2002_No_Municipios.csv")
 colnames(df_2002) <- tolower(colnames(df_2002))
 
 df_2002 <- df_2002 %>%
@@ -254,7 +254,7 @@ df_2002 <- df_2002 %>%
 ##############################################################################
 # 3) AYUNTAMIENTO 2005
 ##############################################################################
-df_2005 <- fread("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018/Ayu_Seccion_2005_No_Municipios.csv",
+df_2005 <- fread("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2005_No_Municipios.csv",
                  encoding = "Latin-1") 
 # Remove "-" and spaces
 colnames(df_2005) <- tolower(colnames(df_2005))
@@ -326,7 +326,7 @@ df_2005 <- df_2005 %>%
 ##############################################################################
 # 4) AYUNTAMIENTO 2008
 ##############################################################################
-df_2008 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018/Ayu_Seccion_2008.csv") 
+df_2008 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2008.csv") 
 # Remove "-" and spaces
 colnames(df_2008) <- tolower(colnames(df_2008))
 names(df_2008) <- gsub("[- ]", "", names(df_2008))
@@ -399,7 +399,7 @@ df_2008 <- df_2008 %>%
 ##############################################################################
 # 5) Tulum Extraordinario 2009
 ##############################################################################
-df_2009 <- read_xlsx("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018/Tulum Extraordinario 2009.xlsx") %>%
+df_2009 <- read_xlsx("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Tulum Extraordinario 2009.xlsx") %>%
   rename(section = Sección) %>%
   filter(section != "", section != "TOTALES")
 names(df_2009) <- gsub("[- ]", "", names(df_2009))
@@ -439,7 +439,7 @@ df_2009 <- df_2009 %>%
 ##############################################################################
 # 6) AYUNTAMIENTO 2010
 ##############################################################################
-df_2010 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018/Ayu_Seccion_2010.csv") 
+df_2010 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2010.csv") 
 names(df_2010) <- gsub("[- ]", "", names(df_2010))
 colnames(df_2010) <- tolower(colnames(df_2010))
 
@@ -551,7 +551,7 @@ all_data <- bind_rows(
 ##############################################################################
 
 # --- Step 1: Read each sheet from "Ayuntamientos_QRoo_2016.xlsx" ---
-excel_file_2016 <- "../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018/Ayuntamientos_QRoo_2016.xlsx"
+excel_file_2016 <- "../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayuntamientos_QRoo_2016.xlsx"
 
 # 1) Identify all sheet names
 sheet_names_2016 <- excel_sheets(excel_file_2016)
@@ -795,7 +795,142 @@ all_2018 <- all_2018 %>%
   mutate(turnout = total / listanominal)
 
 
-final_data <- bind_rows(all_data,all_2016, all_2018)
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset from the excel
+data_2021 <- read_delim("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/21/QROO_AYUN_2021.csv", skip = 3, delim = "|")
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS_CALCULADO,
+                no_reg = NO_REGISTRADOS,
+                nulos = NULOS,
+                FXM = FMEX) %>%
+  rename_with(~ gsub("CAND_IND", "CI", .x)) %>% 
+  rename_with(~ gsub("C_", "", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section),
+    across(PAN:listanominal, as.numeric)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "BENITO JUAREZ"           ~ 23005,
+      municipality == "COZUMEL"                 ~ 23001,
+      municipality == "FELIPE C. PUERTO"  ~ 23002,
+      municipality == "ISLA MUJERES"            ~ 23003,
+      municipality == "JOSE MA. MORELOS"      ~ 23006,
+      municipality == "LAZARO CARDENAS "         ~ 23007,
+      municipality == "OTHON P. BLANCO "         ~ 23004,
+      municipality == "SOLIDARIDAD"             ~ 23008,
+      municipality == "TULUM"                   ~ 23009,
+      municipality == "BACALAR" ~ 23010,
+      municipality == "PUERTO MORELOS" ~ 23011,
+      TRUE                                      ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:MORENA_MAS), na.rm = TRUE),
+    year = 2021,
+    month = "June"
+  )
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset from the excel
+data_2024 <- read_delim("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/24/QROO_AYUN_2024.csv", skip = 3, delim = "|")
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO_LOCAL,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL,
+                no_reg = NO_REGISTRADAS,
+                nulos = NULOS,
+                CI_1 = CAND_IND) %>%
+  rename_with(~ gsub("C_", "", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(str_extract(section, "\\d+")),
+    across(PAN:listanominal, as.numeric)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "BENITO JUAREZ"           ~ 23005,
+      municipality == "COZUMEL"                 ~ 23001,
+      municipality == "FELIPE CARRILLO PUERTO"  ~ 23002,
+      municipality == "ISLA MUJERES"            ~ 23003,
+      municipality == "JOSE MARIA MORELOS"      ~ 23006,
+      municipality == "LAZARO CARDENAS "         ~ 23007,
+      municipality == "OTHON P. BLANCO "         ~ 23004,
+      municipality == "SOLIDARIDAD"             ~ 23008,
+      municipality == "TULUM"                   ~ 23009,
+      municipality == "BACALAR" ~ 23010,
+      municipality == "PUERTO MORELOS" ~ 23011,
+      TRUE                                      ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:PT_MORENA), na.rm = TRUE),
+    year = 2024,
+    month = "June"
+  )
+
+
+final_data <- bind_rows(all_data,all_2016, all_2018, collapsed_2021, collapsed_2024)
 
 data.table::fwrite(final_data,"../../../Processed Data/quintanaroo/quintanaroo_process_raw_data.csv")
-

@@ -27,7 +27,7 @@ setwd(file.path(script_dir, ""))
 ###############################################################################
 # 1) Read CSV (equivalent to: insheet using Ayu_Seccion_1994_No_LN.csv, clear)
 ###############################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1994_No_LN.csv",
+df <- read_csv("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1994_No_LN.csv",
                show_col_types = FALSE)  # adjust path if needed
 colnames(df) <- tolower(colnames(df))
 ###############################################################################
@@ -234,7 +234,7 @@ df_1994 <- df_merged %>%
 ###############################################################################
 # 1) Read CSV (equivalent to: insheet using Ayu_Seccion_1997_No_LN.csv, clear)
 ###############################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 ###############################################################################
 # 2) Rename columns (municipio -> municipality, seccion -> section)
@@ -439,7 +439,7 @@ df_1997 <- df_merged %>%
 # 1) Read Excel file (equivalent to "import excel ..., clear firstrow case(lower)")
 #    Adjust path/filename as needed.
 ################################################################################
-df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000.xlsx", skip = 0) %>%
+df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000.xlsx", skip = 0) %>%
   rename_all(tolower)
 names(df)
 ################################################################################
@@ -617,7 +617,7 @@ df_2000 <- df_collapsed %>%
 ################################################################################
 # 1) Read CSV 
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 ################################################################################
 # 2) Rename variables (municipio -> municipality, casilla -> section)
@@ -888,7 +888,7 @@ df_2003 <- df_collapsed %>%
 ################################################################################
 # 1) Read Excel file
 ################################################################################
-df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006.xlsx") %>%
+df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.xlsx") %>%
   # If you want all column names to be lowercase, uncomment below:
   # rename_all(tolower) %>%
   as.data.frame()  # optional, to ensure a regular data frame
@@ -1060,7 +1060,7 @@ df_2006 <- df_collapsed %>%
 # 1) Read Excel file, dropping unused columns (DISTRITO, CASILLA),
 #    rename columns, and drop empty municipality rows
 ###############################################################################
-df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/CASILLAS_AYUNTAMIENTOS_2012.xlsx",
+df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/CASILLAS_AYUNTAMIENTOS_2012.xlsx",
                  sheet = "ELECCION AYUNTAMIENTO",
                  col_types = "text")
 
@@ -1302,7 +1302,7 @@ df_2012 <- df_collapsed %>%
 ################################################################################
 # 1) Read Excel
 ################################################################################
-df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/ComputoMpalAyuntamiento2015_casilla.xlsx",
+df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/ComputoMpalAyuntamiento2015_casilla.xlsx",
                  sheet = "RES. CASILLA MUNICIPIOS")
 
 # Remove "-" and spaces
@@ -1540,7 +1540,7 @@ df_2015 <- df_merged %>%
 ###############################################################################
 # 1) Read Excel
 ###############################################################################
-df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx", sheet = "Sheet1") %>%
+df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx", sheet = "Sheet1") %>%
   select(-any_of("uniqueid"))
 
 ###############################################################################
@@ -1753,6 +1753,287 @@ df_2018 <- df_collapsed %>%
     STATE = "SONORA"
   )
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset from the excel
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/TABLA_DE_RESULTADOS_AYUNTAMIENTO.xlsx", skip = 1)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = municipio,
+                section = id_seccion,
+                listanominal = lista_nominal,
+                total = total_votos,
+                no_reg = num_votos_can_nreg,
+                nulos = num_votos_nulos,
+                valid = numero_votos_validos,
+                CC_PRI_PAN_PRD = "VA X SONORA",
+                MC = "MOVIMIENTO CIUDADANO",
+                PES = "PARTIDO ENCUENTRO SOLIDARIO",
+                RSP = "REDES SOCIALES PROGRESISTAS",
+                FXM = "FUERZA POR MEXICO",
+                PANAL = "PARTIDO NUEVA ALIANZA",
+                PRI = "PARTIDO REVOLUCIONARIO INSTITUCIONAL",
+                PVEM = "PARTIDO VERDE ECOLOGISTA DE MEXICO",
+                PT = "PARTIDO DEL TRABAJO",
+                PRD = "PARTIDO DE LA REVOLUCION DEMOCRATICA",
+                MORENA = "MORENA",
+                PAN = "PARTIDO ACCION NACIONAL",
+                CI_1 = "Edmundo Gamez Lopez",
+                CI_2 = "Jehovany Andres Urias Ramos",
+                CI_3 = "Omar Ortez Guerrero",
+                CI_4 = "Jose Rodrigo Robinson Bours",
+                CI_5 = "Clemente Neyoy Yocupicio",
+                CI_6 = "Carlos Alberto Quiroz Romo",
+                CI_7 = "Hector Juan Salcido Alvarez",
+                CI_8 = "Yadira Catalina Cota Lugo",
+                CI_9 = "Eduardo Quiroga Jimenez",
+                CI_10 = "Pedro Morghen Rivera") %>%
+  rename_with(~ gsub("-", "_", .x)) %>%
+  rename_with(~ gsub("COALICION ", "", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "ACONCHI"                      ~ 26001,
+      municipality == "AGUA PRIETA"                 ~ 26002,
+      municipality == "ALAMOS"                      ~ 26003,
+      municipality == "ALTAR"                       ~ 26004,
+      municipality == "ARIVECHI"                    ~ 26005,
+      municipality == "ARIZPE"                      ~ 26006,
+      municipality == "ATIL"                        ~ 26007,
+      municipality == "BACADEHUACHI"                ~ 26008,
+      municipality == "BACANORA"                    ~ 26009,
+      municipality == "BACERAC"                     ~ 26010,
+      municipality == "BACOACHI"                    ~ 26011,
+      municipality == "BACUM"                       ~ 26012,
+      municipality == "BANAMICHI"                   ~ 26013,
+      municipality == "BAVIACORA"                   ~ 26014,
+      municipality == "BAVISPE"                     ~ 26015,
+      municipality == "BENITO JUAREZ"               ~ 26071,
+      municipality == "BENJAMIN HILL"               ~ 26016,
+      municipality == "CABORCA"                     ~ 26017,
+      municipality == "CAJEME"                      ~ 26018,
+      municipality == "CANANEA"                     ~ 26019,
+      municipality == "CARBO"                       ~ 26020,
+      municipality == "CUCURPE"                     ~ 26022,
+      municipality == "CUMPAS"                      ~ 26023,
+      municipality == "DIVISADEROS"                 ~ 26024,
+      municipality == "EMPALME"                     ~ 26025,
+      municipality == "ETCHOJOA"                    ~ 26026,
+      municipality == "FRONTERAS"                   ~ 26027,
+      municipality == "GENERAL PLUTARCO ELIAS CALLES" ~ 26070,
+      municipality == "GRANADOS"                    ~ 26028,
+      municipality == "GUAYMAS"                     ~ 26029,
+      municipality == "HERMOSILLO"                  ~ 26030,
+      municipality == "HUACHINERA"                  ~ 26031,
+      municipality == "HUASABAS"                    ~ 26032,
+      municipality == "HUATABAMPO"                  ~ 26033,
+      municipality == "HUEPAC"                      ~ 26034,
+      municipality == "IMURIS"                      ~ 26035,
+      municipality == "LA COLORADA"                 ~ 26021,
+      municipality == "MAGDALENA"                   ~ 26036,
+      municipality == "MAZATAN"                     ~ 26037,
+      municipality == "MOCTEZUMA"                   ~ 26038,
+      municipality == "NACO"                        ~ 26039,
+      municipality == "NACORI CHICO"                ~ 26040,
+      municipality == "NACOZARI DE GARCIA"          ~ 26041,
+      municipality == "NAVOJOA"                     ~ 26042,
+      municipality == "NOGALES"                     ~ 26043,
+      municipality == "ONAVAS"                      ~ 26044,
+      municipality == "OPODEPE"                     ~ 26045,
+      municipality == "OQUITOA"                     ~ 26046,
+      municipality == "PITIQUITO"                   ~ 26047,
+      municipality == "PUERTO PENASCO"              ~ 26048,
+      municipality == "QUIRIEGO"                    ~ 26049,
+      municipality == "RAYON"                       ~ 26050,
+      municipality == "ROSARIO"                     ~ 26051,
+      municipality == "SAHUARIPA"                   ~ 26052,
+      municipality == "SAN FELIPE DE JESUS"         ~ 26053,
+      municipality == "SAN IGNACIO RIO MUERTO"      ~ 26072,
+      municipality == "SAN JAVIER"                  ~ 26054,
+      municipality == "SAN LUIS RIO COLORADO"       ~ 26055,
+      municipality == "SAN MIGUEL DE HORCASITAS"    ~ 26056,
+      municipality == "SAN PEDRO DE LA CUEVA"       ~ 26057,
+      municipality == "SANTA ANA"                   ~ 26058,
+      municipality == "SANTA CRUZ"                  ~ 26059,
+      municipality == "SARIC"                       ~ 26060,
+      municipality == "SOYOPA"                      ~ 26061,
+      municipality == "SUAQUI GRANDE"               ~ 26062,
+      municipality == "TEPACHE"                     ~ 26063,
+      municipality == "TRINCHERAS"                  ~ 26064,
+      municipality == "TUBUTAMA"                    ~ 26065,
+      municipality == "URES"                        ~ 26066,
+      municipality == "VILLA HIDALGO"               ~ 26067,
+      municipality == "VILLA PESQUEIRA"             ~ 26068,
+      municipality == "YECORA"                      ~ 26069,
+      TRUE                                         ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:total), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2021,
+    month =  "June"
+  )
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset from the excel
+data_2024 <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/TABLA_DE_RESULTADOS_AYUNTAMIENTO_2024_mod.xlsx", skip = 1)
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NUM_VOTOS_CAN_NREG,
+                nulos = NUM_VOTOS_NULOS,
+                valid = NUM_VOTOS_VALIDOS) %>%
+  rename_with(~ gsub("CAND_IND", "CI_", .x)) %>%
+  rename_with(~ gsub("C_", "CC_", .x)) %>% 
+  rename_with(~ gsub("NAS", "PANAL", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    municipality = case_when(
+      str_starts(municipality, "PUERTO PE") ~ "PUERTO PENASCO",
+      TRUE ~ municipality
+    ),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "ACONCHI"                      ~ 26001,
+      municipality == "AGUA PRIETA"                 ~ 26002,
+      municipality == "ALAMOS"                      ~ 26003,
+      municipality == "ALTAR"                       ~ 26004,
+      municipality == "ARIVECHI"                    ~ 26005,
+      municipality == "ARIZPE"                      ~ 26006,
+      municipality == "ATIL"                        ~ 26007,
+      municipality == "BACADEHUACHI"                ~ 26008,
+      municipality == "BACANORA"                    ~ 26009,
+      municipality == "BACERAC"                     ~ 26010,
+      municipality == "BACOACHI"                    ~ 26011,
+      municipality == "BACUM"                       ~ 26012,
+      municipality == "BANAMICHI"                   ~ 26013,
+      municipality == "BAVIACORA"                   ~ 26014,
+      municipality == "BAVISPE"                     ~ 26015,
+      municipality == "BENITO JUAREZ"               ~ 26071,
+      municipality == "BENJAMIN HILL"               ~ 26016,
+      municipality == "CABORCA"                     ~ 26017,
+      municipality == "CAJEME"                      ~ 26018,
+      municipality == "CANANEA"                     ~ 26019,
+      municipality == "CARBO"                       ~ 26020,
+      municipality == "CUCURPE"                     ~ 26022,
+      municipality == "CUMPAS"                      ~ 26023,
+      municipality == "DIVISADEROS"                 ~ 26024,
+      municipality == "EMPALME"                     ~ 26025,
+      municipality == "ETCHOJOA"                    ~ 26026,
+      municipality == "FRONTERAS"                   ~ 26027,
+      municipality == "GENERAL PLUTARCO ELIAS CALLES" ~ 26070,
+      municipality == "GRANADOS"                    ~ 26028,
+      municipality == "GUAYMAS"                     ~ 26029,
+      municipality == "HERMOSILLO"                  ~ 26030,
+      municipality == "HUACHINERA"                  ~ 26031,
+      municipality == "HUASABAS"                    ~ 26032,
+      municipality == "HUATABAMPO"                  ~ 26033,
+      municipality == "HUEPAC"                      ~ 26034,
+      municipality == "IMURIS"                      ~ 26035,
+      municipality == "LA COLORADA"                 ~ 26021,
+      municipality == "MAGDALENA"                   ~ 26036,
+      municipality == "MAZATAN"                     ~ 26037,
+      municipality == "MOCTEZUMA"                   ~ 26038,
+      municipality == "NACO"                        ~ 26039,
+      municipality == "NACORI CHICO"                ~ 26040,
+      municipality == "NACOZARI DE GARCIA"          ~ 26041,
+      municipality == "NAVOJOA"                     ~ 26042,
+      municipality == "NOGALES"                     ~ 26043,
+      municipality == "ONAVAS"                      ~ 26044,
+      municipality == "OPODEPE"                     ~ 26045,
+      municipality == "OQUITOA"                     ~ 26046,
+      municipality == "PITIQUITO"                   ~ 26047,
+      municipality == "PUERTO PENASCO"              ~ 26048,
+      municipality == "QUIRIEGO"                    ~ 26049,
+      municipality == "RAYON"                       ~ 26050,
+      municipality == "ROSARIO"                     ~ 26051,
+      municipality == "SAHUARIPA"                   ~ 26052,
+      municipality == "SAN FELIPE DE JESUS"         ~ 26053,
+      municipality == "SAN IGNACIO RIO MUERTO"      ~ 26072,
+      municipality == "SAN JAVIER"                  ~ 26054,
+      municipality == "SAN LUIS RIO COLORADO"       ~ 26055,
+      municipality == "SAN MIGUEL DE HORCASITAS"    ~ 26056,
+      municipality == "SAN PEDRO DE LA CUEVA"       ~ 26057,
+      municipality == "SANTA ANA"                   ~ 26058,
+      municipality == "SANTA CRUZ"                  ~ 26059,
+      municipality == "SARIC"                       ~ 26060,
+      municipality == "SOYOPA"                      ~ 26061,
+      municipality == "SUAQUI GRANDE"               ~ 26062,
+      municipality == "TEPACHE"                     ~ 26063,
+      municipality == "TRINCHERAS"                  ~ 26064,
+      municipality == "TUBUTAMA"                    ~ 26065,
+      municipality == "URES"                        ~ 26066,
+      municipality == "VILLA HIDALGO"               ~ 26067,
+      municipality == "VILLA PESQUEIRA"             ~ 26068,
+      municipality == "YECORA"                      ~ 26069,
+      TRUE                                         ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2024,
+    month =  "June"
+  )
+
 # Combine the dataframes, handling different columns by filling with NA
 SONORA_all <- bind_rows(df_1994,
                         df_1997,
@@ -1762,9 +2043,8 @@ SONORA_all <- bind_rows(df_1994,
                         df_2009,
                         df_2012,
                         df_2015,
-                        df_2018)
+                        df_2018,
+                        collapsed_2021,
+                        collapsed_2024)
 
 data.table::fwrite(SONORA_all,"../../../Processed Data/sonora/sonora_process_raw_data.csv")
-
-
-

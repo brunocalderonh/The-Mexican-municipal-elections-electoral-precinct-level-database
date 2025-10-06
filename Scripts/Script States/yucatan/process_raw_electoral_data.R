@@ -27,7 +27,7 @@ setwd(file.path(script_dir, ""))
 ###############################################################################
 # 1) Read CSV
 ###############################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_1995.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_1995.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
 
@@ -232,7 +232,7 @@ df_1995 <- df_collapsed %>%
 ################################################################################
 # 1) Read CSV (Equivalent to: insheet using "Ayu_Seccion_1998_No_LN.csv", clear)
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_1998_No_LN.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_1998_No_LN.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
 ################################################################################
@@ -470,7 +470,7 @@ df_1998 <- df_merged %>%
 ################################################################################
 # 1) Read CSV (Equivalent to insheet using "Ayu_Seccion_2001.csv", clear)
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_2001.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2001.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
 ################################################################################
@@ -754,7 +754,7 @@ df_2001 <- df_collapsed %>%
 ################################################################################
 # 1) Read CSV (Equivalent to: insheet using "Ayu_Seccion_2004.csv", clear)
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_2004.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2004.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
 ################################################################################
@@ -961,7 +961,7 @@ df_2004 <- df_collapsed %>%
 ################################################################################
 # 1) Read CSV (equivalent to insheet using "Ayu_Seccion_2007.csv", clear)
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_2007.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2007.csv", show_col_types = FALSE)
 names(df) <- gsub("[. ]", "", names(df))
 colnames(df) <- tolower(colnames(df))
 ################################################################################
@@ -1175,7 +1175,7 @@ df_2007 <- df_collapsed %>%
 ################################################################################
 # 1) Read CSV (Equivalent to insheet using "Ayu_Seccion_2010.csv", clear)
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_2010.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2010.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
 ################################################################################
@@ -1398,7 +1398,7 @@ df_2010 <- df_collapsed %>%
 #    (Equivalent to: import excel "Coaltion_2012.xlsx", sheet("Sheet1") firstrow clear)
 ################################################################################
 df_coalition <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Coaltion_2012.xlsx",
+  path = "../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Coaltion_2012.xlsx",
   sheet = "Sheet1",
   col_names = TRUE
 ) %>%
@@ -1441,7 +1441,7 @@ df_coalition <- df_coalition %>%
 #    (Equivalent to: import excel "Ayu_Seccion_2012.xlsx", sheet("Sheet1") firstrow clear)
 ################################################################################
 df_main <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_2012.xlsx",
+  path = "../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.xlsx",
   sheet = "Sheet1",
   col_names = TRUE
 ) %>%
@@ -1744,7 +1744,7 @@ df_2012 <- df_collapsed %>%
 #    rename CC* -> comun*, and save "merge.dta"
 ################################################################################
 df_communal <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/communal candidates 2015.xlsx",
+  path = "../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/communal candidates 2015.xlsx",
   sheet = "Ayuntamientos",
   col_names = TRUE
 ) %>%
@@ -1760,7 +1760,7 @@ names(df_communal) <- sub("^CC", "comun", names(df_communal))
 #                   erase "merge.dta")
 ################################################################################
 df_main <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayuntamientos_Yuc_2015.xlsx",
+  path = "../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayuntamientos_Yuc_2015.xlsx",
   sheet = "REGIDORES",
   col_names = TRUE
 ) %>%
@@ -2052,7 +2052,7 @@ df_2015 <- df_merged2 %>%
 #    rename municipality codes, then collapse
 ################################################################################
 df_main <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayuntamientos_Yuc_2018.xlsx",
+  path = "../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayuntamientos_Yuc_2018.xlsx",
   sheet = "RESULTADOS",
   col_names = TRUE
 ) %>%
@@ -2189,7 +2189,7 @@ df_main <- df_main %>%
 #    transform them into 0/1, rename, etc. Then we'll merge on municipality
 ################################################################################
 df_regidores <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/computosRegidores2018-130918.xlsx",
+  path = "../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/computosRegidores2018-130918.xlsx",
   sheet = "REGIDURIAS",
   range = "A3:AE109",
   col_names = TRUE
@@ -2399,6 +2399,337 @@ df_2018 <- df_2018 %>%
   dplyr::mutate(PT = ifelse(!is.na(PT_MORENA) & PT_MORENA>0 & PT >0, 0, PT),
                 MORENA = ifelse(!is.na(PT_MORENA) & PT_MORENA>0 & MORENA >0, 0, MORENA))
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset from the excel
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/21/2021_SEE_AYUN_YUC_CAS.xlsx")
+
+# Load Uayma extraordinary election
+data_ext <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/YUC_AYUN_EXT_2021.csv", skip = 5) %>% 
+  dplyr::mutate(ID_MUNICIPIO = as.numeric(ID_MUNICIPIO),
+                SECCION = as.numeric(SECCION))
+
+# Combine datasets
+data_2021 <- bind_rows(data_2021, data_ext)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NUM_VOTOS_CAN_NREG,
+                nulos = NUM_VOTOS_NULOS,
+                valid = NUM_VOTOS_VALIDOS,
+                CI_1 = CAND_IND1) %>%
+  rename_with(~ gsub("NAY", "PANAL", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    PRD_PANAL = coalesce(PRD_PANAL, PRD_PANAL_2),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0) %>% 
+  dplyr::select(c(-PRD_PANAL, -PRD_PANAL_2))
+
+# Assign uniqueid
+data_2021 <- data_2021 %>% 
+  mutate(uniqueid = case_when(
+    municipality == "ABALA"           ~ 31001,
+    municipality == "ACANCEH"         ~ 31002,
+    municipality == "AKIL"            ~ 31003,
+    municipality == "BACA"            ~ 31004,
+    municipality == "BOKOBA"          ~ 31005,
+    municipality == "BUCTZOTZ"        ~ 31006,
+    municipality == "CACALCHEN"       ~ 31007,
+    municipality == "CALOTMUL"        ~ 31008,
+    municipality == "CANSAHCAB"       ~ 31009,
+    municipality == "CANTAMAYEC"      ~ 31010,
+    municipality == "CELESTUN"        ~ 31011,
+    municipality == "CENOTILLO"       ~ 31012,
+    municipality == "CHACSINKIN"      ~ 31016,
+    municipality == "CHANKOM"         ~ 31017,
+    municipality == "CHAPAB"          ~ 31018,
+    municipality == "CHEMAX"          ~ 31019,
+    municipality == "CHICHIMILA"      ~ 31021,
+    municipality == "CHICXULUB PUEBLO"~ 31020,
+    municipality == "CHIKINDZONOT"    ~ 31022,
+    municipality == "CHOCHOLA"        ~ 31023,
+    municipality == "CHUMAYEL"        ~ 31024,
+    municipality == "CONKAL"          ~ 31013,
+    municipality == "CUNCUNUL"        ~ 31014,
+    municipality == "CUZAMA"          ~ 31015,
+    municipality == "DZAN"            ~ 31025,
+    municipality == "DZEMUL"          ~ 31026,
+    municipality == "DZIDZANTUN"      ~ 31027,
+    municipality == "DZILAM DE BRAVO" ~ 31028,
+    municipality == "DZILAM GONZALEZ" ~ 31029,
+    municipality == "DZITAS"          ~ 31030,
+    municipality == "DZONCAUICH"      ~ 31031,
+    municipality == "ESPITA"          ~ 31032,
+    municipality == "HALACHO"         ~ 31033,
+    municipality == "HOCABA"          ~ 31034,
+    municipality == "HOCTUN"          ~ 31035,
+    municipality == "HOMUN"           ~ 31036,
+    municipality == "HUHI"            ~ 31037,
+    municipality == "HUNUCMA"         ~ 31038,
+    municipality == "IXIL"            ~ 31039,
+    municipality == "IZAMAL"          ~ 31040,
+    municipality == "KANASIN"         ~ 31041,
+    municipality == "KANTUNIL"        ~ 31042,
+    municipality == "KAUA"            ~ 31043,
+    municipality == "KINCHIL"         ~ 31044,
+    municipality == "KOPOMA"          ~ 31045,
+    municipality == "MAMA"            ~ 31046,
+    municipality == "MANI"            ~ 31047,
+    municipality == "MAXCANU"         ~ 31048,
+    municipality == "MAYAPAN"         ~ 31049,
+    municipality == "MERIDA"          ~ 31050,
+    municipality == "MOCOCHA"         ~ 31051,
+    municipality == "MOTUL"           ~ 31052,
+    municipality == "MUNA"            ~ 31053,
+    municipality == "MUXUPIP"         ~ 31054,
+    municipality == "OPICHEN"         ~ 31055,
+    municipality == "OXKUTZCAB"       ~ 31056,
+    municipality == "PANABA"          ~ 31057,
+    municipality == "PETO"            ~ 31058,
+    municipality == "PROGRESO"        ~ 31059,
+    municipality == "QUINTANA ROO"    ~ 31060,
+    municipality == "RIO LAGARTOS"    ~ 31061,
+    municipality == "SACALUM"         ~ 31062,
+    municipality == "SAMAHIL"         ~ 31063,
+    municipality == "SAN FELIPE"      ~ 31065,
+    municipality == "SANAHCAT"        ~ 31064,
+    municipality == "SANTA ELENA"     ~ 31066,
+    municipality == "SEYE"            ~ 31067,
+    municipality == "SINANCHE"        ~ 31068,
+    municipality == "SOTUTA"          ~ 31069,
+    municipality == "SUCILA"          ~ 31070,
+    municipality == "SUDZAL"          ~ 31071,
+    municipality == "SUMA"            ~ 31072,
+    municipality == "TAHDZIU"         ~ 31073,
+    municipality == "TAHMEK"          ~ 31074,
+    municipality == "TEABO"           ~ 31075,
+    municipality == "TECOH"           ~ 31076,
+    municipality == "TEKAL DE VENEGAS"~ 31077,
+    municipality == "TEKANTO"         ~ 31078,
+    municipality == "TEKAX"           ~ 31079,
+    municipality == "TEKIT"           ~ 31080,
+    municipality == "TEKOM"           ~ 31081,
+    municipality == "TELCHAC PUEBLO"  ~ 31082,
+    municipality == "TELCHAC PUERTO"  ~ 31083,
+    municipality == "TEMAX"           ~ 31084,
+    municipality == "TEMOZON"         ~ 31085,
+    municipality == "TEPAKAN"         ~ 31086,
+    municipality == "TETIZ"           ~ 31087,
+    municipality == "TEYA"            ~ 31088,
+    municipality == "TICUL"           ~ 31089,
+    municipality == "TIMUCUY"         ~ 31090,
+    municipality == "TINUM"           ~ 31091,
+    municipality == "TIXCACALCUPUL"   ~ 31092,
+    municipality == "TIXKOKOB"        ~ 31093,
+    municipality == "TIXMEHUAC"       ~ 31094,
+    municipality == "TIXPEHUAL"        ~ 31095,
+    municipality == "TIZIMIN"         ~ 31096,
+    municipality == "TUNKAS"          ~ 31097,
+    municipality == "TZUCACAB"        ~ 31098,
+    municipality == "UAYMA"           ~ 31099,
+    municipality == "UCU"             ~ 31100,
+    municipality == "UMAN"            ~ 31101,
+    municipality == "VALLADOLID"      ~ 31102,
+    municipality == "XOCCHEL"         ~ 31103,
+    municipality == "YAXCABA"         ~ 31104,
+    municipality == "YAXKUKUL"        ~ 31105,
+    municipality == "YOBAIN"          ~ 31106,
+    TRUE                               ~ NA
+  ))
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:PRI_PANAL), na.rm = TRUE),
+    year = 2021,
+    month = case_when(
+      municipality == "UAYMA" ~ "November",
+      TRUE ~ "June"
+    ))
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Yucatan 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/24/2024_AYUNTAMIENTO_CASILLA.csv")
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NUM_VOTOS_CAN_NREG,
+                nulos = NUM_VOTOS_NULOS,
+                valid = NUM_VOTOS_VALIDOS) %>%
+  rename_with(~ gsub("NAY", "PANAL", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueid
+data_2024 <- data_2024 %>% 
+  mutate(uniqueid = case_when(
+    municipality == "ABALA"           ~ 31001,
+    municipality == "ACANCEH"         ~ 31002,
+    municipality == "AKIL"            ~ 31003,
+    municipality == "BACA"            ~ 31004,
+    municipality == "BOKOBA"          ~ 31005,
+    municipality == "BUCTZOTZ"        ~ 31006,
+    municipality == "CACALCHEN"       ~ 31007,
+    municipality == "CALOTMUL"        ~ 31008,
+    municipality == "CANSAHCAB"       ~ 31009,
+    municipality == "CANTAMAYEC"      ~ 31010,
+    municipality == "CELESTUN"        ~ 31011,
+    municipality == "CENOTILLO"       ~ 31012,
+    municipality == "CHACSINKIN"      ~ 31016,
+    municipality == "CHANKOM"         ~ 31017,
+    municipality == "CHAPAB"          ~ 31018,
+    municipality == "CHEMAX"          ~ 31019,
+    municipality == "CHICHIMILA"      ~ 31021,
+    municipality == "CHICXULUB PUEBLO"~ 31020,
+    municipality == "CHIKINDZONOT"    ~ 31022,
+    municipality == "CHOCHOLA"        ~ 31023,
+    municipality == "CHUMAYEL"        ~ 31024,
+    municipality == "CONKAL"          ~ 31013,
+    municipality == "CUNCUNUL"        ~ 31014,
+    municipality == "CUZAMA"          ~ 31015,
+    municipality == "DZAN"            ~ 31025,
+    municipality == "DZEMUL"          ~ 31026,
+    municipality == "DZIDZANTUN"      ~ 31027,
+    municipality == "DZILAM DE BRAVO" ~ 31028,
+    municipality == "DZILAM GONZALEZ" ~ 31029,
+    municipality == "DZITAS"          ~ 31030,
+    municipality == "DZONCAUICH"      ~ 31031,
+    municipality == "ESPITA"          ~ 31032,
+    municipality == "HALACHO"         ~ 31033,
+    municipality == "HOCABA"          ~ 31034,
+    municipality == "HOCTUN"          ~ 31035,
+    municipality == "HOMUN"           ~ 31036,
+    municipality == "HUHI"            ~ 31037,
+    municipality == "HUNUCMA"         ~ 31038,
+    municipality == "IXIL"            ~ 31039,
+    municipality == "IZAMAL"          ~ 31040,
+    municipality == "KANASIN"         ~ 31041,
+    municipality == "KANTUNIL"        ~ 31042,
+    municipality == "KAUA"            ~ 31043,
+    municipality == "KINCHIL"         ~ 31044,
+    municipality == "KOPOMA"          ~ 31045,
+    municipality == "MAMA"            ~ 31046,
+    municipality == "MANI"            ~ 31047,
+    municipality == "MAXCANU"         ~ 31048,
+    municipality == "MAYAPAN"         ~ 31049,
+    municipality == "MERIDA"          ~ 31050,
+    municipality == "MOCOCHA"         ~ 31051,
+    municipality == "MOTUL"           ~ 31052,
+    municipality == "MUNA"            ~ 31053,
+    municipality == "MUXUPIP"         ~ 31054,
+    municipality == "OPICHEN"         ~ 31055,
+    municipality == "OXKUTZCAB"       ~ 31056,
+    municipality == "PANABA"          ~ 31057,
+    municipality == "PETO"            ~ 31058,
+    municipality == "PROGRESO"        ~ 31059,
+    municipality == "QUINTANA ROO"    ~ 31060,
+    municipality == "RIO LAGARTOS"    ~ 31061,
+    municipality == "SACALUM"         ~ 31062,
+    municipality == "SAMAHIL"         ~ 31063,
+    municipality == "SAN FELIPE"      ~ 31065,
+    municipality == "SANAHCAT"        ~ 31064,
+    municipality == "SANTA ELENA"     ~ 31066,
+    municipality == "SEYE"            ~ 31067,
+    municipality == "SINANCHE"        ~ 31068,
+    municipality == "SOTUTA"          ~ 31069,
+    municipality == "SUCILA"          ~ 31070,
+    municipality == "SUDZAL"          ~ 31071,
+    municipality == "SUMA"            ~ 31072,
+    municipality == "TAHDZIU"         ~ 31073,
+    municipality == "TAHMEK"          ~ 31074,
+    municipality == "TEABO"           ~ 31075,
+    municipality == "TECOH"           ~ 31076,
+    municipality == "TEKAL DE VENEGAS"~ 31077,
+    municipality == "TEKANTO"         ~ 31078,
+    municipality == "TEKAX"           ~ 31079,
+    municipality == "TEKIT"           ~ 31080,
+    municipality == "TEKOM"           ~ 31081,
+    municipality == "TELCHAC PUEBLO"  ~ 31082,
+    municipality == "TELCHAC PUERTO"  ~ 31083,
+    municipality == "TEMAX"           ~ 31084,
+    municipality == "TEMOZON"         ~ 31085,
+    municipality == "TEPAKAN"         ~ 31086,
+    municipality == "TETIZ"           ~ 31087,
+    municipality == "TEYA"            ~ 31088,
+    municipality == "TICUL"           ~ 31089,
+    municipality == "TIMUCUY"         ~ 31090,
+    municipality == "TINUM"           ~ 31091,
+    municipality == "TIXCACALCUPUL"   ~ 31092,
+    municipality == "TIXKOKOB"        ~ 31093,
+    municipality == "TIXMEHUAC"       ~ 31094,
+    municipality == "TIXPEHUAL"        ~ 31095,
+    municipality == "TIZIMIN"         ~ 31096,
+    municipality == "TUNKAS"          ~ 31097,
+    municipality == "TZUCACAB"        ~ 31098,
+    municipality == "UAYMA"           ~ 31099,
+    municipality == "UCU"             ~ 31100,
+    municipality == "UMAN"            ~ 31101,
+    municipality == "VALLADOLID"      ~ 31102,
+    municipality == "XOCCHEL"         ~ 31103,
+    municipality == "YAXCABA"         ~ 31104,
+    municipality == "YAXKUKUL"        ~ 31105,
+    municipality == "YOBAIN"          ~ 31106,
+    TRUE                               ~ NA
+  ))
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:PT_MORENA), na.rm = TRUE),
+    year = 2024,
+    month = "June"
+  )
+
 # Combine the dataframes, handling different columns by filling with NA
 yucatan_all <- bind_rows(df_1995,
                          df_1998,
@@ -2408,8 +2739,9 @@ yucatan_all <- bind_rows(df_1995,
                          df_2010,
                          df_2012,
                          df_2015,
-                         df_2018)
+                         df_2018,
+                         collapsed_2021,
+                         collapsed_2024)
 
 
 data.table::fwrite(yucatan_all,"../../../Processed Data/yucatan/yucatan_process_raw_data.csv")
-

@@ -24,16 +24,10 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 # Assuming your script is in 'Scripts/Script States/', go two levels up
 setwd(file.path(script_dir, ""))
 
-
-
-df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
-colnames(df) <- tolower(colnames(df))
-names(df) <- gsub("[- ]", "", names(df))
-
 ################################################################################
 # 1) Read CSV (equivalent to: insheet using "Ayu_Seccion_1998_No_LN.csv", clear)
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_1998_No_LN.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_1998_No_LN.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
 ################################################################################
@@ -207,7 +201,7 @@ df_1998 <- df_merged %>%
 ################################################################################
 # 1) Read CSV (Equivalent to: insheet using "Ayu_Seccion_2001_No_LN.csv", clear)
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2001_No_LN.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2001_No_LN.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
 ################################################################################
@@ -383,7 +377,7 @@ df_2001 <- df_merged %>%
 ################################################################################
 # 1) Read the CSV (Equivalent to: insheet using "Ayu_Seccion_2004.csv", clear)
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2004.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2004.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
 ################################################################################
@@ -534,7 +528,7 @@ df_2004 <- df_collapsed %>%
 ###############################################################################
 # 1) Read CSV (Equivalent to: insheet using "Ayu_Seccion_2007.csv", clear)
 ###############################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2007.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2007.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
 ###############################################################################
@@ -677,7 +671,7 @@ df_2007 <- df_collapsed %>%
 ################################################################################
 # 1) Read CSV (Equivalent to: insheet using "Ayu_Seccion_2010.csv", clear)
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2010.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2010.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
 ################################################################################
@@ -851,7 +845,7 @@ df_2010 <- df_collapsed %>%
 # 1) Read Excel
 ################################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/CASILLAS_AYUNTAMIENTOS_2013.xlsx",
+  path = "../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/CASILLAS_AYUNTAMIENTOS_2013.xlsx",
   sheet = "CASILLAS_AYUNTAMIENTOS_2013",
   col_names = TRUE
 ) %>%
@@ -1029,7 +1023,7 @@ df_2013 <- df_collapsed %>%
 # 1) Read Excel (Equivalent to: import excel "Ayuntamientos_2016.xlsx", clear firstrow)
 ################################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayuntamientos_2016.xlsx",
+  path = "../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayuntamientos_2016.xlsx",
   col_names = TRUE
 ) %>%
   as.data.frame()
@@ -1250,7 +1244,7 @@ df_2016 <- df_collapsed %>%
 #      sheet("Ayuntamiento") cellrange(A2:Z200) firstrow clear
 ################################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Eleccion_ext_2016_CON_CASILLAS CON LISTA NOMINAL.xlsx",
+  path = "../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Eleccion_ext_2016_CON_CASILLAS CON LISTA NOMINAL.xlsx",
   sheet = "Ayuntamiento",
   range = "A2:Z200",     # Cell range
   col_names = TRUE
@@ -1371,7 +1365,7 @@ df_2016_extra <- df_collapsed %>%
 # 1) Read Excel (Equivalent to: import excel "Ayuntamientos_2018.xlsx", clear firstrow)
 ################################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayuntamientos_2018.xlsx",
+  path = "../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayuntamientos_2018.xlsx",
   col_names = TRUE
 ) %>%
   as.data.frame()
@@ -1580,6 +1574,236 @@ df_2018 <- df_collapsed %>%
     month   = "July"
   )
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/21/CÓMPUTO DE ELECCIÓN PROCESO ELECTORAL 2020-2021.xlsx", skip = 1, sheet = "20210720_1830_COMP_AYU_Zac")
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO_LOCAL,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL_CASILLA,
+                total = TOTAL_VOTOS,
+                no_reg = NO_REGISTRADOS,
+                nulos = NUM_VOTOS_NULOS,
+                valid = NUMERO_VOTOS_VALIDOS,
+                PANAL = "NA", 
+                CI_1 = CAND_IND_1,
+                CI_2 = CAND_IND_2,
+                CI_3 = CAND_IND_3) %>%
+  rename_with(~ gsub("NAZ", "PANAL", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0) %>% 
+  dplyr::select(-PL_1, -PL_2)
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "APOZOL"                        ~ 32001,
+      municipality == "APULCO"                        ~ 32002,
+      municipality == "ATOLINGA"                      ~ 32003,
+      municipality == "BENITO JUAREZ"                 ~ 32004,
+      municipality == "CALERA"                        ~ 32005,
+      municipality == "CANITAS DE FELIPE PESCADOR"                     ~ 32006,
+      municipality == "CHALCHIHUITES"                 ~ 32009,
+      municipality == "CONCEPCION DEL ORO"           ~ 32007,
+      municipality == "CUAUHTEMOC"                   ~ 32008,
+      municipality == "EL PLATEADO DE JOAQUIN AMARO"                  ~ 32015,
+      municipality == "EL SALVADOR"                   ~ 32041,
+      municipality == "FRESNILLO"                     ~ 32010,
+      municipality == "GENARO CODINA"                 ~ 32012,
+      municipality == "GRAL ENRIQUE ESTRADA"               ~ 32013,
+      municipality == "GENERAL FRANCISCO R MURGUIA"          ~ 32014,
+      municipality == "GENERAL PANFILO NATERA"                ~ 32016,
+      municipality == "GUADALUPE"                     ~ 32017,
+      municipality == "HUANUSCO"                      ~ 32018,
+      municipality == "JALPA"                         ~ 32019,
+      municipality == "JEREZ"                         ~ 32020,
+      municipality == "JIMENEZ DEL TEUL"             ~ 32021,
+      municipality == "JUAN ALDAMA"                   ~ 32022,
+      municipality == "JUCHIPILA"                     ~ 32023,
+      municipality == "LORETO"                        ~ 32024,
+      municipality == "LUIS MOYA"                     ~ 32025,
+      municipality == "MAZAPIL"                       ~ 32026,
+      municipality == "MELCHOR OCAMPO"                ~ 32027,
+      municipality == "MEZQUITAL DEL ORO"             ~ 32028,
+      municipality == "MIGUEL AUZA"                   ~ 32029,
+      municipality == "MOMAX"                         ~ 32030,
+      municipality == "MONTE ESCOBEDO"                ~ 32031,
+      municipality == "MORELOS"                       ~ 32032,
+      municipality == "MOYAHUA DE ESTRADA"            ~ 32033,
+      municipality == "NOCHISTLAN"           ~ 32034,
+      municipality == "NORIA DE ANGELES"              ~ 32035,
+      municipality == "OJOCALIENTE"                   ~ 32036,
+      municipality == "PANUCO"                        ~ 32037,
+      municipality == "PINOS"                         ~ 32038,
+      municipality == "RIO GRANDE"                    ~ 32039,
+      municipality == "SAIN ALTO"                      ~ 32040,
+      municipality == "SANTA MARIA DE LA PAZ"         ~ 32058,
+      municipality == "SOMBRERETE"                    ~ 32042,
+      municipality == "SUSTICACAN"                    ~ 32043,
+      municipality == "TABASCO"                       ~ 32044,
+      municipality == "TEPECHITLAN"                   ~ 32045,
+      municipality == "TEPETONGO"                     ~ 32046,
+      municipality == "TEUL DE GONZALEZ ORTEGA"             ~ 32047,
+      municipality == "TLALTENANGO DE SANCHEZ ROMAN"                  ~ 32048,
+      municipality == "TRANCOSO"                      ~ 32057,
+      municipality == "TRINIDAD GARCIA DE LA CADENA"               ~ 32011,
+      municipality == "VALPARAISO"                    ~ 32049,
+      municipality == "VETAGRANDE"                    ~ 32050,
+      municipality == "VILLA DE COS"                  ~ 32051,
+      municipality == "VILLA GARCIA"                  ~ 32052,
+      municipality == "VILLA GONZALEZ ORTEGA"         ~ 32053,
+      municipality == "VILLA  HIDALGO"                 ~ 32054,
+      municipality == "VILLANUEVA"                    ~ 32055,
+      municipality == "ZACATECAS"                     ~ 32056,
+      TRUE                                           ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(listanominal:total,PAN:CI_3), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2021,
+    month = "June"
+  )
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset
+data_2024 <- read_excel("../../../Data/Raw Electoral Data/Zacatecas 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/24/Resultados computos eleccion de Ayuntamiento y Diputaciones por casilla y municipio.xlsx", skip = 2, sheet = "AYUNTAMIENTOS")
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = "SECCIÓN",
+                listanominal = "LISTA\r\nNOMINAL",
+                total = VTOTAL,
+                no_reg = NOREG,
+                nulos = NULOS,
+                FXM = FMZ) %>%
+  rename_with(~ gsub("NAZ", "PANAL", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "APOZOL"                        ~ 32001,
+      municipality == "APULCO"                        ~ 32002,
+      municipality == "ATOLINGA"                      ~ 32003,
+      municipality == "BENITO JUAREZ"                 ~ 32004,
+      municipality == "CALERA"                        ~ 32005,
+      municipality == "CANITAS DE FELIPE PESCADOR"                     ~ 32006,
+      municipality == "CHALCHIHUITES"                 ~ 32009,
+      municipality == "CONCEPCION DEL ORO"           ~ 32007,
+      municipality == "CUAUHTEMOC"                   ~ 32008,
+      municipality == "EL PLATEADO DE JOAQUIN AMARO"                  ~ 32015,
+      municipality == "EL SALVADOR"                   ~ 32041,
+      municipality == "FRESNILLO"                     ~ 32010,
+      municipality == "GENARO CODINA"                 ~ 32012,
+      municipality == "GENERAL ENRIQUE ESTRADA"               ~ 32013,
+      municipality == "GENERAL FRANCISCO R. MURGUIA"          ~ 32014,
+      municipality == "GENERAL PANFILO NATERA"                ~ 32016,
+      municipality == "GUADALUPE"                     ~ 32017,
+      municipality == "HUANUSCO"                      ~ 32018,
+      municipality == "JALPA"                         ~ 32019,
+      municipality == "JEREZ"                         ~ 32020,
+      municipality == "JIMENEZ DEL TEUL"             ~ 32021,
+      municipality == "JUAN ALDAMA"                   ~ 32022,
+      municipality == "JUCHIPILA"                     ~ 32023,
+      municipality == "LORETO"                        ~ 32024,
+      municipality == "LUIS MOYA"                     ~ 32025,
+      municipality == "MAZAPIL"                       ~ 32026,
+      municipality == "MELCHOR OCAMPO"                ~ 32027,
+      municipality == "MEZQUITAL DEL ORO"             ~ 32028,
+      municipality == "MIGUEL AUZA"                   ~ 32029,
+      municipality == "MOMAX"                         ~ 32030,
+      municipality == "MONTE ESCOBEDO"                ~ 32031,
+      municipality == "MORELOS"                       ~ 32032,
+      municipality == "MOYAHUA DE ESTRADA"            ~ 32033,
+      municipality == "NOCHISTLAN DE MEJIA"           ~ 32034,
+      municipality == "NORIA DE ANGELES"              ~ 32035,
+      municipality == "OJOCALIENTE"                   ~ 32036,
+      municipality == "PANUCO"                        ~ 32037,
+      municipality == "PINOS"                         ~ 32038,
+      municipality == "RIO GRANDE"                    ~ 32039,
+      municipality == "SAIN ALTO"                      ~ 32040,
+      municipality == "SANTA MARIA DE LA PAZ"         ~ 32058,
+      municipality == "SOMBRERETE"                    ~ 32042,
+      municipality == "SUSTICACAN"                    ~ 32043,
+      municipality == "TABASCO"                       ~ 32044,
+      municipality == "TEPECHITLAN"                   ~ 32045,
+      municipality == "TEPETONGO"                     ~ 32046,
+      municipality == "TEUL DE GONZALEZ ORTEGA"             ~ 32047,
+      municipality == "TLALTENANGO DE SANCHEZ ROMAN"                  ~ 32048,
+      municipality == "TRANCOSO"                      ~ 32057,
+      municipality == "TRINIDAD GARCIA DE LA CADENA"               ~ 32011,
+      municipality == "VALPARAISO"                    ~ 32049,
+      municipality == "VETAGRANDE"                    ~ 32050,
+      municipality == "VILLA DE COS"                  ~ 32051,
+      municipality == "VILLA GARCIA"                  ~ 32052,
+      municipality == "VILLA GONZALEZ ORTEGA"         ~ 32053,
+      municipality == "VILLA HIDALGO"                 ~ 32054,
+      municipality == "VILLANUEVA"                    ~ 32055,
+      municipality == "ZACATECAS"                     ~ 32056,
+      TRUE                                           ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(listanominal,PAN:total), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:PRI_PRD), na.rm = TRUE),
+    year = 2024,
+    month = "June"
+  )
+
 zacatecas_all <- bind_rows(df_1998,
                            df_2001,
                            df_2004,
@@ -1591,4 +1815,3 @@ zacatecas_all <- bind_rows(df_1998,
                            df_2018)
 
 data.table::fwrite(zacatecas_all,"../../../Processed Data/zacatecas/zacatecas_process_raw_data.csv")
-

@@ -28,7 +28,7 @@ setwd(file.path(script_dir, ""))
 #####################################
 
 # Load the 1995 data
-data_1995 <- read_csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_1995.csv")
+data_1995 <- read_csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_1995.csv")
 names(data_1995)
 # Rename columns
 data_1995 <- data_1995 %>%
@@ -192,7 +192,7 @@ summary(collapsed_1995)
 #####################################
 
 # Load the 1998 data
-data_1998 <- read_csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_1998_No_LN.csv")
+data_1998 <- read_csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_1998_No_LN.csv")
 names(data_1998)
 # Rename columns
 data_1998 <- data_1998 %>%
@@ -301,7 +301,7 @@ rm(ln_all_months_years)
 ### PROCESSING DATA FOR 2001
 #####################################
 
-data_2001 <- data.table::fread("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_2001_No_LN.csv") %>%
+data_2001 <- data.table::fread("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2001_No_LN.csv") %>%
   dplyr::rename(municipality = MUNICIPIO, 
                 section = "Secci\xf3n",
                 total = TOTAL,
@@ -506,7 +506,7 @@ collapsed_2001 <- collapsed_2001 %>%
 ### PROCESSING DATA FOR 2004
 #####################################
 
-data_2004 <- read.csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_2004.csv") %>%
+data_2004 <- read.csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2004.csv") %>%
   dplyr::rename(municipality = MUNICIPIO, 
          section = SECCION,
          listanominal = "LISTA.NOMINAL",
@@ -675,7 +675,7 @@ rm(data_2004)
 #####################################
 
 # Processing Year 2007
-data_2007 <- read.csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_2007.csv") %>%
+data_2007 <- read.csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2007.csv") %>%
   dplyr::rename(municipality = municipio, 
                 section = seccion,
                 listanominal = "lista.nominal",
@@ -886,7 +886,7 @@ collapsed_2007 <- collapsed_2007 %>%
 ### PROCESSING DATA FOR 2010
 #####################################
 
-data_2010 <- data.table::fread("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_2010_No_LN.csv") %>%
+data_2010 <- data.table::fread("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2010_No_LN.csv") %>%
   dplyr::rename(municipality = MUNICIPIO, 
          section = "SECCI\xd3N") %>%
   dplyr::filter(municipality != "" & !is.na(section)) %>%
@@ -1055,7 +1055,7 @@ summary(collapsed_2010)
 ### PROCESSING DATA FOR 2012
 #####################################
 
-data_2012 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Ayu_Seccion_No_LN_2012.xlsx") %>%
+data_2012 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_No_LN_2012.xlsx") %>%
   dplyr::rename(municipality = Municipio, 
                 section = Seccion) %>%
   dplyr::mutate(section = as.numeric(section),
@@ -1272,7 +1272,7 @@ collapsed_2012 <- collapsed_2012 %>%
     ))
 
 # Load and merge Lista Nominal data
-ln_2012 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/LN_2012.xlsx")
+ln_2012 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/LN_2012.xlsx")
 
 ln_2012 <- ln_2012 %>%
   dplyr::mutate(section = as.numeric(Secc),
@@ -1344,7 +1344,7 @@ rm(data_2012)
 #####################################
 
 # Load the dataset from the specific Excel file
-data_2015 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/01_RESULTADOS_ELECTORALES_CASILLA_2015_AYUNTAMIENTOS_MODXTEECHYTEPJF.xlsx", sheet = "Table 1")
+data_2015 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/01_RESULTADOS_ELECTORALES_CASILLA_2015_AYUNTAMIENTOS_MODXTEECHYTEPJF.xlsx", sheet = "Table 1")
 
 # Drop rows for the dissolved government
 data_2015 <- data_2015 %>%
@@ -1641,7 +1641,7 @@ rm(ln_data_2015)
 # ---------------------- 2018 Data Processing ---------------------- #
 
 # Import the 2018 election data
-data_2018 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018/Resultados de Computos Municipales por Casilla de la Eleccion de Ayuntamientos - Chiapas 2018.xlsx")
+data_2018 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Resultados de Computos Municipales por Casilla de la Eleccion de Ayuntamientos - Chiapas 2018.xlsx")
 names(data_2018)
 # Rename municipality column
 data_2018 <- data_2018 %>%
@@ -1970,6 +1970,522 @@ collapsed_2018 <- collapsed_2018 %>%
                 year = 2018, 
                 month = "August")
 
+#####################################
+### PROCESSING DATA FOR 2021 --------
+#####################################
+
+# Load the dataset
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/21/2021_AYUN_LOC_MR_CHIS_CAS.xlsx")
+
+# Drop rows for the extraordinary elections
+data_2021 <- data_2021 %>%
+  dplyr::filter(!MUNICIPIO %in% c("SILTEPEC", "VENUSTIANO CARRANZA", "EL PARRAL", "EMILIANO ZAPATA",
+                                  "FRONTERA COMALAPA", "HONDURAS DE LA SIERRA"))
+
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO, 
+                section = "SECCIÓN",
+                total = TOTAL_VOTOS,
+                listanominal = "LISTA_NOMINAL",
+                noreg = "NO REGISTRADOS",
+                nulos = "VOTOS NULOS") %>%
+  dplyr::filter(!is.na(total), total != 0) %>%
+  dplyr::filter(municipality != "" & !is.na(section))
+
+colnames(data_2021) <- gsub("^INDEP_", "CI_", colnames(data_2021))
+
+# Replace special characters in the municipality column
+data_2021 <- data_2021 %>%
+  dplyr::mutate(municipality = gsub("Á", "A", municipality),
+                municipality = gsub("É", "E", municipality),
+                municipality = gsub("Í", "I", municipality),
+                municipality = gsub("Ó", "O", municipality),
+                municipality = gsub("Ú", "U", municipality),
+                municipality = gsub("Ü", "U", municipality),
+                municipality = gsub("Ñ", "N", municipality),
+                municipality = tools::toTitleCase(municipality))
+
+summary(data_2021)
+
+# Assign unique IDs to municipalities in data_2021
+data_2021 <- data_2021 %>%
+  dplyr::mutate(
+    uniqueid = case_when(
+      municipality == "ACACOYAGUA" ~ 7001,
+      municipality == "ACALA" ~ 7002,
+      municipality == "ACAPETAHUA" ~ 7003,
+      municipality == "ALDAMA" ~ 7113,
+      municipality == "ALTAMIRANO" ~ 7004,
+      municipality == "AMATAN" ~ 7005,
+      municipality == "AMATENANGO DE LA FRONTERA" ~ 7006,
+      municipality == "AMATENANGO DEL VALLE" ~ 7007,
+      municipality == "ANGEL ALBINO CORZO" ~ 7008,
+      municipality == "ARRIAGA" ~ 7009,
+      municipality == "BEJUCAL DE OCAMPO" ~ 7010,
+      municipality == "BELLA VISTA" ~ 7011,
+      municipality == "BENEMERITO DE LAS AMERICAS" ~ 7114,
+      municipality == "BERRIOZABAL" ~ 7012,
+      municipality == "BOCHIL" ~ 7013,
+      municipality == "CACAHOATAN" ~ 7015,
+      municipality == "CAPITAN LUIS ANGEL VIDAL" ~ 7120,
+      municipality == "CATAZAJA" ~ 7016,
+      municipality == "CHALCHIHUITAN" ~ 7022,
+      municipality == "CHAMULA" ~ 7023,
+      municipality == "CHANAL" ~ 7024,
+      municipality == "CHAPULTENANGO" ~ 7025,
+      municipality == "CHENALHO" ~ 7026,
+      municipality == "CHIAPA DE CORZO" ~ 7027,
+      municipality == "CHIAPILLA" ~ 7028,
+      municipality == "CHICOASEN" ~ 7029,
+      municipality == "CHICOMUSELO" ~ 7030,
+      municipality == "CHILON" ~ 7031,
+      municipality == "CINTALAPA" ~ 7017,
+      municipality == "COAPILLA" ~ 7018,
+      municipality == "COMITAN DE DOMINGUEZ" ~ 7019,
+      municipality == "COPAINALA" ~ 7021,
+      municipality == "EL BOSQUE" ~ 7014,
+      municipality == "EL PORVENIR" ~ 7070,
+      municipality == "ESCUINTLA" ~ 7032,
+      municipality == "FRANCISCO LEON" ~ 7033,
+      municipality == "FRONTERA HIDALGO" ~ 7035,
+      municipality == "HUEHUETAN" ~ 7037,
+      municipality == "HUITIUPAN" ~ 7039,
+      municipality == "HUIXTAN" ~ 7038,
+      municipality == "HUIXTLA" ~ 7040,
+      municipality == "IXHUATAN" ~ 7042,
+      municipality == "IXTACOMITAN" ~ 7043,
+      municipality == "IXTAPA" ~ 7044,
+      municipality == "IXTAPANGAJOYA" ~ 7045,
+      municipality == "JIQUIPILAS" ~ 7046,
+      municipality == "JITOTOL" ~ 7047,
+      municipality == "JUAREZ" ~ 7048,
+      municipality == "LA CONCORDIA" ~ 7020,
+      municipality == "LA GRANDEZA" ~ 7036,
+      municipality == "LA INDEPENDENCIA" ~ 7041,
+      municipality == "LA LIBERTAD" ~ 7050,
+      municipality == "LA TRINITARIA" ~ 7099,
+      municipality == "LARRAINZAR" ~ 7049,
+      municipality == "LAS MARGARITAS" ~ 7052,
+      municipality == "LAS ROSAS" ~ 7075,
+      municipality == "MAPASTEPEC" ~ 7051,
+      municipality == "MARAVILLA TENEJAPA" ~ 7115,
+      municipality == "MARQUES DE COMILLAS" ~ 7116,
+      municipality == "MAZAPA DE MADERO" ~ 7053,
+      municipality == "MAZATAN" ~ 7054,
+      municipality == "METAPA" ~ 7055,
+      municipality == "MEZCALAPA" ~ 7123,
+      municipality == "MITONTIC" ~ 7056,
+      municipality == "MONTECRISTO DE GUERRERO" ~ 7117,
+      municipality == "MOTOZINTLA" ~ 7057,
+      municipality == "NICOLAS RUIZ" ~ 7058,
+      municipality == "OCOSINGO" ~ 7059,
+      municipality == "OCOTEPEC" ~ 7060,
+      municipality == "OCOZOCOAUTLA DE ESPINOSA" ~ 7061,
+      municipality == "OSTUACAN" ~ 7062,
+      municipality == "OSUMACINTA" ~ 7063,
+      municipality == "PALENQUE" ~ 7065,
+      municipality == "PANTELHO" ~ 7066,
+      municipality == "PANTEPEC" ~ 7067,
+      municipality == "PICHUCALCO" ~ 7068,
+      municipality == "PIJIJIAPAN" ~ 7069,
+      municipality == "PUEBLO NUEVO SOLISTAHUACAN" ~ 7072,
+      municipality == "RAYON" ~ 7073,
+      municipality == "REFORMA" ~ 7074,
+      municipality == "RINCON CHAMULA SAN PEDRO" ~ 7124,
+      municipality == "SABANILLA" ~ 7076,
+      municipality == "SALTO DE AGUA" ~ 7077,
+      municipality == "SAN ANDRES DURAZNAL" ~ 7118,
+      municipality == "SAN CRISTOBAL DE LAS CASAS" ~ 7078,
+      municipality == "SAN FERNANDO" ~ 7079,
+      municipality == "SAN JUAN CANCUC" ~ 7112,
+      municipality == "SAN LUCAS" ~ 7110,
+      municipality == "SANTIAGO EL PINAR" ~ 7119,
+      municipality == "SIMOJOVEL" ~ 7081,
+      municipality == "SITALA" ~ 7082,
+      municipality == "SOCOLTENANGO" ~ 7083,
+      municipality == "SOLOSUCHIAPA" ~ 7084,
+      municipality == "SOYALO" ~ 7085,
+      municipality == "SUCHIAPA" ~ 7086,
+      municipality == "SUCHIATE" ~ 7087,
+      municipality == "SUNUAPA" ~ 7088,
+      municipality == "TAPACHULA" ~ 7089,
+      municipality == "TAPALAPA" ~ 7090,
+      municipality == "TAPILULA" ~ 7091,
+      municipality == "TECPATAN" ~ 7092,
+      municipality == "TENEJAPA" ~ 7093,
+      municipality == "TEOPISCA" ~ 7094,
+      municipality == "TILA" ~ 7096,
+      municipality == "TONALA" ~ 7097,
+      municipality == "TOTOLAPA" ~ 7098,
+      municipality == "TUMBALA" ~ 7100,
+      municipality == "TUXTLA CHICO" ~ 7102,
+      municipality == "TUXTLA GUTIERREZ" ~ 7101,
+      municipality == "TUZANTAN" ~ 7103,
+      municipality == "TZIMOL" ~ 7104,
+      municipality == "UNION JUAREZ" ~ 7105,
+      municipality == "VILLA CORZO" ~ 7107,
+      municipality == "VILLACOMALTITLAN" ~ 7071,
+      municipality == "VILLAFLORES" ~ 7108,
+      municipality == "YAJALON" ~ 7109,
+      municipality == "ZINACANTAN" ~ 7111,
+      TRUE ~ NA_real_  # Default case for municipalities not in the list
+    )
+  )
+
+# Check for any municipalities that didn't get assigned an ID
+unassigned_municipalities <- data_2021 %>%
+  filter(is.na(uniqueid)) %>%
+  distinct(municipality) %>%
+  pull(municipality)
+
+if(length(unassigned_municipalities) > 0) {
+  cat("Warning: The following municipalities were not assigned IDs:\n")
+  cat(paste(unassigned_municipalities, collapse = "\n"))
+} else {
+  cat("All municipalities successfully assigned unique IDs!")
+}
+
+# Display summary of assignments
+cat("\nSummary of ID assignments:\n")
+data_2021 %>%
+  group_by(municipality, uniqueid) %>%
+  summarise(count = n(), .groups = 'drop') %>%
+  arrange(uniqueid) %>%
+  print(n = 117)
+
+# Collapse by municipalioty
+collapsed_2021 <- data_2021 %>% 
+  dplyr::group_by(uniqueid, municipality, section) %>% 
+  dplyr::summarise(across(c(PAN:CI_10, nulos, total, listanominal), \(x) sum(x, na.rm = TRUE))) %>% 
+  dplyr::mutate(
+    valid = rowSums(across(c(PAN:CI_10)), na.rm = TRUE),
+    year = 2021, 
+    month = "June"
+  )
+
+# Load the extraordinary election data
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/22_ext/2022_SEE_AYUN_CHIS_CAS.xlsx")
+
+data_ext <- data_ext %>%
+  dplyr::rename(municipality = MUNICIPIO, 
+                section = "SECCIÓN",
+                total = TOTAL_VOTOS,
+                listanominal = "LISTA_NOMINAL",
+                noreg = "NO REGISTRADOS",
+                nulos = "VOTOS NULOS") %>%
+  dplyr::filter(!is.na(total), total != 0) %>%
+  dplyr::filter(municipality != "" & !is.na(section))
+
+# Replace special characters in the municipality column
+data_ext <- data_ext %>%
+  dplyr::mutate(municipality = gsub("Á", "A", municipality),
+                municipality = gsub("É", "E", municipality),
+                municipality = gsub("Í", "I", municipality),
+                municipality = gsub("Ó", "O", municipality),
+                municipality = gsub("Ú", "U", municipality),
+                municipality = gsub("Ü", "U", municipality),
+                municipality = gsub("Ñ", "N", municipality),
+                municipality = tools::toTitleCase(municipality))
+
+summary(data_ext)
+
+# Assign unique IDs to municipalities in data_2021
+data_ext <- data_ext %>%
+  dplyr::mutate(
+    uniqueid = case_when(
+      municipality == "EL PARRAL" ~ 7122,
+      municipality == "EMILIANO ZAPATA" ~ 7121,
+      municipality == "VENUSTIANO CARRANZA" ~ 7106,
+      municipality == "SILTEPEC" ~ 7080,
+      TRUE ~ NA_real_  # Default case for municipalities not in the list
+    )
+  )
+
+# Collapse by municipalioty
+collapsed_ext <- data_ext %>% 
+  dplyr::group_by(uniqueid, municipality, section) %>% 
+  dplyr::summarise(across(c(PAN:PVEM_MORENA, nulos, total, listanominal), \(x) sum(x, na.rm = TRUE))) %>% 
+  dplyr::mutate(
+    valid = rowSums(across(c(PAN:PVEM_MORENA)), na.rm = TRUE),
+    year = 2022, 
+    month = "April"
+  )
+
+# Combine the 2021 and 2022-extraordinary elections
+collapsed_2021 <- bind_rows(collapsed_2021,
+                            collapsed_ext) %>% 
+  dplyr::mutate(turnout = total/listanominal)
+
+rm(collapsed_ext)
+rm(data_2021)
+rm(data_ext)
+
+#####################################
+### PROCESSING DATA FOR 2024 --------
+#####################################
+
+# Load the dataset
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/24/20240608_2000_CHIS_AYUN_CAS.csv")
+
+# Drop rows for the extraordinary elections
+data_2024 <- data_2024 %>%
+  dplyr::filter(!MUNICIPIO_LOCAL %in% c("CHICOMUSELO", "CAPITAN LUIS ANGEL VIDAL")) %>% 
+  dplyr::mutate(across(everything(), ~ifelse(.x == "-", NA, .x)),
+                across(PAN:UPC, as.numeric))
+
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO_LOCAL, 
+                section = "SECCION",
+                total = TOTAL_VOTOS,
+                listanominal = "LISTA_NOMINAL_CASILLA",
+                noreg = "NO_REGISTRADOS",
+                nulos = "NUM_VOTOS_NULOS",
+                valid = "NUMERO_VOTOS_VALIDOS",
+                CI_1 = PCL,
+                CI_2 = LLM,
+                CI_3 = UPC) %>%
+  dplyr::filter(!is.na(total), total != 0) %>%
+  dplyr::filter(municipality != "" & !is.na(section)) %>%
+  dplyr::filter(section != 0) %>% 
+  dplyr::mutate(
+    section = as.numeric(section),
+    total = as.numeric(total),
+    listanominal = as.numeric(listanominal),
+    noreg = as.numeric(noreg),
+    nulos = as.numeric(nulos),
+    valid = as.numeric(valid)
+  )
+
+
+# Replace special characters in the municipality column
+data_2024 <- data_2024 %>%
+  dplyr::mutate(municipality = gsub("Á", "A", municipality),
+                municipality = gsub("É", "E", municipality),
+                municipality = gsub("Í", "I", municipality),
+                municipality = gsub("Ó", "O", municipality),
+                municipality = gsub("Ú", "U", municipality),
+                municipality = gsub("Ü", "U", municipality),
+                municipality = gsub("Ñ", "N", municipality),
+                municipality = tools::toTitleCase(municipality),
+                municipality = case_when(
+                  municipality == "CINTALAPA DE FIGUEROA" ~ "CINTALAPA",
+                  TRUE ~ municipality  # Keep all other municipality names unchanged
+                ))
+
+# Assign unique IDs to municipalities in data_2024
+data_2024 <- data_2024 %>%
+  dplyr::mutate(
+    uniqueid = case_when(
+      municipality == "ACACOYAGUA" ~ 7001,
+      municipality == "ACALA" ~ 7002,
+      municipality == "ACAPETAHUA" ~ 7003,
+      municipality == "ALDAMA" ~ 7113,
+      municipality == "ALTAMIRANO" ~ 7004,
+      municipality == "AMATAN" ~ 7005,
+      municipality == "AMATENANGO DE LA FRONTERA" ~ 7006,
+      municipality == "AMATENANGO DEL VALLE" ~ 7007,
+      municipality == "ANGEL ALBINO CORZO" ~ 7008,
+      municipality == "ARRIAGA" ~ 7009,
+      municipality == "BEJUCAL DE OCAMPO" ~ 7010,
+      municipality == "BELLA VISTA" ~ 7011,
+      municipality == "BENEMERITO DE LAS AMERICAS" ~ 7114,
+      municipality == "BERRIOZABAL" ~ 7012,
+      municipality == "BOCHIL" ~ 7013,
+      municipality == "CACAHOATAN" ~ 7015,
+      municipality == "CATAZAJA" ~ 7016,
+      municipality == "CHALCHIHUITAN" ~ 7022,
+      municipality == "CHAMULA" ~ 7023,
+      municipality == "CHANAL" ~ 7024,
+      municipality == "CHAPULTENANGO" ~ 7025,
+      municipality == "CHENALHO" ~ 7026,
+      municipality == "CHIAPA DE CORZO" ~ 7027,
+      municipality == "CHIAPILLA" ~ 7028,
+      municipality == "CHICOASEN" ~ 7029,
+      municipality == "CHILON" ~ 7031,
+      municipality == "CINTALAPA" ~ 7017,
+      municipality == "COAPILLA" ~ 7018,
+      municipality == "COMITAN DE DOMINGUEZ" ~ 7019,
+      municipality == "COPAINALA" ~ 7021,
+      municipality == "EL BOSQUE" ~ 7014,
+      municipality == "EL PARRAL" ~ 7122,
+      municipality == "EL PORVENIR" ~ 7070,
+      municipality == "EMILIANO ZAPATA" ~ 7121,
+      municipality == "ESCUINTLA" ~ 7032,
+      municipality == "FRANCISCO LEON" ~ 7033,
+      municipality == "FRONTERA COMALAPA" ~ 7034,
+      municipality == "FRONTERA HIDALGO" ~ 7035,
+      municipality == "HONDURAS DE LA SIERRA" ~ 7125,
+      municipality == "HUEHUETAN" ~ 7037,
+      municipality == "HUITIUPAN" ~ 7039,
+      municipality == "HUIXTAN" ~ 7038,
+      municipality == "HUIXTLA" ~ 7040,
+      municipality == "IXHUATAN" ~ 7042,
+      municipality == "IXTACOMITAN" ~ 7043,
+      municipality == "IXTAPA" ~ 7044,
+      municipality == "IXTAPANGAJOYA" ~ 7045,
+      municipality == "JIQUIPILAS" ~ 7046,
+      municipality == "JITOTOL" ~ 7047,
+      municipality == "JUAREZ" ~ 7048,
+      municipality == "LA CONCORDIA" ~ 7020,
+      municipality == "LA GRANDEZA" ~ 7036,
+      municipality == "LA INDEPENDENCIA" ~ 7041,
+      municipality == "LA LIBERTAD" ~ 7050,
+      municipality == "LA TRINITARIA" ~ 7099,
+      municipality == "LARRAINZAR" ~ 7049,
+      municipality == "LAS MARGARITAS" ~ 7052,
+      municipality == "LAS ROSAS" ~ 7075,
+      municipality == "MAPASTEPEC" ~ 7051,
+      municipality == "MARAVILLA TENEJAPA" ~ 7115,
+      municipality == "MARQUES DE COMILLAS" ~ 7116,
+      municipality == "MAZAPA DE MADERO" ~ 7053,
+      municipality == "MAZATAN" ~ 7054,
+      municipality == "METAPA" ~ 7055,
+      municipality == "MEZCALAPA" ~ 7123,
+      municipality == "MITONTIC" ~ 7056,
+      municipality == "MONTECRISTO DE GUERRERO" ~ 7117,
+      municipality == "MOTOZINTLA" ~ 7057,
+      municipality == "NICOLAS RUIZ" ~ 7058,
+      municipality == "OCOSINGO" ~ 7059,
+      municipality == "OCOTEPEC" ~ 7060,
+      municipality == "OCOZOCOAUTLA DE ESPINOSA" ~ 7061,
+      municipality == "OSTUACAN" ~ 7062,
+      municipality == "OSUMACINTA" ~ 7063,
+      municipality == "PALENQUE" ~ 7065,
+      municipality == "PANTEPEC" ~ 7067,
+      municipality == "PICHUCALCO" ~ 7068,
+      municipality == "PIJIJIAPAN" ~ 7069,
+      municipality == "PUEBLO NUEVO SOLISTAHUACAN" ~ 7072,
+      municipality == "RAYON" ~ 7073,
+      municipality == "REFORMA" ~ 7074,
+      municipality == "RINCON CHAMULA SAN PEDRO" ~ 7124,
+      municipality == "SABANILLA" ~ 7076,
+      municipality == "SALTO DE AGUA" ~ 7077,
+      municipality == "SAN ANDRES DURAZNAL" ~ 7118,
+      municipality == "SAN CRISTOBAL DE LAS CASAS" ~ 7078,
+      municipality == "SAN FERNANDO" ~ 7079,
+      municipality == "SAN JUAN CANCUC" ~ 7112,
+      municipality == "SAN LUCAS" ~ 7110,
+      municipality == "SANTIAGO EL PINAR" ~ 7119,
+      municipality == "SILTEPEC" ~ 7080,
+      municipality == "SIMOJOVEL" ~ 7081,
+      municipality == "SITALA" ~ 7082,
+      municipality == "SOCOLTENANGO" ~ 7083,
+      municipality == "SOLOSUCHIAPA" ~ 7084,
+      municipality == "SOYALO" ~ 7085,
+      municipality == "SUCHIAPA" ~ 7086,
+      municipality == "SUCHIATE" ~ 7087,
+      municipality == "SUNUAPA" ~ 7088,
+      municipality == "TAPACHULA" ~ 7089,
+      municipality == "TAPALAPA" ~ 7090,
+      municipality == "TAPILULA" ~ 7091,
+      municipality == "TECPATAN" ~ 7092,
+      municipality == "TENEJAPA" ~ 7093,
+      municipality == "TEOPISCA" ~ 7094,
+      municipality == "TILA" ~ 7096,
+      municipality == "TONALA" ~ 7097,
+      municipality == "TOTOLAPA" ~ 7098,
+      municipality == "TUMBALA" ~ 7100,
+      municipality == "TUXTLA CHICO" ~ 7102,
+      municipality == "TUXTLA GUTIERREZ" ~ 7101,
+      municipality == "TUZANTAN" ~ 7103,
+      municipality == "TZIMOL" ~ 7104,
+      municipality == "UNION JUAREZ" ~ 7105,
+      municipality == "VENUSTIANO CARRANZA" ~ 7106,
+      municipality == "VILLA CORZO" ~ 7107,
+      municipality == "VILLACOMALTITLAN" ~ 7071,
+      municipality == "VILLAFLORES" ~ 7108,
+      municipality == "YAJALON" ~ 7109,
+      municipality == "ZINACANTAN" ~ 7111,
+      TRUE ~ NA_real_  # Default case for municipalities not in the list
+    )
+  )
+
+# Check for any municipalities that didn't get assigned an ID
+unassigned_municipalities <- data_2024 %>%
+  filter(is.na(uniqueid)) %>%
+  distinct(municipality) %>%
+  pull(municipality)
+
+if(length(unassigned_municipalities) > 0) {
+  cat("Warning: The following municipalities were not assigned IDs:\n")
+  cat(paste(unassigned_municipalities, collapse = "\n"))
+} else {
+  cat("All municipalities successfully assigned unique IDs!")
+}
+
+# Collapse by municipalioty
+collapsed_2024 <- data_2024 %>% 
+  dplyr::group_by(uniqueid, municipality, section) %>% 
+  dplyr::summarise(across(c(PAN:CI_3, nulos, valid, total, listanominal), \(x) sum(x, na.rm = TRUE))) %>% 
+  dplyr::mutate(
+    year = 2024, 
+    month = "June"
+  )
+
+# Load the extraordinary election data
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2024_AYUN_EXT_CHIS.xlsx")
+
+data_ext <- data_ext %>%
+  dplyr::rename(municipality = Municipio, 
+                section = "Sección")
+
+# Replace special characters in the municipality column
+data_ext <- data_ext %>%
+  dplyr::mutate(municipality = toupper(municipality),
+                municipality = gsub("Á", "A", municipality),
+                municipality = gsub("É", "E", municipality),
+                municipality = gsub("Í", "I", municipality),
+                municipality = gsub("Ó", "O", municipality),
+                municipality = gsub("Ú", "U", municipality),
+                municipality = gsub("Ü", "U", municipality),
+                municipality = gsub("Ñ", "N", municipality),
+  )
+
+summary(data_ext)
+
+# Assign unique IDs to municipalities in data_2021
+data_ext <- data_ext %>%
+  dplyr::mutate(
+    uniqueid = case_when(
+      municipality == "CHICOMUSELO" ~ 7030,
+      municipality == "CAPITAN LUIS ANGEL VIDAL" ~ 7120,
+      TRUE ~ NA_real_  # Default case for municipalities not in the list
+    )
+  )
+
+# Collapse by municipalioty
+collapsed_ext <- data_ext %>% 
+  dplyr::group_by(uniqueid, municipality, section) %>% 
+  dplyr::summarise(across(c(PAN:total), \(x) sum(x, na.rm = TRUE))) %>% 
+  dplyr::mutate(
+    year = 2024, 
+    month = "August",
+    valid = rowSums(across(c(PAN:PRI_PRD)), na.rm = TRUE)
+  )
+
+# Load the Lista Nominal 2024 data and filter by criteria
+ln_2024 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef24.xlsx", skip = 2, 
+                      col_names = c("state_code", "district_code", "mun_code", 
+                                    "section", "col_e", "col_f", "col_g", "col_h", 
+                                    "col_i", "col_j", "col_k", "listanominal")) %>%
+  dplyr::select(state_code, mun_code, section, listanominal) %>% 
+  dplyr::filter(state_code == 7) %>%
+  dplyr::select(section,listanominal)
+
+# Merge Lista Nominal data with the collapsed data
+collapsed_ext <- collapsed_ext %>%
+  left_join(ln_2024, by = "section")
+
+# Combine the 2021 and 2022-extraordinary elections
+collapsed_2024 <- bind_rows(collapsed_2024,
+                            collapsed_ext) %>% 
+  dplyr::mutate(turnout = total/listanominal)
+
+rm(collapsed_ext)
+rm(data_2024)
+rm(data_ext)
+rm(ln_2024)
+
 # Combine the dataframes, handling different columns by filling with NA
 chiapas_all <- bind_rows(collapsed_1995,
                          collapsed_1998,
@@ -1979,9 +2495,10 @@ chiapas_all <- bind_rows(collapsed_1995,
                          collapsed_2010,
                          collapsed_2012,
                          collapsed_2015,
-                         collapsed_2018)
+                         collapsed_2018,
+                         collapsed_2021,
+                         collapsed_2024)
 
 data.table::fwrite(chiapas_all,"../../../Processed Data/chiapas/chiapas_process_raw_data.csv")
-
 
 

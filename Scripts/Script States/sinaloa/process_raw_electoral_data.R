@@ -27,7 +27,7 @@ setwd(file.path(script_dir, ""))
 ##############################################################################
 # 1) Ayu_Seccion_2001_No_LN.csv
 ##############################################################################
-df_2001 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2001_No_LN.csv") 
+df_2001 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2001_No_LN.csv") 
 colnames(df_2001) <- tolower(colnames(df_2001))
 names(df_2001) <- gsub("[- ]", "", names(df_2001))
 
@@ -244,7 +244,7 @@ df_2001 <- df_2001 %>%
 ##############################################################################
 # 2) Ayu_Seccion_LN_2004.xlsx
 ##############################################################################
-df_ln_2004 <- read_excel("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_LN_2004.xlsx", 
+df_ln_2004 <- read_excel("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_LN_2004.xlsx", 
                          sheet="Sheet1", 
                          col_names=TRUE)
 names(df_ln_2004) <- gsub("[- ]", "", names(df_ln_2004))
@@ -264,7 +264,7 @@ df_ln_2004 <-df_ln_2004 %>%
 ##############################################################################
 # 3) Ayu_Seccion_2004_No_LN.csv
 ##############################################################################
-df_2004 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2004_No_LN.csv") 
+df_2004 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2004_No_LN.csv") 
 colnames(df_2004) <- tolower(colnames(df_2004))
 names(df_2004) <- gsub("[- ]", "", names(df_2004))
 
@@ -366,7 +366,7 @@ df_2004 <- df_2004 %>%
 ##############################################################################
 # 4) Ayu_Seccion_LN_2007.xlsx
 ##############################################################################
-df_ln_2007 <- read_excel("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_LN_2007.xlsx", sheet="Sheet1", col_names=TRUE) 
+df_ln_2007 <- read_excel("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_LN_2007.xlsx", sheet="Sheet1", col_names=TRUE) 
 
 names(df_ln_2007) <- gsub("[- ]", "", names(df_ln_2007))
 
@@ -392,7 +392,7 @@ df_ln_2007 <- df_ln_2007 %>%
 ##############################################################################
 # 5) Ayu_Seccion_2007_No_LN.csv
 ##############################################################################
-df_2007 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2007_No_LN.csv")
+df_2007 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2007_No_LN.csv")
 colnames(df_2007) <- tolower(colnames(df_2007))
 names(df_2007) <- gsub("[- ]", "", names(df_2007))
 
@@ -499,7 +499,7 @@ df_2007 <- df_2007 %>%
 ##############################################################################
 # 6) Ayu_Seccion_2010.csv
 ##############################################################################
-df_2010 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2010.csv") 
+df_2010 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2010.csv") 
 colnames(df_2010) <- tolower(colnames(df_2010))
 names(df_2010) <- gsub("[- ]", "", names(df_2010))
 names(df_2010) <- gsub("[. ]", "", names(df_2010))
@@ -586,7 +586,7 @@ df_2010 <- df_2010 %>%
 ##############################################################################
 # 7) Ayu_Seccion_2013.dta
 ##############################################################################
-df_2013 <- read_dta("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Other/Ayu_Seccion_2013.dta")
+df_2013 <- read_dta("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Other/Ayu_Seccion_2013.dta")
 
 
 df_2013 <- df_2013 %>%
@@ -629,7 +629,7 @@ df_2013 <- df_2013 %>%
 ##############################################################################
 # 9) Ayuntamientos_2016.xlsx
 ##############################################################################
-excel_2016 <- "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayuntamientos_2016.xlsx"
+excel_2016 <- "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayuntamientos_2016.xlsx"
 sheet_names_2016 <- excel_sheets(excel_2016)
 
 for (sname in sheet_names_2016) {
@@ -804,7 +804,185 @@ df_2018 <- df_2018 %>%
   )
 
 
-df_combo <- bind_rows(df_2001, df_2004, df_2007, df_2010, df_2013, df_2016, df_2018) %>%
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset from the excel
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/21/AYUNTAMIENTOS_21.xlsx")
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO_LOCAL,
+                section = SECCION,
+                total = TOTAL_VOTOS,
+                no_reg = NO_REGISTRADOS,
+                nulos = NULOS,
+                CI_1 = CAND_IND_IZL,
+                CI_2 = CAND_IND_JSLS,
+                FXM = FxM) %>%
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid=case_when(
+      municipality=="AHOME"             ~ 25001,
+      municipality=="ANGOSTURA"         ~ 25002,
+      municipality=="BADIRAGUATO"       ~ 25003,
+      municipality=="CHOIX"             ~ 25007,
+      municipality=="CONCORDIA"         ~ 25004,
+      municipality=="COSALA"            ~ 25005,
+      municipality=="CULIACAN"          ~ 25006,
+      municipality=="EL FUERTE"         ~ 25010,
+      municipality=="ELOTA"             ~ 25008,
+      municipality=="ESCUINAPA"         ~ 25009,
+      municipality=="GUASAVE"           ~ 25011,
+      municipality=="MAZATLAN"          ~ 25012,
+      municipality=="MOCORITO"          ~ 25013,
+      municipality=="NAVOLATO"          ~ 25018,
+      municipality=="ROSARIO"           ~ 25014,
+      municipality=="SALVADOR ALVARADO" ~ 25015,
+      municipality=="SAN IGNACIO"       ~ 25016,
+      municipality=="SINALOA"           ~ 25017,
+      TRUE                              ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:total), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Load the Lista Nominal 2021 data and filter by criteria
+ln_2021 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef21.xlsx", skip = 3, 
+                      col_names = c("state_code", "district_code", "mun_code", 
+                                    "section", "col_e", "col_f", "col_g", "col_h", 
+                                    "col_i", "col_j", "col_k", "col_l",
+                                    "listanominal", "col_n", "col_o", "col_p")) %>%
+  dplyr::select(state_code, mun_code, section, listanominal) %>% 
+  dplyr::filter(state_code == 25) %>%
+  dplyr::select(section,listanominal)
+
+
+# Merge Lista Nominal data with the collapsed data
+collapsed_2021 <- collapsed_2021 %>%
+  left_join(ln_2021, by = "section")
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:CC_MORENA_PAS), na.rm = TRUE),
+    year = 2021,
+    month = "June"
+  )
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset from the excel
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/24/SIN_AYUNTAMIENTO_2024.csv")
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO_LOCAL,
+                section = SECCION,
+                total = TOTAL_VOTOS,
+                no_reg = VCN,
+                nulos = VN,
+                CI_1 = MAG,
+                CI_2 = JSLS,
+                CI_3 = VMSA) %>%
+  rename_with(~ gsub("C_", "", .x), starts_with("C_")) %>%
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    across(PAN:total, as.numeric),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(
+    uniqueid=case_when(
+      municipality=="AHOME"             ~ 25001,
+      municipality=="ANGOSTURA"         ~ 25002,
+      municipality=="BADIRAGUATO"       ~ 25003,
+      municipality=="CHOIX"             ~ 25007,
+      municipality=="CONCORDIA"         ~ 25004,
+      municipality=="COSALA"            ~ 25005,
+      municipality=="CULIACAN"          ~ 25006,
+      municipality=="EL FUERTE"         ~ 25010,
+      municipality=="ELOTA"             ~ 25008,
+      municipality=="ESCUINAPA"         ~ 25009,
+      municipality=="GUASAVE"           ~ 25011,
+      municipality=="MAZATLAN"          ~ 25012,
+      municipality=="MOCORITO"          ~ 25013,
+      municipality=="NAVOLATO"          ~ 25018,
+      municipality=="ROSARIO"           ~ 25014,
+      municipality=="SALVADOR ALVARADO" ~ 25015,
+      municipality=="SAN IGNACIO"       ~ 25016,
+      municipality=="SINALOA"           ~ 25017,
+      municipality == "ELDORADO" ~ 25019,
+      municipality == "JUAN JOSE RIOS" ~ 25020,
+      TRUE                              ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:total), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Load the Lista Nominal 2024 data and filter by criteria
+ln_2024 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef24.xlsx", skip = 2, 
+                      col_names = c("state_code", "district_code", "mun_code", 
+                                    "section", "col_e", "col_f", "col_g", "col_h", 
+                                    "col_i", "col_j", "col_k", "listanominal")) %>%
+  dplyr::select(state_code, mun_code, section, listanominal) %>% 
+  dplyr::filter(state_code == 25) %>%
+  dplyr::select(section,listanominal)
+
+# Merge Lista Nominal data with the collapsed data
+collapsed_2024 <- collapsed_2024 %>%
+  left_join(ln_2024, by = "section")
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:CC_PVEM_MORENA), na.rm = TRUE),
+    year = 2024,
+    month = "June"
+  )
+
+df_combo <- bind_rows(df_2001, df_2004, df_2007, df_2010, df_2013, df_2016, df_2018, collapsed_2021, collapsed_2024) %>%
   mutate(
     municipality = case_when(
       municipality=="EL ROSARIO" ~ "ROSARIO",

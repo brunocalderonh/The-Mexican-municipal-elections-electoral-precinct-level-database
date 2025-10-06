@@ -28,7 +28,7 @@ setwd(file.path(script_dir, ""))
 ##############################################
 
 # Load the 1997 data
-data_1997 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.xlsx")
+data_1997 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997_No_LN.xlsx")
 names(data_1997)
 # Rename columns for consistency
 data_1997 <- data_1997 %>%
@@ -100,7 +100,7 @@ rm(ln_all_months_years)
 ##############################################
 
 # Load the 2000 data
-data_2000 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000_No_LN.xlsx")
+data_2000 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000_No_LN.xlsx")
 names(data_2000)
 # Rename columns for consistency
 data_2000 <- data_2000 %>%
@@ -177,7 +177,7 @@ rm(ln_all_months_years)
 ##############################################
 
 # Load the 2003 data
-data_2003 <- read_csv("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003.csv")
+data_2003 <- read_csv("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv")
 names(data_2003)
 # Rename columns for consistency
 data_2003 <- data_2003 %>%
@@ -240,7 +240,7 @@ rm(data_2003)
 ##############################################
 
 # Load the 2006 data
-data_2006 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006.xlsx")
+data_2006 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.xlsx")
 names(data_2006)
 # Rename columns for consistency
 data_2006 <- data_2006 %>%
@@ -304,7 +304,7 @@ rm(data_2006)
 ##############################################
 
 # Load the 2009 data
-data_2009 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.xlsx")
+data_2009 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.xlsx")
 names(data_2009)
 # Rename columns for consistency
 data_2009 <- data_2009 %>%
@@ -366,7 +366,7 @@ rm(data_2009)
 ##############################################
 
 # Load the 2012 data
-data_2012 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.xlsx")
+data_2012 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.xlsx")
 names(data_2012)
 # Rename columns for consistency
 data_2012 <- data_2012 %>%
@@ -434,7 +434,7 @@ process_data <- function(sheet_name, unique_id, output_file, file_path) {
 }
 
 # Processing all municipalities for 2015
-file_path_2015 <- "../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/RESULTADOS POR CASILLA - AYUNTAMIENTOS - CANDIDATO.xlsx"
+file_path_2015 <- "../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/RESULTADOS POR CASILLA - AYUNTAMIENTOS - CANDIDATO.xlsx"
 process_data("CALKINI", "4001", "CALKINI", file_path_2015)
 process_data("CAMPECHE", "4002", "CAMPECHE", file_path_2015)
 process_data("CARMEN", "4003", "CARMEN", file_path_2015)
@@ -479,10 +479,10 @@ rm(data_2015)
 ##############################################
 
 # Load and process data for Carmen (2018)
-data_carmen_18 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx", sheet = "CARMEN")
+data_carmen_18 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx", sheet = "CARMEN")
 
 # Process for other municipalities
-data_hoja1 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx", sheet = "Hoja1") %>%
+data_hoja1 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx", sheet = "Hoja1") %>%
   dplyr::filter(Municipio != "Carmen")
 
 # Combine Carmen with other municipalities for 2018
@@ -542,6 +542,217 @@ rm(data_carmen_18)
 rm(data_2018)
 
 
+##############################################
+### PROCESSING DATA FOR 2021 -----------------
+##############################################
+
+# Load 2021 data except Hecelchakan
+data_2021_rest <- readxl::read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/ayuntamientos_2021.xlsx") %>%
+  select(!contains("%"))
+
+names(data_2021_rest)
+
+# Load 2021 data from Hecelchakan
+data_2021_hec <- read_excel(
+  "../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/AYUNTAMIENTO HECELCHAKÁN-Casilla.xlsx",
+  skip = 7,
+  col_names = c(
+    "MUNICIPIO", "CASILLA", 
+    "PAN", "PAN_%", "PRI", "PRI_%", "PRD", "PRD_%", 
+    "PT", "PT_%", "PVEM", "PVEM_%", "MC", "MC_%", 
+    "MORENA", "MORENA_%", "PES", "PES_%", "RSP", "RSP_%", 
+    "FXM", "FXM_%", "PAN_PRI_PRD", "PAN_PRI_PRD_%", 
+    "PAN_PRI", "PAN_PRI_%", "PAN_PRD", "PAN_PRD_%", 
+    "PRI_PRD", "PRI_PRD_%", "CI_1", "CI_1_%", 
+    "CANDIDATOS/AS NO REGISTRADOS/AS", "CANDIDATOS/AS NO REGISTRADOS/AS_%", 
+    "VOTOS VÁLIDOS", "VOTOS VÁLIDOS_%", 
+    "VOTOS NULOS", "VOTOS NULOS_%", 
+    "TOTAL", "TOTAL_%", 
+    "LISTA NOMINAL", "PARTICIPACIÓN CIUDADANA"
+  )
+) %>% 
+  select(!contains("%"))
+
+names(data_2021_hec)
+
+# Combine 2021 data
+data_2021 <- bind_rows(data_2021_rest, data_2021_hec) %>%
+  dplyr::filter(CASILLA != "" & CASILLA != "TOTAL") %>%
+  separate(CASILLA, into = c("section"), sep = " ", remove = FALSE) %>% 
+  dplyr::rename(
+    municipality = MUNICIPIO,
+    total = TOTAL,
+    listanominal = `LISTA NOMINAL`,
+    valid = `VOTOS VÁLIDOS`, 
+    nulos = `VOTOS NULOS`) %>% 
+  dplyr::mutate(municipality = gsub("Á", "A", municipality),
+                municipality = gsub("É", "E", municipality),
+                municipality = gsub("Í", "I", municipality),
+                municipality = gsub("Ó", "O", municipality))  %>%
+  dplyr::mutate(uniqueid = case_when(
+    municipality == "CALKINI" ~ "4001",
+    municipality == "CAMPECHE" ~ "4002",
+    municipality == "CARMEN" ~ "4003",
+    municipality == "CHAMPOTON" ~ "4004",
+    municipality == "HECELCHAKAN" ~ "4005",
+    municipality == "HOPELCHEN" ~ "4006",
+    municipality == "PALIZADA" ~ "4007",
+    municipality == "TENABO" ~ "4008",
+    municipality == "ESCARCEGA" ~ "4009",
+    municipality == "CALAKMUL" ~ "4010",
+    municipality == "CANDELARIA" ~ "4011",
+    municipality == "SEYBALPAYA" ~ "4012",
+    municipality == "DZITBALCHÉ" ~ "4013"
+  ),
+  uniqueid = as.numeric(uniqueid)) %>% 
+  dplyr::mutate(PAN_PRI_PRD = rowSums(across(c(PAN, PRI, PRD, PAN_PRI_PRD, PAN_PRI, PAN_PRD, PRI_PRD)), na.rm = TRUE)) %>%
+  dplyr::select(municipality, section, PT, PVEM, MC, MORENA, PES, RSP, FXM, PAN_PRI_PRD, valid,
+                nulos, total, listanominal, CI_1, uniqueid) %>% 
+  dplyr::mutate(section = as.numeric(section))
+
+# Calculate valid votes and municipal summaries
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(uniqueid, municipality, section) %>%
+  dplyr::summarise(across(c(PT, PVEM, MC, MORENA, PES, RSP, FXM, PAN_PRI_PRD, CI_1, valid, total, listanominal,nulos), sum, na.rm = TRUE))
+
+# Add year and month for 2021 data
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(year = 2021,
+                month = "June",
+                turnout = total / listanominal)
+rm(data_2021)
+rm(data_2021_hec)
+rm(data_2021_rest)
+
+##############################################
+### PROCESSING DATA FOR 2024 -----------------
+##############################################
+
+# Define the folder path
+folder_path <- "../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/"
+
+names_standard <- c(
+  "municipality", "casilla","PAN", "PAN_pct", "PRI", "PRI_pct", "PRD", "PRD_pct",
+  "PT", "PT_pct", "PVEM", "PVEM_pct", "MC", "MC_pct", "MORENA", "MORENA_pct",
+  "PES", "PES_pct", "CL", "CL_pct", "EDC", "EDC_pct", "MLC", "MLC_pct",
+  "PRI_PRD", "PRI_PRD_pct", "PT_PVEM_MORENA", "PT_PVEM_MORENA_pct",
+  "PT_PVEM", "PT_PVEM_pct", "PT_MORENA", "PT_MORENA_pct",
+  "PVEM_MORENA", "PVEM_MORENA_pct", "valid", "validos_pct",
+  "no_reg", "no_reg_pct", "nulos", "nulos_pct", "total", "total_pct",
+  "listanominal", "participacion"
+)
+
+names_7 <- c(
+  "municipality", "casilla","PAN", "PAN_pct", "PRI", "PRI_pct", "PRD", "PRD_pct",
+  "PT", "PT_pct", "PVEM", "PVEM_pct", "MC", "MC_pct", "MORENA", "MORENA_pct",
+  "PES", "PES_pct", "CL", "CL_pct", "EDC", "EDC_pct", "MLC", "MLC_pct",
+  "PRI_PRD", "PRI_PRD_pct", "valid", "validos_pct",
+  "no_reg", "no_reg_pct", "nulos", "nulos_pct", "total", "total_pct",
+  "listanominal", "participacion"
+)
+
+names_9 <- c(
+  "municipality", "casilla","PAN", "PAN_pct", "PRI", "PRI_pct", "PRD", "PRD_pct",
+  "PT", "PT_pct", "PVEM", "PVEM_pct", "MC", "MC_pct", "MORENA", "MORENA_pct",
+  "PES", "PES_pct", "CL", "CL_pct", "EDC", "EDC_pct", "MLC", "MLC_pct",
+  "CI_1", "CI_1_pct",
+  "PRI_PRD", "PRI_PRD_pct", "PT_PVEM_MORENA", "PT_PVEM_MORENA_pct",
+  "PT_PVEM", "PT_PVEM_pct", "PT_MORENA", "PT_MORENA_pct",
+  "PVEM_MORENA", "PVEM_MORENA_pct", "valid", "validos_pct",
+  "no_reg", "no_reg_pct", "nulos", "nulos_pct", "total", "total_pct",
+  "listanominal", "participacion"
+)
+
+names_12 <- c(
+  "municipality", "casilla","PAN", "PAN_pct", "PRI", "PRI_pct", "PRD", "PRD_pct",
+  "PT", "PT_pct", "PVEM", "PVEM_pct", "MC", "MC_pct", "MORENA", "MORENA_pct",
+  "PES", "PES_pct", "CL", "CL_pct", "EDC", "EDC_pct", "MLC", "MLC_pct",
+  "CI_2", "CI_2_pct",
+  "PRI_PRD", "PRI_PRD_pct", "PT_PVEM_MORENA", "PT_PVEM_MORENA_pct",
+  "PT_PVEM", "PT_PVEM_pct", "PT_MORENA", "PT_MORENA_pct",
+  "PVEM_MORENA", "PVEM_MORENA_pct", "valid", "validos_pct",
+  "no_reg", "no_reg_pct", "nulos", "nulos_pct", "total", "total_pct",
+  "listanominal", "participacion"
+)
+
+# Process all Excel files from 1 to 11
+for (x in 1:13) {
+  
+  # Choose the appropriate column names
+  if (x == 7) {
+    manual_names <- names_7
+  } else if (x == 9) {
+    manual_names <- names_9
+  } else if (x == 12) {
+    manual_names <- names_12
+  } else {
+    manual_names <- names_standard
+  }
+  
+  # Load Excel, skip header, and coerce to character
+  file_path <- paste0(folder_path, "AYU_", x, ".xlsx")
+  data <- read_excel(file_path, skip = 6, col_names = manual_names) %>%
+    mutate(across(everything(), as.character))
+  
+  # Save cleaned file
+  cleaned_file_path <- paste0(folder_path, "AYU_", x, "_clean.xlsx")
+  write.xlsx(data, cleaned_file_path)
+  
+  # Reload cleaned file and add uniqueid
+  data <- read_excel(cleaned_file_path) %>%
+    mutate(uniqueid = ifelse(x > 9, paste0("10", x), paste0("100", x)))
+  
+  # Save as RDS
+  saveRDS(data, file = paste0("dataset_", x, ".rds"))
+  
+  # Remove temp cleaned file
+  file.remove(cleaned_file_path)
+}
+
+# Append all datasets
+combined_2024 <- NULL
+for (x in 1:13) {
+  temp_data <- readRDS(paste0("dataset_", x, ".rds"))
+  combined_2024 <- bind_rows(combined_2024, temp_data)
+  file.remove(paste0("dataset_", x, ".rds"))  # Clean up
+}
+
+# Clean up casillas and other variables
+combined_2024 <- combined_2024 %>%
+  select(!contains("pct")) %>% 
+  dplyr::mutate(across(
+    .cols = -c(municipality, casilla),
+    .fns = ~ as.numeric(.)
+  )) %>% 
+  dplyr::filter(casilla != "" & casilla != "TOTAL") %>%
+  separate(casilla, into = c("section"), sep = " ", remove = FALSE) %>% 
+  dplyr::mutate(municipality = gsub("Á", "A", municipality),
+                municipality = gsub("É", "E", municipality),
+                municipality = gsub("Í", "I", municipality),
+                municipality = gsub("Ó", "O", municipality),
+                PRI_PRD = rowSums(across(c(PRI, PRD, PRI_PRD)), na.rm = TRUE),
+                PT_PVEM_MORENA = rowSums(across(c(PT, PVEM, MORENA, PT_PVEM,
+                                                  PT_MORENA, PVEM_MORENA, PT_PVEM,
+                                                  PT_PVEM,MORENA)), na.rm = TRUE)) %>% 
+  dplyr::select(municipality, section, PAN, MC, PES, CL, EDC, MLC, PRI_PRD, PT_PVEM_MORENA, valid, nulos, total, listanominal, CI_1, CI_2, uniqueid) %>% 
+  dplyr::mutate(section = as.numeric(section))
+
+# Calculate valid votes and municipal summaries
+collapsed_2024 <- combined_2024 %>%
+  dplyr::group_by(uniqueid, municipality, section) %>%
+  dplyr::summarise(across(c(PAN, MC, PES, CL, EDC, MLC, PRI_PRD, PT_PVEM_MORENA, valid, nulos, total, listanominal, CI_1, CI_2), sum, na.rm = TRUE))
+
+# Add year and month for 2024 data
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(year = 2024,
+                month = "June",
+                turnout = total / listanominal)
+rm(data)
+rm(temp_data)
+rm(combined_2024)
+
+
+
 # Combine the dataframes, handling different columns by filling with NA
 campeche_all <- bind_rows(collapsed_1997,
                           collapsed_2000,
@@ -550,6 +761,8 @@ campeche_all <- bind_rows(collapsed_1997,
                           collapsed_2009,
                           collapsed_2012,
                           collapsed_2015,
-                          collapsed_2018)
+                          collapsed_2018,
+                          collapsed_2021,
+                          collapsed_2024)
 
 data.table::fwrite(campeche_all,"../../../Processed Data/campeche/campeche_process_raw_data.csv")

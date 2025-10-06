@@ -24,7 +24,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, ""))
 
 # Load CSV file
-ayu_seccion_1997 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997.csv",
+ayu_seccion_1997 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997.csv",
                           encoding = "Latin-1")
 colnames(ayu_seccion_1997) <- tolower(colnames(ayu_seccion_1997))
 # Remove "-" and spaces
@@ -106,7 +106,7 @@ data_1997 <- ayu_seccion_1997 %>%
 
 
 # Read the CSV file
-ayu_seccion_2000 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000.csv",
+ayu_seccion_2000 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000.csv",
                           encoding = "Latin-1")
 colnames(ayu_seccion_2000) <- tolower(colnames(ayu_seccion_2000))
 # Remove "-" and spaces
@@ -208,7 +208,7 @@ data_2000 <- ayu_seccion_2000 %>%
   mutate(turnout = total / listanominal)
 
 # Read the CSV file (replace the file path with your actual path)
-queretaro_2003 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003.csv", stringsAsFactors = FALSE,
+queretaro_2003 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv", stringsAsFactors = FALSE,
                            encoding = "Latin-1")
 colnames(queretaro_2003) <- tolower(colnames(queretaro_2003))
 # Remove "-" and spaces
@@ -294,7 +294,7 @@ data_2003 <- queretaro_2003 %>%
   )
 
 # Load the CSV file into R
-ayuntamiento_2006 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006.csv",
+ayuntamiento_2006 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.csv",
                            encoding = "Latin-1")
 colnames(ayuntamiento_2006) <- tolower(colnames(ayuntamiento_2006))
 # Remove "-" and spaces
@@ -373,7 +373,7 @@ data_2006 <- data_2006 %>%
   arrange(section)
 
 # Load the CSV data
-ayuntamiento_2009 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.csv",
+ayuntamiento_2009 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.csv",
                            encoding = "Latin-1")
 colnames(ayuntamiento_2009) <- tolower(colnames(ayuntamiento_2009))
 # Remove "-" and spaces
@@ -464,7 +464,7 @@ data_2009 <- data %>%
   arrange(section)
 
 # Load the dataset (assuming the file is in CSV format)
-data <- read_xlsx("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.xlsx")
+data <- read_xlsx("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.xlsx")
 colnames(data) <- tolower(colnames(data))
 # Remove "-" and spaces
 names(data) <- gsub("[- ]", "", names(data))
@@ -543,7 +543,7 @@ data_2012 <- data %>%
 all_data <- bind_rows(data1997, data2000, data2003, data2006, data2009, data2012)
 
 # Load Excel file to get sheet names
-file_path <- "../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Municipios_2015.xlsx"
+file_path <- "../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Municipios_2015.xlsx"
 sheets <- excel_sheets(file_path)
 
 # Loop through all sheets, load the data, and clean it
@@ -723,7 +723,7 @@ data_2015 <- data_2015 %>%
   mutate(turnout = total / listanominal)
 
 # Load the CSV file for Huimilpan extraordinary election
-data <- read_csv("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/huimilpan.csv")
+data <- read_csv("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/huimilpan.csv")
 colnames(data) <- tolower(colnames(data))
 # Remove "-" and spaces
 names(data) <- gsub("[- ]", "", names(data))
@@ -803,7 +803,7 @@ data_2015_extra <- data %>%
   )
 
 # Step 1: Load and Clean the Election Data
-data <- read_excel("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Municipios_2018.xlsx", sheet = "Municipios")
+data <- read_excel("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Municipios_2018.xlsx", sheet = "Municipios")
 # Remove "-" and spaces
 names(data) <- gsub("-", "", names(data))
 # Combine coalitions for MORENA, PT, PES
@@ -926,6 +926,164 @@ data_2018 <- data %>%
 combined_data <- bind_rows(data_2015, data_2015_extra, data_2018)
 
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset from the excel
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/2021_Ayuntamiento.xlsx", skip = 1, sheet = "Casilla")
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NUM_VOTOS_CAN_NREG,
+                nulos = NUM_VOTOS_NULOS,
+                valid = NUM_VOTOS_VALIDOS,
+                FXM = FM) %>%
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ã'", "N", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    municipality = str_replace(municipality, "PE.*AMILLER", "PENAMILLER"),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "AMEALCO DE BONFIL" ~ 22001,
+      municipality == "ARROYO SECO" ~ 22003,
+      municipality == "CADEREYTA DE MONTES" ~ 22004,
+      municipality == "COLON" ~ 22005,
+      municipality == "CORREGIDORA" ~ 22006,
+      municipality == "EL MARQUES" ~ 22011,
+      municipality == "EZEQUIEL MONTES" ~ 22007,
+      municipality == "HUIMILPAN" ~ 22008,
+      municipality == "JALPAN DE SERRA" ~ 22009,
+      municipality == "LANDA DE MATAMOROS" ~ 22010,
+      municipality == "PEDRO ESCOBEDO" ~ 22012,
+      municipality == "PENAMILLER" ~ 22013,
+      municipality == "PINAL DE AMOLES" ~ 22002,
+      municipality == "QUERETARO" ~ 22014,
+      municipality == "SAN JOAQUIN" ~ 22015,
+      municipality == "SAN JUAN DEL RIO" ~ 22016,
+      municipality == "TEQUISQUIAPAN" ~ 22017,
+      municipality == "TOLIMAN" ~ 22018
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2021,
+    month = "June"
+  )
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset from the excel
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/QRO_AYUN_RESULTADOS_2024.csv")
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NO_REGISTRADAS,
+                nulos = NULOS,
+                CI_1 = EMC,
+                CI_2 = JBLL, 
+                CI_3 = RHR,
+                CI_4 = LDBG,
+                CI_5 = ATV,
+                CI_6 = SSP,
+                CI_7 = MRGH,
+                CI_8 = SMG) %>%
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ã'", "N", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    municipality = str_replace(municipality, "PE.*AMILLER", "PENAMILLER"),
+    section = as.numeric(section)
+  ) %>% 
+  rename_with(~ gsub("-", "_", .x)) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "AMEALCO DE BONFIL" ~ 22001,
+      municipality == "ARROYO SECO" ~ 22003,
+      municipality == "CADEREYTA DE MONTES" ~ 22004,
+      municipality == "COLON" ~ 22005,
+      municipality == "CORREGIDORA" ~ 22006,
+      municipality == "EL MARQUES" ~ 22011,
+      municipality == "EZEQUIEL MONTES" ~ 22007,
+      municipality == "HUIMILPAN" ~ 22008,
+      municipality == "JALPAN DE SERRA" ~ 22009,
+      municipality == "LANDA DE MATAMOROS" ~ 22010,
+      municipality == "PEDRO ESCOBEDO" ~ 22012,
+      municipality == "PENAMILLER" ~ 22013,
+      municipality == "PINAL DE AMOLES" ~ 22002,
+      municipality == "QUERETARO" ~ 22014,
+      municipality == "SAN JOAQUIN" ~ 22015,
+      municipality == "SAN JUAN DEL RIO" ~ 22016,
+      municipality == "TEQUISQUIAPAN" ~ 22017,
+      municipality == "TOLIMAN" ~ 22018
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:PRI_PRD), na.rm = TRUE),
+    year = 2024,
+    month = "June"
+  )
+
+# Combine the datasets
+combined_data <- bind_rows(data_2015, data_2015_extra, data_2018, collapsed_2021, collapsed_2024)
+
+
 #######################################################################
 # Step: Append 
 
@@ -937,5 +1095,3 @@ data_master <- data_master %>%
   mutate(municipality = toupper(municipality))
 
 data.table::fwrite(data_master,"../../../Processed Data/queretaro/queretaro_process_raw_data.csv")
-
-

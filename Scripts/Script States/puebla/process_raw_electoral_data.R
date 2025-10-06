@@ -24,7 +24,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, ""))
 
 # Read the CSV file
-data <- fread("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Ayu_Seccion_1998_No_LN.csv",
+data <- fread("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Ayu_Seccion_1998_No_LN.csv",
               encoding = "Latin-1")
 colnames(data) <- tolower(colnames(data))
 names(data) <- gsub("[- ]", "", names(data))
@@ -336,7 +336,7 @@ df_1998 <- filtered_data %>%
 rm(filtered_data)
 
 # Read the CSV file
-data <- read_csv("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Ayu_Seccion_2001.csv")
+data <- read_csv("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Ayu_Seccion_2001.csv")
 colnames(data) <- tolower(colnames(data))
 # Rename columns
 data <- data %>%
@@ -645,7 +645,7 @@ data_2001 <- data %>%
   mutate(year = 2001, month = "November")
 
 # Import the Excel sheet and specify the range of cells to read
-data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Resultados por casilla elección 2002 Molcaxac.xlsx", sheet = "aytos", range = "A8:V16", col_names = TRUE)
+data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Resultados por casilla elección 2002 Molcaxac.xlsx", sheet = "aytos", range = "A8:V16", col_names = TRUE)
 
 colnames(data) <- tolower(colnames(data))
 
@@ -716,7 +716,7 @@ data_2002 <- collapsed_data %>%
   mutate(year = 2002, month = "June")
 
 # Read the CSV file
-data <- read_csv("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Ayu_Seccion_2004.csv")
+data <- read_csv("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Ayu_Seccion_2004.csv")
 colnames(data) <- tolower(colnames(data))
 # Rename columns
 data <- data %>%
@@ -996,7 +996,7 @@ data <- data %>%
   arrange(section)
 
 # Import the Excel file with case normalization (convert to lowercase) and keep first row as headers
-data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Ayu_Seccion_2007.xlsx", .name_repair = "minimal")
+data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Ayu_Seccion_2007.xlsx", .name_repair = "minimal")
 colnames(data) <- tolower(colnames(data))
 # Rename columns
 data <- data %>%
@@ -1291,7 +1291,7 @@ data_2007 <- collapsed_data %>%
   mutate(year = 2007, month = "November")
 
 # Import the Excel sheet with specified cell range
-data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/ResultadosDeLaElecciónVotaciónXCasilla Aytos extra. 2008.xlsx", sheet = "ayto", range = "A7:R25", col_names = TRUE)
+data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/ResultadosDeLaElecciónVotaciónXCasilla Aytos extra. 2008.xlsx", sheet = "ayto", range = "A7:R25", col_names = TRUE)
 # Remove "-" and spaces
 names(data) <- gsub("[. ]", "", names(data))
 # Convert all columns to numeric
@@ -1340,7 +1340,7 @@ data_2008 <- collapsed_data %>%
   mutate(year = 2008, month = "June")
 
 # Import the Excel file and convert column names to lowercase
-data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Ayu_Seccion_2010.xlsx", .name_repair = "minimal")
+data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Ayu_Seccion_2010.xlsx", .name_repair = "minimal")
 colnames(data) <- tolower(colnames(data))
 # Rename columns
 data <- data %>%
@@ -1632,7 +1632,7 @@ collapsed_data <- collapsed_data %>%
   arrange(section)
 
 # Import the Excel file with the specified sheet and cell range
-data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Resul_ por casillas e individuales elec extraordinaria 2011.xlsx", 
+data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Resul_ por casillas e individuales elec extraordinaria 2011.xlsx", 
                    sheet = "2011", range = "A6:K75", col_names = TRUE)
 names(data)
 # Rename columns
@@ -1692,7 +1692,7 @@ data_2011 <- collapsed_data %>%
   mutate(year = 2011, month = "July")
 
 # Import the Excel sheet with specified cell range
-data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/RESULTADOS_POR_CASILLA_AYUNTAMIENTOS Y DIPUTADOS_2012_2013.xlsx", 
+data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/RESULTADOS_POR_CASILLA_AYUNTAMIENTOS Y DIPUTADOS_2012_2013.xlsx", 
                    sheet = "AYUNTAMIENTOS FINAL", range = "A7:O6903", col_names = TRUE)
 names(data)
 # Rename columns
@@ -2021,7 +2021,7 @@ data_2013 <- data_2013 %>%
   arrange(section)
 
 # Import Excel data
-puebla_data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/FINAL_Ayu_Ext_2014.xlsx", sheet = "2014", col_names = TRUE)
+puebla_data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/FINAL_Ayu_Ext_2014.xlsx", sheet = "2014", col_names = TRUE)
 
 # Replace 'uniqueid' based on 'municipality' values
 puebla_data <- puebla_data %>%
@@ -2060,7 +2060,7 @@ data_2014 <- data_2014 %>%
   arrange(uniqueid)
 
 # Import the Excel file
-puebla_2018 <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/Ayuntamientos_2018.xlsx", sheet = "Ayuntamientos")
+puebla_2018 <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Ayuntamientos_2018.xlsx", sheet = "Ayuntamientos")
 names(puebla_2018)
 # Apply proper case to the municipality names
 puebla_2018 <- puebla_2018 %>%
@@ -2301,7 +2301,7 @@ puebla_2018 <- puebla_2018 %>%
 
 # Preserve and import the Excel file with coalitions
 # Save it as a temporary file to later merge
-coalitions <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/puebla_coalitions_2018.xlsx", sheet = "Sheet1")
+coalitions <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/puebla_coalitions_2018.xlsx", sheet = "Sheet1")
 
 # Replace missing values (NA) in cc_* columns with 0
 puebla_2018 <- puebla_2018 %>%
@@ -2435,7 +2435,7 @@ data_2018 <- puebla_data_2018 %>%
 # Import CSV files and save them as individual RDS files
 municipalities <- c("AHUAZOTEPEC", "CAÑADA MORELOS", "MAZAPILTEPEC DE JUAREZ", "OCOYUCAN", "TEPEOJUMA")
 for (x in municipalities) {
-  file_path <- paste0("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018/20190609_0800_CW_PRESIDENTE_MUNICIPAL/PRESIDENTE_MUNICIPAL_", x, "_2019.csv")
+  file_path <- paste0("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/20190609_0800_CW_PRESIDENTE_MUNICIPAL/PRESIDENTE_MUNICIPAL_", x, "_2019.csv")
   data <- read_csv(file_path, col_names = TRUE)
   saveRDS(data, paste0(x, ".rds"))
 }
@@ -2541,8 +2541,675 @@ append_data_collapsed <- append_data_collapsed %>%
 data_2019 <- append_data_collapsed %>%
   mutate(year = 2019, month = "June")
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/21/RESULTADOS_COMPUTOS_MUNICIPALES_POR_PARTIDO_POLITICO_NIVEL_CASILLA.xlsx", skip = 4)
+
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Puebla_Electoral_Data_2022.xlsx")
+
+names(data_2021)
+names(data_ext)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO_LOCAL,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL_CASILLA,
+                total = TOTAL_VOTOS,
+                no_reg = NO_REGISTRADOS,
+                nulos = NUM_VOTOS_NULOS,
+                valid = NUMERO_VOTOS_VALIDOS,
+                PANAL = NAP, 
+                CPP = PCPP,
+                CI_1 = CAND_IND_1,
+                CI_2 = CAND_IND_2) %>%
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+data_ext <- data_ext %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                total = TOTAL,
+                no_reg = CANDIDATOS_NO_REGISTRADOS,
+                nulos = NULOS,
+                PANAL = NAP, 
+                CPP = PCPP) %>%
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_ext <- data_ext %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "TLAHUAPAN" ~ 21180,
+      municipality == "TEOTLALCO" ~ 21160,
+      municipality == "SAN JOSE MIAHUATLAN" ~ 21129
+    ))
+
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "ACAJETE" ~ 21001,
+      municipality == "ACATENO" ~ 21002,
+      municipality == "ACATLAN" ~ 21003,
+      municipality == "ACATZINGO" ~ 21004,
+      municipality == "ACTEOPAN" ~ 21005,
+      municipality == "AHUACATLAN" ~ 21006,
+      municipality == "AHUATLAN" ~ 21007,
+      municipality == "AHUAZOTEPEC" ~ 21008,
+      municipality == "AHUEHUETITLA" ~ 21009,
+      municipality == "AJALPAN" ~ 21010,
+      municipality == "ALBINO ZERTUCHE" ~ 21011,
+      municipality == "ALJOJUCA" ~ 21012,
+      municipality == "ALTEPEXI" ~ 21013,
+      municipality == "AMIXTLAN" ~ 21014,
+      municipality == "AMOZOC" ~ 21015,
+      municipality == "AQUIXTLA" ~ 21016,
+      municipality == "ATEMPAN" ~ 21017,
+      municipality == "ATEXCAL" ~ 21018,
+      municipality == "ATLEQUIZAYAN" ~ 21080,
+      municipality == "ATLIXCO" ~ 21019,
+      municipality == "ATOYATEMPAN" ~ 21020,
+      municipality == "ATZALA" ~ 21021,
+      municipality == "ATZITZIHUACAN" ~ 21022,
+      municipality == "ATZITZINTLA" ~ 21023,
+      municipality == "AXUTLA" ~ 21024,
+      municipality == "AYOTOXCO DE GUERRERO" ~ 21025,
+      municipality == "CALPAN" ~ 21026,
+      municipality == "CALTEPEC" ~ 21027,
+      municipality == "CANADA DE MORELOS" ~ 21099,
+      municipality == "CAMOCUAUTLA" ~ 21028,
+      municipality == "CAXHUACAN" ~ 21029,
+      municipality == "CHALCHICOMULA DE SESMA" ~ 21045,
+      municipality == "CHAPULCO" ~ 21046,
+      municipality == "CHIAUTLA" ~ 21047,
+      municipality == "CHIAUTZINGO" ~ 21048,
+      municipality == "CHICHIQUILA" ~ 21050,
+      municipality == "CHICONCUAUTLA" ~ 21049,
+      municipality == "CHIETLA" ~ 21051,
+      municipality == "CHIGMECATITLAN" ~ 21052,
+      municipality == "CHIGNAHUAPAN" ~ 21053,
+      municipality == "CHIGNAUTLA" ~ 21054,
+      municipality == "CHILA" ~ 21055,
+      municipality == "CHILA DE LA SAL" ~ 21056,
+      municipality == "CHILCHOTLA" ~ 21058,
+      municipality == "CHINANTLA" ~ 21059,
+      municipality == "COATEPEC" ~ 21030,
+      municipality == "COATZINGO" ~ 21031,
+      municipality == "COHETZALA" ~ 21032,
+      municipality == "COHUECAN" ~ 21033,
+      municipality == "CORONANGO" ~ 21034,
+      municipality == "COXCATLAN" ~ 21035,
+      municipality == "COYOMEAPAN" ~ 21036,
+      municipality == "COYOTEPEC" ~ 21037,
+      municipality == "CUAPIAXTLA DE MADERO" ~ 21038,
+      municipality == "CUAUTEMPAN" ~ 21039,
+      municipality == "CUAUTINCHAN" ~ 21040,
+      municipality == "CUAUTLANCINGO" ~ 21041,
+      municipality == "CUAYUCA DE ANDRADE" ~ 21042,
+      municipality == "CUETZALAN DEL PROGRESO" ~ 21043,
+      municipality == "CUYOACO" ~ 21044,
+      municipality == "DOMINGO ARENAS" ~ 21060,
+      municipality == "ELOXOCHITLAN" ~ 21061,
+      municipality == "EPATLAN" ~ 21062,
+      municipality == "ESPERANZA" ~ 21063,
+      municipality == "FRANCISCO Z. MENA" ~ 21064,
+      municipality == "GENERAL FELIPE ANGELES" ~ 21065,
+      municipality == "GUADALUPE" ~ 21066,
+      municipality == "GUADALUPE VICTORIA" ~ 21067,
+      municipality == "HERMENEGILDO GALEANA" ~ 21068,
+      municipality == "HONEY" ~ 21057,
+      municipality == "HUAQUECHULA" ~ 21069,
+      municipality == "HUATLATLAUCA" ~ 21070,
+      municipality == "HUAUCHINANGO" ~ 21071,
+      municipality == "HUEHUETLA" ~ 21072,
+      municipality == "HUEHUETLAN EL CHICO" ~ 21073,
+      municipality == "HUEHUETLAN EL GRANDE" ~ 21150,
+      municipality == "HUEJOTZINGO" ~ 21074,
+      municipality == "HUEYAPAN" ~ 21075,
+      municipality == "HUEYTAMALCO" ~ 21076,
+      municipality == "HUEYTLALPAN" ~ 21077,
+      municipality == "HUITZILAN DE SERDAN" ~ 21078,
+      municipality == "HUITZILTEPEC" ~ 21079,
+      municipality == "IXCAMILPA DE GUERRERO" ~ 21081,
+      municipality == "IXCAQUIXTLA" ~ 21082,
+      municipality == "IXTACAMAXTITLAN" ~ 21083,
+      municipality == "IXTEPEC" ~ 21084,
+      municipality == "IZUCAR DE MATAMOROS" ~ 21085,
+      municipality == "JALPAN" ~ 21086,
+      municipality == "JOLALPAN" ~ 21087,
+      municipality == "JONOTLA" ~ 21088,
+      municipality == "JOPALA" ~ 21089,
+      municipality == "JUAN C. BONILLA" ~ 21090,
+      municipality == "JUAN GALINDO" ~ 21091,
+      municipality == "JUAN N. MENDEZ" ~ 21092,
+      municipality == "MAGDALENA TLATLAUQUITEPEC" ~ 21095,
+      municipality == "LAFRAGUA" ~ 21093,
+      municipality == "LIBRES" ~ 21094,
+      municipality == "LOS REYES DE JUAREZ" ~ 21118,
+      municipality == "MAZAPILTEPEC DE JUAREZ" ~ 21096,
+      municipality == "MIXTLA" ~ 21097,
+      municipality == "MOLCAXAC" ~ 21098,
+      municipality == "NAUPAN" ~ 21100,
+      municipality == "NAUZONTLA" ~ 21101,
+      municipality == "NEALTICAN" ~ 21102,
+      municipality == "NICOLAS BRAVO" ~ 21103,
+      municipality == "NOPALUCAN" ~ 21104,
+      municipality == "OCOTEPEC" ~ 21105,
+      municipality == "OCOYUCAN" ~ 21106,
+      municipality == "OLINTLA" ~ 21107,
+      municipality == "ORIENTAL" ~ 21108,
+      municipality == "PAHUATLAN" ~ 21109,
+      municipality == "PALMAR DE BRAVO" ~ 21110,
+      municipality == "PANTEPEC" ~ 21111,
+      municipality == "PETLALCINGO" ~ 21112,
+      municipality == "PIAXTLA" ~ 21113,
+      municipality == "PUEBLA" ~ 21114,
+      municipality == "QUECHOLAC" ~ 21115,
+      municipality == "QUIMIXTLAN" ~ 21116,
+      municipality == "RAFAEL LARA GRAJALES" ~ 21117,
+      municipality == "SAN ANDRES CHOLULA" ~ 21119,
+      municipality == "SAN ANTONIO CANADA" ~ 21120,
+      municipality == "SAN DIEGO LA MESA TOCHIMILTZINGO" ~ 21121,
+      municipality == "SAN FELIPE TEOTLALCINGO" ~ 21122,
+      municipality == "SAN FELIPE TEPATLAN" ~ 21123,
+      municipality == "SAN GABRIEL CHILAC" ~ 21124,
+      municipality == "SAN GREGORIO ATZOMPA" ~ 21125,
+      municipality == "SAN JERONIMO TECUANIPAN" ~ 21126,
+      municipality == "SAN JERONIMO XAYACATLAN" ~ 21127,
+      municipality == "SAN JOSE CHIAPA" ~ 21128,
+      municipality == "SAN JOSE MIAHUATLAN" ~ 21129,
+      municipality == "SAN JUAN ATENCO" ~ 21130,
+      municipality == "SAN JUAN ATZOMPA" ~ 21131,
+      municipality == "SAN MARTIN TEXMELUCAN" ~ 21132,
+      municipality == "SAN MARTIN TOTOLTEPEC" ~ 21133,
+      municipality == "SAN MATIAS TLALANCALECA" ~ 21134,
+      municipality == "SAN MIGUEL IXITLAN" ~ 21135,
+      municipality == "SAN MIGUEL XOXTLA" ~ 21136,
+      municipality == "SAN NICOLAS BUENOS AIRES" ~ 21137,
+      municipality == "SAN NICOLAS DE LOS RANCHOS" ~ 21138,
+      municipality == "SAN PABLO ANICANO" ~ 21139,
+      municipality == "SAN PEDRO CHOLULA" ~ 21140,
+      municipality == "SAN PEDRO YELOIXTLAHUACA" ~ 21141,
+      municipality == "SAN SALVADOR EL SECO" ~ 21142,
+      municipality == "SAN SALVADOR EL VERDE" ~ 21143,
+      municipality == "SAN SALVADOR HUIXCOLOTLA" ~ 21144,
+      municipality == "SAN SEBASTIAN TLACOTEPEC" ~ 21145,
+      municipality == "SANTA CATARINA TLALTEMPAN" ~ 21146,
+      municipality == "SANTA INES AHUATEMPAN" ~ 21147,
+      municipality == "SANTA ISABEL CHOLULA" ~ 21148,
+      municipality == "SANTIAGO MIAHUATLAN" ~ 21149,
+      municipality == "SANTO TOMAS HUEYOTLIPAN" ~ 21151,
+      municipality == "SOLTEPEC" ~ 21152,
+      municipality == "TECALI DE HERRERA" ~ 21153,
+      municipality == "TECAMACHALCO" ~ 21154,
+      municipality == "TECOMATLAN" ~ 21155,
+      municipality == "TEHUACAN" ~ 21156,
+      municipality == "TEHUITZINGO" ~ 21157,
+      municipality == "TENAMPULCO" ~ 21158,
+      municipality == "TEOPANTLAN" ~ 21159,
+      municipality == "TEOTLALCO" ~ 21160,
+      municipality == "TEPANCO DE LOPEZ" ~ 21161,
+      municipality == "TEPANGO DE RODRIGUEZ" ~ 21162,
+      municipality == "TEPATLAXCO DE HIDALGO" ~ 21163,
+      municipality == "TEPEACA" ~ 21164,
+      municipality == "TEPEMAXALCO" ~ 21165,
+      municipality == "TEPEOJUMA" ~ 21166,
+      municipality == "TEPETZINTLA" ~ 21167,
+      municipality == "TEPEXCO" ~ 21168,
+      municipality == "TEPEXI DE RODRIGUEZ" ~ 21169,
+      municipality == "TEPEYAHUALCO" ~ 21170,
+      municipality == "TEPEYAHUALCO DE CUAUHTEMOC" ~ 21171,
+      municipality == "TETELA DE OCAMPO" ~ 21172,
+      municipality == "TETELES DE AVILA CASTILLO" ~ 21173,
+      municipality == "TEZIUTLAN" ~ 21174,
+      municipality == "TIANGUISMANALCO" ~ 21175,
+      municipality == "TILAPA" ~ 21176,
+      municipality == "TLACHICHUCA" ~ 21179,
+      municipality == "TLACOTEPEC DE BENITO JUAREZ" ~ 21177,
+      municipality == "TLACUILOTEPEC" ~ 21178,
+      municipality == "TLAHUAPAN" ~ 21180,
+      municipality == "TLALTENANGO" ~ 21181,
+      municipality == "TLANEPANTLA" ~ 21182,
+      municipality == "TLAOLA" ~ 21183,
+      municipality == "TLAPACOYA" ~ 21184,
+      municipality == "TLAPANALA" ~ 21185,
+      municipality == "TLATLAUQUITEPEC" ~ 21186,
+      municipality == "TLAXCO" ~ 21187,
+      municipality == "TOCHIMILCO" ~ 21188,
+      municipality == "TOCHTEPEC" ~ 21189,
+      municipality == "TOTOLTEPEC DE GUERRERO" ~ 21190,
+      municipality == "TULCINGO DE VALLE" | municipality == "TULCINGO" ~ 21191,
+      municipality == "TUZAMAPAN DE GALEANA" ~ 21192,
+      municipality == "TZICATLACOYAN" ~ 21193,
+      municipality == "VENUSTIANO CARRANZA" ~ 21194,
+      municipality == "VICENTE GUERRERO" ~ 21195,
+      municipality == "XAYACATLAN DE BRAVO" ~ 21196,
+      municipality == "XICOTEPEC" ~ 21197,
+      municipality == "XICOTLAN" ~ 21198,
+      municipality == "XIUTETELCO" ~ 21199,
+      municipality == "XOCHIAPULCO" ~ 21200,
+      municipality == "XOCHILTEPEC" ~ 21201,
+      municipality == "XOCHITLAN DE VICENTE SUAREZ" ~ 21202,
+      municipality == "XOCHITLAN TODOS SANTOS" ~ 21203,
+      municipality == "YAONAHUAC" ~ 21204,
+      municipality == "YEHUALTEPEC" ~ 21205,
+      municipality == "ZACAPALA" ~ 21206,
+      municipality == "ZACAPOAXTLA" ~ 21207,
+      municipality == "ZACATLAN" ~ 21208,
+      municipality == "ZAPOTITLAN SALINAS" ~ 21209,
+      municipality == "ZAPOTITLAN DE MENDEZ" | municipality == "ZAPOTITLAN" ~ 21210,
+      municipality == "ZARAGOZA" ~ 21211,
+      municipality == "ZAUTLA" ~ 21212,
+      municipality == "ZIHUATEUTLA" ~ 21213,
+      municipality == "ZINACATEPEC" ~ 21214,
+      municipality == "ZONGOZOTLA" ~ 21215,
+      municipality == "ZOQUIAPAN" ~ 21216,
+      municipality == "ZOQUITLAN" ~ 21217,
+      TRUE ~ NA_integer_
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(listanominal:total, PAN:CI_2), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+collapsed_ext <- data_ext %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:total), 
+           \(x) sum(x, na.rm = TRUE))
+  ) %>% 
+  dplyr::mutate(
+    valid = sum(c_across(PAN:PAN_PRD), na.rm = TRUE),
+  )
+
+# Get the municipalities that appear in the ext data
+ext_municipalities <- unique(collapsed_ext$municipality)
+
+# Keep listanominal from 2021 for those municipalities
+listanominal_2021 <- collapsed_2021 %>%
+  filter(municipality %in% ext_municipalities) %>%
+  select(section, listanominal)
+
+# Merge ext data with the listanominal from 2021
+collapsed_ext <- collapsed_ext %>%
+  left_join(listanominal_2021, by = c("municipality", "section"))
+
+# Merge both data frames and filter 2021 for ext elections
+collapsed_2021 <- bind_rows(collapsed_2021 %>% filter(!municipality %in% ext_municipalities),
+                            collapsed_ext)
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = case_when(
+      municipality %in% c("SAN JOSE MIAHUATLAN", "TEOTLALCO", "TLAHUAPAN") ~ 2022,
+      TRUE ~ 2021
+    ),
+    month = case_when(
+      municipality %in% c("SAN JOSE MIAHUATLAN", "TEOTLALCO", "TLAHUAPAN") ~ "March",
+      TRUE ~ "June"
+    ))
+
+rm(data_2021)
+rm(data_ext)
+rm(listanominal_2021)
+rm(collapsed_ext)
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset
+data_2024 <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/24/RESULTADO_CASILLA_AYUNTAMIENTOS_PEEOC_2023_2024.xlsx", 
+                        skip = 7)
+
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/RESULTADOS_POR_CASILLA_AYUNTAMIENTOS_PELE_2025.xlsx",
+                       skip = 5)
+
+names(data_2024)
+names(data_ext)
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCIÓN,
+                total = TOTAL,
+                no_reg = "NO REGISTRADOS",
+                nulos = NULOS,
+                CI_1 = "CAND_IND 1",
+                CI_2 = CAND_IND2) %>%
+  rename_with(~ gsub("NAP", "PANAL", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section),
+    across(c(PAN:total), as.numeric)
+  ) %>% 
+  dplyr::filter(!municipality %in% c("AYOTOXCO DE GUERRERO", "CHIGNAHUAPAN", "VENUSTIANO CARRANZA", "XIUTETELCO")
+                & section > 0)
+
+data_ext <- data_ext %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCIÓN,
+                total = "VOTACIÓN TOTAL",
+                no_reg = "CANDIDATURAS NO REGISTRADAS",
+                nulos = NULOS) %>%
+  rename_with(~ gsub("NAP", "PANAL", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section),
+    across(c(PAN:total), as.numeric)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Merge 2024 and extraordinary elections
+data_2024 <- bind_rows(data_2024, data_ext)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "ACAJETE" ~ 21001,
+      municipality == "ACATENO" ~ 21002,
+      municipality == "ACATLAN" ~ 21003,
+      municipality == "ACATZINGO" ~ 21004,
+      municipality == "ACTEOPAN" ~ 21005,
+      municipality == "AHUACATLAN" ~ 21006,
+      municipality == "AHUATLAN" ~ 21007,
+      municipality == "AHUAZOTEPEC" ~ 21008,
+      municipality == "AHUEHUETITLA" ~ 21009,
+      municipality == "AJALPAN" ~ 21010,
+      municipality == "ALBINO ZERTUCHE" ~ 21011,
+      municipality == "ALJOJUCA" ~ 21012,
+      municipality == "ALTEPEXI" ~ 21013,
+      municipality == "AMIXTLAN" ~ 21014,
+      municipality == "AMOZOC" ~ 21015,
+      municipality == "AQUIXTLA" ~ 21016,
+      municipality == "ATEMPAN" ~ 21017,
+      municipality == "ATEXCAL" ~ 21018,
+      municipality == "ATLEQUIZAYAN" ~ 21080,
+      municipality == "ATLIXCO" ~ 21019,
+      municipality == "ATOYATEMPAN" ~ 21020,
+      municipality == "ATZALA" ~ 21021,
+      municipality == "ATZITZIHUACAN" ~ 21022,
+      municipality == "ATZITZINTLA" ~ 21023,
+      municipality == "AXUTLA" ~ 21024,
+      municipality == "AYOTOXCO DE GUERRERO" ~ 21025,
+      municipality == "CALPAN" ~ 21026,
+      municipality == "CALTEPEC" ~ 21027,
+      municipality == "CANADA DE MORELOS" | municipality == "CANADA MORELOS" ~ 21099,
+      municipality == "CAMOCUAUTLA" ~ 21028,
+      municipality == "CAXHUACAN" ~ 21029,
+      municipality == "CHALCHICOMULA DE SESMA" ~ 21045,
+      municipality == "CHAPULCO" ~ 21046,
+      municipality == "CHIAUTLA" ~ 21047,
+      municipality == "CHIAUTZINGO" ~ 21048,
+      municipality == "CHICHIQUILA" ~ 21050,
+      municipality == "CHICONCUAUTLA" ~ 21049,
+      municipality == "CHIETLA" ~ 21051,
+      municipality == "CHIGMECATITLAN" ~ 21052,
+      municipality == "CHIGNAHUAPAN" ~ 21053,
+      municipality == "CHIGNAUTLA" ~ 21054,
+      municipality == "CHILA" ~ 21055,
+      municipality == "CHILA DE LA SAL" ~ 21056,
+      municipality == "CHILCHOTLA" ~ 21058,
+      municipality == "CHINANTLA" ~ 21059,
+      municipality == "COATEPEC" ~ 21030,
+      municipality == "COATZINGO" ~ 21031,
+      municipality == "COHETZALA" ~ 21032,
+      municipality == "COHUECAN" ~ 21033,
+      municipality == "CORONANGO" ~ 21034,
+      municipality == "COXCATLAN" ~ 21035,
+      municipality == "COYOMEAPAN" ~ 21036,
+      municipality == "COYOTEPEC" ~ 21037,
+      municipality == "CUAPIAXTLA DE MADERO" ~ 21038,
+      municipality == "CUAUTEMPAN" ~ 21039,
+      municipality == "CUAUTINCHAN" ~ 21040,
+      municipality == "CUAUTLANCINGO" ~ 21041,
+      municipality == "CUAYUCA DE ANDRADE" ~ 21042,
+      municipality == "CUETZALAN DEL PROGRESO" ~ 21043,
+      municipality == "CUYOACO" ~ 21044,
+      municipality == "DOMINGO ARENAS" ~ 21060,
+      municipality == "ELOXOCHITLAN" ~ 21061,
+      municipality == "EPATLAN" ~ 21062,
+      municipality == "ESPERANZA" ~ 21063,
+      municipality == "FRANCISCO Z. MENA" ~ 21064,
+      municipality == "GENERAL FELIPE ANGELES" ~ 21065,
+      municipality == "GUADALUPE" ~ 21066,
+      municipality == "GUADALUPE VICTORIA" ~ 21067,
+      municipality == "HERMENEGILDO GALEANA" ~ 21068,
+      municipality == "HONEY" ~ 21057,
+      municipality == "HUAQUECHULA" ~ 21069,
+      municipality == "HUATLATLAUCA" ~ 21070,
+      municipality == "HUAUCHINANGO" ~ 21071,
+      municipality == "HUEHUETLA" ~ 21072,
+      municipality == "HUEHUETLAN EL CHICO" ~ 21073,
+      municipality == "HUEHUETLAN EL GRANDE" ~ 21150,
+      municipality == "HUEJOTZINGO" ~ 21074,
+      municipality == "HUEYAPAN" ~ 21075,
+      municipality == "HUEYTAMALCO" ~ 21076,
+      municipality == "HUEYTLALPAN" ~ 21077,
+      municipality == "HUITZILAN DE SERDAN" ~ 21078,
+      municipality == "HUITZILTEPEC" ~ 21079,
+      municipality == "IXCAMILPA DE GUERRERO" ~ 21081,
+      municipality == "IXCAQUIXTLA" ~ 21082,
+      municipality == "IXTACAMAXTITLAN" ~ 21083,
+      municipality == "IXTEPEC" ~ 21084,
+      municipality == "IZUCAR DE MATAMOROS" ~ 21085,
+      municipality == "JALPAN" ~ 21086,
+      municipality == "JOLALPAN" ~ 21087,
+      municipality == "JONOTLA" ~ 21088,
+      municipality == "JOPALA" ~ 21089,
+      municipality == "JUAN C. BONILLA" ~ 21090,
+      municipality == "JUAN GALINDO" ~ 21091,
+      municipality == "JUAN N. MENDEZ" ~ 21092,
+      municipality == "MAGDALENA TLATLAUQUITEPEC" | municipality == "LA MAGDALENA TLATLAUQUITEPEC" ~ 21095,
+      municipality == "LAFRAGUA" ~ 21093,
+      municipality == "LIBRES" ~ 21094,
+      municipality == "LOS REYES DE JUAREZ" ~ 21118,
+      municipality == "MAZAPILTEPEC DE JUAREZ" ~ 21096,
+      municipality == "MIXTLA" ~ 21097,
+      municipality == "MOLCAXAC" ~ 21098,
+      municipality == "NAUPAN" ~ 21100,
+      municipality == "NAUZONTLA" ~ 21101,
+      municipality == "NEALTICAN" ~ 21102,
+      municipality == "NICOLAS BRAVO" ~ 21103,
+      municipality == "NOPALUCAN" ~ 21104,
+      municipality == "OCOTEPEC" ~ 21105,
+      municipality == "OCOYUCAN" ~ 21106,
+      municipality == "OLINTLA" ~ 21107,
+      municipality == "ORIENTAL" ~ 21108,
+      municipality == "PAHUATLAN" ~ 21109,
+      municipality == "PALMAR DE BRAVO" ~ 21110,
+      municipality == "PANTEPEC" ~ 21111,
+      municipality == "PETLALCINGO" ~ 21112,
+      municipality == "PIAXTLA" ~ 21113,
+      municipality == "PUEBLA" ~ 21114,
+      municipality == "QUECHOLAC" ~ 21115,
+      municipality == "QUIMIXTLAN" ~ 21116,
+      municipality == "RAFAEL LARA GRAJALES" ~ 21117,
+      municipality == "SAN ANDRES CHOLULA" ~ 21119,
+      municipality == "SAN ANTONIO CANADA" ~ 21120,
+      municipality == "SAN DIEGO LA MESA TOCHIMILTZINGO" ~ 21121,
+      municipality == "SAN FELIPE TEOTLALCINGO" ~ 21122,
+      municipality == "SAN FELIPE TEPATLAN" ~ 21123,
+      municipality == "SAN GABRIEL CHILAC" ~ 21124,
+      municipality == "SAN GREGORIO ATZOMPA" ~ 21125,
+      municipality == "SAN JERONIMO TECUANIPAN" ~ 21126,
+      municipality == "SAN JERONIMO XAYACATLAN" ~ 21127,
+      municipality == "SAN JOSE CHIAPA" ~ 21128,
+      municipality == "SAN JOSE MIAHUATLAN" ~ 21129,
+      municipality == "SAN JUAN ATENCO" ~ 21130,
+      municipality == "SAN JUAN ATZOMPA" ~ 21131,
+      municipality == "SAN MARTIN TEXMELUCAN" ~ 21132,
+      municipality == "SAN MARTIN TOTOLTEPEC" ~ 21133,
+      municipality == "SAN MATIAS TLALANCALECA" ~ 21134,
+      municipality == "SAN MIGUEL IXITLAN" ~ 21135,
+      municipality == "SAN MIGUEL XOXTLA" ~ 21136,
+      municipality == "SAN NICOLAS BUENOS AIRES" ~ 21137,
+      municipality == "SAN NICOLAS DE LOS RANCHOS" ~ 21138,
+      municipality == "SAN PABLO ANICANO" ~ 21139,
+      municipality == "SAN PEDRO CHOLULA" ~ 21140,
+      municipality == "SAN PEDRO YELOIXTLAHUACA" ~ 21141,
+      municipality == "SAN SALVADOR EL SECO" ~ 21142,
+      municipality == "SAN SALVADOR EL VERDE" ~ 21143,
+      municipality == "SAN SALVADOR HUIXCOLOTLA" ~ 21144,
+      municipality == "SAN SEBASTIAN TLACOTEPEC" ~ 21145,
+      municipality == "SANTA CATARINA TLALTEMPAN" ~ 21146,
+      municipality == "SANTA INES AHUATEMPAN" ~ 21147,
+      municipality == "SANTA ISABEL CHOLULA" ~ 21148,
+      municipality == "SANTIAGO MIAHUATLAN" ~ 21149,
+      municipality == "SANTO TOMAS HUEYOTLIPAN" ~ 21151,
+      municipality == "SOLTEPEC" ~ 21152,
+      municipality == "TECALI DE HERRERA" ~ 21153,
+      municipality == "TECAMACHALCO" ~ 21154,
+      municipality == "TECOMATLAN" ~ 21155,
+      municipality == "TEHUACAN" ~ 21156,
+      municipality == "TEHUITZINGO" ~ 21157,
+      municipality == "TENAMPULCO" ~ 21158,
+      municipality == "TEOPANTLAN" ~ 21159,
+      municipality == "TEOTLALCO" ~ 21160,
+      municipality == "TEPANCO DE LOPEZ" ~ 21161,
+      municipality == "TEPANGO DE RODRIGUEZ" ~ 21162,
+      municipality == "TEPATLAXCO DE HIDALGO" ~ 21163,
+      municipality == "TEPEACA" ~ 21164,
+      municipality == "TEPEMAXALCO" ~ 21165,
+      municipality == "TEPEOJUMA" ~ 21166,
+      municipality == "TEPETZINTLA" ~ 21167,
+      municipality == "TEPEXCO" ~ 21168,
+      municipality == "TEPEXI DE RODRIGUEZ" ~ 21169,
+      municipality == "TEPEYAHUALCO" ~ 21170,
+      municipality == "TEPEYAHUALCO DE CUAUHTEMOC" ~ 21171,
+      municipality == "TETELA DE OCAMPO" ~ 21172,
+      municipality == "TETELES DE AVILA CASTILLO" ~ 21173,
+      municipality == "TEZIUTLAN" ~ 21174,
+      municipality == "TIANGUISMANALCO" ~ 21175,
+      municipality == "TILAPA" ~ 21176,
+      municipality == "TLACHICHUCA" ~ 21179,
+      municipality == "TLACOTEPEC DE BENITO JUAREZ" ~ 21177,
+      municipality == "TLACUILOTEPEC" ~ 21178,
+      municipality == "TLAHUAPAN" ~ 21180,
+      municipality == "TLALTENANGO" ~ 21181,
+      municipality == "TLANEPANTLA" ~ 21182,
+      municipality == "TLAOLA" ~ 21183,
+      municipality == "TLAPACOYA" ~ 21184,
+      municipality == "TLAPANALA" ~ 21185,
+      municipality == "TLATLAUQUITEPEC" ~ 21186,
+      municipality == "TLAXCO" ~ 21187,
+      municipality == "TOCHIMILCO" ~ 21188,
+      municipality == "TOCHTEPEC" ~ 21189,
+      municipality == "TOTOLTEPEC DE GUERRERO" ~ 21190,
+      municipality == "TULCINGO DE VALLE" | municipality == "TULCINGO" ~ 21191,
+      municipality == "TUZAMAPAN DE GALEANA" ~ 21192,
+      municipality == "TZICATLACOYAN" ~ 21193,
+      municipality == "VENUSTIANO CARRANZA" ~ 21194,
+      municipality == "VICENTE GUERRERO" ~ 21195,
+      municipality == "XAYACATLAN DE BRAVO" ~ 21196,
+      municipality == "XICOTEPEC" ~ 21197,
+      municipality == "XICOTLAN" | municipality == "XICOTLAN*" ~ 21198,
+      municipality == "XIUTETELCO" ~ 21199,
+      municipality == "XOCHIAPULCO" ~ 21200,
+      municipality == "XOCHILTEPEC" ~ 21201,
+      municipality == "XOCHITLAN DE VICENTE SUAREZ" ~ 21202,
+      municipality == "XOCHITLAN TODOS SANTOS" ~ 21203,
+      municipality == "YAONAHUAC" ~ 21204,
+      municipality == "YEHUALTEPEC" ~ 21205,
+      municipality == "ZACAPALA" ~ 21206,
+      municipality == "ZACAPOAXTLA" ~ 21207,
+      municipality == "ZACATLAN" ~ 21208,
+      municipality == "ZAPOTITLAN SALINAS" ~ 21209,
+      municipality == "ZAPOTITLAN DE MENDEZ" | municipality == "ZAPOTITLAN" ~ 21210,
+      municipality == "ZARAGOZA" ~ 21211,
+      municipality == "ZAUTLA" ~ 21212,
+      municipality == "ZIHUATEUTLA" ~ 21213,
+      municipality == "ZINACATEPEC" ~ 21214,
+      municipality == "ZONGOZOTLA" ~ 21215,
+      municipality == "ZOQUIAPAN" ~ 21216,
+      municipality == "ZOQUITLAN" ~ 21217,
+      TRUE ~ NA_integer_
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:total), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Load the Lista Nominal 2024 data and filter by criteria
+ln_2024 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef24.xlsx", skip = 2, 
+                      col_names = c("state_code", "district_code", "mun_code", 
+                                    "section", "col_e", "col_f", "col_g", "col_h", 
+                                    "col_i", "col_j", "col_k", "listanominal")) %>%
+  dplyr::select(state_code, mun_code, section, listanominal) %>% 
+  dplyr::filter(state_code == 21) %>%
+  dplyr::select(section,listanominal)
+
+# Merge Lista Nominal data with the collapsed data
+collapsed_2024 <- collapsed_2024%>%
+  left_join(ln_2024, by = "section")
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:MORENA_FXM), na.rm = TRUE),
+    year = case_when(
+      municipality %in% c("AYOTOXCO DE GUERRERO", "CHIGNAHUAPAN", "VENUSTIANO CARRANZA", "XIUTETELCO") ~ 2025,
+      TRUE ~ 2024
+    ),
+    month = case_when(
+      municipality %in% c("AYOTOXCO DE GUERRERO", "CHIGNAHUAPAN", "VENUSTIANO CARRANZA", "XIUTETELCO") ~ "March",
+      TRUE ~ "June"
+    ))
+
 # Append the data
-puebla_all <- bind_rows(data_2014, data_2018, data_2019)
+puebla_all <- bind_rows(data_2014, data_2018, data_2019, collapsed_2021, collapsed_2024)
 
 puebla_combined <- bind_rows(puebla_all_data, puebla_all)
 

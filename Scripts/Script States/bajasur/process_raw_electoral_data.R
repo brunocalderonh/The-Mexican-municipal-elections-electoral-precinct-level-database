@@ -28,7 +28,7 @@ setwd(file.path(script_dir, ""))
 #####################################
 
 # Load 1999 data
-data_1999 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018/Ayu_Seccion_1999.csv")
+data_1999 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/Ayu_Seccion_1999.csv")
 
 # Rename columns for consistency
 data_1999 <- data_1999 %>%
@@ -85,7 +85,7 @@ rm(data_1999)
 #####################################
 
 # Load 2002 data
-data_2002 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018/Ayu_Seccion_2002.csv")
+data_2002 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/Ayu_Seccion_2002.csv")
 
 # Rename columns for consistency
 data_2002 <- data_2002 %>%
@@ -141,7 +141,7 @@ rm(data_2002)
 #####################################
 
 # Load 2005 data
-data_2005 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018/Ayu_Seccion_2005.csv")
+data_2005 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/Ayu_Seccion_2005.csv")
 
 # Rename columns for consistency
 data_2005 <- data_2005 %>%
@@ -197,7 +197,7 @@ rm(data_2005)
 #####################################
 
 # Load 2008 data
-data_2008 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018/Ayu_Seccion_2008.csv")
+data_2008 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/Ayu_Seccion_2008.csv")
 
 # Rename columns for consistency
 data_2008 <- data_2008 %>%
@@ -255,7 +255,7 @@ rm(data_2008)
 #####################################
 
 # Load 2011 data
-data_2011 <- data.table::fread("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018/Ayu_Seccion_2011.csv")
+data_2011 <- data.table::fread("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/Ayu_Seccion_2011.csv")
 names(data_2011)
 # Rename columns for consistency
 data_2011 <- data_2011 %>%
@@ -313,7 +313,7 @@ rm(data_2011)
 #####################################
 
 # Load 2015 data
-data_2015 <- read_excel("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018/BCS_2015.xlsx")
+data_2015 <- read_excel("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/BCS_2015.xlsx")
 names(data_2015)
 
 # Load and merge Lista Nominal data
@@ -365,7 +365,7 @@ rm(ln_data_2015)
 #####################################
 
 # Load 2018 data
-data_2018 <- read_excel("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018/BCS_2018.xlsx")
+data_2018 <- read_excel("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/BCS_2018.xlsx")
 names(data_2018)
 
 # Rename columns for consistency
@@ -434,14 +434,231 @@ rm(data_2018)
 rm(ln_data_2018)
 summary(collapsed_2018)
 
+#####################################
+### PROCESSING DATA FOR 2021 ----
+#####################################
+
+# Define the folder path
+folder_path <- "../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/21/"
+
+standard_names <- c("municipality", "section", "casilla", "PAN_PRI_PRD_PH_PRS", "PT", "PVEM", "MC", "MORENA", "BCSC", "PANAL", "PES", "RSP", "FXM", "MORENA_PT", "no_reg", "nulo", "total")
+
+file2_names <- c("municipality", "section", "casilla", "PAN_PRI_PRD_PH_PRS", "PT", "MORENA", "BCSC", "PANAL", "PES", "RSP", "MORENA_PT", "no_reg", "nulo", "total")
+
+file9_names <- c("municipality", "section", "casilla", "PAN_PRI_PRD_PH_PRS", "PT", "PVEM", "MC", "MORENA", "PES", "RSP", "FXM", "MORENA_PT", "no_reg", "nulo", "total")
+
+# Process all Excel files from 1 to 11
+for (x in c(1,2,3,8,9)) {
+  
+  # Choose the appropriate column names
+  if (x == 2) {
+    manual_names <- file2_names
+  } else if (x == 9) {
+    manual_names <- file9_names
+  } else {
+    manual_names <- standard_names
+  }
+  
+  # Load the original Excel file, skip first two rows, and convert columns to character for cleaning
+  file_path <- paste0(folder_path, "IEEBCS_PLE_2020-2021_AYUNTAMIENTOS_", x, ".xlsx")
+  data <- read_excel(file_path, skip = 4, col_names = manual_names) %>%
+    mutate(across(everything(), as.character))
+  
+  # Save the cleaned data as a new Excel file
+  cleaned_file_path <- paste0(folder_path, "IEEBCS_PLE_2020-2021_AYUNTAMIENTOS_", x, "_clean.xlsx")
+  write.xlsx(data, cleaned_file_path)
+  
+  # Reload the cleaned data and add uniqueid column
+  data <- read_excel(cleaned_file_path)
+  data <- data %>%
+    mutate(uniqueid = paste0("300", x))
+  
+  # Change structure of file 2 and 9 to match the rest
+  if (x == 2) {
+    data <- data %>%
+      mutate(
+        PVEM = NA_character_,
+        MC = NA_character_,
+        FXM = NA_character_
+      ) %>%
+      # Reorder to match standard structure
+      select(municipality, section, casilla, PAN_PRI_PRD_PH_PRS, PT, PVEM, MC, MORENA, 
+             BCSC, PANAL, PES, RSP, FXM, MORENA_PT, no_reg, nulo, total, uniqueid)
+  } else if (x == 9) {
+    data <- data %>%
+      mutate(
+        BCSC = NA_character_,  # File 9 is missing BCSC
+        PANAL = NA_character_, # File 9 is missing PANAL  
+      ) %>%
+      # Reorder to match standard structure
+      select(municipality, section, casilla, PAN_PRI_PRD_PH_PRS, PT, PVEM, MC, MORENA, 
+             BCSC, PANAL, PES, RSP, FXM, MORENA_PT, no_reg, nulo, total, uniqueid)
+  }
+  
+  # Save the cleaned dataset as RDS
+  saveRDS(data, file = paste0("dataset_", x, ".rds"))
+  
+  # Remove the temporary cleaned file
+  file.remove(cleaned_file_path)
+}
+
+# Append all the datasets into one
+combined_data <- NULL
+
+for (x in c(1,2,3,8,9)) {
+  temp_data <- readRDS(paste0("dataset_", x, ".rds"))
+  combined_data <- bind_rows(combined_data, temp_data)
+  file.remove(paste0("dataset_", x, ".rds"))  # Erase the individual dataset file after appending
+}
+
+names(combined_data)
+# Collapse the data by municipality, uniqueid, and section, summing columns
+collapsed_data <- combined_data %>%
+  dplyr::mutate(across(PAN_PRI_PRD_PH_PRS:total, as.numeric)) %>% 
+  dplyr::group_by(uniqueid,section, municipality) %>%
+  dplyr::summarise(across(c(PAN_PRI_PRD_PH_PRS:MORENA_PT, total), \(x) sum(x, na.rm = TRUE)))
+
+# Load the Lista Nominal 2021 data and filter by criteria
+ln_2021 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef21.xlsx", skip = 3, 
+                      col_names = c("state_code", "district_code", "mun_code", 
+                                    "section", "col_e", "col_f", "col_g", "col_h", 
+                                    "col_i", "col_j", "col_k", "col_l",
+                                    "listanominal", "col_n", "col_o", "col_p")) %>%
+  dplyr::select(state_code, mun_code, section, listanominal) %>% 
+  dplyr::filter(state_code == 3) %>%
+  dplyr::select(section,listanominal)
+
+collapsed_data$section <- as.numeric(collapsed_data$section)
+
+# Merge Lista Nominal data with the collapsed data
+collapsed_2021 <- collapsed_data %>%
+  left_join(ln_2021, by = "section")
+
+# Calculate the valid votes
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(valid = rowSums(across(PAN_PRI_PRD_PH_PRS:MORENA_PT), na.rm = TRUE),
+                turnout = total / listanominal,  # Case-sensitive column names
+                year = 2021,
+                month = "June",
+                uniqueid = as.numeric(uniqueid)
+  )
+
+rm(ln_2021)
+rm(collapsed_data)
+rm(combined_data)
+rm(temp_data)
+rm(data)
+
+#####################################
+### PROCESSING DATA FOR 2024 ----
+#####################################
+
+# Define the folder path
+folder_path <- "../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/24/"
+
+standard_names <- c("municipality", "section", "casilla", "PAN_PRI_PRD_PH_PRS", "MORENA_PT_PVEM_PANAL", "MC", "FXM", "ML", "no_reg", "nulo", "total")
+
+other_names <- c("municipality", "section", "casilla", "PAN_PRI_PRD_PH_PRS", "MORENA_PT_PVEM_PANAL", "MC", "FXM", "no_reg", "nulo", "total")
+
+# Process all Excel files from 1 to 11
+for (x in c(1,2,3,8,9)) {
+  
+  # Choose the appropriate column names
+  if (x == 2 | x == 9) {
+    manual_names <- other_names
+  } else {
+    manual_names <- standard_names
+  }
+  
+  # Load the original Excel file, skip first two rows, and convert columns to character for cleaning
+  file_path <- paste0(folder_path, "IEEBCS_PLE_2023-2024_AYUNTAMIENTOS_", x, ".xlsx")
+  data <- read_excel(file_path, skip = 4, col_names = manual_names) %>%
+    mutate(across(everything(), as.character))
+  
+  # Save the cleaned data as a new Excel file
+  cleaned_file_path <- paste0(folder_path, "IEEBCS_PLE_2023-2024_AYUNTAMIENTOS_", x, "_clean.xlsx")
+  write.xlsx(data, cleaned_file_path)
+  
+  # Reload the cleaned data and add uniqueid column
+  data <- read_excel(cleaned_file_path)
+  data <- data %>%
+    mutate(uniqueid = paste0("300", x))
+  
+  # Change structure of file 2 and 9 to match the rest
+  if (x == 2 | x == 9) {
+    data <- data %>%
+      mutate(
+        ML = NA_character_
+      ) %>%
+      # Reorder to match standard structure
+      select(municipality, section, casilla, PAN_PRI_PRD_PH_PRS,
+             MORENA_PT_PVEM_PANAL, MC, FXM, ML, no_reg, nulo, total, uniqueid)
+  }
+  
+  # Save the cleaned dataset as RDS
+  saveRDS(data, file = paste0("dataset_", x, ".rds"))
+  
+  # Remove the temporary cleaned file
+  file.remove(cleaned_file_path)
+}
+
+# Append all the datasets into one
+combined_data <- NULL
+
+for (x in c(1,2,3,8,9)) {
+  temp_data <- readRDS(paste0("dataset_", x, ".rds"))
+  combined_data <- bind_rows(combined_data, temp_data)
+  file.remove(paste0("dataset_", x, ".rds"))  # Erase the individual dataset file after appending
+}
+
+names(combined_data)
+# Collapse the data by municipality, uniqueid, and section, summing columns
+collapsed_data <- combined_data %>%
+  dplyr::mutate(across(PAN_PRI_PRD_PH_PRS:total, as.numeric)) %>% 
+  dplyr::group_by(uniqueid,section, municipality) %>%
+  dplyr::summarise(across(c(PAN_PRI_PRD_PH_PRS:ML, total), \(x) sum(x, na.rm = TRUE)))
+
+# Load the Lista Nominal 2024 data and filter by criteria
+ln_2024 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef24.xlsx", skip = 2, 
+                      col_names = c("state_code", "district_code", "mun_code", 
+                                    "section", "col_e", "col_f", "col_g", "col_h", 
+                                    "col_i", "col_j", "col_k", "listanominal")) %>%
+  dplyr::select(state_code, mun_code, section, listanominal) %>% 
+  dplyr::filter(state_code == 3) %>%
+  dplyr::select(section,listanominal)
+
+collapsed_data$section <- as.numeric(collapsed_data$section)
+
+# Merge Lista Nominal data with the collapsed data
+collapsed_2024 <- collapsed_data %>%
+  left_join(ln_2024, by = "section")
+
+# Calculate the valid votes
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(valid = rowSums(across(PAN_PRI_PRD_PH_PRS:ML), na.rm = TRUE),
+                turnout = total / listanominal,  # Case-sensitive column names
+                year = 2024,
+                month = "June",
+                uniqueid = as.numeric(uniqueid)
+  )
+
+rm(ln_2024)
+rm(collapsed_data)
+rm(combined_data)
+rm(temp_data)
+rm(data)
+
 # Combine all processed years into one dataset
 bajasur_all <- bind_rows(collapsed_1999, 
-                                     collapsed_2002, 
-                                     collapsed_2005, 
-                                     collapsed_2008, 
-                                     collapsed_2011, 
-                                     collapsed_2015, 
-                                     collapsed_2018)
+                         collapsed_2002, 
+                         collapsed_2005, 
+                         collapsed_2008, 
+                         collapsed_2011, 
+                         collapsed_2015, 
+                         collapsed_2018,
+                         collapsed_2021,
+                         collapsed_2024
+)
 
 validation <- bajasur_all %>% 
   dplyr::group_by(year,uniqueid,section) %>% 

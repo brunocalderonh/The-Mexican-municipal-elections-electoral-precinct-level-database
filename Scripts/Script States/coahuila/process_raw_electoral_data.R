@@ -26,7 +26,7 @@ setwd(file.path(script_dir, ""))
 # Year 1996
 ##########################
 # Read CSV file for 1996
-data_1996 <- read_csv("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Ayu_Seccion_1996_No_LN.csv")
+data_1996 <- read_csv("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Ayu_Seccion_1996_No_LN.csv")
 names(data_1996)
 # Rename columns as needed
 colnames(data_1996) <- c("municipality", "section", "pan", "pri", "prd", "pc", "pt", "pvem", "prt", "pps", "pdm", "nulos", "total")
@@ -124,7 +124,7 @@ summary(data_1996)
 # Year 1999
 ##########################
 # Read Excel file for 1999
-data_1999 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Ayu_Seccion_1999_No_LN.xlsx", sheet = "Ayu_Seccion_1999_No_LN")
+data_1999 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Ayu_Seccion_1999_No_LN.xlsx", sheet = "Ayu_Seccion_1999_No_LN")
 
 # Rename columns
 data_1999 <- data_1999 %>%
@@ -217,7 +217,7 @@ summary(data_1999)
 # Read CSV file for 2002
 
 # Step 1: Load the CSV file
-data_2002 <- read_csv("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Ayu_Seccion_2002.csv")
+data_2002 <- read_csv("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Ayu_Seccion_2002.csv")
 names(data_2002)
 # Step 2: Rename columns
 data_2002 <- data_2002 %>%
@@ -244,7 +244,7 @@ data_2002 <- data_2002 %>%
 
 
 # Step 7: Merge with coalition data
-coalitions_data <- read_csv("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Ayu_Seccion_2002_Colaitions_by_Municipality.csv") %>% 
+coalitions_data <- read_csv("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Ayu_Seccion_2002_Colaitions_by_Municipality.csv") %>% 
   dplyr::rename("municipality"="municipio")
 
 data_2002 <- left_join(data_2002, coalitions_data, 
@@ -406,7 +406,7 @@ data_2002 <- data_2002 %>%
 ##########################
 
 # Step 1: Import 'LISTA NOMINAL COAHUILA 2005' Excel file
-lista_nominal_2005 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/LISTA NOMINAL COAHUILA 2005.xls", sheet = "estad_lp_05_01")
+lista_nominal_2005 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/LISTA NOMINAL COAHUILA 2005.xls", sheet = "estad_lp_05_01")
 
 # Step 2: Rename 'SECCION' to 'section'
 lista_nominal_2005 <- lista_nominal_2005 %>%
@@ -426,7 +426,7 @@ lista_nominal_2005 <- lista_nominal_2005 %>%
   dplyr::summarise(listanominal = sum(listanominal))
 
 # Step 7: Import 'Ayu_Seccion_2005_No_LN.csv' file
-seccion_2005 <- read.csv("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Ayu_Seccion_2005_No_LN.csv")
+seccion_2005 <- read.csv("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Ayu_Seccion_2005_No_LN.csv")
 names(seccion_2005)
 # Step 8: Rename columns
 seccion_2005 <- seccion_2005 %>%
@@ -504,7 +504,7 @@ data_2005 <- data_2005 %>%
 # *****************************
 
 # Step 16: Load and merge 'ListaNominal2005.rds' by 'section'
-lista_nominal_2005 <- read.dta13("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Other/ListaNominal2005.dta")
+lista_nominal_2005 <- read.dta13("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Other/ListaNominal2005.dta")
 data_2005 <- left_join(data_2005, lista_nominal_2005, 
                           by = "section")
 
@@ -584,10 +584,10 @@ summary(data_2005)
 
 # Step 28: Load "all_months_years.dta" file
 # Step 16: Load and merge 'ListaNominal2005.rds' by 'section'
-lista <- read.dta13("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Other/ListaNominal2005.dta")
+lista <- read.dta13("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Other/ListaNominal2005.dta")
 
 # Step 32: Load 'Abasolo extraord 2006' Excel file
-abasolo_2006 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Abasolo extraord 2006.xlsx", sheet = "Hoja1", range = "A7:K10")
+abasolo_2006 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Abasolo extraord 2006.xlsx", sheet = "Hoja1", range = "A7:K10")
 
 # Step 33: Rename columns and drop missing 'section' rows
 abasolo_2006 <- abasolo_2006 %>%
@@ -650,7 +650,7 @@ data_2005 <- rbind(data_2005,
 
 
 # Step 1: Import 'Ayu_Seccion_2009.csv'
-seccion_2009 <- read_delim("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Ayu_Seccion_2009.csv", delim = ",")
+seccion_2009 <- read_delim("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Ayu_Seccion_2009.csv", delim = ",")
 names(seccion_2009)
 # Step 2: Rename columns
 seccion_2009 <- seccion_2009 %>%
@@ -799,7 +799,7 @@ data_2009 <- data_2009 %>%
 summary(data_2009)
 
 # Read the specific range and sheet from the Excel file
-data_2010 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Ayuntamientos Juarez-Lamadrid 2010.xls", 
+data_2010 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Ayuntamientos Juarez-Lamadrid 2010.xls", 
                    sheet = "Hoja1", range = "A7:N22")
 
 # Step 2: Drop rows with index 6 to 12
@@ -874,7 +874,7 @@ data_2010 <- data_2010 %>%
 # Import the Excel data
 
 # Step 1: Import the Excel file
-coalitions <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Coalitions_2013.xlsx", sheet = "Sheet1", col_names = TRUE)
+coalitions <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Coalitions_2013.xlsx", sheet = "Sheet1", col_names = TRUE)
 
 # Step 1: Initialize empty coalition columns
 coalitions <- coalitions %>%
@@ -953,7 +953,7 @@ coalitions <- coalitions %>%
   select(-cc_CC1, -cc_CC2, -cc_CC3, -starts_with("cc_"))
 
 # Step 1: Import the Excel file
-ayuntamientos <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Ayuntamientos2013 x SECCION.xlsx", 
+ayuntamientos <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Ayuntamientos2013 x SECCION.xlsx", 
                             sheet = "Ayuntamientos2013 x seccion", 
                             col_names = TRUE)
 
@@ -1139,7 +1139,7 @@ data_2013 <- data_2013 %>%
 ############################################
 
 # Step 1: Import the first Excel file
-ayuntamientos_2017 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Ayuntamientos_2017.xlsx")
+ayuntamientos_2017 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Ayuntamientos_2017.xlsx")
 
 # Keep specific columns and remove duplicates
 merge_data <- ayuntamientos_2017 %>%
@@ -1150,7 +1150,7 @@ merge_data <- ayuntamientos_2017 %>%
 write.csv(merge_data, "merge.csv", row.names = FALSE)
 
 # Step 2: Import the second Excel file
-ayuntamiento_xcasilla <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/Ayuntamiento_Xcasilla.xlsx", sheet = "Ayuntamiento_xcasilla")
+ayuntamiento_xcasilla <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Ayuntamiento_Xcasilla.xlsx", sheet = "Ayuntamiento_xcasilla")
 
 # Merge the datasets on "municipio"
 merged_data <- ayuntamiento_xcasilla %>%
@@ -1322,7 +1322,7 @@ summary(data_2017)
 ############################################
 
 # Step 1: Import computos2018_XCasilla_.xlsx
-computos_2018 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018/computos2018_XCasilla_.xlsx", sheet = "computos2018-0507_1030")
+computos_2018 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/computos2018_XCasilla_.xlsx", sheet = "computos2018-0507_1030")
 
 # Step 2: Process and manipulate columns similar to 2017
 computos_2018 <- computos_2018 %>%
@@ -1432,6 +1432,191 @@ data_2018 <- computos_2018 %>%
     turnout = total / listanominal
   )
 
+############################################
+## 2021 Data Processing --------------
+############################################
+
+# Load the 2021 dataset from the Excel
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/21/Computos_Ayuntamientos2021_XCasilla.xlsx")
+
+names(data_2021)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = nom_mun,
+                section = seccion,
+                listanominal = "Listado Nominal",
+                total = total_votos,
+                no_reg = "cand_nreg") %>%
+  rename_with(~ gsub("cand_ind", "CI_", .x), starts_with("cand_ind")) %>% 
+  rename_with(toupper, pan:fxm) %>% 
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    municipality = case_when(
+      municipality == "CASTA√ëOS" ~ "CATANOS",
+      municipality == "ACU√ëA"   ~ "ACUNA",
+      TRUE ~ municipality)
+  )
+
+# Assign uniqueids to municipalities
+data_2021 <- data_2021 %>%
+  mutate(
+    uniqueid = case_when(
+      municipality == "ABASOLO" ~ 5001,
+      municipality == "ACUNA" ~ 5002,  # Fixed spelling
+      municipality == "ALLENDE" ~ 5003,
+      municipality == "ARTEAGA" ~ 5004,
+      municipality == "CANDELA" ~ 5005,
+      municipality == "CATANOS" ~ 5006,  # Fixed spelling (was CASTAÑOS)
+      municipality == "CUATRO CIENEGAS" ~ 5007,
+      municipality == "ESCOBEDO" ~ 5008,
+      municipality == "FRANCISCO I. MADERO" ~ 5009,
+      municipality == "FRONTERA" ~ 5010,
+      municipality == "GENERAL CEPEDA" ~ 5011,
+      municipality == "GUERRERO" ~ 5012,
+      municipality == "HIDALGO" ~ 5013,
+      municipality == "JIMENEZ" ~ 5014,
+      municipality == "JUAREZ" ~ 5015,
+      municipality == "LAMADRID" ~ 5016,
+      municipality == "MATAMOROS" ~ 5017,
+      municipality == "MONCLOVA" ~ 5018,
+      municipality == "MORELOS" ~ 5019,
+      municipality == "MUZQUIZ" ~ 5020,
+      municipality == "NADADORES" ~ 5021,
+      municipality == "NAVA" ~ 5022,
+      municipality == "OCAMPO" ~ 5023,
+      municipality == "PARRAS" ~ 5024,
+      municipality == "PIEDRAS NEGRAS" ~ 5025,
+      municipality == "PROGRESO" ~ 5026,
+      municipality == "RAMOS ARIZPE" ~ 5027,
+      municipality == "SABINAS" ~ 5028,
+      municipality == "SACRAMENTO" ~ 5029,
+      municipality == "SALTILLO" ~ 5030,
+      municipality == "SAN BUENAVENTURA" ~ 5031,
+      municipality == "SAN JUAN DE SABINAS" ~ 5032,
+      municipality == "SAN PEDRO" ~ 5033,
+      municipality == "SIERRA MOJADA" ~ 5034,
+      municipality == "TORREON" ~ 5035,
+      municipality == "VIESCA" ~ 5036,
+      municipality == "VILLA UNION" ~ 5037,
+      municipality == "ZARAGOZA" ~ 5038,
+      TRUE ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:listanominal), 
+                          sum, na.rm = TRUE))
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    valid = sum(c_across(PAN:PRI_PRD), na.rm = TRUE),
+    turnout = total/listanominal,
+    year = 2021,
+    month = "June"
+  )
+
+############################################
+## 2024 Data Processing --------------
+############################################
+
+# Load the 2024 dataset from the Excel
+data_2024 <- read_excel("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/24/AYUNTAMIENTOS2024 X CASILLA.xlsx")
+
+names(data_2024)
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = nom_mun,
+                section = seccion,
+                listanominal = lista,
+                total = TOTAL,
+                no_reg = "cand_nreg") %>%
+  rename_with(~ gsub("cand_ind", "CI_", .x), starts_with("cand_ind")) %>% 
+  rename_with(toupper, pan:morena) %>% 
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids to municipalities
+data_2024 <- data_2024 %>%
+  mutate(
+    uniqueid = case_when(
+      municipality == "ABASOLO" ~ 5001,
+      municipality == "ACUNA" ~ 5002,  # Fixed spelling
+      municipality == "ALLENDE" ~ 5003,
+      municipality == "ARTEAGA" ~ 5004,
+      municipality == "CANDELA" ~ 5005,
+      municipality == "CATANOS" ~ 5006,  # Fixed spelling (was CASTAÑOS)
+      municipality == "CUATRO CIENEGAS" ~ 5007,
+      municipality == "ESCOBEDO" ~ 5008,
+      municipality == "FRANCISCO I. MADERO" ~ 5009,
+      municipality == "FRONTERA" ~ 5010,
+      municipality == "GENERAL CEPEDA" ~ 5011,
+      municipality == "GUERRERO" ~ 5012,
+      municipality == "HIDALGO" ~ 5013,
+      municipality == "JIMENEZ" ~ 5014,
+      municipality == "JUAREZ" ~ 5015,
+      municipality == "LAMADRID" ~ 5016,
+      municipality == "MATAMOROS" ~ 5017,
+      municipality == "MONCLOVA" ~ 5018,
+      municipality == "MORELOS" ~ 5019,
+      municipality == "MUZQUIZ" ~ 5020,
+      municipality == "NADADORES" ~ 5021,
+      municipality == "NAVA" ~ 5022,
+      municipality == "OCAMPO" ~ 5023,
+      municipality == "PARRAS" ~ 5024,
+      municipality == "PIEDRAS NEGRAS" ~ 5025,
+      municipality == "PROGRESO" ~ 5026,
+      municipality == "RAMOS ARIZPE" ~ 5027,
+      municipality == "SABINAS" ~ 5028,
+      municipality == "SACRAMENTO" ~ 5029,
+      municipality == "SALTILLO" ~ 5030,
+      municipality == "SAN BUENAVENTURA" ~ 5031,
+      municipality == "SAN JUAN DE SABINAS" ~ 5032,
+      municipality == "SAN PEDRO" ~ 5033,
+      municipality == "SIERRA MOJADA" ~ 5034,
+      municipality == "TORREON" ~ 5035,
+      municipality == "VIESCA" ~ 5036,
+      municipality == "VILLA UNION" ~ 5037,
+      municipality == "ZARAGOZA" ~ 5038,
+      TRUE ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:listanominal), 
+                          sum, na.rm = TRUE))
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    valid = sum(c_across(PAN:PT_MORENA), na.rm = TRUE),
+    turnout = total/listanominal,
+    year = 2024,
+    month = "June"
+  )
+
+
+
 # Combine the dataframes, handling different columns by filling with NA
 coahuila_all <- bind_rows(data_1996,
                           data_1999,
@@ -1441,7 +1626,9 @@ coahuila_all <- bind_rows(data_1996,
                           data_2010,
                           data_2013,
                           data_2017,
-                          data_2018 )
+                          data_2018,
+                          collapsed_2021,
+                          collapsed_2024)
 
 data.table::fwrite(coahuila_all,"../../../Processed Data/coahuila/coahuila_process_raw_data.csv")
 

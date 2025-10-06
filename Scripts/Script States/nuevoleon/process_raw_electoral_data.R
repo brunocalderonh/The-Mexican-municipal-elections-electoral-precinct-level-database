@@ -24,7 +24,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, ""))
 
 # Step 1: Load the data
-data <- read_csv("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000.csv")
+data <- read_csv("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000.csv")
 
 # Step 2: Rename columns for clarity
 data <- data %>%
@@ -96,7 +96,7 @@ data_2000 <- data %>%
 rm(data)
 
 # Step 1: Read the CSV file
-data <- fread("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003.csv")
+data <- fread("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv")
 colnames(data) <- tolower(colnames(data))
 names(data) <- gsub("[. ]", "", names(data))
 # Step 2: Rename the columns `municipio` to `municipality` and `seccion` to `section`
@@ -173,7 +173,7 @@ data <- data %>%
 head(data)
 
 # Step 1: Import Data
-data <- read_csv("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003.csv")
+data <- read_csv("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv")
 colnames(data) <- tolower(colnames(data))
 names(data) <- gsub("[. ]", "", names(data))
 # Step 2: Generate unique IDs based on the municipality field
@@ -242,7 +242,7 @@ data_2003 <- data %>%
   mutate(year = 2003, month = "July")
 
 # Step 1: Load the CSV file
-data <- read_csv("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006.csv")
+data <- read_csv("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.csv")
 colnames(data) <- tolower(colnames(data))
 names(data) <- gsub("[. ]", "", names(data))
 # Step 2: Rename columns
@@ -374,7 +374,7 @@ data <- data %>%
   arrange(section)
 
 # Step 2: Load the dataset
-data <- read.csv("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.csv", stringsAsFactors = FALSE)
+data <- read.csv("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.csv", stringsAsFactors = FALSE)
 colnames(data) <- tolower(colnames(data))
 names(data) <- gsub("[. ]", "", names(data))
 # Step 3: Drop rows with missing municipality or section, and with missing or zero 'total'
@@ -441,7 +441,7 @@ data <- data %>%
 
 
 # Step 2: Load the Excel sheet
-data <- read_excel("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.xlsx", sheet = "Sheet1")
+data <- read_excel("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.xlsx", sheet = "Sheet1")
 colnames(data) <- tolower(colnames(data))
 names(data) <- gsub("[. ]", "", names(data))
 # Step 3: Drop rows with empty municipality and convert columns to numeric
@@ -506,7 +506,7 @@ nuevo_leon_all <- bind_rows(nuevo_leon_2000, nuevo_leon_2003, nuevo_leon_2006, n
 
 
 # Step 2: Import the Excel data from the "Ayuntamientos_2015.xlsx" file
-df <- read_excel("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx", sheet = "Ayuntamientos_2015")
+df <- read_excel("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2015.xlsx", sheet = "Ayuntamientos_2015")
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[. ]", "", names(df))
 # Step 3: Generate the coalitions 'coalprdpt' and 'coalpripvemnapd'
@@ -619,7 +619,7 @@ df_2015 <- df_2015 %>%
   ))
 
 # Step 1: Import the Excel file "Ayuntamientos_2018.xlsx"
-df <- read_excel("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx", sheet = 1)
+df <- read_excel("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx", sheet = 1)
 
 names(df) <- gsub("[. ]", "", names(df))
 # Step 2: Rename columns
@@ -745,7 +745,7 @@ df_2018 <- df_2018 %>%
   ))
 
 # Step 1: Import Excel data
-df <- read_excel("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018/NL_AYUN_2018_EXTRAORDINARIO.xlsx", sheet = "NL_AYUN_2018_EXTRAORDINARIO", range = "A6:AD1601")
+df <- read_excel("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/NL_AYUN_2018_EXTRAORDINARIO.xlsx", sheet = "NL_AYUN_2018_EXTRAORDINARIO", range = "A6:AD1601")
 names(df)
 # Step 2: Rename columns
 df <- df %>%
@@ -775,8 +775,227 @@ df_collapsed <- df_collapsed %>%
 df_2018_extra <- df_collapsed %>%
   mutate(year = 2018, month = "December", STATE = "NUEVO LEON")
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset
+data_2021 <- read_csv("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/NL_AYUN_2021.csv", skip = 5) %>% 
+  filter(MUNICIPIO != "Gral. Zuazua")
+
+data_ext <- read_csv("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/NL_AYUN_ext_2021.csv", skip = 5)
+
+data_2021 <- bind_rows(data_2021, data_ext)
+names(data_2021)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS_CALCULADO,
+                no_reg = NO_REGISTRADOS,
+                nulos = NULOS) %>%
+  rename_with(~ gsub("C_", "", .x), starts_with("C_")) %>%
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  filter(section > 0)
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "ABASOLO" ~ 19001,
+      municipality == "AGUALEGUAS" ~ 19002,
+      municipality == "ALLENDE" ~ 19004,
+      municipality == "ANAHUAC" ~ 19005,
+      municipality == "APODACA" ~ 19006,
+      municipality == "ARAMBERRI" ~ 19007,
+      municipality == "BUSTAMANTE" ~ 19008,
+      municipality == "CADEREYTA JIMENEZ" ~ 19009,
+      municipality == "EL CARMEN" ~ 19010,
+      municipality == "CERRALVO" ~ 19011,
+      municipality == "CHINA" ~ 19013,
+      municipality == "CIENEGA DE FLORES" ~ 19012,
+      municipality == "DR. ARROYO" ~ 19014,
+      municipality == "DR. COSS" ~ 19015,
+      municipality == "DR. GONZALEZ" ~ 19016,
+      municipality == "GALEANA" ~ 19017,
+      municipality == "GARCIA" ~ 19018,
+      municipality == "GRAL. BRAVO" ~ 19020,
+      municipality == "GRAL. ESCOBEDO" ~ 19021,
+      municipality == "GRAL. TERAN" ~ 19022,
+      municipality == "GRAL. TREVINO" ~ 19023,
+      municipality == "GRAL. ZARAGOZA" ~ 19024,
+      municipality == "GRAL. ZUAZUA" ~ 19025,
+      municipality == "GUADALUPE" ~ 19026,
+      municipality == "HIDALGO" ~ 19047,
+      municipality == "HIGUERAS" ~ 19028,
+      municipality == "HUALAHUISES" ~ 19029,
+      municipality == "ITURBIDE" ~ 19030,
+      municipality == "JUAREZ" ~ 19031,
+      municipality == "LAMPAZOS DE NARANJO" ~ 19032,
+      municipality == "LINARES" ~ 19033,
+      municipality == "LOS ALDAMAS" ~ 19003,
+      municipality == "LOS HERRERAS" ~ 19027,
+      municipality == "LOS RAMONES" ~ 19042,
+      municipality == "MARIN" ~ 19034,
+      municipality == "MELCHOR OCAMPO" ~ 19035,
+      municipality == "MIER Y NORIEGA" ~ 19036,
+      municipality == "MINA" ~ 19037,
+      municipality == "MONTEMORELOS" ~ 19038,
+      municipality == "MONTERREY" ~ 19039,
+      municipality == "PARAS" ~ 19040,
+      municipality == "PESQUERIA" ~ 19041,
+      municipality == "RAYONES" ~ 19043,
+      municipality == "SABINAS HIDALGO" ~ 19044,
+      municipality == "SALINAS VICTORIA" ~ 19045,
+      municipality == "SAN NICOLAS DE LOS GARZA" ~ 19046,
+      municipality == "SAN PEDRO GARZA GARCIA" ~ 19019,
+      municipality == "SANTA CATARINA" ~ 19048,
+      municipality == "SANTIAGO" ~ 19049,
+      municipality == "VALLECILLO" ~ 19050,
+      municipality == "VILLALDAMA" ~ 19051
+    ))
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:nulos, total:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:MORENA_PANAL), na.rm = TRUE),
+    year = 2021,
+    month = case_when(
+      municipality == "GRAL. ZUAZUA" ~ "November",
+      TRUE ~ "June"
+    )
+  )
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset
+data_2024 <- read_excel("../../../Data/Raw Electoral Data/Nuevo Leon - 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/NL_AYUN_2024.xlsx", skip = 6)
+
+names(data_2024)
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS_CALCULADO,
+                no_reg = NO_REGISTRADAS,
+                nulos = NULOS) %>%
+  rename_with(~ gsub("C_", "", .x), starts_with("C_")) %>%
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  filter(section > 0)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "ABASOLO" ~ 19001,
+      municipality == "AGUALEGUAS" ~ 19002,
+      municipality == "ALLENDE" ~ 19004,
+      municipality == "ANAHUAC" ~ 19005,
+      municipality == "APODACA" ~ 19006,
+      municipality == "ARAMBERRI" ~ 19007,
+      municipality == "BUSTAMANTE" ~ 19008,
+      municipality == "CADEREYTA JIMENEZ" ~ 19009,
+      municipality == "EL CARMEN" ~ 19010,
+      municipality == "CERRALVO" ~ 19011,
+      municipality == "CHINA" ~ 19013,
+      municipality == "CIENEGA DE FLORES" ~ 19012,
+      municipality == "DR. ARROYO" ~ 19014,
+      municipality == "DR. COSS" ~ 19015,
+      municipality == "DR. GONZALEZ" ~ 19016,
+      municipality == "GALEANA" ~ 19017,
+      municipality == "GARCIA" ~ 19018,
+      municipality == "GRAL. BRAVO" ~ 19020,
+      municipality == "GRAL. ESCOBEDO" ~ 19021,
+      municipality == "GRAL. TERAN" ~ 19022,
+      municipality == "GRAL. TREVINO" ~ 19023,
+      municipality == "GRAL. ZARAGOZA" ~ 19024,
+      municipality == "GRAL. ZUAZUA" ~ 19025,
+      municipality == "GUADALUPE" ~ 19026,
+      municipality == "HIDALGO" ~ 19047,
+      municipality == "HIGUERAS" ~ 19028,
+      municipality == "HUALAHUISES" ~ 19029,
+      municipality == "ITURBIDE" ~ 19030,
+      municipality == "JUAREZ" ~ 19031,
+      municipality == "LAMPAZOS DE NARANJO" ~ 19032,
+      municipality == "LINARES" ~ 19033,
+      municipality == "LOS ALDAMAS" ~ 19003,
+      municipality == "LOS HERRERAS" ~ 19027,
+      municipality == "LOS RAMONES" ~ 19042,
+      municipality == "MARIN" ~ 19034,
+      municipality == "MELCHOR OCAMPO" ~ 19035,
+      municipality == "MIER Y NORIEGA" ~ 19036,
+      municipality == "MINA" ~ 19037,
+      municipality == "MONTEMORELOS" ~ 19038,
+      municipality == "MONTERREY" ~ 19039,
+      municipality == "PARAS" ~ 19040,
+      municipality == "PESQUERIA" ~ 19041,
+      municipality == "RAYONES" ~ 19043,
+      municipality == "SABINAS HIDALGO" ~ 19044,
+      municipality == "SALINAS VICTORIA" ~ 19045,
+      municipality == "SAN NICOLAS DE LOS GARZA" ~ 19046,
+      municipality == "SAN PEDRO GARZA GARCIA" ~ 19019,
+      municipality == "SANTA CATARINA" ~ 19048,
+      municipality == "SANTIAGO" ~ 19049,
+      municipality == "VALLECILLO" ~ 19050,
+      municipality == "VILLALDAMA" ~ 19051
+    ))
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:PVEM_MORENA), na.rm = TRUE),
+    year = 2024,
+    month = "June"
+  )
+
 # Step 2: Append datasets
-nleon_combined <- bind_rows(df_2015, df_2018, df_2018_extra)
+nleon_combined <- bind_rows(df_2015, df_2018, df_2018_extra, collapsed_2021, collapsed_2024)
 
 
 # Step 10: Append the new combined data to the larger dataset

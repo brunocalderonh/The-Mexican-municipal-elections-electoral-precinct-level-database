@@ -28,7 +28,7 @@ setwd(file.path(script_dir, ""))
 ################################################################################
 # 1) Read CSV (equivalent to: insheet using "Ayu_Seccion_1997_No_LN.csv", clear)
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 ################################################################################
 # 2) Rename columns, drop empty municipality/section, and drop total == NA or 0
@@ -169,7 +169,7 @@ df_1997 <- df_ranks_combined %>%
 ################################################################################
 # 1) Read CSV (equivalent to "insheet using Ayu_Seccion_2000_No_LN.csv, clear")
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayu_Seccion_2000_No_LN.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000_No_LN.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
 ################################################################################
@@ -308,7 +308,7 @@ df_2000 <- df_merged %>%
 ################################################################################
 # 1) Read CSV
 ################################################################################
-df <- fread("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayu_Seccion_2003.csv", 
+df <- fread("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv", 
             encoding = "Latin-1")
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[- ]", "", names(df))
@@ -467,7 +467,7 @@ df_2003 <- df_merged %>%
 #    cellrange(A4:L2429) firstrow clear
 ################################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/estadistica_electoral_2006.xls",
+  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/estadistica_electoral_2006.xls",
   sheet = "Casillas Regidores",
   range = "A4:L2429",    # cell range A4:L2429
   col_names = TRUE
@@ -612,7 +612,7 @@ df_2006 <- df_merged %>%
 ###############################################################################
 # 1) Read CSV (Equivalent to: insheet using "Ayu_Seccion_2009.csv", clear)
 ###############################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.csv", show_col_types = FALSE)
 names(df) <- gsub("[- ]", "", names(df))
 colnames(df) <- tolower(colnames(df))
 ###############################################################################
@@ -730,7 +730,7 @@ df_2009 <- df_collapsed %>%
 # 1) Read Excel 
 ###############################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.xlsx",
+  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.xlsx",
   sheet = "Sheet1",
   col_names = TRUE
 ) %>%
@@ -881,7 +881,7 @@ df_2012 <- df_merged %>%
 #    import excel "Ayuntamientos_2015.xlsx", sheet("DESGLOSE") clear firstrow)
 ################################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx",
+  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2015.xlsx",
   sheet = "DESGLOSE",
   col_names = TRUE
 ) %>%
@@ -1060,7 +1060,7 @@ df_2015 <- df_merged %>%
 #    import excel "Ayuntamientos_2015.xlsx", sheet("DESGLOSE") clear firstrow)
 ################################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx",
+  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2015.xlsx",
   sheet = "DESGLOSE",
   col_names = TRUE
 ) %>%
@@ -1241,7 +1241,7 @@ df_2015 <- df_merged %>%
 #    import excel "Ayuntamientos_2018.xlsx", sheet("1 TAB RES AYUN") clear firstrow)
 ###############################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx",
+  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx",
   sheet = "1 TAB RES AYUN",
   col_names = TRUE
 ) %>%
@@ -1348,6 +1348,158 @@ df_2018 <- df_collapsed %>%
     STATE   = "TABASCO"
   )
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset from the excel
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/21/ayu_resumen_general_casillas.xlsx", skip = 6)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = "SECCIÓN ELECTORAL",
+                listanominal = "LISTA NOMINAL",
+                total = "TOTAL DE VOTOS",
+                no_reg = "NÚMERO DE VOTOS CANDIDATURAS NO REGISTRADAS",
+                nulos = "NÚMERO DE VOTOS NULOS",
+                valid = "NÚMERO DE VOTOS VÁLIDOS",
+                PAN_PRI = "PAN Y PRI",
+                FXM = FPM,
+                CI_1 = "C. IND. JOSÉ ANTONIO HERNÁNDEZ ROMERO",
+                CI_2 = "C. IND. SERGIO VIDAL GONZÁLEZ",
+                CI_3 = "C. IND. JESÚS ABRAHAM CANO GONZÁLEZ",
+                CI_4 = "C. IND. DONALD JIMÉNEZ MONTEJO") %>%
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "BALANCAN"         ~ 27001,
+      municipality == "CARDENAS"         ~ 27002,
+      municipality == "CENTLA"           ~ 27003,
+      municipality == "CENTRO"           ~ 27004,
+      municipality == "COMALCALCO"       ~ 27005,
+      municipality == "CUNDUACAN"        ~ 27006,
+      municipality == "EMILIANO ZAPATA"  ~ 27007,
+      municipality == "HUIMANGUILLO"     ~ 27008,
+      municipality == "JALAPA"           ~ 27009,
+      municipality == "JALPA DE MENDEZ"  ~ 27010,
+      municipality == "JONUTA"           ~ 27011,
+      municipality == "MACUSPANA"        ~ 27012,
+      municipality == "NACAJUCA"         ~ 27013,
+      municipality == "PARAISO"          ~ 27014,
+      municipality == "TACOTALPA"        ~ 27015,
+      municipality == "TEAPA"            ~ 27016,
+      municipality == "TENOSIQUE"        ~ 27017,
+      TRUE                               ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2021,
+    month = "June"
+  )
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset from the excel
+data_2024 <- read_excel("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/24/ayu_resumen_general_casillas.xlsx", skip = 7)
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = "SECCIÓN ELECTORAL",
+                listanominal = "LISTA NOMINAL",
+                total = "TOTAL DE VOTOS",
+                no_reg = "NÚMERO DE VOTOS CANDIDATURAS NO REGISTRADAS",
+                nulos = "NÚMERO DE VOTOS NULOS",
+                valid = "NÚMERO DE VOTOS VÁLIDOS",
+                PAN_PRI = "PAN Y PRI",
+                PVEM_MORENA = "PVEM Y MORENA",
+                CI_1 = "C. IND. JUAN CARLOS GUZMAN CORREA",
+                CI_2 = "C. IND. LUIS ALFONSO OJEDA VILLASEÑOR", 
+                CI_3 = "C. IND. JESUS ABRAHAM CANO GONZALEZ") %>%
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0) %>% 
+  dplyr:: select(-c("TOTAL\r\nPVEM Y MORENA", "TOTAL\r\nPAN Y PRI"))
+
+# Assign uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "BALANCAN"         ~ 27001,
+      municipality == "CARDENAS"         ~ 27002,
+      municipality == "CENTLA"           ~ 27003,
+      municipality == "CENTRO"           ~ 27004,
+      municipality == "COMALCALCO"       ~ 27005,
+      municipality == "CUNDUACAN"        ~ 27006,
+      municipality == "EMILIANO ZAPATA"  ~ 27007,
+      municipality == "HUIMANGUILLO"     ~ 27008,
+      municipality == "JALAPA"           ~ 27009,
+      municipality == "JALPA DE MENDEZ"  ~ 27010,
+      municipality == "JONUTA"           ~ 27011,
+      municipality == "MACUSPANA"        ~ 27012,
+      municipality == "NACAJUCA"         ~ 27013,
+      municipality == "PARAISO"          ~ 27014,
+      municipality == "TACOTALPA"        ~ 27015,
+      municipality == "TEAPA"            ~ 27016,
+      municipality == "TENOSIQUE"        ~ 27017,
+      TRUE                               ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2024,
+    month = "June"
+  )
+
 # Combine the dataframes, handling different columns by filling with NA
 tabasco_all <- bind_rows(df_1997,
                          df_2000,
@@ -1356,7 +1508,8 @@ tabasco_all <- bind_rows(df_1997,
                          df_2009,
                          df_2012,
                          df_2015,
-                         df_2018)
+                         df_2018,
+                         collapsed_2021,
+                         collapsed_2024)
 
 data.table::fwrite(tabasco_all,"../../../Processed Data/tabasco/tabasco_process_raw_data.csv")
-

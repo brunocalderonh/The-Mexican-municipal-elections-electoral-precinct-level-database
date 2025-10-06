@@ -29,7 +29,7 @@ setwd(file.path(script_dir, ""))
 ##############################################################################
 
 # Equivalent to: insheet using Ayu_Seccion_1997_No_LN.csv, clear
-df_1997 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.csv") 
+df_1997 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997_No_LN.csv") 
 colnames(df_1997) <- tolower(colnames(df_1997))
 
 df_1997 <-df_1997 %>%
@@ -159,7 +159,7 @@ df_1997 <- df_1997 %>%
 ##############################################################################
 # ============== 3) Ayu_Seccion_2000.csv  ====================================
 ##############################################################################
-df_2000 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000.csv") %>%
+df_2000 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000.csv") %>%
   rename(municipality = municipio, section = seccion) %>%
   filter(!(municipality=="" & is.na(section))) %>%
   filter(!(is.na(total) | total==0))
@@ -275,7 +275,7 @@ df_2000 <- df_2000 %>%
 ##############################################################################
 # ============== 4) Ayu_Seccion_2003.csv  ====================================
 ##############################################################################
-df_2003 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003.csv") 
+df_2003 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv") 
 colnames(df_2003) <- tolower(colnames(df_2003))
 
 df_2003 <-df_2003 %>%
@@ -379,7 +379,7 @@ df_2003 <- df_2003 %>%
 ##############################################################################
 # ============== 6) Ayu_Seccion_2006.csv  ====================================
 ##############################################################################
-df_2006 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006.csv") %>%
+df_2006 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.csv") %>%
   rename(
     municipality = nombre_municipio,
     section      = seccion,
@@ -475,7 +475,7 @@ df_2006 <- df_2006 %>%
 ##############################################################################
 # ============== 7) Ayu_Seccion_2009.csv  ====================================
 ##############################################################################
-df_2009 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.csv") %>%
+df_2009 <- read_csv("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.csv") %>%
   rename(
     municipality = nombre_municipio,
     section      = seccion,
@@ -566,7 +566,7 @@ df_2009 <- df_2009 %>%
 ##############################################################################
 # ============== 8) Ayu_Seccion_2012.dta  ====================================
 ##############################################################################
-df_2012 <- read_dta("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.dta") %>%
+df_2012 <- read_dta("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.dta") %>%
   mutate(turnout = total/listanominal) %>%
   mutate(municipality = trimws(municipality)) %>%
   mutate(
@@ -652,7 +652,7 @@ all_slp <- bind_rows(all_slp, df_2006, df_2009, df_2012)
 # ============== 10) Ayuntamientos_2015.xlsx  ===============================
 ##############################################################################
 # Import each sheet, drop if Seccion=="", fill empty strings with "0", save .dta
-excel_file_2015 <- "../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx"
+excel_file_2015 <- "../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2015.xlsx"
 sheet_names_2015 <- excel_sheets(excel_file_2015)
 
 for (sname in sheet_names_2015) {
@@ -836,7 +836,7 @@ for (f in files_2015) {
 # ============== 11) MunicipiosSLP_2018.xlsx  ===============================
 ##############################################################################
 # Similar approach for 2018
-excel_file_2018 <- "../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/MunicipiosSLP_2018.xlsx"
+excel_file_2018 <- "../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/MunicipiosSLP_2018.xlsx"
 sheet_names_2018 <- excel_sheets(excel_file_2018)
 
 for (sname in sheet_names_2018) {
@@ -945,7 +945,7 @@ all_2018 <- all_2018 %>%
   )
 
 # Merge m:1 municipality using uniqueids.dta => replicate partial
-df_uniqueids <- read_dta("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Other/uniqueids.dta")  # created by code above
+df_uniqueids <- read_dta("../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Other/uniqueids.dta")  # created by code above
 all_2018 <- all_2018 %>%
   left_join(df_uniqueids, by="municipality") %>%
   select(-municipality) %>%
@@ -983,11 +983,339 @@ for (f in files_2018) {
   if (file.exists(f)) file.remove(f)
 }
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+library(purrr)
+library(stringr)
+
+# Set the directory path
+data_dir <- "../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/"
+
+# Get all Excel files in the directory
+excel_files <- list.files(data_dir, pattern = "\\.xlsx$", full.names = TRUE)
+
+# Function to read and process each file
+read_municipality_file <- function(file_path) {
+  # Extract municipality name from filename
+  municipality_name <- basename(file_path) %>%
+    str_remove("\\.xlsx$") %>%
+    str_remove("^CME ") # Remove "CME " prefix if present
+  
+  # Read the Excel file with all columns as text to avoid type conflicts
+  df <- read_excel(file_path, col_types = "text")
+  
+  # Add municipality column
+  df <- df %>%
+    mutate(source = municipality_name)
+  
+  return(df)
+}
+
+# Read all files and combine them
+data_2021 <- map_dfr(excel_files, read_municipality_file) %>%
+  mutate(
+    # Consolidate municipality columns
+    municipality = case_when(
+      !is.na(Municipio) ~ Municipio,
+      !is.na(Municipo) ~ Municipo,
+      TRUE ~ NA_character_
+    ),
+    
+    # Consolidate total columns
+    total = case_when(
+      !is.na(Total) ~ Total,
+      !is.na(TOT) ~ TOT,
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  # Remove original columns
+  select(-c(Municipio, Municipo, Total, TOT))
+
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(no_reg = CNR,
+                nulos = VTN,
+                CI_1 = CI,
+                PANAL = PNA) %>%
+  rename_with(~ gsub("ALIANZA ", "CC_", .x)) %>%
+  rename_with(~ gsub(",", "_", .x)) %>% 
+  dplyr::mutate(
+    section = as.numeric(str_extract(Casilla, "\\d{4}(?=[A-Z])")),
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    municipality = case_when(municipality == "AHULULCO" ~ "AHUALULCO",
+                             TRUE ~ municipality),
+    across(PAN:CC_PAN_PRI_PCP, as.numeric),
+    total = as.numeric(total)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      str_detect(municipality, "AHUALULCO") ~ 24001,
+      str_detect(municipality, "ALAQUINES") ~ 24002,
+      str_detect(municipality, "AQUISMON") ~ 24003,
+      str_detect(municipality, "ARMADILLO DE LOS INFANTE") ~ 24004,
+      str_detect(municipality, "AXTLA DE TERRAZAS") ~ 24053,
+      str_detect(municipality, "CARDENAS") ~ 24005,
+      str_detect(municipality, "CATORCE") ~ 24006,
+      str_detect(municipality, "CEDRAL") ~ 24007,
+      str_detect(municipality, "CERRITOS") ~ 24008,
+      str_detect(municipality, "CERRO DE SAN PEDRO") ~ 24009,
+      str_detect(municipality, "CHARCAS") ~ 24015,
+      str_detect(municipality, "CIUDAD DEL MAIZ") ~ 24010,
+      str_detect(municipality, "CIUDAD FERNANDEZ") ~ 24011,
+      str_detect(municipality, "CIUDAD VALLES") ~ 24013,
+      str_detect(municipality, "COXCATLAN") ~ 24014,
+      str_detect(municipality, "EBANO") ~ 24016,
+      str_detect(municipality, "EL NARANJO") ~ 24058,
+      str_detect(municipality, "GUADALCAZAR") ~ 24017,
+      str_detect(municipality, "HUEHUETLAN") ~ 24018,
+      str_detect(municipality, "LAGUNILLAS") ~ 24019,
+      str_detect(municipality, "MATEHUALA") ~ 24020,
+      str_detect(municipality, "MATLAPA") ~ 24057,
+      str_detect(municipality, "MEXQUITIC") ~ 24021,
+      str_detect(municipality, "MOCTEZUMA") ~ 24022,
+      str_detect(municipality, "RAYON") ~ 24023,
+      str_detect(municipality, "RIOVERDE") ~ 24024,
+      str_detect(municipality, "SALINAS") ~ 24025,
+      str_detect(municipality, "SAN ANTONIO") ~ 24026,
+      str_detect(municipality, "SAN CIRO DE ACOSTA") ~ 24027,
+      str_detect(municipality, "SAN LUIS POTOSI") ~ 24028,
+      str_detect(municipality, "SAN MARTIN CHALCHICUAUTLA") ~ 24029,
+      str_detect(municipality, "SAN NICOLAS TOLENTINO") ~ 24030,
+      str_detect(municipality, "SAN VICENTE TANCUAYALAB") ~ 24034,
+      str_detect(municipality, "SANTA CATARINA") ~ 24031,
+      str_detect(municipality, "SANTA MARIA DEL RIO") ~ 24032,
+      str_detect(municipality, "SANTO DOMINGO") ~ 24033,
+      str_detect(municipality, "SOLEDAD DE GRACIANO SANCHEZ") ~ 24035,
+      str_detect(municipality, "TAMASOPO") ~ 24036,
+      str_detect(municipality, "TAMAZUNCHALE") ~ 24037,
+      str_detect(municipality, "TAMPACAN") ~ 24038,
+      str_detect(municipality, "TAMPAMOLON") ~ 24039,
+      str_detect(municipality, "TAMUIN") ~ 24040,
+      str_detect(municipality, "TANCANHUITZ") ~ 24012,
+      str_detect(municipality, "TANLAJAS") ~ 24041,
+      str_detect(municipality, "TANQUIAN DE ESCOBEDO") ~ 24042,
+      str_detect(municipality, "TIERRA NUEVA") ~ 24043,
+      str_detect(municipality, "VANEGAS") ~ 24044,
+      str_detect(municipality, "VENADO") ~ 24045,
+      str_detect(municipality, "VILLA DE ARISTA") ~ 24056,
+      str_detect(municipality, "VILLA DE ARRIAGA") ~ 24046,
+      str_detect(municipality, "VILLA DE GUADALUPE") ~ 24047,
+      str_detect(municipality, "VILLA DE LA PAZ") ~ 24048,
+      str_detect(municipality, "VILLA DE RAMOS") ~ 24049,
+      str_detect(municipality, "VILLA DE REYES") ~ 24050,
+      str_detect(municipality, "VILLA HIDALGO") ~ 24051,
+      str_detect(municipality, "VILLA JUAREZ") ~ 24052,
+      str_detect(municipality, "XILITLA") ~ 24054,
+      str_detect(municipality, "ZARAGOZA") ~ 24055,
+      TRUE ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:CC_PAN_PRI_PCP, total), 
+           \(x) sum(x, na.rm = TRUE))
+  ) %>% 
+  dplyr::select(-c("Dto. Local", source, "Dto. local", "Dto. Loc", "Dto.Local", "No. Mpo."))
+
+# Load the Lista Nominal 2021 data and filter by criteria
+ln_2021 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef21.xlsx", skip = 3, 
+                      col_names = c("state_code", "district_code", "mun_code", 
+                                    "section", "col_e", "col_f", "col_g", "col_h", 
+                                    "col_i", "col_j", "col_k", "col_l",
+                                    "listanominal", "col_n", "col_o", "col_p")) %>%
+  dplyr::select(state_code, mun_code, section, listanominal) %>% 
+  dplyr::filter(state_code == 24) %>%
+  dplyr::select(section,listanominal)
+
+# Merge Lista Nominal data with the collapsed data
+collapsed_2021 <- collapsed_2021 %>%
+  left_join(ln_2021, by = "section")
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(c(PAN:PRD_PCP, MORENA:CC_PAN_PRI_PCP)), na.rm = TRUE),
+    year = 2021,
+    month = "June"
+  )
+
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Set the directory path for 2024 files
+data_dir_24 <- "../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/"
+
+# Get all Excel files in the directory
+excel_files_24 <- list.files(data_dir_24, pattern = "\\.xlsx$", full.names = TRUE)
+
+
+# Function to read and process each 2024 file
+read_municipality_file_24 <- function(file_path) {
+  # Extract municipality name from filename (remove number prefix and .xlsx)
+  municipality_name <- basename(file_path) %>%
+    str_remove("\\.xlsx$") %>%
+    str_remove("^\\d+-") # Remove number and dash prefix like "1-"
+  
+  # Read the Excel file with all columns as text
+  df <- read_excel(file_path, col_types = "text")
+  
+  # Add municipality column
+  df <- df %>%
+    mutate(source = municipality_name)
+  
+  return(df)
+}
+
+# Read all files and combine them
+data_2024_cons <- map_dfr(excel_files_24, read_municipality_file_24)
+
+# Rename columns
+data_2024 <- data_2024_cons %>%
+  dplyr::rename(municipality = Municipio,
+                no_reg = CNR,
+                nulos = VTN,
+                CI_1 = CI,
+                PANAL = PNASLP,
+                PCP = CP,
+                MC = PMC,
+                PES = PESSLP) %>%
+  rename_with(~ gsub(",", "_", .x)) %>% 
+  dplyr::mutate(
+    section = as.numeric(str_sub(casilla, 2, 5)),
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    across(PAN:nulos, as.numeric),
+    across(PAN_PRI_PRD:CI_1, as.numeric),
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(
+    uniqueid = case_when(
+      str_detect(municipality, "AHUALULCO") ~ 24001,
+      str_detect(municipality, "ALAQUINES") ~ 24002,
+      str_detect(municipality, "AQUISMON") ~ 24003,
+      str_detect(municipality, "ARMADILLO DE LOS INFANTE") ~ 24004,
+      str_detect(municipality, "AXTLA DE TERRAZAS") ~ 24053,
+      str_detect(municipality, "CARDENAS") ~ 24005,
+      str_detect(municipality, "CATORCE") ~ 24006,
+      str_detect(municipality, "CEDRAL") ~ 24007,
+      str_detect(municipality, "CERRITOS") ~ 24008,
+      str_detect(municipality, "CERRO DE SAN PEDRO") ~ 24009,
+      str_detect(municipality, "CHARCAS") ~ 24015,
+      str_detect(municipality, "CIUDAD DEL MAIZ") ~ 24010,
+      str_detect(municipality, "CIUDAD FERNANDEZ") ~ 24011,
+      str_detect(municipality, "CIUDAD VALLES") ~ 24013,
+      str_detect(municipality, "COXCATLAN") ~ 24014,
+      str_detect(municipality, "EBANO") ~ 24016,
+      str_detect(municipality, "EL NARANJO") ~ 24058,
+      str_detect(municipality, "GUADALCAZAR") ~ 24017,
+      str_detect(municipality, "HUEHUETLAN") ~ 24018,
+      str_detect(municipality, "LAGUNILLAS") ~ 24019,
+      str_detect(municipality, "MATEHUALA") ~ 24020,
+      str_detect(municipality, "MATLAPA") ~ 24057,
+      str_detect(municipality, "MEXQUITIC") ~ 24021,
+      str_detect(municipality, "MOCTEZUMA") ~ 24022,
+      str_detect(municipality, "RAYON") ~ 24023,
+      str_detect(municipality, "RIOVERDE") ~ 24024,
+      str_detect(municipality, "SALINAS") ~ 24025,
+      str_detect(municipality, "SAN ANTONIO") ~ 24026,
+      str_detect(municipality, "SAN CIRO DE ACOSTA") ~ 24027,
+      str_detect(municipality, "SAN LUIS POTOSI") ~ 24028,
+      str_detect(municipality, "SAN MARTIN CHALCHICUAUTLA") ~ 24029,
+      str_detect(municipality, "SAN NICOLAS TOLENTINO") ~ 24030,
+      str_detect(municipality, "SAN VICENTE TANCUAYALAB") ~ 24034,
+      str_detect(municipality, "SANTA CATARINA") ~ 24031,
+      str_detect(municipality, "SANTA MARIA DEL RIO") ~ 24032,
+      str_detect(municipality, "SANTO DOMINGO") ~ 24033,
+      str_detect(municipality, "SOLEDAD DE GRACIANO SANCHEZ") ~ 24035,
+      str_detect(municipality, "TAMASOPO") ~ 24036,
+      str_detect(municipality, "TAMAZUNCHALE") ~ 24037,
+      str_detect(municipality, "TAMPACAN") ~ 24038,
+      str_detect(municipality, "TAMPAMOLON") ~ 24039,
+      str_detect(municipality, "TAMUIN") ~ 24040,
+      str_detect(municipality, "TANCANHUITZ") ~ 24012,
+      str_detect(municipality, "TANLAJAS") ~ 24041,
+      str_detect(municipality, "TANQUIAN DE ESCOBEDO") ~ 24042,
+      str_detect(municipality, "TIERRA NUEVA") ~ 24043,
+      str_detect(municipality, "VANEGAS") ~ 24044,
+      str_detect(municipality, "VENADO") ~ 24045,
+      str_detect(municipality, "VILLA DE ARISTA") ~ 24056,
+      str_detect(municipality, "VILLA DE ARRIAGA") ~ 24046,
+      str_detect(municipality, "VILLA DE GUADALUPE") ~ 24047,
+      str_detect(municipality, "VILLA DE LA PAZ") ~ 24048,
+      str_detect(municipality, "VILLA DE RAMOS") ~ 24049,
+      str_detect(municipality, "VILLA DE REYES") ~ 24050,
+      str_detect(municipality, "VILLA HIDALGO") ~ 24051,
+      str_detect(municipality, "VILLA JUAREZ") ~ 24052,
+      str_detect(municipality, "XILITLA") ~ 24054,
+      str_detect(municipality, "ZARAGOZA") ~ 24055,
+      TRUE ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:nulos, PAN_PRI_PRD:CI_1), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Load the Lista Nominal 2024 data and filter by criteria
+ln_2024 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef24.xlsx", skip = 2, 
+                      col_names = c("state_code", "district_code", "mun_code", 
+                                    "section", "col_e", "col_f", "col_g", "col_h", 
+                                    "col_i", "col_j", "col_k", "listanominal")) %>%
+  dplyr::select(state_code, mun_code, section, listanominal) %>% 
+  dplyr::filter(state_code == 24) %>%
+  dplyr::select(section,listanominal)
+
+# Merge Lista Nominal data with the collapsed data
+collapsed_2024 <- collapsed_2024 %>%
+  left_join(ln_2024, by = "section")
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    total = sum(c_across(c(PAN:CI_1)), na.rm = TRUE),
+    turnout = total/listanominal,
+    valid = sum(c_across(c(PAN:PT_MORENA, PAN_PRI_PRD:CI_1)), na.rm = TRUE),
+    year = 2024,
+    month = "June"
+  )
+
 ##############################################################################
 # ============== 12) Append 2015 + 2018, then with older data ===============
 ##############################################################################
 
-all_slp_final <- bind_rows(all_slp,df_2015, df_2018)
+all_slp_final <- bind_rows(all_slp,df_2015, df_2018, collapsed_2021, collapsed_2024)
 
 ##############################################################################
 # Done
@@ -995,4 +1323,6 @@ all_slp_final <- bind_rows(all_slp,df_2015, df_2018)
 
 
 data.table::fwrite(all_slp_final,"../../../Processed Data/sanluispotosi/slp_process_raw_data.csv")
+
+
 

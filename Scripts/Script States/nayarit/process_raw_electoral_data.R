@@ -25,7 +25,7 @@ setwd(file.path(script_dir, ""))
 
 # ------------------------------------------------------------------------------
 # Read 1996 data
-df1996 <- read.csv("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017/Ayu_Seccion_1996_No_LN.csv", stringsAsFactors = FALSE)
+df1996 <- read.csv("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/Ayu_Seccion_1996_No_LN.csv", stringsAsFactors = FALSE)
 colnames(df1996) <- tolower(colnames(df1996))
 
 names(df1996)[names(df1996) == "municipio"] <- "municipality"
@@ -107,7 +107,7 @@ df1996 <- subset(df1996, !is.na(total) & total != 0)
 ###############################################################################
 ## 3) 1999 DATA
 ###############################################################################
-df1999 <- read.csv("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017/Ayu_Seccion_1999_No_LN.csv", stringsAsFactors = FALSE)
+df1999 <- read.csv("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/Ayu_Seccion_1999_No_LN.csv", stringsAsFactors = FALSE)
 
 # Remove upper, "-" and spaces
 
@@ -175,7 +175,7 @@ df1999 <- df1999[order(df1999$section), ]
 ###############################################################################
 ## 4) 2002 DATA
 ###############################################################################
-df2002 <- read.csv("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017/Ayu_Seccion_2002_No_LN.csv", stringsAsFactors = FALSE)
+df2002 <- read.csv("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/Ayu_Seccion_2002_No_LN.csv", stringsAsFactors = FALSE)
 # Remove upper, "-" and spaces
 
 colnames(df2002) <- tolower(colnames(df2002))
@@ -264,7 +264,7 @@ temp_2002 <- temp_2002[order(temp_2002$section), ]
 ###############################################################################
 ## 5) 2005 DATA
 ###############################################################################
-df2005 <- read.csv("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017/Ayu_Seccion_2005_No_LN.csv", stringsAsFactors = FALSE)
+df2005 <- read.csv("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/Ayu_Seccion_2005_No_LN.csv", stringsAsFactors = FALSE)
 # Remove upper, "-" and spaces
 
 colnames(df2005) <- tolower(colnames(df2005))
@@ -342,7 +342,7 @@ temp_2005 <- temp_2005[order(temp_2005$section), ]
 ###############################################################################
 ## 6) 2008 DATA
 ###############################################################################
-df2008 <- read.csv("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017/Ayu_Seccion_2008.csv", stringsAsFactors = FALSE)
+df2008 <- read.csv("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/Ayu_Seccion_2008.csv", stringsAsFactors = FALSE)
 
 names(df2008)[names(df2008) == "nombre_municipio"] <- "municipality"
 names(df2008)[names(df2008) == "seccion"]          <- "section"
@@ -401,7 +401,7 @@ df2008 <- df2008[order(df2008$section), ]
 ###############################################################################
 ## 7) 2011 DATA
 ###############################################################################
-df2011 <- read_excel("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017/Ayu_Seccion_2011.xlsx", sheet = "Sheet1")
+df2011 <- read_excel("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/Ayu_Seccion_2011.xlsx", sheet = "Sheet1")
 
 # drop K, L
 df2011 <- df2011 %>% select(-c(K, L))
@@ -507,7 +507,7 @@ df_1996_2011 <- df_96_99_02_05_08_11
 ## 9) 2014 DATA
 ###############################################################################
 
-excel_path_2014 <- "../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017/Ayuntamientos_2014.xlsx"
+excel_path_2014 <- "../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/Ayuntamientos_2014.xlsx"
 sheet_names_2014 <- excel_sheets(excel_path_2014)
 
 # Read each sheet into a list
@@ -562,7 +562,7 @@ df2014$STATE <- "NAYARIT"
 ###############################################################################
 ## 10) 2017 DATA
 ###############################################################################
-df2017 <- read_excel("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017/Ayuntamientos_2017.xlsx", sheet = "AYUNTAMIENTOS", col_types = "text")
+df2017 <- read_excel("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/Ayuntamientos_2017.xlsx", sheet = "AYUNTAMIENTOS", col_types = "text")
 
 df2017$uniqueid <- 0
 df2017$uniqueid[df2017$municipality == "ACAPONETA"]          <- 18001
@@ -592,6 +592,170 @@ df2017$year  <- 2017
 df2017$month <- "June"
 df2017$STATE <- "NAYARIT"
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset from the excel
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/21/BaseDatosPresidenciaYSindicatura.xlsx", skip = 5)
+
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/PyS21-Ext.xlsx", skip = 5, sheet = "YES") %>% 
+  dplyr::mutate(CABECERA_MUNICIPAL = "LA YESCA")
+
+data_2021 <- bind_rows(data_2021, data_ext)
+names(data_2021)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = CABECERA_MUNICIPAL,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NO_REGISTRADOS,
+                nulos = NULOS,
+                CI_1 = CI) %>%
+  rename_with(~ gsub("NAN", "PANAL", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section),
+    municipality = case_when(municipality == "BUCERIAS" ~ "BAHIA DE BANDERAS",
+                             municipality == "JESUS MARIA" ~ "DEL NAYAR",
+                             TRUE ~ municipality)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "ACAPONETA" ~ 18001,
+      municipality == "AHUACATLAN" ~ 18002,  
+      municipality == "AMATLAN DE CANAS" ~ 18003, 
+      municipality == "BAHIA DE BANDERAS" ~ 18020, 
+      municipality == "COMPOSTELA" ~ 18004,
+      municipality == "HUAJICORI" ~ 18005,
+      municipality == "IXTLAN DEL RIO" ~ 18006,  
+      municipality == "JALA" ~ 18007,
+      municipality == "DEL NAYAR" ~ 18009,  
+      municipality == "ROSAMORADA" ~ 18010,
+      municipality == "RUIZ" ~ 18011,  
+      municipality == "SAN BLAS" ~ 18012,
+      municipality == "SAN PEDRO LAGUNILLAS" ~ 18013,
+      municipality == "SANTA MARIA DEL ORO" ~ 18014,
+      municipality == "SANTIAGO IXCUINTLA" ~ 18015,
+      municipality == "TECUALA" ~ 18016,
+      municipality == "TEPIC" ~ 18017,
+      municipality == "TUXPAN" ~ 18018,
+      municipality == "LA YESCA" ~ 18019,
+      municipality == "XALISCO" ~ 18008,
+      TRUE ~ NA_real_
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:MORENA_PANAL), na.rm = TRUE),
+    year = 2021,
+    month = case_when(
+      municipality == "LA YESCA" ~ "December",
+      TRUE ~ "June"
+    ))
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset from the excel
+data_2024 <- read_excel("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/24/Presidencias y Sindicaturas.xlsx", skip = 5)
+
+names(data_2024)
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NO_REGISTRADOS,
+                nulos = NULOS) %>%
+  rename_with(~ gsub("NAN", "PANAL", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "ACAPONETA" ~ 18001,
+      municipality == "AHUACATLAN" ~ 18002,  
+      municipality == "AMATLAN DE CANAS" ~ 18003, 
+      municipality == "BAHIA DE BANDERAS" ~ 18020, 
+      municipality == "COMPOSTELA" ~ 18004,
+      municipality == "HUAJICORI" ~ 18005,
+      municipality == "IXTLAN DEL RIO" ~ 18006,  
+      municipality == "JALA" ~ 18007,
+      municipality == "DEL NAYAR" ~ 18009,  
+      municipality == "ROSAMORADA" ~ 18010,
+      municipality == "RUIZ" ~ 18011,  
+      municipality == "SAN BLAS" ~ 18012,
+      municipality == "SAN PEDRO LAGUNILLAS" ~ 18013,
+      municipality == "SANTA MARIA DEL ORO" ~ 18014,
+      municipality == "SANTIAGO IXCUINTLA" ~ 18015,
+      municipality == "TECUALA" ~ 18016,
+      municipality == "TEPIC" ~ 18017,
+      municipality == "TUXPAN" ~ 18018,
+      municipality == "LA YESCA" ~ 18019,
+      municipality == "XALISCO" ~ 18008,
+      TRUE ~ NA_real_
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(PAN:MORENA_FXM), na.rm = TRUE),
+    year = 2024,
+    month = "June"
+  )
+
+
+
 ###############################################################################
 ## 11) APPEND (2014, 2017) + (1996–2011)
 ###############################################################################
@@ -600,7 +764,7 @@ df2017$STATE <- "NAYARIT"
 df_14_17 <- bind_rows(df2014, df2017)
 
 # Then combine with older data:
-df_final <- bind_rows(df_1996_2011, df_14_17)
+df_final <- bind_rows(df_1996_2011, df_14_17, collapsed_2021, collapsed_2024)
 
 ###############################################################################
 ## 12) SAVE FINAL DATASET
@@ -609,5 +773,3 @@ df_final <- bind_rows(df_1996_2011, df_14_17)
 # at the municipality-section level, skipping aggregator, ranking, and winner.
 
 data.table::fwrite(df_final,"../../../Processed Data/nayarit/nayarit_process_raw_data.csv")
-
-

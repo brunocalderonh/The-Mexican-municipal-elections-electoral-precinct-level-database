@@ -28,7 +28,7 @@ setwd(file.path(script_dir, ""))
 # 1) Read "Ayu_Seccion_1998_No_LN.csv", rename columns, drop empties, parse numeric
 ################################################################################
 
-df_tam <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_1998_No_LN.csv", 
+df_tam <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_1998_No_LN.csv", 
                    show_col_types=FALSE) 
 colnames(df_tam) <- tolower(colnames(df_tam))
 names(df_tam) <- gsub("[- ]", "", names(df_tam))
@@ -195,7 +195,7 @@ df_1998 <- df_join %>%
 # 1) Read "Ayu_Seccion_1995_No_Municipalities_No_LN.csv"
 ################################################################################
 
-df_1995 <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_1995_No_Municipalities_No_LN.csv", 
+df_1995 <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_1995_No_Municipalities_No_LN.csv", 
                     show_col_types=FALSE) 
 colnames(df_1995) <- tolower(colnames(df_1995))
 names(df_1995) <- gsub("[- ]", "", names(df_1995))
@@ -274,7 +274,7 @@ df_1995 <- df_merged %>%
 # 1) Read "Ayu_Seccion_2001_No_LN.csv", rename columns, drop incomplete, parse numeric
 ################################################################################
 
-df_2001 <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2001_No_LN.csv", 
+df_2001 <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2001_No_LN.csv", 
                     show_col_types=FALSE) 
 
 colnames(df_2001) <- tolower(colnames(df_2001))
@@ -458,7 +458,7 @@ df_2001 <- df_merged %>%
 ################################################################################
 
 df_2004 <- read_excel(
-  path     = "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2004_No_LN.xlsx",
+  path     = "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2004_No_LN.xlsx",
   sheet    = 1,       # or specify the correct sheet if not the first
   col_names= TRUE
 ) %>%
@@ -603,7 +603,7 @@ df_2004<- df_merged %>%
 # 1) Read "Ayu_Seccion_2007.csv" CSV file, rename columns, filter, parse numeric
 ################################################################################
 
-df_2007 <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2007.csv", 
+df_2007 <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2007.csv", 
                     show_col_types=FALSE)
 colnames(df_2007) <- tolower(colnames(df_2007))
 names(df_2007) <- gsub("[. ]", "", names(df_2007))
@@ -734,7 +734,7 @@ df_2007 <- df_collapsed %>%
 ################################################################################
 
 df_2010 <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2010.xlsx",
+  path = "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2010.xlsx",
   sheet = 1,         # or specify the correct sheet if not the first
   col_names= TRUE
 ) %>%
@@ -908,7 +908,7 @@ df_2010 <- df_join %>%
 ################################################################################
 
 df_2013 <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2013.xlsx",
+  path = "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2013.xlsx",
   sheet= 1,      # or specify the correct sheet if not the first
   col_names= TRUE
 ) %>%
@@ -1047,12 +1047,12 @@ df_2013 <- df_collapse %>%
 # Part A: Reading each sheet from "Ayuntamientos_2016.xlsx" into .dta
 ################################################################################
 
-all_sheets <- excel_sheets("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayuntamientos_2016.xlsx")
+all_sheets <- excel_sheets("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayuntamientos_2016.xlsx")
 
 for (sheetname in all_sheets) {
   # Read the Excel sheet
   df_sheet <- read_excel(
-    path = "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Ayuntamientos_2016.xlsx",
+    path = "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayuntamientos_2016.xlsx",
     sheet = sheetname,
     col_names = TRUE,
     col_types = "text"
@@ -1287,7 +1287,7 @@ mun_names <- c("Abasolo","Aldama","Altamira","AntiguoMorelos","Burgos","Bustamen
 for (x in mun_names) {
   # "import excel `x'.xlsx, clear"
   df_mun <- read_excel(
-    path = paste0("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018/Other/Ayuntamientos 2018/", x, ".xlsx"),
+    path = paste0("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Other/Ayuntamientos 2018/", x, ".xlsx"),
     sheet=1,  # if only 1 sheet, or specify the correct sheet
     col_names=TRUE,
     col_types="text"
@@ -1478,16 +1478,237 @@ df_2018 <- df_merge_ids %>%
     STATE = "TAMAULIPAS"
   )
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+library(purrr)
+library(stringr)
+
+# Set the directory path for Tamaulipas 2021 files
+data_dir <- "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/21/"
+
+# Get all Excel files in the directory
+excel_files <- list.files(data_dir, pattern = "\\.xlsx$", full.names = TRUE)
+
+# Check if files are found
+cat("Found", length(excel_files), "Excel files\n")
+excel_files
+
+# Function to read and process each file
+read_municipality_file <- function(file_path) {
+  # Extract municipality name from filename
+  municipality_name <- basename(file_path) %>%
+    str_remove("\\.xlsx$") %>%
+    str_remove("^CME ") # Remove "CME " prefix
+  
+  # Read the Excel file starting from row 7, with all columns as text
+  df <- read_excel(file_path, skip = 6, col_types = "text")
+  
+  # Add municipality column
+  df <- df %>%
+    mutate(source = municipality_name)
+  
+  return(df)
+}
+
+# Read all files and combine them
+data_2021_cons <- map_dfr(excel_files, read_municipality_file)
+
+
+# Rename columns
+data_2021 <- data_2021_cons %>%
+  dplyr::rename(municipality = source,
+                no_reg = "CANDIDATOS NO REGISTRADOS",
+                nulos = "VOTOS\r\n NULOS",
+                CI_1 = "MIGUEL RODRÍGUEZ SALAZAR",
+                CI_2 = "ARNOLDO JAVIER RODRÍGUEZ",
+                CI_3 = "JOSÉ MUÑOZ PORRAS",
+                CI_4 = "JOSÉ LUIS GALLARDO FLORES",
+                CI_5 = "ELISA PATRICIA QUINTANILLA",
+                CI_6 = "HIRAM PEÑA GÓMEZ",
+                CI_7 = "VÍCTOR MANUEL VERGARA",
+                CI_8 = "CARLOS LARA MACÍAS",
+                CI_9 = "PATRICIO GARZA TAPIA",
+                CI_10 = "CARLOS ALBERTO GUERRERO",
+                CI_11 = "JULIÁN ALEJANDRO CARAVEO",
+                CI_12 = "MARGGID ANTONIO RODRÍGUEZ",
+                CI_13 = "MÓNICA MARGOT DE LEÓN") %>%
+  rename_with(~ gsub("-", "_", .x)) %>% 
+  dplyr::mutate(
+    section = as.numeric(str_sub(CASILLA, 1, 4)),
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    municipality = case_when(
+      str_detect(municipality, "MEZ FA") ~ "GOMEZ FARIAS",
+      str_detect(municipality, "GON") ~ "GONZALEZ",
+      str_detect(municipality, "GÜÉMEZ") ~ "GUEMEZ",
+      str_detect(municipality, "GUSTAVO") ~ "GUSTAVO DIAZ ORDAZ",
+      str_detect(municipality, "JIMÉNEZ") ~ "JIMENEZ",
+      str_detect(municipality, "MÉNDEZ") ~ "MENDEZ",
+      str_detect(municipality, "MIGUEL") ~ "MIGUEL ALEMAN",
+      str_detect(municipality, "BRAVO") ~ "RIO BRAVO",
+      str_detect(municipality, "SAN NICOLÁS") ~ "SAN NICOLAS",
+      str_detect(municipality, "VILLAGRÁN") ~ "VILLAGRAN",
+      str_detect(municipality, "XICOT") ~ "XICOTENCATL",
+      str_detect(municipality, "MANTE EL") ~ "EL MANTE",
+      TRUE ~ municipality
+    ),
+    mutate(across(c(PAN:no_reg,CI_1:CI_13), as.numeric))
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality=="ABASOLO"          ~ 28001,
+      municipality=="ALDAMA"           ~ 28002,
+      municipality=="ALTAMIRA"         ~ 28003,
+      municipality=="ANTIGUO MORELOS"  ~ 28004,
+      municipality=="BURGOS"           ~ 28005,
+      municipality=="BUSTAMANTE"       ~ 28006,
+      municipality=="CAMARGO"          ~ 28007,
+      municipality=="CASAS"            ~ 28008,
+      municipality=="CIUDAD MADERO"    ~ 28009,
+      municipality=="CRUILLAS"        ~ 28010,
+      municipality=="EL MANTE"         ~ 28021,
+      municipality=="GOMEZ FARIAS"     ~ 28011,
+      municipality=="GONZALEZ"         ~ 28012,
+      municipality=="GUEMEZ"           ~ 28013,
+      municipality=="GUERRERO"         ~ 28014,
+      municipality=="GUSTAVO DIAZ ORDAZ" ~ 28015,
+      municipality=="HIDALGO"          ~ 28016,
+      municipality=="JAUMAVE"          ~ 28017,
+      municipality=="JIMENEZ"          ~ 28018,
+      municipality=="LLERA"            ~ 28019,
+      municipality=="MAINERO"          ~ 28020,
+      municipality=="MATAMOROS"        ~ 28022,
+      municipality=="MENDEZ"           ~ 28023,
+      municipality=="MIER"             ~ 28024,
+      municipality=="MIGUEL ALEMAN"    ~ 28025,
+      municipality=="MIQUIHUANA"       ~ 28026,
+      municipality=="NUEVO LAREDO"     ~ 28027,
+      municipality=="NUEVO MORELOS"    ~ 28028,
+      municipality=="OCAMPO"           ~ 28029,
+      municipality=="PADILLA"          ~ 28030,
+      municipality=="PALMILLAS"        ~ 28031,
+      municipality=="REYNOSA"          ~ 28032,
+      municipality=="RIO BRAVO"        ~ 28033,
+      municipality=="SAN CARLOS"       ~ 28034,
+      municipality=="SAN FERNANDO"     ~ 28035,
+      municipality=="SAN NICOLAS"      ~ 28036,
+      municipality=="SOTO LA MARINA"   ~ 28037,
+      municipality=="TAMPICO"          ~ 28038,
+      municipality=="TULA"             ~ 28039,
+      municipality=="VALLE HERMOSO"    ~ 28040,
+      municipality=="VICTORIA"         ~ 28041,
+      municipality=="VILLAGRAN"        ~ 28042,
+      municipality=="XICOTENCATL"      ~ 28043,
+      TRUE ~ NA
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:CI_13), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Load the Lista Nominal 2021 data and filter by criteria
+ln_2021 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef21.xlsx", skip = 3, 
+                      col_names = c("state_code", "district_code", "mun_code", 
+                                    "section", "col_e", "col_f", "col_g", "col_h", 
+                                    "col_i", "col_j", "col_k", "col_l",
+                                    "listanominal", "col_n", "col_o", "col_p")) %>%
+  dplyr::select(state_code, mun_code, section, listanominal) %>% 
+  dplyr::filter(state_code == 28) %>%
+  dplyr::select(section,listanominal)
+
+# Merge Lista Nominal data with the collapsed data
+collapsed_2021 <- collapsed_2021 %>%
+  left_join(ln_2021, by = "section")
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    total = sum(c_across(PAN:CI_13), na.rm = TRUE),
+    turnout = total/listanominal,
+    valid = sum(c_across(c(PAN:PT_MORENA, CI_1:CI_13)), na.rm = TRUE),
+    year = 2021,
+    month = "June"
+  )
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Set the directory path for Tamaulipas 2024 files
+data_dir_24 <- "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/24/"
+
+# Get all Excel files in the directory, excluding temporary files
+excel_files_24 <- list.files(data_dir_24, pattern = "\\.(xlsx|xls)$", full.names = TRUE) %>%
+  .[!grepl("~\\$", basename(.))]
+
+cat("Found", length(excel_files_24), "Excel files\n")
+
+# Function to read and process each 2024 file with error handling
+read_municipality_file_24 <- function(file_path) {
+  tryCatch({
+    # Extract municipality name from filename
+    municipality_name <- basename(file_path) %>%
+      str_remove("\\.(xlsx|xls)$") %>%
+      str_remove("_Tabla_de_Computo_Municipal") %>%
+      toupper() %>%
+      # Remove accents and special characters
+      gsub("Á|À|Â|Ã|Ä|Å", "A", .) %>%
+      gsub("É|È|Ê|Ë", "E", .) %>%
+      gsub("Í|Ì|Î|Ï", "I", .) %>%
+      gsub("Ó|Ò|Ô|Õ|Ö", "O", .) %>%
+      gsub("Ú|Ù|Û|Ü", "U", .) %>%
+      gsub("Ñ", "N", .)
+    
+    # Read the Excel file with all columns as text
+    df <- read_excel(file_path, col_types = "text", skip = 4)
+    
+    # Add municipality column
+    df <- df %>%
+      mutate(municipality = municipality_name)
+    
+    return(df)
+  }, error = function(e) {
+    cat("Error reading file:", basename(file_path), "\n")
+    cat("Error message:", e$message, "\n\n")
+    return(NULL)
+  })
+}
+
+# Read all files and combine them, removing NULL results
+data_list <- map(excel_files_24, read_municipality_file_24)
+data_list <- data_list[!sapply(data_list, is.null)]
+
+# Combine successful reads
+data_2024_cons <- bind_rows(data_list)
+
+
 # Combine the dataframes, handling different columns by filling with NA
 Tamaulipas_all <- bind_rows(df_1995,
-                         df_1998,
-                         df_2001,
-                         df_2004,
-                         df_2007,
-                         df_2010,
-                         df_2013,
-                         df_2016,
-                         df_2018)
+                            df_1998,
+                            df_2001,
+                            df_2004,
+                            df_2007,
+                            df_2010,
+                            df_2013,
+                            df_2016,
+                            df_2018)
 
 # Replace municipality = upper(municipality), then unify some names
 Tamaulipas_all <- Tamaulipas_all %>%

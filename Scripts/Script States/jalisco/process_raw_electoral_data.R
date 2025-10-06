@@ -27,7 +27,7 @@ setwd(file.path(script_dir, ""))
 # 1. Read data (Ayu_Seccion_1995.csv)
 #-------------------------------------------------------------
 
-data_1995 <- read_csv("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1995.csv", show_col_types = FALSE)
+data_1995 <- read_csv("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1995.csv", show_col_types = FALSE)
 names(data_1995) <- tolower(names(data_1995))
 
 #-------------------------------------------------------------
@@ -127,7 +127,7 @@ data_1995 <- data_1995 %>% arrange(section)
 #--------------------------------------------
 # 1. Import Excel data (Ayu_Seccion_1997_No_LN.xlsx)
 #--------------------------------------------
-data_1997 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997_No_LN.xlsx") 
+data_1997 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997_No_LN.xlsx") 
 names(data_1997) <- tolower(names(data_1997))
 
 #--------------------------------------------
@@ -363,7 +363,7 @@ data_1997 <- data_1997 %>% arrange(section)
 #-------------------------------------------------------------
 # 1. Read data (Ayu_Seccion_2000_No_LN.csv)
 #-------------------------------------------------------------
-data_2000 <- read_csv("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000_No_LN.csv",
+data_2000 <- read_csv("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000_No_LN.csv",
                       show_col_types = FALSE)
 names(data_2000) <- tolower(names(data_2000))
 #-------------------------------------------------------------
@@ -544,7 +544,7 @@ data_2000 <- data_2000 %>%
 #    Save them as .dta if desired (omitting commented steps).
 # -----------------------------------------------------
 data_2003_main <- read_csv(
-  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003_No_LN.csv",
+  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003_No_LN.csv",
   show_col_types = FALSE
 )
 
@@ -556,7 +556,7 @@ data_2003_main <- data_2003_main %>%
 # write_dta(data_2003_main, "Ayu_Seccion_2003_No_LN.dta")
 
 data_2003_extra <- read_csv(
-  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003_No_LN_Extra.csv",
+  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003_No_LN_Extra.csv",
   show_col_types = FALSE
 )
 
@@ -836,7 +836,7 @@ data_2003 <- data_2003 %>%
 #-------------------------------------------------------------
 # 1. Import Excel data (Ayu_Seccion_2006_No_LN.xlsx)
 #-------------------------------------------------------------
-data_2006 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006_No_LN.xlsx")
+data_2006 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006_No_LN.xlsx")
 names(data_2006) <- tolower(names(data_2006)) # convert column names to lowercase to match case(lower)
 
 #-------------------------------------------------------------
@@ -1094,7 +1094,7 @@ summary(data_2006)
 #-------------------------------------------------------------
 # 1. Read Excel Data
 #-------------------------------------------------------------
-data_2009 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2009_No_LN.xlsx")
+data_2009 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009_No_LN.xlsx")
 names(data_2009) <- tolower(names(data_2009))
 
 #-------------------------------------------------------------
@@ -1429,7 +1429,7 @@ data_2009 <- data_2009 %>% arrange(section)
 #-------------------------------------------------------------
 # 1. Import Excel data
 #-------------------------------------------------------------
-data_2012 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2012.xlsx", 
+data_2012 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.xlsx", 
                         sheet = "CasillaXCasilla")
 
 # Convert column names to lowercase
@@ -1700,7 +1700,7 @@ data_2012 <- data_2012 %>%
 #-------------------------------------------------------------
 
 # Import Excel for 2015
-data_2015 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/ResultadosPorCasilla2015.xlsx", 
+data_2015 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/ResultadosPorCasilla2015.xlsx", 
                         sheet="RESULTADOS", 
                         guess_max=100000)
 
@@ -1860,7 +1860,7 @@ pacman::p_load(dplyr, haven, readxl, stringr, tidyr, data.table)
 # 1. IMPORT EXCEL DATA 2018
 # ------------------------------------------------------------------
 data_2018 <- read_excel(
-  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx", 
+  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx", 
   sheet = "Ayuntamientos",
   guess_max = 100000  # to handle large sheets
 )
@@ -2003,25 +2003,422 @@ data_2018 <- data_2018 %>%
 
 # Omit municipal aggregator steps (mun_listanominal, mun_turnout)
 
-# ------------------------------------------------------------------
-# 10. SAVE SECTION-LEVEL DATA
-# ------------------------------------------------------------------
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 data
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/resultados_ayuntamientos_casillas2021.xlsx", skip = 1)
+
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/resultados_casillaxcasilla-extraordinaria_tlaquepaque2021.xlsx") %>%
+  dplyr::rename(
+    FXM = "FUERZA X MÉXICO",
+    no_reg = "CANDIDATOS NO REGISTRADOS",
+    nulos = "VOTOS NULOS",
+    total = "TOTAL DE VOTOS"
+  ) %>% 
+  dplyr::mutate(
+    municipality = "SAN PEDRO TLAQUEPAQUE",
+    valid = rowSums(pick(PAN:FXM), na.rm = TRUE),
+    uniqueid = 14098,
+    section = as.numeric(str_extract(CASILLA, "\\d+"))
+  ) %>% 
+  dplyr::filter(section > 0)
+
+names(data_2021)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                FXM = FM,
+                CI_1 = VGA,
+                CI_2 = VJC,
+                CI_3 = MHLA,
+                CI_4 = CMSR,
+                CI_5 = GGR,
+                CI_6 = PRP,
+                CI_7 = AGLA,
+                CI_8 = RHCA,
+                CI_9 = CGG,
+                CI_10 = CNJF,
+                CI_11 = PCHE,
+                CI_12 = CMJD,
+                CI_13 = ZQO,
+                CI_14 = RRF,
+                CI_15 = FBJ,
+                CI_16 = RLCA,
+                CI_17 = GCF,
+                CI_18 = PMR,
+                valid = NUM_VOTOS_VALIDOS,
+                no_reg = NUM_VOTOS_CAN_NREG, 
+                nulos = NUM_VOTOS_NULOS,
+                total = TOTAL_VOTOS,
+                listanominal = LISTA_NOMINAL) %>% 
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign unique IDs based on municipality name & create total
+data_2021 <- data_2021 %>%
+  mutate(uniqueid = case_when(
+    municipality == "ACATIC" ~ 14001,
+    municipality == "ACATLAN DE JUAREZ" ~ 14002,
+    municipality == "AHUALULCO DE MERCADO" ~ 14003,
+    municipality == "AMACUECA" ~ 14004,
+    municipality == "AMATITAN" ~ 14005,
+    municipality == "AMECA" ~ 14006,
+    municipality == "ARANDAS" ~ 14008,
+    municipality == "ATEMAJAC DE BRIZUELA" ~ 14010,
+    municipality == "ATENGO" ~ 14011,
+    municipality == "ATENGUILLO" ~ 14012,
+    municipality == "ATOTONILCO EL ALTO" ~ 14013,
+    municipality == "ATOYAC" ~ 14014,
+    municipality == "AUTLAN DE NAVARRO" ~ 14015,
+    municipality == "AYOTLAN" ~ 14016,
+    municipality == "AYUTLA" ~ 14017,
+    municipality == "BOLANOS" ~ 14019,  
+    municipality == "CABO CORRIENTES" ~ 14020,
+    municipality == "CANADAS DE OBREGON" ~ 14117,
+    municipality == "CASIMIRO CASTILLO" ~ 14021,
+    municipality == "CHAPALA" ~ 14030,
+    municipality == "CHIMALTITAN" ~ 14031,
+    municipality == "CHIQUILISTLAN" ~ 14032,
+    municipality == "CIHUATLAN" ~ 14022,
+    municipality == "COCULA" ~ 14024,
+    municipality == "COLOTLAN" ~ 14025,
+    municipality == "CONCEPCION DE BUENOS AIRES" ~ 14026,
+    municipality == "CUAUTITLAN DE GARCIA BARRAGAN" ~ 14027,
+    municipality == "CUAUTLA" ~ 14028,
+    municipality == "CUQUIO" ~ 14029,
+    municipality == "DEGOLLADO" ~ 14033,
+    municipality == "EJUTLA" ~ 14034,
+    municipality == "EL ARENAL" ~ 14009,
+    municipality == "EL GRULLO" ~ 14037,
+    municipality == "EL LIMON" ~ 14054,
+    municipality == "EL SALTO" ~ 14070,
+    municipality == "ENCARNACION DE DIAZ" ~ 14035,
+    municipality == "ETZATLAN" ~ 14036,
+    municipality == "GOMEZ FARIAS" ~ 14079,
+    municipality == "GUACHINANGO" ~ 14038,
+    municipality == "GUADALAJARA" ~ 14039,
+    municipality == "HOSTOTIPAQUILLO" ~ 14040,
+    municipality == "HUEJUCAR" ~ 14041,
+    municipality == "HUEJUQUILLA EL ALTO" ~ 14042,
+    municipality == "IXTLAHUACAN DE LOS MEMBRILLOS" ~ 14044,
+    municipality == "IXTLAHUACAN DEL RIO" ~ 14045,
+    municipality == "JALOSTOTITLAN" ~ 14046,
+    municipality == "JAMAY" ~ 14047,
+    municipality == "JESUS MARIA" ~ 14048,
+    municipality == "JILOTLAN DE LOS DOLORES" ~ 14049,
+    municipality == "JOCOTEPEC" ~ 14050,
+    municipality == "JUANACATLAN" ~ 14051,
+    municipality == "JUCHITLAN" ~ 14052,
+    municipality == "LA BARCA" ~ 14018,
+    municipality == "LA HUERTA" ~ 14043,
+    municipality == "LA MANZANILLA DE LA PAZ" ~ 14057,
+    municipality == "LAGOS DE MORENO" ~ 14053,
+    municipality == "MAGDALENA" ~ 14055,
+    municipality == "MASCOTA" ~ 14058,
+    municipality == "MAZAMITLA" ~ 14059,
+    municipality == "MEXTICACAN" ~ 14060,
+    municipality == "MEZQUITIC" ~ 14061,
+    municipality == "MIXTLAN" ~ 14062,
+    municipality == "OCOTLAN" ~ 14063,
+    municipality == "OJUELOS DE JALISCO" ~ 14064,
+    municipality == "PIHUAMO" ~ 14065,
+    municipality == "PONCITLAN" ~ 14066,
+    municipality == "PUERTO VALLARTA" ~ 14067,
+    municipality == "QUITUPAN" ~ 14069,
+    municipality == "SAN CRISTOBAL DE LA BARRANCA" ~ 14071,
+    municipality == "SAN DIEGO DE ALEJANDRIA" ~ 14072,
+    municipality == "SAN GABRIEL" ~ 14113,
+    municipality == "SAN IGNACIO CERRO GORDO" ~ 14125,
+    municipality == "SAN JUAN DE LOS LAGOS" ~ 14073,
+    municipality == "SAN JUANITO DE ESCOBEDO" ~ 14007,
+    municipality == "SAN JULIAN" ~ 14074,
+    municipality == "SAN MARCOS" ~ 14075,
+    municipality == "SAN MARTIN DE BOLANOS" ~ 14076,  
+    municipality == "SAN MARTIN HIDALGO" ~ 14077,
+    municipality == "SAN MIGUEL EL ALTO" ~ 14078,
+    municipality == "SAN PEDRO TLAQUEPAQUE" ~ 14098,
+    municipality == "SAN SEBASTIAN DEL OESTE" ~ 14080,
+    municipality == "SANTA MARIA DE LOS ANGELES" ~ 14081,
+    municipality == "SANTA MARIA DEL ORO" ~ 14056,
+    municipality == "SAYULA" ~ 14082,
+    municipality == "TALA" ~ 14083,
+    municipality == "TALPA DE ALLENDE" ~ 14084,
+    municipality == "TAMAZULA DE GORDIANO" ~ 14085,
+    municipality == "TAPALPA" ~ 14086,
+    municipality == "TECALITLAN" ~ 14087,
+    municipality == "TECHALUTA DE MONTENEGRO" ~ 14089,
+    municipality == "TECOLOTLAN" ~ 14088,
+    municipality == "TENAMAXTLAN" ~ 14090,
+    municipality == "TEOCALTICHE" ~ 14091,
+    municipality == "TEOCUITATLAN DE CORONA" ~ 14092,
+    municipality == "TEPATITLAN DE MORELOS" ~ 14093,
+    municipality == "TEQUILA" ~ 14094,
+    municipality == "TEUCHITLAN" ~ 14095,
+    municipality == "TIZAPAN EL ALTO" ~ 14096,
+    municipality == "TLAJOMULCO DE ZUNIGA" ~ 14097, 
+    municipality == "TOLIMAN" ~ 14099,
+    municipality == "TOMATLAN" ~ 14100,
+    municipality == "TONALA" ~ 14101,
+    municipality == "TONAYA" ~ 14102,
+    municipality == "TONILA" ~ 14103,
+    municipality == "TOTATICHE" ~ 14104,
+    municipality == "TOTOTLAN" ~ 14105,
+    municipality == "TUXCACUESCO" ~ 14106,
+    municipality == "TUXCUECA" ~ 14107,
+    municipality == "TUXPAN" ~ 14108,
+    municipality == "UNION DE SAN ANTONIO" ~ 14109,
+    municipality == "UNION DE TULA" ~ 14110,
+    municipality == "VALLE DE GUADALUPE" ~ 14111,
+    municipality == "VALLE DE JUAREZ" ~ 14112,
+    municipality == "VILLA CORONA" ~ 14114,
+    municipality == "VILLA GUERRERO" ~ 14115,
+    municipality == "VILLA HIDALGO" ~ 14116,
+    municipality == "VILLA PURIFICACION" ~ 14068,
+    municipality == "YAHUALICA DE GONZALEZ GALLO" ~ 14118,
+    municipality == "ZACOALCO DE TORRES" ~ 14119,
+    municipality == "ZAPOPAN" ~ 14120,
+    municipality == "ZAPOTILTIC" ~ 14121,
+    municipality == "ZAPOTITLAN DE VADILLO" ~ 14122,
+    municipality == "ZAPOTLAN DEL REY" ~ 14123,
+    municipality == "ZAPOTLAN EL GRANDE" ~ 14023,
+    municipality == "ZAPOTLANEJO" ~ 14124,
+    TRUE ~ NA_integer_
+  ))
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:listanominal), 
+                          sum, na.rm = TRUE))
+
+collapsed_ext <- data_ext %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:valid), 
+                          sum, na.rm = TRUE))
+
+tlaquepaque_listanominal <- collapsed_2021 %>%
+  filter(municipality == "SAN PEDRO TLAQUEPAQUE") %>%
+  select(municipality, section, listanominal)
+
+collapsed_ext <- collapsed_ext %>% 
+  left_join(tlaquepaque_listanominal %>% select(section, listanominal), by = c("section", "municipality"))
+
+# Add tlaquepaque ext to data
+collapsed_2021 <- bind_rows(collapsed_ext, collapsed_2021 %>% 
+                              filter(municipality != "SAN PEDRO TLAQUEPAQUE"))
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2021,
+    month = case_when(
+      municipality == "SAN PEDRO TLAQUEPAQUE" ~ "November",
+      TRUE ~ "June"
+    )
+  )
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 data
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/2024_SEE_AYUN_JAL_CAS.csv")
+
+names(data_2024)
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                valid = NUM_VOTOS_VALIDOS,
+                no_reg = NUM_VOTOS_CAN_NREG, 
+                nulos = NUM_VOTOS_NULOS,
+                total = TOTAL_VOTOS,
+                listanominal = LISTA_NOMINAL) %>% 
+  rename_with(~ gsub("CAND_IND", "CI_", .x), starts_with("cand_ind")) %>% 
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign unique IDs based on municipality name & create total
+data_2024 <- data_2024 %>%
+  mutate(uniqueid = case_when(
+    municipality == "ACATIC" ~ 14001,
+    municipality == "ACATLAN DE JUAREZ" ~ 14002,
+    municipality == "AHUALULCO DE MERCADO" ~ 14003,
+    municipality == "AMACUECA" ~ 14004,
+    municipality == "AMATITAN" ~ 14005,
+    municipality == "AMECA" ~ 14006,
+    municipality == "ARANDAS" ~ 14008,
+    municipality == "ATEMAJAC DE BRIZUELA" ~ 14010,
+    municipality == "ATENGO" ~ 14011,
+    municipality == "ATENGUILLO" ~ 14012,
+    municipality == "ATOTONILCO EL ALTO" ~ 14013,
+    municipality == "ATOYAC" ~ 14014,
+    municipality == "AUTLAN DE NAVARRO" ~ 14015,
+    municipality == "AYOTLAN" ~ 14016,
+    municipality == "AYUTLA" ~ 14017,
+    municipality == "BOLANOS" ~ 14019,  
+    municipality == "CABO CORRIENTES" ~ 14020,
+    municipality == "CANADAS DE OBREGON" ~ 14117,
+    municipality == "CASIMIRO CASTILLO" ~ 14021,
+    municipality == "CHAPALA" ~ 14030,
+    municipality == "CHIMALTITAN" ~ 14031,
+    municipality == "CHIQUILISTLAN" ~ 14032,
+    municipality == "CIHUATLAN" ~ 14022,
+    municipality == "COCULA" ~ 14024,
+    municipality == "COLOTLAN" ~ 14025,
+    municipality == "CONCEPCION DE BUENOS AIRES" ~ 14026,
+    municipality == "CUAUTITLAN DE GARCIA BARRAGAN" ~ 14027,
+    municipality == "CUAUTLA" ~ 14028,
+    municipality == "CUQUIO" ~ 14029,
+    municipality == "DEGOLLADO" ~ 14033,
+    municipality == "EJUTLA" ~ 14034,
+    municipality == "EL ARENAL" ~ 14009,
+    municipality == "EL GRULLO" ~ 14037,
+    municipality == "EL LIMON" ~ 14054,
+    municipality == "EL SALTO" ~ 14070,
+    municipality == "ENCARNACION DE DIAZ" ~ 14035,
+    municipality == "ETZATLAN" ~ 14036,
+    municipality == "GOMEZ FARIAS" ~ 14079,
+    municipality == "GUACHINANGO" ~ 14038,
+    municipality == "GUADALAJARA" ~ 14039,
+    municipality == "HOSTOTIPAQUILLO" ~ 14040,
+    municipality == "HUEJUCAR" ~ 14041,
+    municipality == "HUEJUQUILLA EL ALTO" ~ 14042,
+    municipality == "IXTLAHUACAN DE LOS MEMBRILLOS" ~ 14044,
+    municipality == "IXTLAHUACAN DEL RIO" ~ 14045,
+    municipality == "JALOSTOTITLAN" ~ 14046,
+    municipality == "JAMAY" ~ 14047,
+    municipality == "JESUS MARIA" ~ 14048,
+    municipality == "JILOTLAN DE LOS DOLORES" ~ 14049,
+    municipality == "JOCOTEPEC" ~ 14050,
+    municipality == "JUANACATLAN" ~ 14051,
+    municipality == "JUCHITLAN" ~ 14052,
+    municipality == "LA BARCA" ~ 14018,
+    municipality == "LA HUERTA" ~ 14043,
+    municipality == "LA MANZANILLA DE LA PAZ" ~ 14057,
+    municipality == "LAGOS DE MORENO" ~ 14053,
+    municipality == "MAGDALENA" ~ 14055,
+    municipality == "MASCOTA" ~ 14058,
+    municipality == "MAZAMITLA" ~ 14059,
+    municipality == "MEXTICACAN" ~ 14060,
+    municipality == "MEZQUITIC" ~ 14061,
+    municipality == "MIXTLAN" ~ 14062,
+    municipality == "OCOTLAN" ~ 14063,
+    municipality == "OJUELOS DE JALISCO" ~ 14064,
+    municipality == "PIHUAMO" ~ 14065,
+    municipality == "PONCITLAN" ~ 14066,
+    municipality == "PUERTO VALLARTA" ~ 14067,
+    municipality == "QUITUPAN" ~ 14069,
+    municipality == "SAN CRISTOBAL DE LA BARRANCA" ~ 14071,
+    municipality == "SAN DIEGO DE ALEJANDRIA" ~ 14072,
+    municipality == "SAN GABRIEL" ~ 14113,
+    municipality == "SAN IGNACIO CERRO GORDO" ~ 14125,
+    municipality == "SAN JUAN DE LOS LAGOS" ~ 14073,
+    municipality == "SAN JUANITO DE ESCOBEDO" ~ 14007,
+    municipality == "SAN JULIAN" ~ 14074,
+    municipality == "SAN MARCOS" ~ 14075,
+    municipality == "SAN MARTIN DE BOLANOS" ~ 14076,  
+    municipality == "SAN MARTIN HIDALGO" ~ 14077,
+    municipality == "SAN MIGUEL EL ALTO" ~ 14078,
+    municipality == "SAN PEDRO TLAQUEPAQUE" ~ 14098,
+    municipality == "SAN SEBASTIAN DEL OESTE" ~ 14080,
+    municipality == "SANTA MARIA DE LOS ANGELES" ~ 14081,
+    municipality == "SANTA MARIA DEL ORO" ~ 14056,
+    municipality == "SAYULA" ~ 14082,
+    municipality == "TALA" ~ 14083,
+    municipality == "TALPA DE ALLENDE" ~ 14084,
+    municipality == "TAMAZULA DE GORDIANO" ~ 14085,
+    municipality == "TAPALPA" ~ 14086,
+    municipality == "TECALITLAN" ~ 14087,
+    municipality == "TECHALUTA DE MONTENEGRO" ~ 14089,
+    municipality == "TECOLOTLAN" ~ 14088,
+    municipality == "TENAMAXTLAN" ~ 14090,
+    municipality == "TEOCALTICHE" ~ 14091,
+    municipality == "TEOCUITATLAN DE CORONA" ~ 14092,
+    municipality == "TEPATITLAN DE MORELOS" ~ 14093,
+    municipality == "TEQUILA" ~ 14094,
+    municipality == "TEUCHITLAN" ~ 14095,
+    municipality == "TIZAPAN EL ALTO" ~ 14096,
+    municipality == "TLAJOMULCO DE ZUNIGA" ~ 14097, 
+    municipality == "TOLIMAN" ~ 14099,
+    municipality == "TOMATLAN" ~ 14100,
+    municipality == "TONALA" ~ 14101,
+    municipality == "TONAYA" ~ 14102,
+    municipality == "TONILA" ~ 14103,
+    municipality == "TOTATICHE" ~ 14104,
+    municipality == "TOTOTLAN" ~ 14105,
+    municipality == "TUXCACUESCO" ~ 14106,
+    municipality == "TUXCUECA" ~ 14107,
+    municipality == "TUXPAN" ~ 14108,
+    municipality == "UNION DE SAN ANTONIO" ~ 14109,
+    municipality == "UNION DE TULA" ~ 14110,
+    municipality == "VALLE DE GUADALUPE" ~ 14111,
+    municipality == "VALLE DE JUAREZ" ~ 14112,
+    municipality == "VILLA CORONA" ~ 14114,
+    municipality == "VILLA GUERRERO" ~ 14115,
+    municipality == "VILLA HIDALGO" ~ 14116,
+    municipality == "VILLA PURIFICACION" ~ 14068,
+    municipality == "YAHUALICA DE GONZALEZ GALLO" ~ 14118,
+    municipality == "ZACOALCO DE TORRES" ~ 14119,
+    municipality == "ZAPOPAN" ~ 14120,
+    municipality == "ZAPOTILTIC" ~ 14121,
+    municipality == "ZAPOTITLAN DE VADILLO" ~ 14122,
+    municipality == "ZAPOTLAN DEL REY" ~ 14123,
+    municipality == "ZAPOTLAN EL GRANDE" ~ 14023,
+    municipality == "ZAPOTLANEJO" ~ 14124,
+    TRUE ~ NA_integer_
+  ))
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:listanominal), 
+                          sum, na.rm = TRUE))
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2024,
+    month = "June"
+  )
+
+
 # Combine the dataframes, handling different columns by filling with NA
 jalisco_all <- bind_rows(data_1997,
-                            data_2000,
-                            data_2003,
-                            data_2006,
-                            data_2009,
-                            data_2012,
-                            data_2015,
-                            data_2018)
+                         data_2000,
+                         data_2003,
+                         data_2006,
+                         data_2009,
+                         data_2012,
+                         data_2015,
+                         data_2018,
+                         collapsed_2021,
+                         collapsed_2024)
 
 data.table::fwrite(jalisco_all,"../../../Processed Data/jalisco/jalisco_process_raw_data.csv")
-
-
-
-
-
-
-
 
