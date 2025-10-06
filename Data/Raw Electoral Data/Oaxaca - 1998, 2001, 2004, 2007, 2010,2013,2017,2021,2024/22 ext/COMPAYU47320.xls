@@ -1,0 +1,596 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Candidatos</title>
+</head>
+<body>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+		<table border="1">
+    
+    <tr>
+      <td>NOMBRE_GANADOR</td>
+      <td>APEP_GANADOR</td>
+      <td>APEM_GANADOR</td>
+      <td>SEXO_P_GANADOR</td>
+	</tr>
+    
+         
+    <tr>
+    
+       <td>FELIPE</td>
+       <td>BENITEZ</td>
+       <td>DOMINGUEZ</td>
+                    
+      	  <td>1</td>
+      
+      
+    </tr>
+       
+    
+    </table>
+	
+	
+	
+	<div style=" margin-top:30px; margin-bottom:5px; text-align:left; margin-left:2px; ">
+
+<table border="1" style="width:100%; font-size:12px;" id="customers">
+<thead class=''>
+
+<tr>
+
+<th>ID_ESTADO</th>
+<th>NOMBRE_ESTADO</th>
+<th>ID_DISTRITO_LOCAL</th>
+<th>CABECERA_DISTRITO_LOCAL</th>
+<th>ID_MUNICIPIO_LOCAL</th>
+<th>MUNICIPIO_LOCAL</th>
+
+<th>SECCION</th>
+<th>ID_CASILLA</th>
+<th>TIPO_CASILLA</th>
+<th>EXT_CONTIGUA</th>
+<th>ID_TIPO_CANDIDATURA</th>
+<td>ESTATUS_ACTA</td>
+<td>CASILLA_INSTALADA</td>
+<td>ESTATUS_PAQUETE</td>
+<td>ID_INCIDENTE</td>
+<td>NUM_ACTA_IMPRESO</td>
+
+<td>LISTA_NOMINAL_CASILLA</td>
+
+<!--<th>ACTA</th>-->
+
+
+
+<th>NUM_VOTOS_NULOS</th>
+<th>NO_REGISTRADOS</th>
+<td>NUM_BOLETAS_RECIBIDAS</td>
+<td>NUMERO_VOTOS_VALIDOS</td>
+<td>TOTAL_VOTOS</td>
+
+
+<th>
+PAN
+</th>
+<th>
+PRI
+</th>
+<th>
+MORENA
+</th>
+<th>
+PES
+</th>
+		<th>
+				CANDIDATURA COMÚN PAN-PRI		
+			   
+       
+        
+        
+        </th>
+		
+<!--<th>Votacion</th>-->
+<th>NUM_BOLETAS_SOBRANTES</th>
+<th>NUM_ESCRITOS</th>
+<th>BOLETAS_OTRA_ELECCION</th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+
+				
+				<tr id="idess_0" style="background-color:#f0f0f0" onMouseOver="cambiar('idess_0','#cccccc');" onMouseOut="cambiar('idess_0','#f0f0f0');">
+			
+			
+
+<td>20</td>
+<td>OAXACA</td>
+<td>18</td>
+<td>SANTO DOMINGO TEHUANTEPEC</td>
+
+<th>473</th>
+<th>SANTIAGO LAOLLAGA</th>
+
+
+<td>2057</td>
+<td>B1</td>
+<td>B</td>
+
+<td>0</td>
+
+
+<td>11</td>
+
+<td style="font-size:9px;">
+8
+</td>
+
+<td>
+SI</td>
+
+
+<td></td>
+<td></td>
+<td></td>
+
+
+<td>445</td>
+
+
+
+
+				<!--<td align="center">-->
+				<td>1</td><td>0</td>				<!--</td>-->
+                
+                <td>469</td> 
+                
+                <td>213</td>
+				<td>214                </td>
+                
+						<td align="center">
+		0		</td>
+				<td align="center">
+		0		</td>
+				<td align="center">
+		213		</td>
+				<td align="center">
+		0		</td>
+								<td align="center">
+                            0						</td>
+									<!--<td></td>-->
+            
+            <td>255</td>
+             
+             <td>0</td>
+              
+             <td>0</td>
+            
+							
+				<tr id="idess_1" style="background-color:#f0f0f0" onMouseOver="cambiar('idess_1','#cccccc');" onMouseOut="cambiar('idess_1','#f0f0f0');">
+			
+			
+
+<td>20</td>
+<td>OAXACA</td>
+<td>18</td>
+<td>SANTO DOMINGO TEHUANTEPEC</td>
+
+<th>473</th>
+<th>SANTIAGO LAOLLAGA</th>
+
+
+<td>2057</td>
+<td>C1</td>
+<td>C</td>
+
+<td>0</td>
+
+
+<td>11</td>
+
+<td style="font-size:9px;">
+1
+</td>
+
+<td>
+SI</td>
+
+
+<td></td>
+<td></td>
+<td></td>
+
+
+<td>444</td>
+
+
+
+
+				<!--<td align="center">-->
+				<td>0</td><td>0</td>				<!--</td>-->
+                
+                <td>468</td> 
+                
+                <td>217</td>
+				<td>217                </td>
+                
+						<td align="center">
+		0		</td>
+				<td align="center">
+		1		</td>
+				<td align="center">
+		214		</td>
+				<td align="center">
+		2		</td>
+								<td align="center">
+                            0						</td>
+									<!--<td></td>-->
+            
+            <td>251</td>
+             
+             <td>0</td>
+              
+             <td>0</td>
+            
+							
+				<tr id="idess_2" style="background-color:#f0f0f0" onMouseOver="cambiar('idess_2','#cccccc');" onMouseOut="cambiar('idess_2','#f0f0f0');">
+			
+			
+
+<td>20</td>
+<td>OAXACA</td>
+<td>18</td>
+<td>SANTO DOMINGO TEHUANTEPEC</td>
+
+<th>473</th>
+<th>SANTIAGO LAOLLAGA</th>
+
+
+<td>2058</td>
+<td>B1</td>
+<td>B</td>
+
+<td>0</td>
+
+
+<td>11</td>
+
+<td style="font-size:9px;">
+1
+</td>
+
+<td>
+SI</td>
+
+
+<td></td>
+<td></td>
+<td></td>
+
+
+<td>563</td>
+
+
+
+
+				<!--<td align="center">-->
+				<td>1</td><td>0</td>				<!--</td>-->
+                
+                <td>587</td> 
+                
+                <td>247</td>
+				<td>248                </td>
+                
+						<td align="center">
+		0		</td>
+				<td align="center">
+		0		</td>
+				<td align="center">
+		247		</td>
+				<td align="center">
+		0		</td>
+								<td align="center">
+                            0						</td>
+									<!--<td></td>-->
+            
+            <td>339</td>
+             
+             <td>0</td>
+              
+             <td>0</td>
+            
+							
+				<tr id="idess_3" style="background-color:#f0f0f0" onMouseOver="cambiar('idess_3','#cccccc');" onMouseOut="cambiar('idess_3','#f0f0f0');">
+			
+			
+
+<td>20</td>
+<td>OAXACA</td>
+<td>18</td>
+<td>SANTO DOMINGO TEHUANTEPEC</td>
+
+<th>473</th>
+<th>SANTIAGO LAOLLAGA</th>
+
+
+<td>2058</td>
+<td>C1</td>
+<td>C</td>
+
+<td>0</td>
+
+
+<td>11</td>
+
+<td style="font-size:9px;">
+1
+</td>
+
+<td>
+SI</td>
+
+
+<td></td>
+<td></td>
+<td></td>
+
+
+<td>563</td>
+
+
+
+
+				<!--<td align="center">-->
+				<td>3</td><td>0</td>				<!--</td>-->
+                
+                <td>587</td> 
+                
+                <td>240</td>
+				<td>243                </td>
+                
+						<td align="center">
+		0		</td>
+				<td align="center">
+		0		</td>
+				<td align="center">
+		237		</td>
+				<td align="center">
+		1		</td>
+								<td align="center">
+                            2						</td>
+									<!--<td></td>-->
+            
+            <td>344</td>
+             
+             <td>0</td>
+              
+             <td>0</td>
+            
+							
+				<tr id="idess_4" style="background-color:#f0f0f0" onMouseOver="cambiar('idess_4','#cccccc');" onMouseOut="cambiar('idess_4','#f0f0f0');">
+			
+			
+
+<td>20</td>
+<td>OAXACA</td>
+<td>18</td>
+<td>SANTO DOMINGO TEHUANTEPEC</td>
+
+<th>473</th>
+<th>SANTIAGO LAOLLAGA</th>
+
+
+<td>2058</td>
+<td>C2</td>
+<td>C</td>
+
+<td>0</td>
+
+
+<td>11</td>
+
+<td style="font-size:9px;">
+1
+</td>
+
+<td>
+SI</td>
+
+
+<td></td>
+<td></td>
+<td></td>
+
+
+<td>562</td>
+
+
+
+
+				<!--<td align="center">-->
+				<td>0</td><td>0</td>				<!--</td>-->
+                
+                <td>586</td> 
+                
+                <td>256</td>
+				<td>256                </td>
+                
+						<td align="center">
+		1		</td>
+				<td align="center">
+		0		</td>
+				<td align="center">
+		254		</td>
+				<td align="center">
+		1		</td>
+								<td align="center">
+                            0						</td>
+									<!--<td></td>-->
+            
+            <td>330</td>
+             
+             <td>0</td>
+              
+             <td>0</td>
+            
+							
+				<tr id="idess_5" style="background-color:#f0f0f0" onMouseOver="cambiar('idess_5','#cccccc');" onMouseOut="cambiar('idess_5','#f0f0f0');">
+			
+			
+
+<td>20</td>
+<td>OAXACA</td>
+<td>18</td>
+<td>SANTO DOMINGO TEHUANTEPEC</td>
+
+<th>473</th>
+<th>SANTIAGO LAOLLAGA</th>
+
+
+<td>2059</td>
+<td>B1</td>
+<td>B</td>
+
+<td>0</td>
+
+
+<td>11</td>
+
+<td style="font-size:9px;">
+8
+</td>
+
+<td>
+SI</td>
+
+
+<td></td>
+<td></td>
+<td></td>
+
+
+<td>304</td>
+
+
+
+
+				<!--<td align="center">-->
+				<td>1</td><td>0</td>				<!--</td>-->
+                
+                <td>328</td> 
+                
+                <td>151</td>
+				<td>152                </td>
+                
+						<td align="center">
+		0		</td>
+				<td align="center">
+		1		</td>
+				<td align="center">
+		150		</td>
+				<td align="center">
+		0		</td>
+								<td align="center">
+                            0						</td>
+									<!--<td></td>-->
+            
+            <td>176</td>
+             
+             <td>0</td>
+              
+             <td>0</td>
+            
+			</tr>
+
+
+<!--
+<tfoot>
+<tr style="background-color:#CCC;">
+<td colspan="10"></td>
+
+
+
+<td></td>-->
+
+
+
+ 
+
+
+
+ 
+
+<!--<td>-->
+
+<!--</td>-->
+<!--<td>-->
+
+<!--</td>-->
+<!--<td>-->
+
+<!--</td>-->
+<!--<td>-->
+
+<!--</td>-->
+		<!--<td>-->
+				
+        
+           
+        
+        
+        
+       <!-- </td>-->
+		<!--<td></td>
+
+
+</tr>
+
+<tr style="background-color:#CCC;">
+<td colspan="4"></td>
+
+<td style="font-weight:bold;">TOTAL</td>-->
+
+	<!--<td align="center" style="font-weight:bold">-->
+	   <!-- </td>-->
+	<!--<td align="center" style="font-weight:bold">-->
+	   <!-- </td>-->
+	<!--<td align="center" style="font-weight:bold">-->
+	   <!-- </td>-->
+	<!--<td align="center" style="font-weight:bold">-->
+	   <!-- </td>-->
+	<!--<td align="center" style="font-weight:bold">-->
+	   <!-- </td>-->
+	<!--<td align="center" style="font-weight:bold">-->
+	   <!-- </td>-->
+	<!--<td align="center" style="font-weight:bold">-->
+	   <!-- </td>-->
+
+<!--<td align="center"></td>-->
+
+<!--</tr>-->
+
+</tfoot>
+</tbody>
+
+</table>
+
+
+
+
+</div>
+
+
+
+
+    
+	
+	    
+    
+	</body>
+</html>
