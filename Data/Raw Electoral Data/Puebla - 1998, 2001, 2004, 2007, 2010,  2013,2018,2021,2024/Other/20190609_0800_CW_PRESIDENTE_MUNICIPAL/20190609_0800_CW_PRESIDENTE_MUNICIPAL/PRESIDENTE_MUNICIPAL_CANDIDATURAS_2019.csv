@@ -1,0 +1,102 @@
+sep=|
+ESTADO|MUNICIPIO|PARTIDO|CANDIDATO_PROPIETARIO|CANDIDATO_SUPLENTE
+21|8|PAN|José Antonio Romero Granados
+21|8|PRI|Juan Daniel Ramírez Ramírez
+21|8|PT|Alfredo Ramírez Hernández
+21|8|PVEM|Alfredo Ramírez Hernández
+21|8|NAP|Abel Hernández Hernández
+21|8|CPP|José Antonio Romero Granados
+21|8|PSI|Eric Alvarado Martínez
+21|8|MORENA|Alfredo Ramírez Hernández
+21|8|PES|Alfredo Ramírez Hernández
+21|8|PAN_CPP|José Antonio Romero Granados
+21|8|PT_PVEM_MORENA_PES|Alfredo Ramírez Hernández
+21|8|PT_PVEM_MORENA|Alfredo Ramírez Hernández
+21|8|PT_PVEM_PES|Alfredo Ramírez Hernández
+21|8|PT_MORENA_PES|Alfredo Ramírez Hernández
+21|8|PVEM_MORENA_PES|Alfredo Ramírez Hernández
+21|8|PT_PVEM|Alfredo Ramírez Hernández
+21|8|PT_MORENA|Alfredo Ramírez Hernández
+21|8|PT_PES|Alfredo Ramírez Hernández
+21|8|PVEM_MORENA|Alfredo Ramírez Hernández
+21|8|PVEM_PES|Alfredo Ramírez Hernández
+21|8|MORENA_PES|Alfredo Ramírez Hernández
+21|8|CANDIDATAS/OS NO REGISTRADAS/OS|
+21|29|PAN|Raquel Medel Valencia
+21|29|PRI|María de Lourdes Carrera Carrera
+21|29|PRD|Raquel Medel Valencia
+21|29|PT|Dionicia García Rojas
+21|29|PVEM|Dionicia García Rojas
+21|29|MC|Raquel Medel Valencia
+21|29|CPP|Raquel Medel Valencia
+21|29|MORENA|Dionicia García Rojas
+21|29|PES|Dionicia García Rojas
+21|29|PAN_PRD_MC_CPP|Raquel Medel Valencia
+21|29|PAN_PRD_MC|Raquel Medel Valencia
+21|29|PAN_PRD_CPP|Raquel Medel Valencia
+21|29|PAN_MC_CPP|Raquel Medel Valencia
+21|29|PRD_MC_CPP|Raquel Medel Valencia
+21|29|PAN_PRD|Raquel Medel Valencia
+21|29|PAN_MC|Raquel Medel Valencia
+21|29|PAN_CPP|Raquel Medel Valencia
+21|29|PRD_MC|Raquel Medel Valencia
+21|29|PRD_CPP|Raquel Medel Valencia
+21|29|MC_CPP|Raquel Medel Valencia
+21|29|PT_PVEM_MORENA_PES|Dionicia García Rojas
+21|29|PT_PVEM_MORENA|Dionicia García Rojas
+21|29|PT_PVEM_PES|Dionicia García Rojas
+21|29|PT_MORENA_PES|Dionicia García Rojas
+21|29|PVEM_MORENA_PES|Dionicia García Rojas
+21|29|PT_PVEM|Dionicia García Rojas
+21|29|PT_MORENA|Dionicia García Rojas
+21|29|PT_PES|Dionicia García Rojas
+21|29|PVEM_MORENA|Dionicia García Rojas
+21|29|PVEM_PES|Dionicia García Rojas
+21|29|MORENA_PES|Dionicia García Rojas
+21|29|CANDIDATAS/OS NO REGISTRADAS/OS|
+21|98|PRI|Gabriela Marín Castro
+21|98|PT|Estela Margarita Romero Pérez
+21|98|PVEM|Liliana Hernández Ramírez
+21|98|MC|Miguel Pérez Cuellar
+21|98|CPP|Gabriela Marín Castro
+21|98|PSI|María Osvelia Vázquez Pérez
+21|98|MORENA|Guadalupe Cristal Hernández Velasco
+21|98|PES|Blanca Estela Ramirez López
+21|98|PRI_CPP|Gabriela Marín Castro
+21|98|CANDIDATAS/OS NO REGISTRADAS/OS|
+21|107|PAN|Martín Colotl Montes
+21|107|PRI|Rosendo Morales Sánchez
+21|107|PRD|Fidencio Becerril Toxtle
+21|107|PT|Pascual Tenahua Villa
+21|107|PVEM|Pascual Tenahua Villa
+21|107|MC|Fidencio Becerril Toxtle
+21|107|CPP|Fidencio Becerril Toxtle
+21|107|MORENA|Pascual Tenahua Villa
+21|107|PES|Pascual Tenahua Villa
+21|107|PRD_MC_CPP|Fidencio Becerril Toxtle
+21|107|PRD_MC|Fidencio Becerril Toxtle
+21|107|PRD_CPP|Fidencio Becerril Toxtle
+21|107|MC_CPP|Fidencio Becerril Toxtle
+21|107|PT_PVEM_MORENA_PES|Pascual Tenahua Villa
+21|107|PT_PVEM_MORENA|Pascual Tenahua Villa
+21|107|PT_PVEM_PES|Pascual Tenahua Villa
+21|107|PT_MORENA_PES|Pascual Tenahua Villa
+21|107|PVEM_MORENA_PES|Pascual Tenahua Villa
+21|107|PT_PVEM|Pascual Tenahua Villa
+21|107|PT_MORENA|Pascual Tenahua Villa
+21|107|PT_PES|Pascual Tenahua Villa
+21|107|PVEM_MORENA|Pascual Tenahua Villa
+21|107|PVEM_PES|Pascual Tenahua Villa
+21|107|MORENA_PES|Pascual Tenahua Villa
+21|107|CANDIDATAS/OS NO REGISTRADAS/OS|
+21|165|PRI|Daniel Gerardo Domínguez Alarcón
+21|165|PT|Manuel Ismael Gil García
+21|165|PVEM|María Angélica Ramírez Morales
+21|165|MC|Elizabeth Morales Martínez
+21|165|MORENA|Manuel Ismael Gil García
+21|165|PES|Manuel Ismael Gil García
+21|165|PT_MORENA_PES|Manuel Ismael Gil García
+21|165|PT_MORENA|Manuel Ismael Gil García
+21|165|PT_PES|Manuel Ismael Gil García
+21|165|MORENA_PES|Manuel Ismael Gil García
+21|165|CANDIDATAS/OS NO REGISTRADAS/OS|
