@@ -118,25 +118,17 @@ df_collapsed <- df_collapsed %>%
 ################################################################################
 
 # We'll do something similar in R, reading the external .dta:
-df_all <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista) %>%
-  # filter to ed=27 afterwards or we'll merge first and then filter
-  rename(section = seccion)
-
-# add ed=27, reassign "section" from our df_collapsed
-df_collapsed <- df_collapsed %>%
-  mutate(
-    ed      = 27,
-    seccion = section  # just for merging
-  )
+df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter( state == "TABASCO") %>% 
+  select(section, month, year, lista)
 
 # merge 1:m on (ed, seccion)
 df_merged <- df_collapsed %>%
-  left_join(df_all, by = c("ed", "seccion"))
+  left_join(df_all, by = c("section"))
 
 # keep only month==12 & year==1997
 df_merged <- df_merged %>%
-  filter(month == 12, year == 1997)
+  filter(month == "December", year == 1997)
 
 # after a left_join, no extra rows from "using". If we want to
 # drop rows that didn't find a match (which would have NA in 'lista'),
@@ -145,7 +137,7 @@ df_merged <- df_merged %>% filter(!is.na(lista))
 
 # drop _merge, ed, seccion, year, month
 df_merged <- df_merged %>%
-  select(-ed, -seccion, -year, -month)
+  select(-year, -month)
 
 # rename lista -> listanominal
 df_merged <- df_merged %>%
@@ -160,7 +152,7 @@ df_merged <- df_merged %>%
 ################################################################################
 # 14) year=1997, month="November"
 ################################################################################
-df_1997 <- df_ranks_combined %>%
+df_1997 <- df_merged %>%
   mutate(
     year  = 1997,
     month = "November"
@@ -260,27 +252,19 @@ df_collapsed <- df_collapsed %>%
     )
   )
 
-################################################################################
-# 9) Prepare to merge with the external dataset: set ed=27, seccion=section
-################################################################################
-df_collapsed <- df_collapsed %>%
-  mutate(
-    ed      = 27,
-    seccion = section
-  )
 
 ################################################################################
 # 10) Merge 1:m with "..\..\all_months_years.dta", keep only (month, year, lista).
 #     Then filter for month==9 & year==2000. Drop unmatched. Rename lista -> listanominal
 ################################################################################
 # Read the external .dta
-df_all <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista)%>%
-  filter(month == 9, year == 2000)
+df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  select(state, section, month, year, lista)%>%
+  filter(state == "TABASCO", month == "September", year == 2000)
 
 # Merge
 df_merged <- df_collapsed %>%
-  left_join(df_all, by = c("ed", "seccion"))
+  left_join(df_all, by = c("section"))
 
 # In left_join, 
 # we remove rows with NA in 'lista' to emulate that behavior:
@@ -289,7 +273,7 @@ df_merged <- df_merged %>%
 
 # Drop _merge, ed, seccion, year, month from final
 df_merged <- df_merged %>%
-  select(-ed, -seccion, -year, -month)
+  select(-state, -year, -month)
 
 # Rename lista -> listanominal
 df_merged <- df_merged %>%
@@ -353,20 +337,15 @@ df_collapsed <- df %>%
 #    month==9 & year==2003, drop unmatched, then rename 'lista' -> 'listanominal'
 ################################################################################
 
-df_collapsed <- df_collapsed %>%
-  mutate(
-    ed      = 27,
-    seccion = section
-  )
-
-df_all <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista)
+df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  select(state, section, month, year, lista) %>% 
+  filter(state == "TABASCO")
 
 df_merged <- df_collapsed %>%
-  left_join(df_all, by = c("ed", "seccion")) %>%
-  filter(month == 9, year == 2003) %>%
+  left_join(df_all, by = c("section")) %>%
+  filter(month == "September", year == 2003) %>%
   filter(!is.na(lista)) %>% 
-  select(-ed, -seccion, -year, -month)
+  select(-state, -year, -month)
 
 # rename lista -> listanominal
 # keep both old 'listanominal' (collapsed) and 'lista' from merge, see next step
@@ -576,25 +555,24 @@ vars_valid <- c("PAN", "PRI", "PRD_PT", "PVEM", "PANAL", "PAS")
 
 df_collapsed <- df_collapsed %>%
   mutate(
-    valid = rowSums(select(., all_of(vars_valid)), na.rm = TRUE),
-    ed = 27,
-    seccion = section
+    valid = rowSums(select(., all_of(vars_valid)), na.rm = TRUE)
   )
 
 ################################################################################
 # 9) Merge (1:m) with "..\..\all_months_years.dta", keep only (month, year, lista)
 #    Then keep if month==9 & year==2006, drop unmatched, rename lista->listanominal
 ################################################################################
-df_all <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista)
+df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  select(state, section, month, year, lista) %>% 
+  filter(state == "TABASCO")
 
 df_merged <- df_collapsed %>%
-  left_join(df_all, by = c("ed", "seccion")) %>%
-  filter(month == 9, year == 2006) %>%
+  left_join(df_all, by = c("section")) %>%
+  filter(month == "September", year == 2006) %>%
   filter(!is.na(lista))  # drop if no match
 
 df_merged <- df_merged %>%
-  select(-ed, -seccion, -year, -month) %>%
+  select(-state, -year, -month) %>%
   rename(listanominal = lista)
 
 ################################################################################
@@ -843,26 +821,25 @@ df_collapsed <- df_collapsed %>%
 ###############################################################################
 df_collapsed <- df_collapsed %>%
   mutate(
-    valid = rowSums(select(., PAN, PRD_PT_PC, PRI_PVEM_PANAL), na.rm = TRUE),
-    ed    = 27,
-    seccion = section
+    valid = rowSums(select(., PAN, PRD_PT_PC, PRI_PVEM_PANAL), na.rm = TRUE)
   )
 
 ###############################################################################
 # 8) Merge with "..\..\all_months_years.dta" (1:m on ed, seccion),
 #    keep if month==7 & year==2012 & day==1, drop unmatched, rename lista->listanominal
 ###############################################################################
-df_all <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista, day)
+df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  select(state, section, month, year, lista, day) %>% 
+  filter(state=="TABASCO")
 
 df_merged <- df_collapsed %>%
-  left_join(df_all, by = c("ed", "seccion")) %>%
-  filter(month == 7, year == 2012, day == 1) %>%
+  left_join(df_all, by = c("section")) %>%
+  filter(month == "July", year == 2012, day == 1) %>%
   filter(!is.na(lista))  # drop if no match 
 
 # drop _merge, ed, seccion, year, month, day
 df_merged <- df_merged %>%
-  select(-ed, -seccion, -year, -month, -day) %>%
+  select(-state, -year, -month, -day) %>%
   rename(listanominal = lista)
 
 ###############################################################################
@@ -1016,7 +993,7 @@ df_collapsed <- df_collapsed %>%
 # 8)
 ################################################################################
 # We'll read LN2015.dta 
-df_ln <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
+df_ln <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
   select(entidad, municipio, seccion, lista, file, year, month) %>%
   mutate(uniqueid = (entidad * 1000) + municipio) %>%
   filter(uniqueid == 27004, month == 2, seccion != 0) %>%
@@ -1026,7 +1003,7 @@ df_ln <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
 
 # We'll do a left_join on (section) to replicate "merge 1:1 section using LN16_TAB.dta"
 df_merged <- df_collapsed %>%
-  left_join(df_ln, by = "section")
+  left_join(df_ln, by = c("section", "uniqueid"))
 
 # drop if _merge==2 => rows that don't match LN data
 # In R, that means we drop rows where 'lista' is NA
@@ -1196,7 +1173,7 @@ df_collapsed <- df_collapsed %>%
 # 8) 
 ################################################################################
 # We'll read LN2015.dta 
-df_ln <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
+df_ln <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
   select(entidad, municipio, seccion, lista, file, year, month) %>%
   mutate(uniqueid = (entidad * 1000) + municipio) %>%
   filter(uniqueid == 27004, month == 2, seccion != 0) %>%
@@ -1206,7 +1183,7 @@ df_ln <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
 
 # We'll do a left_join on (section) to replicate "merge 1:1 section using LN16_TAB.dta"
 df_merged <- df_collapsed %>%
-  left_join(df_ln, by = "section")
+  left_join(df_ln, by = c("uniqueid", "section"))
 
 # drop if _merge==2 => rows that don't match LN data
 # In R, that means we drop rows where 'lista' is NA
@@ -1311,7 +1288,7 @@ df <- df %>%
     CI_1 = rowSums(select(., all_of(cand_cols)), na.rm = TRUE)
   ) %>%
   select(-all_of(cand_cols))  # drop all CAND_IND columns
-e
+
 if ("PT_MORENA" %in% names(df)) {
   df <- df %>%
     relocate(CI_1, .before = PT_MORENA)
@@ -1424,6 +1401,90 @@ collapsed_2021 <- collapsed_2021 %>%
     month = "June"
   )
 
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 27) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply coalition processing function
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 #####################################
 ### PROCESSING DATA FOR 2024 -------
 #####################################
@@ -1456,7 +1517,7 @@ data_2024 <- data_2024 %>%
     municipality = gsub("Ñ", "N", municipality),
     section = as.numeric(section)
   ) %>% 
-  dplyr::filter(section > 0) %>% 
+  dplyr::filter(section > 0 & total > 0) %>% 
   dplyr:: select(-c("TOTAL\r\nPVEM Y MORENA", "TOTAL\r\nPAN Y PRI"))
 
 # Assign uniqueids
@@ -1500,6 +1561,11 @@ collapsed_2024 <- collapsed_2024 %>%
     month = "June"
   )
 
+# Apply coalition processing function
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
+
 # Combine the dataframes, handling different columns by filling with NA
 tabasco_all <- bind_rows(df_1997,
                          df_2000,
@@ -1512,4 +1578,4 @@ tabasco_all <- bind_rows(df_1997,
                          collapsed_2021,
                          collapsed_2024)
 
-data.table::fwrite(tabasco_all,"../../../Processed Data/tabasco/tabasco_process_raw_data.csv")
+data.table::fwrite(tabasco_all,"../../../Processed Data/Tabasco/Tabasco_process_raw_data.csv")

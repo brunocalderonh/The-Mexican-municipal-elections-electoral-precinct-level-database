@@ -601,14 +601,15 @@ data_2021 <- bind_rows(data_2021_rest, data_2021_hec) %>%
     municipality == "ESCARCEGA" ~ "4009",
     municipality == "CALAKMUL" ~ "4010",
     municipality == "CANDELARIA" ~ "4011",
-    municipality == "SEYBALPAYA" ~ "4012",
-    municipality == "DZITBALCHÉ" ~ "4013"
+    municipality == "SEYBAPLAYA" ~ "4012",
+    municipality == "DZITBALCHE" ~ "4013"
   ),
   uniqueid = as.numeric(uniqueid)) %>% 
   dplyr::mutate(PAN_PRI_PRD = rowSums(across(c(PAN, PRI, PRD, PAN_PRI_PRD, PAN_PRI, PAN_PRD, PRI_PRD)), na.rm = TRUE)) %>%
   dplyr::select(municipality, section, PT, PVEM, MC, MORENA, PES, RSP, FXM, PAN_PRI_PRD, valid,
                 nulos, total, listanominal, CI_1, uniqueid) %>% 
-  dplyr::mutate(section = as.numeric(section))
+  dplyr::mutate(section = as.numeric(section)) %>% 
+  filter(total > 1)
 
 # Calculate valid votes and municipal summaries
 collapsed_2021 <- data_2021 %>%
@@ -623,6 +624,91 @@ collapsed_2021 <- collapsed_2021 %>%
 rm(data_2021)
 rm(data_2021_hec)
 rm(data_2021_rest)
+
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 4) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 
 ##############################################
 ### PROCESSING DATA FOR 2024 -----------------
@@ -700,7 +786,7 @@ for (x in 1:13) {
   
   # Reload cleaned file and add uniqueid
   data <- read_excel(cleaned_file_path) %>%
-    mutate(uniqueid = ifelse(x > 9, paste0("10", x), paste0("100", x)))
+    mutate(uniqueid = ifelse(x > 9, paste0("40", x), paste0("400", x)))
   
   # Save as RDS
   saveRDS(data, file = paste0("dataset_", x, ".rds"))
@@ -735,7 +821,8 @@ combined_2024 <- combined_2024 %>%
                                                   PT_MORENA, PVEM_MORENA, PT_PVEM,
                                                   PT_PVEM,MORENA)), na.rm = TRUE)) %>% 
   dplyr::select(municipality, section, PAN, MC, PES, CL, EDC, MLC, PRI_PRD, PT_PVEM_MORENA, valid, nulos, total, listanominal, CI_1, CI_2, uniqueid) %>% 
-  dplyr::mutate(section = as.numeric(section))
+  dplyr::mutate(section = as.numeric(section)) %>% 
+  filter(total > 1)
 
 # Calculate valid votes and municipal summaries
 collapsed_2024 <- combined_2024 %>%
@@ -751,7 +838,73 @@ rm(data)
 rm(temp_data)
 rm(combined_2024)
 
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
 
+# Apply coalition processing function
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
 
 # Combine the dataframes, handling different columns by filling with NA
 campeche_all <- bind_rows(collapsed_1997,

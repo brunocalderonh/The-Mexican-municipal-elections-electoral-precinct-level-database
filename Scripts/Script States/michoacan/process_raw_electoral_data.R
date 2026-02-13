@@ -334,7 +334,8 @@ data_1998 <- data_1998 %>%
   mutate(
     year=1998,
     month="November"
-  )
+  ) %>% 
+  select(-municipality)
 
 # -------------------------------------------------------------------
 # 1. READ CSV
@@ -1524,18 +1525,6 @@ data_2015 <- data_2015 %>%
     month= "July"
   )
 
-# -------------------------------------------------------------------
-# 2. RENAME
-#    Sección -> section
-#    K -> total
-# -------------------------------------------------------------------
-# We'll assume columns match exactly: "Sección" is named "Sección" and "K" is the 11th column. 
-# Check your actual data for these column names.
-data_2008 <- data_2008 %>%
-  rename(
-    section = `Sección`,
-    total   = `...11`
-  )
 
 ###############################################################################
 ### 1. Import Excel extraordinary elections
@@ -1691,7 +1680,7 @@ for (sheetname in sheet_list) {
     rename_with(~ gsub("[^A-Za-z0-9_]", "_", .x))
   
   # 6) Build the output filename
-  file_out <- paste0(gsub("[^A-Za-z0-9_]", "_", sheetname), ".dta")
+  file_out <- paste0(sheetname, ".dta")
   
   # 7) Save as .dta
   haven::write_dta(df_sheet, file_out)
@@ -1931,9 +1920,17 @@ df <- df %>%
 ###############################################################################
 ### 2. "destring *, replace" => Convert all columns to numeric if possible
 ###############################################################################
-# We'll replicate "destring" for all columns:
+# Convert to numeric only if the column contains all numeric values (allowing for NAs)
 df <- df %>%
-  mutate(across(everything(), ~ suppressWarnings(as.numeric(as.character(.)))))
+  mutate(across(where(is.character), ~ {
+    numeric_version <- suppressWarnings(as.numeric(.x))
+    # If conversion creates NAs where there weren't NAs before, keep as character
+    if (sum(is.na(numeric_version)) > sum(is.na(.x))) {
+      .x  # Keep as character
+    } else {
+      numeric_version  # Convert to numeric
+    }
+  }))
 
 ###############################################################################
 ### 1) Generate or update coalition columns (PAN_PRD_PMC, etc.)
@@ -2083,16 +2080,15 @@ data_2018 <- df %>%
 ###############################################################################
 data_2018 <- data_2018 %>%
   rowwise() %>%
-  mutate(valid = sum(c_across(c("PAN","PRI","PRD","PT","PVEM","MC","PANAL","MORENA","PES",
-                                "PAN_PRD_MC","PT_MORENA","PAN_MC","PRD_PVEM","PAN_PRD","PRD_MC","CI_1","CI_2")),
+  mutate(valid = sum(c_across(c("PAN","PRI","PRD","PT","PVEM","MC","PANAL","MORENA","PES","CI_1","CI_2")),
                      na.rm=TRUE)) %>%
   ungroup()
 
 data_2018 <- data_2018 %>%
   mutate(
-    total = valid + NULO + NOREG
+    total = valid + NULOS + NOREG
   ) %>%
-  select(-NOREG, -NULO)
+  select(-NOREG, -NULOS)
 
 ###############################################################################
 #g year=2018, g month="July", g STATE="MICHOACAN"
@@ -2109,8 +2105,8 @@ data_2018 <- data_2018 %>%
 ###    Then save as "MICH_LN18.dta"
 ###    Then restore
 ###############################################################################
-ln2018 <- read_dta("../Listas Nominales/ListadoNominalPREP2018.dta") %>%
-  filter(STATE=="MICHOACAN")
+ln2018 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ListadoNominalPREP2018.dta") %>%
+  filter(STATE == "MICHOACAN")
 
 ###############################################################################
 ### 9) merge 1:1 STATE section using MICH_LN18.dta => left_join by (STATE, section)
@@ -2527,6 +2523,102 @@ collapsed_2021 <- collapsed_2021 %>%
     month = "June"
   )
 
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 16) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: extract party names from a column name (handles all CC/CO variations)
+  extract_parties <- function(col_name) {
+    # Remove CC_ or CO_ prefix if present
+    col_name <- sub("^(CC|CO)_", "", col_name)
+    # Remove _CO or _CC suffix if present
+    col_name <- sub("_(CO|CC)$", "", col_name)
+    # Split by underscore
+    strsplit(col_name, "_")[[1]]
+  }
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    coal_parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      col_parties <- extract_parties(col)
+      # Check if all parties in the column match the coalition parties
+      setequal(col_parties, coal_parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply coalition processing function
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 
 #####################################
 ### PROCESSING DATA FOR 2024 -------
@@ -2716,6 +2808,11 @@ collapsed_2024 <- collapsed_2024 %>%
       TRUE ~ "June"
     )
   )
+
+# Apply coalition processing function
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 
 # Combine the dataframes, handling different columns by filling with NA
 michoacan_all <- bind_rows(data_1995,

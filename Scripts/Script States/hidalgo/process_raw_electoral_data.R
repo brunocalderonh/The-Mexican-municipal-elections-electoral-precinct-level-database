@@ -27,7 +27,7 @@ setwd(file.path(script_dir, ""))
 ### Read and Prepare Data
 ###########################################
 
-data_1996 <- read.csv("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_1996.csv")
+data_1996 <- read.csv("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/1996/Ayu_Seccion_1996.csv")
 
 # Convert column names to lowercase
 data_1996 <- data_1996 %>% rename_with(tolower)
@@ -140,7 +140,7 @@ data_1996 <- data_1996 %>%
 ### Step 1: Read Data
 ###########################################
 # Equivalent to: insheet using Ayu_Seccion_1999.csv, clear
-data_1999 <- read.csv("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_1999.csv")
+data_1999 <- read.csv("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/1999/Ayu_Seccion_1999.csv")
 
 # Convert column names to lowercase
 data_1999 <- data_1999 %>% rename_with(tolower)
@@ -260,7 +260,7 @@ data_1999 <- data_1999 %>%
 ###########################################
 ### Step 1: Read Data
 ###########################################
-data_2002 <- read.csv("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_2002.csv")
+data_2002 <- read.csv("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2002/Ayu_Seccion_2002.csv")
 
 # Convert column names to lowercase
 data_2002 <- data_2002 %>% rename_with(tolower)
@@ -384,7 +384,7 @@ data_2002 <- data_2002 %>%
 ###########################################
 ### Step 1: Import Data
 ###########################################
-data_2005 <- fread("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_2005.csv",
+data_2005 <- fread("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2005/Ayu_Seccion_2005.csv",
                    encoding = "Latin-1")
 
 # Convert column names to lowercase
@@ -509,7 +509,7 @@ data_2005 <- data_2005 %>%
 ###########################################
 ### Step 1: Import Data
 ###########################################
-data_2008 <- fread("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_2008.csv")
+data_2008 <- fread("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2008/Ayu_Seccion_2008.csv")
 
 # Convert column names to lowercase
 data_2008 <- data_2008 %>% rename_with(tolower)
@@ -649,7 +649,7 @@ data_2008 <- data_2008 %>%
 ###########################################
 ### Step 1: Import Excel
 ###########################################
-data_2011 <- read_excel("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_2011.xlsx", sheet = "Ayu_Seccion_2011")
+data_2011 <- read_excel("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2011/Ayu_Seccion_2011.xlsx", sheet = "Ayu_Seccion_2011")
 
 ###########################################
 ### Step 2: Rename and Initial Drops
@@ -807,8 +807,8 @@ data_2011 <- data_2011 %>%
 ###########################################
 
 # Paths
-input_file <- "../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayuntamientos_Hgo_2016.xlsx"
-output_dir <- "../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Other"
+input_file <- "../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2016/Ayuntamientos_Hgo_2016.xlsx"
+output_dir <- "../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/Other"
 
 # Create the output directory if it doesn't exist
 if(!dir.exists(output_dir)) {
@@ -1047,7 +1047,7 @@ data_2016 <- data_2016 %>%
   select(-c(NOREGISTRADO,NULO,Nulos,VOTOSNULOS))
 
 # Next, read Ayu_Seccion_2016_Extraordinario.csv
-extra_data <- read_delim("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016/Ayu_Seccion_2016_Extraordinario.csv", delim=",")
+extra_data <- read_delim("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2016/Ayu_Seccion_2016_Extraordinario.csv", delim=",")
 # Convert column names to lowercase
 extra_data <- extra_data %>% rename_with(tolower)
 
@@ -1069,6 +1069,590 @@ extra_data <- extra_data %>%
 extra_data <- extra_data %>%
   mutate(year=2016, month="December")
 
+#####################################
+### PROCESSING DATA FOR 2020 -------
+#####################################
+
+# Load the 2020 dataset from the CSV
+data_2020 <- read_csv("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2020/2020_AYUN_HGO_CASILLAS.csv") %>% 
+  dplyr::filter(MUNICIPIO != "ACAXOCHITLAN" & MUNICIPIO != "IXMIQUILPAN")
+
+ln_ext <- read_csv("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2020/2020_AYUN_HGO_CASILLAS.csv") %>% 
+  dplyr::filter(MUNICIPIO %in% c("ACAXOCHITLAN","IXMIQUILPAN")) %>% 
+  select(MUNICIPIO, SECCION, CASILLA, LISTA_NOMINAL)
+
+data_acaxoch <- read_excel("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2021/ext_2021.xlsx", sheet = "ACAXOCHITLAN", skip = 2) %>% 
+  mutate(MUNICIPIO = "ACAXOCHITLAN")
+
+data_ixmi <- read_excel("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2021/ext_2021.xlsx", sheet = "IXMIQUILPAN", skip = 1) %>% 
+  mutate(MUNICIPIO = "IXMIQUILPAN")
+
+data_ext <- bind_rows(data_acaxoch, data_ixmi) %>% 
+  rename(SECCION = "SECCIÓN") %>% 
+  mutate(
+    valid = sum(c_across(c(PAN:MAS,PT:MORENA_PANAL)), na.rm = TRUE),
+    CASILLA_RECODED = case_when(
+      CASILLA == "BASICA" ~ "B",
+      CASILLA == "CONTIGUA 01" ~ "C01",
+      CASILLA == "CONTIGUA 02" ~ "C02",
+      CASILLA == "CONTIGUA 03" ~ "C03",
+      CASILLA == "CONTIGUA 04" ~ "C04",
+      CASILLA == "CONTIGUA 05" ~ "C05",
+      CASILLA == "ESPECIAL 01" ~ "S01",
+      CASILLA == "ESPECIAL 02" ~ "S02",
+      CASILLA == "EXTRAORDINARIA 01" ~ "E01",
+      CASILLA == "EXTRAORDINARIA 02" ~ "E02",
+      CASILLA == "EXTRAORDINARIA 03" ~ "E03",
+      CASILLA == "EXTRAORDINARIA 01 CONTIGUA 01" ~ "E01C01",
+      CASILLA == "EXTRAORDINARIA 01 CONTIGUA 02" ~ "E01C02",
+      CASILLA == "EXTRAORDINARIA 01 CONTIGUA 03" ~ "E01C03",
+      CASILLA == "EXTRAORDINARIA 02 CONTIGUA 01" ~ "E02C01",
+      CASILLA == "EXTRAORDINARIA 02 CONTIGUA 02" ~ "E02C02",
+      CASILLA == "EXTRAORDINARIA 03 CONTIGUA 01" ~ "E03C01",
+      TRUE ~ CASILLA  # Keep original if not matched
+    )
+  ) %>%
+  select(-CASILLA) %>%
+  rename(CASILLA = CASILLA_RECODED)
+
+data_ext <- left_join(data_ext, ln_ext, by = c("MUNICIPIO","SECCION", "CASILLA"))
+
+# Rename columns
+data_2020 <- data_2020 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                valid = NUM_VOTOS_VALIDOS,
+                no_reg = NUM_VOTOS_CAN_NREG,
+                nulos = NUM_VOTOS_NULOS,
+                PANAL = NVA_ALIANZA,
+                MXH = MAS_X_HIDALGO) %>%
+  rename_with(~ gsub("CAND_IND", "CI_", .x), starts_with("cand_ind")) %>%
+  rename_with(~ str_replace_all(., "ESH", "PES")) %>% 
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  )
+
+data_ext <- data_ext %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL,
+                no_reg = "NO REGISTRADO",
+                nulos = "VOTOS NULOS",
+                MXH = MAS) %>%
+  dplyr::mutate(
+    section = as.numeric(section)
+  ) %>% 
+  filter(section > 0)
+
+data_2020 <- bind_rows(data_2020, data_ext)
+
+# Assign uniqueids
+data_2020 <- data_2020 %>%
+  mutate(uniqueid = case_when(
+    municipality == "ACATLAN" ~ 13001,
+    municipality == "ACAXOCHITLAN" ~ 13002,
+    municipality == "ACTOPAN" ~ 13003,
+    municipality == "AGUA BLANCA DE ITURBIDE" ~ 13004,
+    municipality == "AJACUBA" ~ 13005,
+    municipality == "ALFAJAYUCAN" ~ 13006,
+    municipality == "ALMOLOYA" ~ 13007,
+    municipality == "APAN" ~ 13008,
+    municipality == "ATITALAQUIA" ~ 13010,
+    municipality == "ATLAPEXCO" ~ 13011,
+    municipality == "ATOTONILCO DE TULA" ~ 13013,
+    municipality == "ATOTONILCO EL GRANDE" ~ 13012,
+    municipality == "CALNALI" ~ 13014,
+    municipality == "CARDONAL" ~ 13015,
+    municipality == "CHAPANTONGO" ~ 13017,
+    municipality == "CHAPULHUACAN" ~ 13018,
+    municipality == "CHILCUAUTLA" ~ 13019,
+    municipality == "CUAUTEPEC DE HINOJOSA" ~ 13016,
+    municipality == "EL ARENAL" ~ 13009,
+    municipality == "ELOXOCHITLAN" ~ 13020,
+    municipality == "EMILIANO ZAPATA" ~ 13021,
+    municipality == "EPAZOYUCAN" ~ 13022,
+    municipality == "FRANCISCO I. MADERO" ~ 13023,
+    municipality == "HUASCA DE OCAMPO" ~ 13024,
+    municipality == "HUAUTLA" ~ 13025,
+    municipality == "HUAZALINGO" ~ 13026,
+    municipality == "HUEHUETLA" ~ 13027,
+    municipality == "HUEJUTLA DE REYES" ~ 13028,
+    municipality == "HUICHAPAN" ~ 13029,
+    municipality == "IXMIQUILPAN" ~ 13030,
+    municipality == "JACALA DE LEDEZMA" ~ 13031,
+    municipality == "JALTOCAN" ~ 13032,
+    municipality == "JUAREZ HIDALGO" ~ 13033,
+    municipality == "LA MISION" ~ 13040,
+    municipality == "LOLOTLA" ~ 13034,
+    municipality == "METEPEC" ~ 13035,
+    municipality == "METZTITLAN" ~ 13037,
+    municipality == "MINERAL DE LA REFORMA" ~ 13051,
+    municipality == "MINERAL DEL CHICO" ~ 13038,
+    municipality == "MINERAL DEL MONTE" ~ 13039,
+    municipality == "MIXQUIAHUALA DE JUAREZ" ~ 13041,
+    municipality == "MOLANGO DE ESCAMILLA" ~ 13042,
+    municipality == "NICOLAS FLORES" ~ 13043,
+    municipality == "NOPALA DE VILLAGRAN" ~ 13044,
+    municipality == "OMITLAN DE JUAREZ" ~ 13045,
+    municipality == "PACHUCA DE SOTO" ~ 13048,
+    municipality == "PACULA" ~ 13047,
+    municipality == "PISAFLORES" ~ 13049,
+    municipality == "PROGRESO DE OBREGON" ~ 13050,
+    municipality == "SAN AGUSTIN METZQUITITLAN" ~ 13036,
+    municipality == "SAN AGUSTIN TLAXIACA" ~ 13052,
+    municipality == "SAN BARTOLO TUTOTEPEC" ~ 13053,
+    municipality == "SAN FELIPE ORIZATLAN" ~ 13046,
+    municipality == "SAN SALVADOR" ~ 13054,
+    municipality == "SANTIAGO DE ANAYA" ~ 13055,
+    municipality == "SANTIAGO TULANTEPEC DE LUGO GUERRERO" ~ 13056,
+    municipality == "SINGUILUCAN" ~ 13057,
+    municipality == "TASQUILLO" ~ 13058,
+    municipality == "TECOZAUTLA" ~ 13059,
+    municipality == "TENANGO DE DORIA" ~ 13060,
+    municipality == "TEPEAPULCO" ~ 13061,
+    municipality == "TEPEHUACAN DE GUERRERO" ~ 13062,
+    municipality == "TEPEJI DEL RIO DE OCAMPO" ~ 13063,
+    municipality == "TEPETITLAN" ~ 13064,
+    municipality == "TETEPANGO" ~ 13065,
+    municipality == "TEZONTEPEC DE ALDAMA" ~ 13067,
+    municipality == "TIANGUISTENGO" ~ 13068,
+    municipality == "TIZAYUCA" ~ 13069,
+    municipality == "TLAHUELILPAN" ~ 13070,
+    municipality == "TLAHUILTEPA" ~ 13071,
+    municipality == "TLANALAPA" ~ 13072,
+    municipality == "TLANCHINOL" ~ 13073,
+    municipality == "TLAXCOAPAN" ~ 13074,
+    municipality == "TOLCAYUCA" ~ 13075,
+    municipality == "TULA DE ALLENDE" ~ 13076,
+    municipality == "TULANCINGO DE BRAVO" ~ 13077,
+    municipality == "VILLA DE TEZONTEPEC" ~ 13066,
+    municipality == "XOCHIATIPAN" ~ 13078,
+    municipality == "XOCHICOATLAN" ~ 13079,
+    municipality == "YAHUALICA" ~ 13080,
+    municipality == "ZACUALTIPAN DE ANGELES" ~ 13081,
+    municipality == "ZAPOTLAN DE JUAREZ" ~ 13082,
+    municipality == "ZEMPOALA" ~ 13083,
+    municipality == "ZIMAPAN" ~ 13084,
+    TRUE ~ NA_integer_
+  ))
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2020 <- data_2020 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:listanominal, PT_PVEM_MORENA_PANAL:MORENA_PANAL), 
+                          sum, na.rm = TRUE))
+
+# Calculate valid votes and final details
+collapsed_2020 <- collapsed_2020 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = case_when(
+      municipality %in% c("ACAXOCHITLAN","IXMIQUILPAN") ~ 2021,
+      TRUE ~ 2020
+    ),
+    month = case_when(
+      municipality %in% c("ACAXOCHITLAN","IXMIQUILPAN") ~ "June",
+      TRUE ~ "October"
+    )
+  )
+
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 13) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply coalition processing function
+collapsed_2020 <- process_coalitions(collapsed_2020, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Process data into a single file
+library(readxl)
+library(dplyr)
+library(purrr)
+library(stringr)
+library(fs)
+library(writexl)
+
+# Define the base path
+base_path <- "../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2024"
+
+# Strategy 1: Recursive file discovery and processing
+process_hidalgo_elections <- function(base_path) {
+  
+  # Step 1: Find all Excel files recursively (exclude temp files)
+  excel_files <- dir_ls(base_path, 
+                        recurse = TRUE, 
+                        regexp = "\\.(xlsx|xls)$", 
+                        type = "file") %>%
+    # Filter out temporary Excel files (start with ~$)
+    .[!str_detect(path_file(.), "^~\\$")]
+  
+  cat("Found", length(excel_files), "Excel files\n")
+  
+  # Step 2: Extract metadata from file paths
+  file_info <- tibble(
+    file_path = excel_files,
+    district = str_extract(file_path, "Distrito \\d+"),
+    filename = path_file(file_path),
+    # Extract municipality name from filename (remove numbers, underscores, extensions)
+    municipality_raw = str_remove(filename, "\\.(xlsx|xls)$"),
+    municipality_clean = str_remove_all(municipality_raw, "^\\d+_?") %>% 
+      str_to_upper() %>%
+      str_trim()
+  )
+  
+  # Step 3: Preview the file structure
+  cat("\nFile structure preview:\n")
+  print(file_info %>% select(district, filename, municipality_clean) %>% head(10))
+  
+  # Step 4: Function to safely read each Excel file
+  read_excel_safely <- function(file_path, district, municipality) {
+    tryCatch({
+      
+      # Read the Excel file - you may need to adjust sheet names or ranges
+      data <- read_excel(file_path, 
+                         sheet = 1,  # Adjust if needed
+                         skip = 0,   # Adjust if there are header rows to skip
+                         col_types = "text")  # Read everything as text first
+      
+      # Clean up special characters in municipality name
+      municipality_clean <- municipality %>%
+        # Fix encoding issues with special characters
+        str_replace_all("†", "Á") %>%
+        str_replace_all("¢", "Ó") %>%
+        str_replace_all("‡", "É") %>%
+        str_replace_all("¡", "Í") %>%
+        str_replace_all("£", "Ú") %>%
+        str_replace_all("¤", "Ñ")
+      
+      # Add metadata columns
+      data <- data %>%
+        mutate(
+          source_file = basename(file_path),
+          district = district,
+          municipality = municipality_clean,
+          .before = 1
+        )
+      
+      return(data)
+      
+    }, error = function(e) {
+      cat("Error reading file:", file_path, "\n")
+      cat("Error message:", e$message, "\n")
+      return(NULL)
+    })
+  }
+  
+  # Step 5: Process all files
+  cat("\nProcessing files...\n")
+  
+  all_data <- file_info %>%
+    mutate(
+      data = pmap(list(file_path, district, municipality_clean), 
+                  read_excel_safely)
+    ) %>%
+    filter(!map_lgl(data, is.null))  # Remove failed reads
+  
+  # Step 6: Combine all data
+  combined_data <- all_data %>%
+    pull(data) %>%
+    bind_rows()
+  
+  cat("Successfully processed", nrow(all_data), "files\n")
+  cat("Combined dataset has", nrow(combined_data), "rows and", ncol(combined_data), "columns\n")
+  
+  return(list(
+    combined_data = combined_data,
+    file_info = all_data,
+    failed_files = file_info %>% 
+      anti_join(all_data, by = "file_path") %>% 
+      pull(file_path)
+  ))
+}
+
+results <- process_hidalgo_elections(base_path)
+
+# Or save to the same folder as your source data
+output_path <- "../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/"
+write.csv(results$combined_data, paste0(output_path, "hidalgo_2024_combined.csv"), row.names = FALSE)
+
+
+# Load the 2024 dataset from the CSV
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2024/hidalgo_2024_combined.csv") %>% 
+  dplyr::filter(nombremunicipio !=  "CUAUTEPEC DE HINOJOSA")
+
+data_ext <- read_csv("../../../Data/Raw Electoral Data/Hidalgo - 1996, 1999, 2002, 2005, 2008, 2011,2016,2020,2024/2024/ext_2024.csv")
+
+names(data_2024)
+names(data_ext)
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(section = seccion,
+                otro = municipality,
+                municipality = nombremunicipio,
+                total = TOTAL,
+                no_reg = CNR,
+                nulos = VN,
+                PANAL = PNAH,
+                CI_1 = CI_01,
+                CI_2 = CI_02) %>%
+  rename_with(~ str_replace_all(., "PNAH", "PANAL")) %>% 
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    municipality = case_when(
+      municipality == "ACATLΜN" ~ "ACATLAN",
+      municipality == "ACAXOCHITLΜN" ~ "ACAXOCHITLAN",
+      TRUE ~ municipality
+    ),
+    section = as.numeric(section) 
+  ) %>% 
+  dplyr::filter(section > 0)
+
+data_ext <- data_ext %>%
+  dplyr::rename(municipality = NOMBRE_MUNICIPIO,
+                section = SECCION,
+                total = TOTAL_VOTOS,
+                no_reg = CNR,
+                nulos = VN,
+                PANAL = PNAH) %>%
+  rename_with(~ str_replace_all(., "PNAH", "PANAL")) %>% 
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  filter(section > 0)
+
+# Combine with extraordinary election
+data_2024 <- bind_rows(data_2024, data_ext)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>%
+  mutate(uniqueid = case_when(
+    municipality == "ACATLAN" ~ 13001,
+    municipality == "ACAXOCHITLAN" ~ 13002,
+    municipality == "ACTOPAN" ~ 13003,
+    municipality == "AGUA BLANCA DE ITURBIDE" ~ 13004,
+    municipality == "AJACUBA" ~ 13005,
+    municipality == "ALFAJAYUCAN" ~ 13006,
+    municipality == "ALMOLOYA" ~ 13007,
+    municipality == "APAN" ~ 13008,
+    municipality == "ATITALAQUIA" ~ 13010,
+    municipality == "ATLAPEXCO" ~ 13011,
+    municipality == "ATOTONILCO DE TULA" ~ 13013,
+    municipality == "ATOTONILCO EL GRANDE" ~ 13012,
+    municipality == "CALNALI" ~ 13014,
+    municipality == "CARDONAL" ~ 13015,
+    municipality == "CHAPANTONGO" ~ 13017,
+    municipality == "CHAPULHUACAN" ~ 13018,
+    municipality == "CHILCUAUTLA" ~ 13019,
+    municipality == "CUAUTEPEC DE HINOJOSA" ~ 13016,
+    municipality == "EL ARENAL" ~ 13009,
+    municipality == "ELOXOCHITLAN" ~ 13020,
+    municipality == "EMILIANO ZAPATA" ~ 13021,
+    municipality == "EPAZOYUCAN" ~ 13022,
+    municipality == "FRANCISCO I MADERO" ~ 13023,
+    municipality == "HUASCA DE OCAMPO" ~ 13024,
+    municipality == "HUAUTLA" ~ 13025,
+    municipality == "HUAZALINGO" ~ 13026,
+    municipality == "HUEHUETLA" ~ 13027,
+    municipality == "HUEJUTLA DE REYES" ~ 13028,
+    municipality == "HUICHAPAN" ~ 13029,
+    municipality == "IXMIQUILPAN" ~ 13030,
+    municipality == "JACALA DE LEDEZMA" ~ 13031,
+    municipality == "JALTOCAN" ~ 13032,
+    municipality == "JUAREZ HIDALGO" ~ 13033,
+    municipality == "LA MISION" ~ 13040,
+    municipality == "LOLOTLA" ~ 13034,
+    municipality == "METEPEC" ~ 13035,
+    municipality == "METZTITLAN" ~ 13037,
+    municipality == "MINERAL DE LA REFORMA" ~ 13051,
+    municipality == "MINERAL DEL CHICO" ~ 13038,
+    municipality == "MINERAL DEL MONTE" ~ 13039,
+    municipality == "MIXQUIAHUALA DE JUAREZ" ~ 13041,
+    municipality == "MOLANGO DE ESCAMILLA" ~ 13042,
+    municipality == "NICOLAS FLORES" ~ 13043,
+    municipality == "NOPALA DE VILLAGRAN" ~ 13044,
+    municipality == "OMITLAN DE JUAREZ" ~ 13045,
+    municipality == "PACHUCA DE SOTO" ~ 13048,
+    municipality == "PACULA" ~ 13047,
+    municipality == "PISAFLORES" ~ 13049,
+    municipality == "PROGRESO DE OBREGON" ~ 13050,
+    municipality == "SAN AGUSTIN METZQUITITLAN" ~ 13036,
+    municipality == "SAN AGUSTIN TLAXIACA" ~ 13052,
+    municipality == "SAN BARTOLO TUTOTEPEC" ~ 13053,
+    municipality == "SAN FELIPE ORIZATLAN" ~ 13046,
+    municipality == "SAN SALVADOR" ~ 13054,
+    municipality == "SANTIAGO DE ANAYA" ~ 13055,
+    municipality == "SANTIAGO TULANTEPEC DE LUGO GUERRERO" ~ 13056,
+    municipality == "SINGUILUCAN" ~ 13057,
+    municipality == "TASQUILLO" ~ 13058,
+    municipality == "TECOZAUTLA" ~ 13059,
+    municipality == "TENANGO DE DORIA" ~ 13060,
+    municipality == "TEPEAPULCO" ~ 13061,
+    municipality == "TEPEHUACAN DE GUERRERO" ~ 13062,
+    municipality == "TEPEJI DEL RIO DE OCAMPO" ~ 13063,
+    municipality == "TEPETITLAN" ~ 13064,
+    municipality == "TETEPANGO" ~ 13065,
+    municipality == "TEZONTEPEC DE ALDAMA" ~ 13067,
+    municipality == "TIANGUISTENGO" ~ 13068,
+    municipality == "TIZAYUCA" ~ 13069,
+    municipality == "TLAHUELILPAN" ~ 13070,
+    municipality == "TLAHUILTEPA" ~ 13071,
+    municipality == "TLANALAPA" ~ 13072,
+    municipality == "TLANCHINOL" ~ 13073,
+    municipality == "TLAXCOAPAN" ~ 13074,
+    municipality == "TOLCAYUCA" ~ 13075,
+    municipality == "TULA DE ALLENDE" ~ 13076,
+    municipality == "TULANCINGO DE BRAVO" ~ 13077,
+    municipality == "VILLA DE TEZONTEPEC" ~ 13066,
+    municipality == "XOCHIATIPAN" ~ 13078,
+    municipality == "XOCHICOATLAN" ~ 13079,
+    municipality == "YAHUALICA" ~ 13080,
+    municipality == "ZACUALTIPAN DE ANGELES" ~ 13081,
+    municipality == "ZAPOTLAN DE JUAREZ" ~ 13082,
+    municipality == "ZEMPOALA" ~ 13083,
+    municipality == "ZIMAPAN" ~ 13084,
+    TRUE ~ NA_integer_
+  ))
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:total), 
+                          sum, na.rm = TRUE))
+
+# Load the Lista Nominal 2024 data and filter by criteria
+ln_2024 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef24.xlsx", skip = 2, 
+                      col_names = c("state_code", "district_code", "mun_code", 
+                                    "section", "col_e", "col_f", "col_g", "col_h", 
+                                    "col_i", "col_j", "col_k", "listanominal")) %>%
+  dplyr::select(state_code, mun_code, section, listanominal) %>% 
+  dplyr::filter(state_code == 13) %>%
+  dplyr::select(section,listanominal)
+
+# Merge Lista Nominal data with the collapsed data
+collapsed_2024 <- collapsed_2024 %>%
+  left_join(ln_2024, by = "section")
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    valid = sum(c_across(PAN:CI_2), na.rm = TRUE),
+    turnout = total/listanominal,
+    year = 2024,
+    month = case_when(
+      municipality == "CUAUTEPEC DE HINOJOSA" ~ "December",
+      TRUE ~ "June"
+    )
+  )
+
+# Apply coalition processing function
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 # Combine the dataframes, handling different columns by filling with NA
 Hidalgo_all <- bind_rows(data_1996,
                          data_1999,
@@ -1077,14 +1661,8 @@ Hidalgo_all <- bind_rows(data_1996,
                          data_2008,
                          data_2011,
                          data_2016,
-                         extra_data) 
+                         extra_data,
+                         collapsed_2020,
+                         collapsed_2024)
 
 data.table::fwrite(Hidalgo_all,"../../../Processed Data/hidalgo/hidalgo_process_raw_data.csv")
-
-
-
-
-
-
-
-

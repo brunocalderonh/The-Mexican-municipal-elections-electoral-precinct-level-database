@@ -24,7 +24,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, ""))
 
 # Load CSV file
-ayu_seccion_1997 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997.csv",
+ayu_seccion_1997 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1997/Ayu_Seccion_1997.csv",
                           encoding = "Latin-1")
 colnames(ayu_seccion_1997) <- tolower(colnames(ayu_seccion_1997))
 # Remove "-" and spaces
@@ -43,6 +43,7 @@ ayu_seccion_1997 <- ayu_seccion_1997 %>%
 
 # Convert relevant columns from string to numeric (equivalent to `destring`)
 numeric_vars <- c("listanominal", "pan", "pri", "prd", "pt", "pvem", "total")
+ayu_seccion_1997 <- as.data.frame(ayu_seccion_1997)
 ayu_seccion_1997[numeric_vars] <- lapply(ayu_seccion_1997[numeric_vars], as.numeric)
 
 # Collapse (sum) relevant variables by `municipality` and `section`
@@ -106,7 +107,7 @@ data_1997 <- ayu_seccion_1997 %>%
 
 
 # Read the CSV file
-ayu_seccion_2000 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000.csv",
+ayu_seccion_2000 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2000/Ayu_Seccion_2000.csv",
                           encoding = "Latin-1")
 colnames(ayu_seccion_2000) <- tolower(colnames(ayu_seccion_2000))
 # Remove "-" and spaces
@@ -168,13 +169,9 @@ ayu_seccion_2000 <- ayu_seccion_2000 %>%
     municipality == "SAN JUAN DEL RxCDO" ~ 22016,
     municipality == "TEQUISQUIAPAN" ~ 22017,
     municipality == "TOLIMxC1N" ~ 22018,
-    TRUE ~ uniqueid  # If the municipality doesn't match, keep the original uniqueid
+    TRUE ~ NA 
   ))
 
-# Rename variables
-ayu_seccion_2000 <- ayu_seccion_2000 %>%
-  rename(municipality = municipio,
-         section = seccin)
 
 # Drop rows where `municipality` is empty and `section` is missing
 ayu_seccion_2000 <- ayu_seccion_2000 %>%
@@ -186,29 +183,19 @@ ayu_seccion_2000 <- ayu_seccion_2000 %>%
 
 # Convert the specified columns to numeric
 ayu_seccion_2000 <- ayu_seccion_2000 %>%
-  mutate(across(listanominal:psn, as.numeric))
+  mutate(across(listanominal:PSN, as.numeric))
 
 # Collapse (sum) the relevant columns by `municipality` and `section`
 ayu_seccion_2000 <- ayu_seccion_2000 %>%
   group_by(municipality, section) %>%
-  summarise(across(listanominal:psn, sum, na.rm = TRUE), .groups = "drop")
-
-# Rename the columns for political parties
-ayu_seccion_2000 <- ayu_seccion_2000 %>%
-  rename(PAN = pan,
-         PRI = pri,
-         PRD = prd,
-         PT = pt,
-         PVEM = pvem,
-         PC = pc,
-         PSN = psn)
+  summarise(across(listanominal:PSN, sum, na.rm = TRUE), .groups = "drop")
 
 # Generate the `turnout` variable as the ratio of `total` to `listanominal`
 data_2000 <- ayu_seccion_2000 %>%
   mutate(turnout = total / listanominal)
 
 # Read the CSV file (replace the file path with your actual path)
-queretaro_2003 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv", stringsAsFactors = FALSE,
+queretaro_2003 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003.csv", stringsAsFactors = FALSE,
                            encoding = "Latin-1")
 colnames(queretaro_2003) <- tolower(colnames(queretaro_2003))
 # Remove "-" and spaces
@@ -294,7 +281,7 @@ data_2003 <- queretaro_2003 %>%
   )
 
 # Load the CSV file into R
-ayuntamiento_2006 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.csv",
+ayuntamiento_2006 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2006/Ayu_Seccion_2006.csv",
                            encoding = "Latin-1")
 colnames(ayuntamiento_2006) <- tolower(colnames(ayuntamiento_2006))
 # Remove "-" and spaces
@@ -314,17 +301,17 @@ ayuntamiento_2006 <- ayuntamiento_2006 %>%
 
 # Convert relevant columns to numeric
 ayuntamiento_2006 <- ayuntamiento_2006 %>%
-  mutate(across(c(PAN:listanominal), as.numeric))
+  mutate(across(c(pan:listanominal), as.numeric))
 
 # Collapse (sum) by municipality and section, summing votes for each party and total votes/listanominal
 ayuntamiento_2006_summary <- ayuntamiento_2006 %>%
   group_by(municipality, section) %>%
   summarise(
-    PAN = sum(PAN, na.rm = TRUE),
-    PRI = sum(PRI, na.rm = TRUE),
-    PRD = sum(PRD, na.rm = TRUE),
-    PT = sum(PT, na.rm = TRUE),
-    PVEM = sum(PVEM, na.rm = TRUE),
+    PAN = sum(pan, na.rm = TRUE),
+    PRI = sum(pri, na.rm = TRUE),
+    PRD = sum(prd, na.rm = TRUE),
+    PT = sum(pt, na.rm = TRUE),
+    PVEM = sum(pvem, na.rm = TRUE),
     PC = sum(convergencia, na.rm = TRUE),
     PRI_PVEM = sum(pripvem, na.rm = TRUE),
     PANAL = sum(panal, na.rm = TRUE),
@@ -337,7 +324,7 @@ ayuntamiento_2006_summary <- ayuntamiento_2006_summary %>%
   mutate(turnout = total / listanominal)
 
 # Create and assign `uniqueid` based on municipality
-queretaro_2006 <- queretaro_2006 %>%
+queretaro_2006 <- ayuntamiento_2006_summary %>%
   mutate(uniqueid = case_when(
     municipality == "Amealco de Bonfil" ~ 22001,
     municipality == "Arroyo Seco" ~ 22003,
@@ -362,10 +349,10 @@ queretaro_2006 <- queretaro_2006 %>%
 
 # Calculate `valid` as the row total of relevant vote columns
 queretaro_2006 <- queretaro_2006 %>%
-  mutate(valid = rowSums(select(., PAN, PRI, PRD, PVEM, PC, PT, PANAL, PRI_PVEM), na.rm = TRUE))
+  mutate(valid = rowSums(across(c(PAN, PRI, PRD, PVEM, PC, PT, PANAL, PRI_PVEM)), na.rm = TRUE))
 
 # Add year and month columns
-data_2006 <- data_2006 %>%
+data_2006 <- queretaro_2006 %>%
   mutate(year = 2006, month = "July")
 
 # Sort by section
@@ -373,7 +360,7 @@ data_2006 <- data_2006 %>%
   arrange(section)
 
 # Load the CSV data
-ayuntamiento_2009 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.csv",
+ayuntamiento_2009 <- fread("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2009/Ayu_Seccion_2009.csv",
                            encoding = "Latin-1")
 colnames(ayuntamiento_2009) <- tolower(colnames(ayuntamiento_2009))
 # Remove "-" and spaces
@@ -441,7 +428,7 @@ ayuntamiento_2009_collapsed <- ayuntamiento_2009_collapsed %>%
     municipality == "SAN JUAN DEL RxCDO" ~ 22016,
     municipality == "TEQUISQUIAPAN" ~ 22017,
     municipality == "TOLIMxC1N" ~ 22018,
-    TRUE ~ uniqueid  # If the municipality doesn't match, keep the original uniqueid
+    TRUE ~ NA 
   ))
 
 # Assume data is already loaded into a dataframe called `data`
@@ -464,7 +451,7 @@ data_2009 <- data %>%
   arrange(section)
 
 # Load the dataset (assuming the file is in CSV format)
-data <- read_xlsx("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.xlsx")
+data <- read_xlsx("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2012/Ayu_Seccion_2012.xlsx")
 colnames(data) <- tolower(colnames(data))
 # Remove "-" and spaces
 names(data) <- gsub("[- ]", "", names(data))
@@ -540,10 +527,10 @@ data_2012 <- data %>%
   mutate(turnout = total / listanominal)
 
 # Append all data sets together
-all_data <- bind_rows(data1997, data2000, data2003, data2006, data2009, data2012)
+data_master <- bind_rows(data_1997, data_2000, data_2003, data_2006, data_2009, data_2012)
 
 # Load Excel file to get sheet names
-file_path <- "../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Municipios_2015.xlsx"
+file_path <- "../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/Municipios_2015.xlsx"
 sheets <- excel_sheets(file_path)
 
 # Loop through all sheets, load the data, and clean it
@@ -723,7 +710,7 @@ data_2015 <- data_2015 %>%
   mutate(turnout = total / listanominal)
 
 # Load the CSV file for Huimilpan extraordinary election
-data <- read_csv("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/huimilpan.csv")
+data <- read_csv("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/huimilpan.csv")
 colnames(data) <- tolower(colnames(data))
 # Remove "-" and spaces
 names(data) <- gsub("[- ]", "", names(data))
@@ -803,7 +790,7 @@ data_2015_extra <- data %>%
   )
 
 # Step 1: Load and Clean the Election Data
-data <- read_excel("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Municipios_2018.xlsx", sheet = "Municipios")
+data <- read_excel("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2018/Municipios_2018.xlsx", sheet = "Municipios")
 # Remove "-" and spaces
 names(data) <- gsub("-", "", names(data))
 # Combine coalitions for MORENA, PT, PES
@@ -920,18 +907,13 @@ data <- data %>%
 data_2018 <- data %>%
   mutate(year = 2018, month = "July", STATE = "QUERETARO") %>% 
   select(-c(NUM_BOLETAS_SOBRANTES,NUM_ESCRITOS,BOLETAS_OTRA_ELECCION,STATE))
-#######################################################################
-
-# Combine the datasets
-combined_data <- bind_rows(data_2015, data_2015_extra, data_2018)
-
 
 #####################################
 ### PROCESSING DATA FOR 2021 -------
 #####################################
 
 # Load the 2021 dataset from the excel
-data_2021 <- read_excel("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/2021_Ayuntamiento.xlsx", skip = 1, sheet = "Casilla")
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2021/2021_Ayuntamiento.xlsx", skip = 1, sheet = "Casilla")
 
 # Rename columns
 data_2021 <- data_2021 %>%
@@ -956,7 +938,7 @@ data_2021 <- data_2021 %>%
     municipality = str_replace(municipality, "PE.*AMILLER", "PENAMILLER"),
     section = as.numeric(section)
   ) %>% 
-  dplyr::filter(section > 0)
+  dplyr::filter(section > 0 & total > 0)
 
 # Assign uniqueids
 data_2021 <- data_2021 %>% 
@@ -999,12 +981,96 @@ collapsed_2021 <- collapsed_2021 %>%
     month = "June"
   )
 
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 22) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply coalition processing function
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 #####################################
 ### PROCESSING DATA FOR 2024 -------
 #####################################
 
 # Load the 2024 dataset from the excel
-data_2024 <- read_csv("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/QRO_AYUN_RESULTADOS_2024.csv")
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Queretaro - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2024/QRO_AYUN_RESULTADOS_2024.csv")
 
 # Rename columns
 data_2024 <- data_2024 %>%
@@ -1036,7 +1102,7 @@ data_2024 <- data_2024 %>%
     section = as.numeric(section)
   ) %>% 
   rename_with(~ gsub("-", "_", .x)) %>% 
-  dplyr::filter(section > 0)
+  dplyr::filter(section > 0 & total > 0)
 
 # Assign uniqueids
 data_2024 <- data_2024 %>% 
@@ -1079,6 +1145,10 @@ collapsed_2024 <- collapsed_2024 %>%
     year = 2024,
     month = "June"
   )
+
+# Apply coalition processing function
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
 
 # Combine the datasets
 combined_data <- bind_rows(data_2015, data_2015_extra, data_2018, collapsed_2021, collapsed_2024)

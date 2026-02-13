@@ -30,7 +30,7 @@ setwd(file.path(script_dir, ""))
 
 
 # 1) Read CSV: "Ayu_Seccion_1997_No_LN.csv"
-df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997_No_LN.csv", 
+df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1997/Ayu_Seccion_1997_No_LN.csv", 
                show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 
@@ -183,7 +183,7 @@ rm(df)
 ###############################################################################
 
 # 1) Read CSV
-df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2000/Ayu_Seccion_2000.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 # 2) rename municipio->municipality, seccion->section
 df <- df %>%
@@ -334,7 +334,7 @@ rm(df)
 ###############################################################################
 
 # 1) Read Excel: 'Extraordinario 2001.xlsx', sheet="Sheet1", first row as headers
-df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Extraordinario 2001.xlsx", 
+df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2001/Extraordinario 2001.xlsx", 
                  sheet = "Sheet1", col_names = TRUE)
 
 # 2) rename SECCIÓN->section, SUMA->total, LISTA->listanominal
@@ -385,7 +385,7 @@ rm(df)
 ###############################################################################
 
 # 1) Read CSV
-df <- fread("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003_No_LN.csv", 
+df <- fread("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003_No_LN.csv", 
                encoding = "Latin-1")
 colnames(df) <- tolower(colnames(df))
 # 2) rename municipio->municipality, seccin->section
@@ -529,7 +529,7 @@ rm(df)
 ###############################################################################
 
 # 1) Read CSV
-df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2006/Ayu_Seccion_2006.csv", show_col_types = FALSE)
 
 colnames(df) <- tolower(colnames(df))
 # Remove "-" and spaces
@@ -707,7 +707,7 @@ rm(df)
 ###############################################################################
 
 # 1) Read CSV
-df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2009/Ayu_Seccion_2009.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 # Remove "-" and spaces
 names(df) <- gsub("[- ]", "", names(df))
@@ -905,7 +905,7 @@ rm(df)
 ### Ayu_Seccion_2012.csv
 ###############################################################################
 # 1) Read CSV
-df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2012/Ayu_Seccion_2012.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 # 2) replace municipality = subinstr(municipality,"*","",.)
 #    i.e. remove asterisk from 'municipality'
@@ -1063,7 +1063,7 @@ df_2012 <- df_collapsed %>%
 ###############################################################################
 
 # 1) Read Exce
-df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2015.xlsx", 
+df <- read_excel("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/Ayuntamientos_2015.xlsx", 
                  col_names = TRUE)
 
 # 2) replace PRI=. if C_PRI_PVEM_PANAL!=.
@@ -1128,7 +1128,7 @@ names(df_2015)
 
 ####### 2018
 
-all_sheets <- excel_sheets("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx")
+all_sheets <- excel_sheets("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2018/Ayuntamientos_2018.xlsx")
 sheet_index <- seq_along(all_sheets)
 
 for (i in sheet_index) {
@@ -1137,7 +1137,7 @@ for (i in sheet_index) {
   
   # Read Excel
   df_sheet <- read_excel(
-    "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx", 
+    "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2018/Ayuntamientos_2018.xlsx", 
     sheet = sheetname, 
     col_names = TRUE
   )
@@ -1400,7 +1400,7 @@ library(stringr)
 library(fs)
 
 # Define the base path for Morelos 2021 data
-base_path <- "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/"
+base_path <- "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2021/"
 
 # Main processing function for Morelos municipalities
 process_morelos_elections <- function(base_path) {
@@ -1618,11 +1618,11 @@ inspect_morelos_files(base_path)
 results <- process_morelos_elections(base_path)
 final_data <- post_process_morelos(results$combined_data)
 
-output_path <- "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/"
+output_path <- "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2021/"
 write.csv(results$combined_data, paste0(output_path, "morelos_2021_combined.csv"), row.names = FALSE)
 
 # Load the 2021 dataset
-data_2021 <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/morelos_2021_combined.csv") %>% 
+data_2021 <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2021/morelos_2021_combined.csv") %>% 
   mutate(listanominal = LNOMINAL + L_NOMINAL)
 
 names(data_2021)
@@ -1634,19 +1634,20 @@ data_2021 <- data_2021 %>%
                 no_reg = NO_REGISTRADOS,
                 nulos = NUM_VOTOS_NULOS,
                 PANAL = "NA",
+                PMP = MP,
                 FXM = FPM,
                 PH = HUMANISTA,
                 CI_1 = CAND_IND_AGUSTIN_TOLEDANO_AMARO,
                 CI_2 = CAND_IND_CELSO_NIETO_ESTRADA,
                 CI_3 = CAND_IND_PEDRO_ANTONIO_MONTENEGRO_MORGADO,
-                MORENA_PANAL_ES_CC = CC_MORENA_NA_ES, # CC Candidatura Comun
-                PAN_PH_CC = CC_PAN_HUMANISTA,
-                PAN_PSD_CC = CC_PAN_PSD,
-                PRD_PSD_CC = CC_PRD_PSD,
+                MORENA_PANAL_PES = CC_MORENA_NA_ES, # CC Candidatura Comun
+                PAN_PH = CC_PAN_HUMANISTA,
+                PAN_PSD = CC_PAN_PSD,
+                PRD_PSD = CC_PRD_PSD,
                 PRD_PRI = COAL_PRD_PRI,
-                MORENA_ES_CC = CONFIG_CC_MORENA_ES,
-                MORENA_PANAL_CC = CONFIG_CC_MORENA_NA,
-                PANAL_ES_CC = CONFIG_CC_NA_ES) %>%
+                MORENA_PES = CONFIG_CC_MORENA_ES,
+                MORENA_PANAL = CONFIG_CC_MORENA_NA,
+                PANAL_PES = CONFIG_CC_NA_ES) %>%
   dplyr::mutate(
     municipality = gsub("Á", "A", municipality),
     municipality = gsub("É", "E", municipality),
@@ -1660,18 +1661,18 @@ data_2021 <- data_2021 %>%
   dplyr::filter(section > 0) %>% 
   select(municipality, section,
          PAN, PRI, PRD, PT, PVEM, MC, MORENA,
-         APM, BC, ES, FM, FXM, FUTURO, PH, MAS, MP, PANAL, PAS, PES, 
+         APM, BC, ES, FM, FXM, FUTURO, PH, MAS, PMP, PANAL, PAS, PES, 
          PODEMOS, PSD, RPM, RSP, CI_1, CI_2, CI_3,
-         MORENA_PANAL_ES_CC, PAN_PH_CC, PAN_PSD_CC, PRD_PSD_CC, PRD_PRI, MORENA_ES_CC,
-         MORENA_PANAL_CC, PANAL_ES_CC,
+         MORENA_PANAL_PES, PAN_PH, PAN_PSD, PRD_PSD, PRD_PRI, MORENA_PES,
+         MORENA_PANAL, PANAL_PES,
          no_reg, nulos, total, listanominal
   ) %>% 
   mutate(
     across(c(section, PAN, PRI, PRD, PT, PVEM, MC, MORENA,
-             APM, BC, ES, FM, FXM, FUTURO, PH, MAS, MP, PANAL, PAS, PES, 
+             APM, BC, ES, FM, FXM, FUTURO, PH, MAS, PMP, PANAL, PAS, PES, 
              PODEMOS, PSD, RPM, RSP, CI_1, CI_2, CI_3,
-             MORENA_PANAL_ES_CC, PAN_PH_CC, PAN_PSD_CC, PRD_PSD_CC, PRD_PRI, 
-             MORENA_ES_CC, MORENA_PANAL_CC, PANAL_ES_CC,
+             MORENA_PANAL_PES, PAN_PH, PAN_PSD, PRD_PSD, PRD_PRI, 
+             MORENA_PES, MORENA_PANAL, PANAL_PES,
              no_reg, nulos, total, listanominal), 
            as.numeric)
   )
@@ -1712,7 +1713,7 @@ data_2021 <- data_2021 %>%
       municipality=="YAUTEPEC" ~ 17029,
       municipality=="YECAPIXTLA" ~ 17030,
       municipality=="ZACATEPEC" ~ 17031,
-      municipality=="ZACUALPAN" ~ 17032,
+      municipality=="ZACUALPAN DE AMILPAS" ~ 17032,
       TRUE ~ NA
     )
   )
@@ -1726,11 +1727,97 @@ collapsed_2021 <- data_2021 %>%
 # Calculate valid votes and final details
 collapsed_2021 <- collapsed_2021 %>%
   dplyr::mutate(
-    valid = sum(c_across(PAN:PANAL_ES_CC), na.rm = TRUE),
+    valid = sum(c_across(PAN:PANAL_PES), na.rm = TRUE),
     turnout = total/listanominal,
     year = 2021,
     month = "June"
   )
+
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 17) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_replace_all(regex("PESM", ignore_case = TRUE), "PES") |> 
+        str_replace_all(regex("PROGRESA", ignore_case = TRUE), "PMP") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply coalition processing function
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
 
 #####################################
 ### PROCESSING DATA FOR 2024 -------
@@ -1746,7 +1833,7 @@ library(writexl)
 
 # Set working directory to your data folder
 # Adjust this path to match your directory structure
-base_path <- "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/24/"
+base_path <- "../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2024/"
 
 # Function to safely read files (handles both CSV and Excel formats)
 safe_read_file <- function(file_path) {
@@ -1906,7 +1993,7 @@ cat("\n=== SAMPLE DATA ===\n")
 print(head(combined_elections, 3))
 
 # Save the combined dataset
-output_csv <- file.path(dirname(base_path), "morelos_elections_combined.csv")
+output_csv <- file.path(dirname(base_path), "morelos_2024_combined.csv")
 
 cat("\n=== SAVING RESULTS ===\n")
 
@@ -1914,14 +2001,10 @@ cat("\n=== SAVING RESULTS ===\n")
 write.csv(combined_elections, output_csv, row.names = FALSE, fileEncoding = "UTF-8")
 cat("CSV saved to:", output_csv, "\n")
 
-summary_file <- file.path(dirname(base_path), "processing_summary.csv")
-write.csv(summary_stats, summary_file, row.names = FALSE)
-cat("Processing summary saved to:", summary_file, "\n")
-
 cat("\n=== PROCESS COMPLETED SUCCESSFULLY ===\n")
 
 # Load the 2024 dataset
-data_2024 <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/morelos_2024_combined.csv") %>% 
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Morelos - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2024/morelos_2024_combined.csv") %>% 
   dplyr::mutate(seccion = as.numeric(seccion)) %>% 
   dplyr::filter(seccion > 0)
 
@@ -1944,10 +2027,10 @@ data_2024 <- data_2024 %>%
                 PANAL = na,
                 PES = pes,
                 MAS = mas,
-                MP = progresa,
+                PMP = progresa,
                 RSP = rsp,
                 PAN_PRI_PRD_RSP = c_pan_pri_prd_rsp,
-                MORENA_NA_PES_MAS = c_morena_na_pes_mas,
+                MORENA_PANAL_PES_MAS = c_morena_na_pes_mas,
                 PAN_PRI_PRD = c_pan_pri_prd,
                 PAN_PRI_RSP = c_pan_pri_rsp,
                 PAN_PRD_RSP = c_pan_prd_rsp,
@@ -1966,9 +2049,9 @@ data_2024 <- data_2024 %>%
                 MORENA_PES = c_morena_pes,
                 MORENA_MAS = c_morena_mas,
                 PANAL_PES = c_na_pes,
-                NA_MAS = c_na_mas,
+                PANAL_MAS = c_na_mas,
                 PES_MAS = c_pes_mas,
-                MC_MP = c_mc_progresa,
+                MC_PMP = c_mc_progresa,
                 CI_1 = cand_ind_luis_armando_jaime_maldonado,
                 CI_2 = cand_ind_andres_tapia_franco,
                 CI_3 = cand_ind_perseo_quiroz_rendon) %>% 
@@ -2039,7 +2122,7 @@ data_2024 <- data_2024 %>%
 collapsed_2024 <- data_2024 %>%
   dplyr::group_by(municipality, section, uniqueid) %>%
   dplyr::summarise(
-    across(c(PAN:PRD_RSP, MORENA_NA_PES_MAS:CI_3, no_reg:listanominal), 
+    across(c(PAN:PRD_RSP, MORENA_PANAL_PES_MAS:CI_3, no_reg:listanominal), 
            \(x) sum(x, na.rm = TRUE))
   )
 
@@ -2051,6 +2134,10 @@ collapsed_2024 <- collapsed_2024 %>%
     year = 2024,
     month = "June"
   )
+
+# Apply coalition processing function
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
 
 # Combine the dataframes, handling different columns by filling with NA
 morelos_all <- bind_rows(df_1997,

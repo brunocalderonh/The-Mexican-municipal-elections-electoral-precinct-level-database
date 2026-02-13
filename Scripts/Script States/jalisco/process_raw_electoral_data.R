@@ -336,15 +336,6 @@ data_1997 <- data_1997 %>%
   dplyr::mutate(listanominal = lista) %>% 
   dplyr::select(-lista)
 
-# drop _merge==2 not needed since we did left_join
-# drop _merge ed seccion year month
-drops <- c("year","month","validos" ,
-           "no reg.","nulos","state","day")
-data_1997 <- data_1997 %>% select(-all_of(drops))
-
-# rename lista to listanominal
-data_1997 <- data_1997 %>% rename(listanominal = lista)
-
 #--------------------------------------------
 # 7. Create turnout
 #--------------------------------------------
@@ -550,7 +541,7 @@ data_2003_main <- read_csv(
 
 # Convert all columns to numeric where possible
 data_2003_main <- data_2003_main %>%
-  mutate(across(everything(), ~ suppressWarnings(as.numeric(.))))
+  mutate(across(-c(MUNICIPIO), as.numeric))
 
 # data_2003_main.dta can be saved if needed:
 # write_dta(data_2003_main, "Ayu_Seccion_2003_No_LN.dta")
@@ -561,7 +552,7 @@ data_2003_extra <- read_csv(
 )
 
 data_2003_extra <- data_2003_extra %>%
-  mutate(across(everything(), ~ suppressWarnings(as.numeric(.))))
+  mutate(across(-c(MUNICIPIO), as.numeric))
 
 # -----------------------------------------------------
 # 2. Append data (mimicking "use ... append using ...")
@@ -1833,7 +1824,7 @@ lista_nominal <- read.dta13("../../../Data/Raw Electoral Data/Listas Nominales/L
 
 data_2015 <- data_2015 %>%
   filter(!is.na(section)) %>%
-  left_join(lista_nominal, by = c("section"))
+  left_join(lista_nominal, by = c("section", "uniqueid"))
 
 data_2015 <- data_2015 %>% rename(listanominal = lista)
 
@@ -1849,7 +1840,6 @@ data_2015 <- data_2015 %>% arrange(uniqueid, section)
 # ------------------------------------------------------------------
 # SETUP
 # ------------------------------------------------------------------
-rm(list = ls())
 cat("\014")
 options(max.print = 5000, scipen=10)
 
@@ -1890,7 +1880,7 @@ data_2018 <- data_2018 %>%
 # destring *, replace
 # Convert all remaining non-ID columns to numeric if possible
 data_2018 <- data_2018 %>%
-  mutate(across(everything(), ~ suppressWarnings(as.numeric(as.character(.)))))
+  mutate(across(-c(MUNICIPIO), as.numeric))
 
 names(data_2018) <- str_replace_all(names(data_2018), "-", "_")
 # ------------------------------------------------------------------
@@ -2231,6 +2221,93 @@ collapsed_2021 <- collapsed_2021 %>%
     )
   )
 
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 14) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_replace_all(regex("HAG", ignore_case = TRUE), "HAGAMOS") |> 
+        str_replace_all(regex("FUT", ignore_case = TRUE), "FUTURO") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply coalition processing function
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
+
 #####################################
 ### PROCESSING DATA FOR 2024 -------
 #####################################
@@ -2406,6 +2483,10 @@ collapsed_2024 <- collapsed_2024 %>%
     year = 2024,
     month = "June"
   )
+
+# Apply coalition processing function
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
 
 
 # Combine the dataframes, handling different columns by filling with NA

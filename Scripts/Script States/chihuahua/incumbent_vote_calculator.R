@@ -31,8 +31,16 @@ replace_parties <- function(party_str) {
 # Apply the replacement function to the incumbent_party_magar column
 finaldb <- finaldb %>%
   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
-  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
-
+  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties)) %>% 
+  # Because PANAL dissolved in 2021
+  mutate(incumbent_party_magar = if_else(
+    year == 2024,
+    str_replace_all(
+      str_replace_all(incumbent_party_magar, "PANAL_|_PANAL", ""),
+      "__", "_"
+    ),
+    incumbent_party_magar
+  ))
 
 
 assign_incumbent_vote <- function(data) {
