@@ -34,6 +34,13 @@ names(df1996)[names(df1996) == "seccion"]   <- "section"
 # drop if municipality=="" & section==.
 df1996 <- subset(df1996, !(municipality == "" & is.na(section)))
 
+df1996 <- df1996 %>% 
+  rename(
+    parm = parmen,
+    cd = "c.d.",
+    noregistrados = "no.registrados"
+  )
+
 # create total = rowtotal(pan pri prd pt pvem prs parm cd noregistrados nulos)
 df1996$total <- rowSums(df1996[, c("pan","pri","prd","pt","pvem","prs","parm","cd","noregistrados","nulos")],
                         na.rm = TRUE)
@@ -114,10 +121,13 @@ df1999 <- read.csv("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002,
 colnames(df1999) <- tolower(colnames(df1999))
 names(df1999) <- gsub("[. ]", "", names(df1999))
 
-names(df1999)[names(df1999) == "nomunicipio"] <- "municipality"
+names(df1999)[names(df1999) == "nomunicipio"] <- "municipality number"
 names(df1999)[names(df1999) == "seccion"]     <- "section"
 
-df1999 <- subset(df1999, !(is.na(municipality) & is.na(section)))
+df1999 <- df1999 %>% 
+  mutate(section = as.numeric(section))
+
+df1999 <- subset(df1999, !(is.na("municipality number") & is.na(section)))
 
 df1999$total <- rowSums(df1999[, c("pri","pvem","medp","parmen","pps","cac","candnoreg","votosnulos")],
                         na.rm = TRUE)
@@ -164,10 +174,7 @@ df1999$turnout <- df1999$total / df1999$listanominal
 df1999$year  <- 1999
 df1999$month <- "July"
 
-# drop municipality for the next merge
-temp_merged_99$municipality <- NULL
-
-df1999 <- subset(df1999, !(is.na(df1999$uniqueid) & is.na(df1999$municipality)))
+df1999 <- subset(df1999, !(is.na(df1999$uniqueid) & is.na(df1999$"municipality number")))
 
 # Sort by section
 df1999 <- df1999[order(df1999$section), ]
@@ -234,29 +241,19 @@ df2002$uniqueid[df2002$municipality == "XALISCO"]             <- 18008
 
 df2002$valid <- rowSums(df2002[, c("PAN","PRI","PRD","PT","PVEM","PRS","PMEP","PC","PSN","PAS")], na.rm = TRUE)
 
-# Merge with all_months_years
-df2002$ed      <- 18
-df2002$seccion <- df2002$section
+df2002 <- df2002 %>% 
+  mutate(
+    month = "June",
+    year = 2002
+  )
 
-temp_2002 <- merge(df2002,
-                   all_my[, c("ed","seccion","month","year","lista")],
-                   by.x = c("ed","seccion"), 
-                   by.y = c("ed","seccion"),
-                   all.x = TRUE, 
-                   all.y = FALSE)
-
-temp_2002 <- subset(temp_2002, month == 6 & year == 2002)
-temp_2002 <- subset(temp_2002, !(is.na(month)))
-
-temp_2002$ed      <- NULL
-temp_2002$seccion <- NULL
-temp_2002$month   <- NULL
-temp_2002$year    <- NULL
+temp_2002 <- df2002 %>% 
+  left_join(ln_all_months_years, by = c("section", "month", "year")) %>% 
+  select(-month)
 
 names(temp_2002)[names(temp_2002) == "lista"] <- "listanominal"
 temp_2002$turnout <- temp_2002$total / temp_2002$listanominal
 
-temp_2002$year  <- 2002
 temp_2002$month <- "July"
 
 temp_2002 <- temp_2002[order(temp_2002$section), ]
@@ -316,21 +313,15 @@ df2005$uniqueid[df2005$municipality == "XALISCO"]             <- 18008
 
 df2005$valid <- rowSums(df2005[, c("PAN","PRI","PVEM","PC","PRD_PT_PRS")], na.rm = TRUE)
 
-df2005$ed      <- 18
-df2005$seccion <- df2005$section
-temp_2005 <- merge(df2005,
-                   all_my[, c("ed","seccion","month","year","lista")],
-                   by.x = c("ed","seccion"), 
-                   by.y = c("ed","seccion"),
-                   all.x = TRUE, 
-                   all.y = FALSE)
-temp_2005 <- subset(temp_2005, month == 6 & year == 2005)
-temp_2005 <- subset(temp_2005, !(is.na(month)))
+df2005 <- df2005 %>% 
+  mutate(
+    month = "June",
+    year = 2005
+  )
 
-temp_2005$ed      <- NULL
-temp_2005$seccion <- NULL
-temp_2005$month   <- NULL
-temp_2005$year    <- NULL
+temp_2005 <- df2005 %>% 
+  left_join(ln_all_months_years, by = c("section", "month", "year")) %>% 
+  select(-month)
 
 names(temp_2005)[names(temp_2005) == "lista"] <- "listanominal"
 temp_2005$turnout <- temp_2005$total / temp_2005$listanominal
@@ -344,13 +335,16 @@ temp_2005 <- temp_2005[order(temp_2005$section), ]
 ###############################################################################
 df2008 <- read.csv("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/Ayu_Seccion_2008.csv", stringsAsFactors = FALSE)
 
+names(df2008) <- tolower(gsub("\\.", "", names(df2008)))
 names(df2008)[names(df2008) == "nombre_municipio"] <- "municipality"
 names(df2008)[names(df2008) == "seccion"]          <- "section"
 names(df2008)[names(df2008) == "lista_nominal"]    <- "listanominal"
 
 df2008 <- subset(df2008, !(municipality == "" & is.na(section)))
 
-df2008$total <- as.numeric(df2008$total)
+df2008 <- df2008 %>% 
+  mutate(total = as.numeric(total))
+
 df2008 <- subset(df2008, !is.na(total) & total != 0)
 
 num_vars_08 <- c("listanominal","pan","pripanal","prdpvem","pt","pcprs","pas","total")
@@ -404,9 +398,9 @@ df2008 <- df2008[order(df2008$section), ]
 df2011 <- read_excel("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/Ayu_Seccion_2011.xlsx", sheet = "Sheet1")
 
 # drop K, L
-df2011 <- df2011 %>% select(-c(K, L))
+df2011 <- df2011 %>% select(-c("...11", "...12"))
 
-names(df2011)[names(df2011) == "MUNICIPIO"] <- "municipality"
+names(df2011)[names(df2011) == "MUNICIPIO:"] <- "municipality"
 names(df2011)[names(df2011) == "Section"]   <- "section"
 
 # fill municipality if blank
@@ -414,7 +408,7 @@ df2011 <- df2011 %>%
   tidyr::fill(municipality, .direction = "down")
 
 df2011$total <- rowSums(df2011[, c("PAN","PRD","PRS","PRI_PVEM_PANAL","PT_PC",
-                                   "CandidatosNoRegistrados","VotosNulos")],
+                                   "Candidatos No Registrados","Votos Nulos")],
                         na.rm = TRUE)
 df2011 <- subset(df2011, !(is.na(total) | total == 0))
 df2011$CandidatosNoRegistrados <- NULL
@@ -447,27 +441,22 @@ df2011$uniqueid[df2011$municipality == "XALISCO"]            <- 18008
 df2011$valid <- rowSums(df2011[, c("PAN","PRD","PRS","PRI_PVEM_PANAL","PT_PC")], na.rm = TRUE)
 
 # Merge with all_months_years
-df2011$ed      <- 18
-df2011$seccion <- df2011$section
 
-temp_2011 <- merge(df2011,
-                   all_my[, c("ed","seccion","month","year","lista")],
-                   by.x = c("ed","seccion"),
-                   by.y = c("ed","seccion"),
-                   all.x = TRUE,
-                   all.y = FALSE)
-temp_2011 <- subset(temp_2011, month == 6 & year == 2011)
-temp_2011 <- subset(temp_2011, !(is.na(month)))
+df2011 <- df2011 %>% 
+  mutate(
+    month = "June",
+    year = 2011
+  )
 
-temp_2011$ed      <- NULL
-temp_2011$seccion <- NULL
+temp_2011 <- df2011 %>% 
+  left_join(ln_all_months_years, by = c("section", "month", "year")) %>% 
+  select(-month)
+
 temp_2011$month   <- NULL
-temp_2011$year    <- NULL
 
 names(temp_2011)[names(temp_2011) == "lista"] <- "listanominal"
 temp_2011$turnout <- temp_2011$total / temp_2011$listanominal
 
-temp_2011$year  <- 2011
 temp_2011$month <- "July"
 temp_2011 <- temp_2011[order(temp_2011$section), ]
 
@@ -475,33 +464,8 @@ temp_2011 <- temp_2011[order(temp_2011$section), ]
 ## 8) APPEND 1996–2011 DATA
 ###############################################################################
 
-df_96_99 <- rbind(
-  df1996,
-  df1999
-)
+df_1996_2011 <- bind_rows(df1996,df1999,temp_2002,temp_2005,df2008,temp_2011,)
 
-df_96_99_02 <- rbind(
-  df_96_99,
-  temp_2002
-)
-
-df_96_99_02_05 <- rbind(
-  df_96_99_02,
-  temp_2005
-)
-
-df_96_99_02_05_08 <- rbind(
-  df_96_99_02_05,
-  df2008
-)
-
-df_96_99_02_05_08_11 <- rbind(
-  df_96_99_02_05_08,
-  temp_2011
-)
-
-# This dataset is the 1996–2011 combined:
-df_1996_2011 <- df_96_99_02_05_08_11
 
 ###############################################################################
 ## 9) 2014 DATA
@@ -678,6 +642,90 @@ collapsed_2021 <- collapsed_2021 %>%
       TRUE ~ "June"
     ))
 
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 18) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply coalition processing function
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 #####################################
 ### PROCESSING DATA FOR 2024 -------
 #####################################
@@ -754,6 +802,9 @@ collapsed_2024 <- collapsed_2024 %>%
     month = "June"
   )
 
+# Apply coalition processing function
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
 
 
 ###############################################################################
@@ -761,7 +812,10 @@ collapsed_2024 <- collapsed_2024 %>%
 ###############################################################################
 # We'll append 2014 and 2017 together, then append them to the 1996–2011.
 
-df_14_17 <- bind_rows(df2014, df2017)
+df_14_17 <- bind_rows(df2014, df2017) %>% 
+  mutate(section = as.numeric(section),
+         across(c(PRI_PVEM_PANAL:CI_1,PRI:listanominal), as.numeric)
+         )
 
 # Then combine with older data:
 df_final <- bind_rows(df_1996_2011, df_14_17, collapsed_2021, collapsed_2024)

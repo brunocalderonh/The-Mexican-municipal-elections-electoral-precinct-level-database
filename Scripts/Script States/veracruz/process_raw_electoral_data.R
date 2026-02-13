@@ -24,6 +24,242 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 # Assuming your script is in 'Scripts/Script States/', go two levels up
 setwd(file.path(script_dir, ""))
 
+################################################################################
+## Helper Functions
+################################################################################
+
+remove_accents <- function(x) {
+  if (!is.character(x)) return(x)
+  x <- gsub("Á|á", "A", x)
+  x <- gsub("É|é", "E", x)
+  x <- gsub("Í|í", "I", x)
+  x <- gsub("Ó|ó", "O", x)
+  x <- gsub("Ú|ú", "U", x)
+  x <- gsub("Ñ|ñ", "N", x)
+  x <- gsub("ü|Ü", "U", x)
+  return(x)
+}
+
+# Comprehensive uniqueid assignment for Veracruz (212 municipalities)
+assign_veracruz_uniqueid <- function(municipality) {
+  municipality <- toupper(remove_accents(municipality))
+  case_when(
+    grepl("^ACAJETE$", municipality) ~ 30001,
+    grepl("^ACATLAN$", municipality) ~ 30002,
+    grepl("^ACAYUCAN$", municipality) ~ 30003,
+    grepl("^ACTOPAN$", municipality) ~ 30004,
+    grepl("^ACULA$", municipality) ~ 30005,
+    grepl("^ACULTZINGO$", municipality) ~ 30006,
+    grepl("CAMARON DE TEJEDA", municipality) ~ 30007,
+    grepl("ALPATLAHUAC", municipality) ~ 30008,
+    grepl("ALTO LUCERO", municipality) ~ 30009,
+    grepl("^ALTOTONGA$", municipality) ~ 30010,
+    grepl("^ALVARADO$", municipality) ~ 30011,
+    grepl("^AMATITLAN$", municipality) ~ 30012,
+    grepl("NARANJOS AMATLAN", municipality) ~ 30013,
+    grepl("AMATLAN DE LOS REYES", municipality) ~ 30014,
+    grepl("ANGEL R", municipality) ~ 30015,
+    grepl("^LA ANTIGUA$", municipality) ~ 30016,
+    grepl("^APAZAPAN$", municipality) ~ 30017,
+    grepl("^AQUILA$", municipality) ~ 30018,
+    grepl("^ASTACINGA$", municipality) ~ 30019,
+    grepl("ATLAHUICO|ATLAHUILCO", municipality) ~ 30020,
+    grepl("^ATOYAC$", municipality) ~ 30021,
+    grepl("^ATZACAN$", municipality) ~ 30022,
+    grepl("^ATZALAN$", municipality) ~ 30023,
+    grepl("TLALTETELA", municipality) ~ 30024,
+    grepl("AYAHUALULCO", municipality) ~ 30025,
+    grepl("^BANDERILLA$", municipality) ~ 30026,
+    grepl("^BENITO JUAREZ$", municipality) ~ 30027,
+    grepl("BOCA DEL RIO", municipality) ~ 30028,
+    grepl("CALCAHUALCO", municipality) ~ 30029,
+    grepl("CAMERINO Z", municipality) ~ 30030,
+    grepl("CARRILLO PUERTO", municipality) ~ 30031,
+    grepl("^CATEMACO$", municipality) ~ 30032,
+    grepl("CAZONES", municipality) ~ 30033,
+    grepl("CERRO AZUL", municipality) ~ 30034,
+    grepl("CITLALT", municipality) ~ 30035,
+    grepl("COACOATZINTLA", municipality) ~ 30036,
+    grepl("COAHUITLAN", municipality) ~ 30037,
+    grepl("^COATEPEC$", municipality) ~ 30038,
+    grepl("COATZACOALCOS", municipality) ~ 30039,
+    grepl("COATZINTLA", municipality) ~ 30040,
+    grepl("COETZALA", municipality) ~ 30041,
+    grepl("^COLIPA$", municipality) ~ 30042,
+    grepl("^COMAPA$", municipality) ~ 30043,
+    grepl("CORDOBA", municipality) ~ 30044,
+    grepl("COSAMALOAPAN", municipality) ~ 30045,
+    grepl("COSAUTLAN", municipality) ~ 30046,
+    grepl("COSCOMATEPEC", municipality) ~ 30047,
+    grepl("COSOLEACAQUE", municipality) ~ 30048,
+    grepl("COTAXTLA", municipality) ~ 30049,
+    grepl("COXQUIHUI", municipality) ~ 30050,
+    grepl("COYUTLA", municipality) ~ 30051,
+    grepl("^CUICHAPA$", municipality) ~ 30052,
+    grepl("CUITLAHUAC", municipality) ~ 30053,
+    grepl("CHACALTIANGUIS", municipality) ~ 30054,
+    grepl("^CHALMA$", municipality) ~ 30055,
+    grepl("CHICONAMEL", municipality) ~ 30056,
+    grepl("CHICONQUIACO", municipality) ~ 30057,
+    grepl("CHICONTEPEC", municipality) ~ 30058,
+    grepl("^CHINAMECA$", municipality) ~ 30059,
+    grepl("CHINAMPA", municipality) ~ 30060,
+    grepl("LAS CHOAPAS", municipality) ~ 30061,
+    grepl("CHOCAMAN", municipality) ~ 30062,
+    grepl("^CHONTLA$", municipality) ~ 30063,
+    grepl("CHUMATLAN", municipality) ~ 30064,
+    grepl("^EMILIANO ZAPATA", municipality) ~ 30065,
+    grepl("^ESPINAL$", municipality) ~ 30066,
+    grepl("FILOMENO MATA", municipality) ~ 30067,
+    grepl("^FORTIN$", municipality) ~ 30068,
+    grepl("GUTIERREZ ZAMORA", municipality) ~ 30069,
+    grepl("HIDALGOTITLAN", municipality) ~ 30070,
+    grepl("^HUATUSCO$", municipality) ~ 30071,
+    grepl("HUAYACOCOTLA", municipality) ~ 30072,
+    grepl("HUEYAPAN", municipality) ~ 30073,
+    grepl("HUILOAPAN", municipality) ~ 30074,
+    grepl("IGNACIO DE LA LLAVE", municipality) ~ 30075,
+    grepl("ILAMATLAN", municipality) ~ 30076,
+    grepl("^ISLA$", municipality) ~ 30077,
+    grepl("IXCATEPEC", municipality) ~ 30078,
+    grepl("IXHUACAN DE LOS REYES|DE LOS REYES", municipality) & grepl("IXHUA", municipality) ~ 30079,
+    grepl("IXHUATLAN DEL CAF", municipality) ~ 30080,
+    grepl("IXHUATLANCILLO", municipality) ~ 30081,
+    grepl("IXHUATLAN DEL SURESTE", municipality) ~ 30082,
+    grepl("IXHUATLAN DE MADERO", municipality) ~ 30083,
+    grepl("IXMATLAHUACAN", municipality) ~ 30084,
+    grepl("IXTACZOQUITLAN", municipality) ~ 30085,
+    grepl("^JALACINGO$", municipality) ~ 30086,
+    grepl("^XALAPA$", municipality) ~ 30087,
+    grepl("JALCOMULCO", municipality) ~ 30088,
+    grepl("^JALTIPAN$", municipality) ~ 30089,
+    grepl("^JAMAPA$", municipality) ~ 30090,
+    grepl("JESUS CARRANZA", municipality) ~ 30091,
+    grepl("^XICO$", municipality) ~ 30092,
+    grepl("^JILOTEPEC$", municipality) ~ 30093,
+    grepl("JUAN RODRIGUEZ CLARA", municipality) ~ 30094,
+    grepl("JUCHIQUE DE FERRER", municipality) ~ 30095,
+    grepl("LANDERO Y COSS", municipality) ~ 30096,
+    grepl("LERDO DE TEJADA", municipality) ~ 30097,
+    grepl("^MAGDALENA$", municipality) ~ 30098,
+    grepl("^MALTRATA$", municipality) ~ 30099,
+    grepl("MANLIO FABIO", municipality) ~ 30100,
+    grepl("MARIANO ESCOBEDO", municipality) ~ 30101,
+    grepl("MARTINEZ DE LA TORRE", municipality) ~ 30102,
+    grepl("MECATLAN", municipality) ~ 30103,
+    grepl("MECAYAPAN", municipality) ~ 30104,
+    grepl("^MEDELLIN$", municipality) ~ 30105,
+    grepl("MIAHUATLAN", municipality) ~ 30106,
+    grepl("LAS MINAS", municipality) ~ 30107,
+    grepl("MINATITLAN", municipality) ~ 30108,
+    grepl("^MISANTLA$", municipality) ~ 30109,
+    grepl("MIXTLA DE ALTAMIRANO", municipality) ~ 30110,
+    grepl("MOLOACAN", municipality) ~ 30111,
+    grepl("^NAOLINCO$", municipality) ~ 30112,
+    grepl("^NARANJAL$", municipality) ~ 30113,
+    grepl("^NAUTLA$", municipality) ~ 30114,
+    grepl("^NOGALES$", municipality) ~ 30115,
+    grepl("^OLUTA$", municipality) ~ 30116,
+    grepl("^OMEALCA$", municipality) ~ 30117,
+    grepl("^ORIZABA$", municipality) ~ 30118,
+    grepl("OTATITLAN", municipality) ~ 30119,
+    grepl("^OTEAPAN$", municipality) ~ 30120,
+    grepl("OZULUAMA", municipality) ~ 30121,
+    grepl("^PAJAPAN$", municipality) ~ 30122,
+    grepl("^PANUCO$", municipality) ~ 30123,
+    grepl("^PAPANTLA$", municipality) ~ 30124,
+    grepl("PASO DEL MACHO", municipality) ~ 30125,
+    grepl("PASO DE OVEJAS", municipality) ~ 30126,
+    grepl("LA PERLA", municipality) ~ 30127,
+    grepl("^PEROTE$", municipality) ~ 30128,
+    grepl("PLATON SANCHEZ|PLAT.N S.NCHEZ", municipality) ~ 30129,
+    grepl("PLAYA VICENTE", municipality) ~ 30130,
+    grepl("POZA RICA|POZARICA", municipality) ~ 30131,
+    grepl("LAS VIGAS", municipality) ~ 30132,
+    grepl("PUEBLO VIEJO", municipality) ~ 30133,
+    grepl("PUENTE NACIONAL", municipality) ~ 30134,
+    grepl("RAFAEL DELGADO", municipality) ~ 30135,
+    grepl("RAFAEL LUCIO", municipality) ~ 30136,
+    grepl("LOS REYES", municipality) & !grepl("IXHUA", municipality) ~ 30137,
+    grepl("RIO BLANCO", municipality) ~ 30138,
+    grepl("SALTABARRANCA", municipality) ~ 30139,
+    grepl("SAN ANDRES TENEJAPAN", municipality) ~ 30140,
+    grepl("SAN ANDRES TUXTLA", municipality) ~ 30141,
+    grepl("SAN JUAN EVANGELISTA", municipality) ~ 30142,
+    grepl("SANTIAGO TUXTLA", municipality) ~ 30143,
+    grepl("SAYULA DE ALEMAN", municipality) ~ 30144,
+    grepl("^SOCONUSCO$", municipality) ~ 30145,
+    grepl("^SOCHIAPA$", municipality) ~ 30146,
+    grepl("SOLEDAD ATZOMPA", municipality) ~ 30147,
+    grepl("SOLEDAD DE DOBLADO", municipality) ~ 30148,
+    grepl("SOTEAPAN", municipality) ~ 30149,
+    grepl("^TAMALIN$", municipality) ~ 30150,
+    grepl("^TAMIAHUA$", municipality) ~ 30151,
+    grepl("TAMPICO ALTO", municipality) ~ 30152,
+    grepl("^TANCOCO$", municipality) ~ 30153,
+    grepl("^TANTIMA$", municipality) ~ 30154,
+    grepl("^TANTOYUCA$", municipality) ~ 30155,
+    grepl("^TATATILA$", municipality) ~ 30156,
+    grepl("CASTILLO DE TEAYO", municipality) ~ 30157,
+    grepl("^TECOLUTLA$", municipality) ~ 30158,
+    grepl("TEHUIPANGO", municipality) ~ 30159,
+    grepl("TEMAPACHE|^ALAMO$", municipality) ~ 30160,
+    grepl("^TEMPOAL$", municipality) ~ 30161,
+    grepl("^TENAMPA$", municipality) ~ 30162,
+    grepl("TENOCHTITLAN", municipality) ~ 30163,
+    grepl("^TEOCELO$", municipality) ~ 30164,
+    grepl("TEPATLAXCO", municipality) ~ 30165,
+    grepl("^TEPETLAN$", municipality) ~ 30166,
+    grepl("TEPETZINTLA", municipality) ~ 30167,
+    grepl("^TEQUILA$", municipality) ~ 30168,
+    grepl("JOSE AZUETA", municipality) ~ 30169,
+    grepl("TEXCATEPEC", municipality) ~ 30170,
+    grepl("TEXHUACAN", municipality) ~ 30171,
+    grepl("TEXISTEPEC", municipality) ~ 30172,
+    grepl("TEZONAPA", municipality) ~ 30173,
+    grepl("TIERRA BLANCA", municipality) ~ 30174,
+    grepl("TIHUATLAN", municipality) ~ 30175,
+    grepl("TLACOJALPAN", municipality) ~ 30176,
+    grepl("TLACOLULAN", municipality) ~ 30177,
+    grepl("TLACOTALPAN", municipality) ~ 30178,
+    grepl("TLACOTEPEC DE MEJIA", municipality) ~ 30179,
+    grepl("TLACHICHILCO", municipality) ~ 30180,
+    grepl("TLALIXCOYAN", municipality) ~ 30181,
+    grepl("TLALNELHUAYOCAN", municipality) ~ 30182,
+    grepl("TLAPACOYAN", municipality) ~ 30183,
+    grepl("TLAQUILPA", municipality) ~ 30184,
+    grepl("TLILAPAN", municipality) ~ 30185,
+    grepl("^TOMATLAN$", municipality) ~ 30186,
+    grepl("^TONAYAN$", municipality) ~ 30187,
+    grepl("^TOTUTLA$", municipality) ~ 30188,
+    grepl("^TUXPAN$", municipality) ~ 30189,
+    grepl("^TUXTILLA$", municipality) ~ 30190,
+    grepl("URSULO GALVAN", municipality) ~ 30191,
+    grepl("VEGA DE ALATORRE", municipality) ~ 30192,
+    grepl("^VERACRUZ$", municipality) ~ 30193,
+    grepl("VILLA ALDAMA", municipality) ~ 30194,
+    grepl("XOXOCOTLA", municipality) ~ 30195,
+    grepl("^YANGA$", municipality) ~ 30196,
+    grepl("YECUATLA", municipality) ~ 30197,
+    grepl("ZACUALPAN", municipality) ~ 30198,
+    grepl("^ZARAGOZA$", municipality) ~ 30199,
+    grepl("^ZENTLA$", municipality) ~ 30200,
+    grepl("^ZONGOLICA$", municipality) ~ 30201,
+    grepl("ZONTECOMATLAN", municipality) ~ 30202,
+    grepl("ZOZOCOLCO", municipality) ~ 30203,
+    grepl("AGUA DULCE", municipality) ~ 30204,
+    grepl("EL HIGO", municipality) ~ 30205,
+    grepl("NANCHITAL", municipality) ~ 30206,
+    grepl("TRES VALLES", municipality) ~ 30207,
+    grepl("CARLOS A. CARRILLO", municipality) ~ 30208,
+    grepl("TATAHUICAPAN", municipality) ~ 30209,
+    grepl("UXPANAPA", municipality) ~ 30210,
+    grepl("SAN RAFAEL", municipality) ~ 30211,
+    grepl("SANTIAGO SOCHIAPAN", municipality) ~ 30212,
+    TRUE ~ NA_real_
+  )
+}
+
 
 ################################################################################
 # 1) Read "Lisado Nominal 2004.xlsx" 
@@ -33,9 +269,7 @@ setwd(file.path(script_dir, ""))
 df_listanom <- read_excel(
   path = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Lisado Nominal 2004.xlsx",
   sheet = "Sheet1",
-  col_names = TRUE
-) %>%
-  as.data.frame()
+  col_names = TRUE)
 
 # keep only (section, listanominal)
 df_listanom <- df_listanom %>%
@@ -1025,24 +1259,17 @@ for (var_ in coal_cols) {
   }
 }
 
-# Now set ed=30, seccion=section
-df_main <- df_main %>%
-  mutate(
-    ed      = 30,
-    seccion = section
-  )
-
 # Merge 1:m ed seccion using "..\..\all_months_years.dta", keepusing(month year lista)
-df_all <- read_dta("../../all_months_years.dta")
+df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta")
 
 df_all_sub <- df_all %>%
-  select(ed, seccion, month, year, lista) %>%
-  filter(month==6, year==2013)
+  select(state, section, month, year, lista) %>%
+  filter(month== "June", year==2013, state == "VERACRUZ")
 
 
 # We'll do left_join => 
 df_merged <- df_main %>%
-  left_join(df_all_sub, by=c("ed","seccion"))
+  left_join(df_all_sub, by=c("section"))
 
 # drop if _merge==2 => in R means dropping rows with no match => check if 'lista' is NA
 df_merged <- df_merged %>%
@@ -1050,7 +1277,7 @@ df_merged <- df_merged %>%
 
 # drop _merge, ed, seccion, year, month
 df_merged <- df_merged %>%
-  select(-any_of(c("ed","seccion","year","month")))
+  select(-any_of(c("state","year","month")))
 
 # rename lista->listanominal
 df_merged <- df_merged %>%
@@ -1066,427 +1293,190 @@ df_2013 <- df_merged %>%
   arrange(section)
 
 ################################################################################
-# 1) Reading "Ayuntamientos_2016.xlsx" sheets, converting to .dta
+## 2017 (SALVADOR) - Elections held 2016-2017
 ################################################################################
 
-# In R, we replicate that logic by discovering all sheets in "Ayuntamientos_2016.xlsx"
-all_sheets <- readxl::excel_sheets("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/Ayuntamientos_2016.xlsx")
+# Read all sheets from Ayuntamientos_2016.xlsx and Ayuntamientos_2016b.xlsx
+# First file - main results
+sheets_2016 <- excel_sheets("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/Ayuntamientos_2016.xlsx")
 
-for (sheetname in all_sheets) {
-  # Read the sheet, all columns as strings
-  df_sheet <- read_excel(
-    path    = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/Ayuntamientos_2016.xlsx",
-    sheet   = sheetname,
-    col_names = TRUE,
-    col_types = "text"
-  ) %>%
-    as.data.frame()
-  
-  # Sanitize column names
-  df_sheet <- df_sheet %>%
-    janitor::clean_names() %>%
-    rename_with(~ str_trunc(., 32, ellipsis = "")) # Truncate to 32 characters
-  
-  # Replace municipality with its first value
-  if (nrow(df_sheet) > 0 && "municipality" %in% names(df_sheet)) {
-    df_sheet$municipality <- df_sheet$municipality[1]
-  }
-  
-  # Drop rows where Seccion == "TOTAL" or Seccion == ""
-  if ("seccion" %in% names(df_sheet)) {
-    df_sheet <- df_sheet %>%
-      filter(!(seccion %in% c("TOTAL", "")))
-  }
-  
-  # Replace empty strings with "0"
-  df_sheet <- df_sheet %>%
-    mutate(across(everything(), ~ if_else(. == "", "0", .)))
-  
-  # Save as `sheetname`.dta
-  write_dta(df_sheet, paste0(sheetname, ".dta"))
-}
+# List of sheets to skip (numbered gaps in SALVADOR file)
+sheet_nums_main <- c(1:8, 10:162, 164:169, 171:178)
+sheet_names_main <- paste0("Resultados", c("", paste0(" (", 2:178, ")")))
+sheet_names_main <- sheet_names_main[sheet_nums_main]
+sheet_names_main <- sheet_names_main[sheet_names_main %in% sheets_2016]
 
-
-################################################################################
-# 2) Clear and append multiple .dta files: "Resultados.dta", "Resultados (2).dta", ...
-################################################################################
-
-# We'll assume you have a known list of .dta files or you collect them from directory
-append_files <- c(
-  "Resultados.dta", "Resultados (2).dta", "Resultados (3).dta", "Resultados (4).dta",
-  "Resultados (5).dta", "Resultados (6).dta", "Resultados (7).dta", "Resultados (8).dta",
-  "Resultados (10).dta", "Resultados (11).dta", "Resultados (12).dta", "Resultados (13).dta",
-  "Resultados (14).dta", "Resultados (15).dta", "Resultados (16).dta", "Resultados (17).dta",
-  "Resultados (18).dta", "Resultados (19).dta", "Resultados (20).dta", "Resultados (21).dta",
-  "Resultados (22).dta", "Resultados (23).dta", "Resultados (24).dta", "Resultados (25).dta",
-  "Resultados (26).dta", "Resultados (27).dta", "Resultados (28).dta", "Resultados (29).dta",
-  "Resultados (30).dta", "Resultados (31).dta", "Resultados (32).dta", "Resultados (33).dta",
-  "Resultados (34).dta", "Resultados (35).dta", "Resultados (36).dta", "Resultados (37).dta",
-  "Resultados (38).dta", "Resultados (39).dta", "Resultados (40).dta", "Resultados (41).dta",
-  "Resultados (42).dta", "Resultados (43).dta", "Resultados (44).dta", "Resultados (45).dta",
-  "Resultados (46).dta", "Resultados (47).dta", "Resultados (48).dta", "Resultados (49).dta",
-  "Resultados (50).dta", "Resultados (51).dta", "Resultados (52).dta", "Resultados (53).dta",
-  "Resultados (54).dta", "Resultados (55).dta", "Resultados (56).dta", "Resultados (57).dta",
-  "Resultados (58).dta", "Resultados (59).dta", "Resultados (60).dta", "Resultados (61).dta",
-  "Resultados (62).dta", "Resultados (63).dta", "Resultados (64).dta", "Resultados (65).dta",
-  "Resultados (66).dta", "Resultados (67).dta", "Resultados (68).dta", "Resultados (69).dta",
-  "Resultados (70).dta", "Resultados (71).dta", "Resultados (72).dta", "Resultados (73).dta",
-  "Resultados (74).dta", "Resultados (75).dta", "Resultados (76).dta", "Resultados (77).dta",
-  "Resultados (78).dta", "Resultados (79).dta", "Resultados (80).dta", "Resultados (81).dta",
-  "Resultados (82).dta", "Resultados (83).dta", "Resultados (84).dta", "Resultados (85).dta",
-  "Resultados (86).dta", "Resultados (87).dta", "Resultados (88).dta", "Resultados (89).dta",
-  "Resultados (90).dta", "Resultados (91).dta", "Resultados (92).dta", "Resultados (93).dta",
-  "Resultados (94).dta", "Resultados (95).dta", "Resultados (96).dta", "Resultados (97).dta",
-  "Resultados (98).dta", "Resultados (99).dta", "Resultados (100).dta", "Resultados (101).dta",
-  "Resultados (102).dta", "Resultados (103).dta", "Resultados (104).dta", "Resultados (105).dta",
-  "Resultados (106).dta", "Resultados (107).dta", "Resultados (108).dta", "Resultados (109).dta",
-  "Resultados (110).dta", "Resultados (111).dta", "Resultados (112).dta", "Resultados (113).dta",
-  "Resultados (114).dta", "Resultados (115).dta", "Resultados (116).dta", "Resultados (117).dta",
-  "Resultados (118).dta", "Resultados (119).dta", "Resultados (120).dta", "Resultados (121).dta",
-  "Resultados (122).dta", "Resultados (123).dta", "Resultados (124).dta", "Resultados (125).dta",
-  "Resultados (126).dta", "Resultados (127).dta", "Resultados (128).dta", "Resultados (129).dta",
-  "Resultados (130).dta", "Resultados (131).dta", "Resultados (132).dta", "Resultados (133).dta",
-  "Resultados (134).dta", "Resultados (135).dta", "Resultados (136).dta", "Resultados (137).dta",
-  "Resultados (138).dta", "Resultados (139).dta", "Resultados (140).dta", "Resultados (141).dta",
-  "Resultados (142).dta", "Resultados (143).dta", "Resultados (144).dta", "Resultados (145).dta",
-  "Resultados (146).dta", "Resultados (147).dta", "Resultados (148).dta", "Resultados (149).dta",
-  "Resultados (150).dta", "Resultados (151).dta", "Resultados (152).dta", "Resultados (153).dta",
-  "Resultados (154).dta", "Resultados (155).dta", "Resultados (156).dta", "Resultados (157).dta",
-  "Resultados (158).dta", "Resultados (159).dta", "Resultados (160).dta", "Resultados (161).dta",
-  "Resultados (162).dta", "Resultados (164).dta", "Resultados (165).dta", "Resultados (166).dta",
-  "Resultados (167).dta", "Resultados (168).dta", "Resultados (169).dta", "Resultados (171).dta",
-  "Resultados (172).dta", "Resultados (173).dta", "Resultados (174).dta", "Resultados (175).dta",
-  "Resultados (176).dta", "Resultados (177).dta", "Resultados (178).dta"
-)
-
-df_all <- data.frame()
-
-for (f in append_files) {
-  if (file.exists(f)) {
-    df_new <- read_dta(f)
-    df_all <- bind_rows(df_all, df_new)
-  }
-}
-
-# gen municipio=subinstr(municipality,"Reporte de Casillas del municipio de ","",1)
-df_all <- df_all %>%
-  mutate(
-    municipio = str_replace(municipality, 
-                            "Reporte de Casillas del municipio de ", "")
-  )
-
-################################################################################
-# 3) Another set: "AyuntamientosB" folder, "Ayuntamientos_2016b.xlsx", reading multiple sheets
-################################################################################
-
-all_sheets_b <- readxl::excel_sheets("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/AyuntamientosB/Ayuntamientos_2016b.xlsx")
-
-for (sheetname in all_sheets_b) {
-  # Read the sheet, all columns as strings
-  df_sheet_b <- read_excel(
-    path = "../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/AyuntamientosB/Ayuntamientos_2016b.xlsx",
-    sheet = sheetname,
-    col_names = TRUE,
-    col_types = "text"
-  ) %>%
-    as.data.frame()
-  
-  # Sanitize column names
-  df_sheet_b <- df_sheet_b %>%
-    janitor::clean_names() %>%
-    rename_with(~ str_trunc(., 32, ellipsis = "")) # Truncate to 32 characters
-  
-  # Replace municipality with its first value
-  if (nrow(df_sheet_b) > 0 && "municipality" %in% names(df_sheet_b)) {
-    df_sheet_b$municipality <- df_sheet_b$municipality[1]
-  }
-  
-  # Drop rows where Seccion == "TOTAL" or Seccion == ""
-  if ("seccion" %in% names(df_sheet_b)) {
-    df_sheet_b <- df_sheet_b %>%
-      filter(!(seccion %in% c("TOTAL", "")))
-  }
-  
-  # Replace empty strings with "0"
-  df_sheet_b <- df_sheet_b %>%
-    mutate(across(everything(), ~ if_else(. == "", "0", .)))
-  
-  # Save as `sheetname`.dta
-  write_dta(df_sheet_b, paste0(sheetname, ".dta"))
-}
-
-
-# clear, then appends: "Resultados.dta", "Resultados (2).dta", ...
-append_files_b <- c("Resultados.dta","Resultados (2).dta","Resultados (3).dta","Resultados (4).dta","Resultados (5).dta",
-                    "Resultados (6).dta","Resultados (7).dta","Resultados (8).dta","Resultados (9).dta","Resultados (10).dta",
-                    # etc. fill in as needed
-                    "Resultados (16).dta","Resultados (17).dta","Resultados (18).dta","Resultados (19).dta",
-                    "Resultados (20).dta","Resultados (21).dta","Resultados (22).dta","Resultados (23).dta","Resultados (24).dta",
-                    "Resultados (25).dta","Resultados (26).dta","Resultados (27).dta","Resultados (28).dta","Resultados (29).dta",
-                    "Resultados (30).dta","Resultados (31).dta","Resultados (32).dta","Resultados (33).dta","Resultados (34).dta",
-                    "Resultados (35).dta","Resultados (36).dta")
-
-df_b_all <- data.frame()
-for (f in append_files_b) {
-  if (file.exists(f)) {
-    df_new_b <- read_dta(f)
-    df_b_all <- bind_rows(df_b_all, df_new_b)
-  }
-}
-
-# gen municipio=subinstr(municipality,"Reporte de Casillas del municipio de ","",1)
-df_b_all <- df_b_all %>%
-  mutate(
-    municipio = str_replace(municipality, 
-                            "Reporte de Casillas del municipio de ", "")
-  )
-
-# drop if municipio=="Jaltipan" or "Zontecomatlán"
-df_b_all <- df_b_all %>%
-  filter(!(municipio %in% c("Jaltipan","Zontecomatlán")))
-
-################################################################################
-# 4) Now returning to parent directory, read "Veracruz_Section_2017.dta", append "Veracruz_Section_2016b.dta"
-################################################################################
-
-df_ver1 <- read_dta("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/AyuntamientosB/Veracruz_Section_2017b.dta")
-df_ver2 <- read_dta("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/AyuntamientosB/Veracruz_Section_2016b.dta")
-
-df_ver <- bind_rows(df_ver1, df_ver2)
-
-# destring * => in R, parse columns as numeric if needed:
-df_ver <- df_ver %>%
-  mutate(across(where(is.character), ~ suppressWarnings(as.numeric(.))))
-
-# drop O P if exist
-df_ver <- df_ver %>%
-  select(-any_of(c("O","P")))
-
-# drop municipality => rename municipio->municipality
-# rename Seccion->section
-if ("municipality" %in% names(df_ver)) {
-  df_ver <- df_ver %>%
-    select(-municipality)
-}
-if ("Seccion" %in% names(df_ver)) {
-  df_ver <- df_ver %>%
-    rename(section = Seccion)
-}
-df_ver <- df_ver %>%
-  rename(municipality = municipio)
-
-# reorder
-df_ver <- df_ver %>%
-  select(municipality, section, everything())
-
-################################################################################
-# 5) Coalition handling: 
-#    replace CoalicionPANPRD=CoalicionPANPRD + PAN + PRD if CoalicionPANPRD!=. ...
-#    and similarly for others.
-################################################################################
-
-# We'll replicate the logic in R with if_else or something similar.
-# Because the code is quite repetitive, we do carefully:
-
-if ("CoalicionPANPRD" %in% names(df_ver)) {
-  df_ver <- df_ver %>%
-    mutate(
-      CoalicionPANPRD = if_else(!is.na(CoalicionPANPRD),
-                                CoalicionPANPRD + coalesce(PAN,0) + coalesce(PRD,0),
-                                CoalicionPANPRD),
-      PAN = if_else(!is.na(CoalicionPANPRD), NA_real_, PAN),
-      PRD = if_else(!is.na(CoalicionPANPRD), NA_real_, PRD)
-    )
-}
-
-# Another line: replace CoaliciónPANPRD=CoaliciónPANPRD + PAN + PRD
-if ("CoaliciónPANPRD" %in% names(df_ver)) {
-  df_ver <- df_ver %>%
-    mutate(
-      CoaliciónPANPRD = if_else(!is.na(CoaliciónPANPRD),
-                                CoaliciónPANPRD + coalesce(PAN,0) + coalesce(PRD,0),
-                                CoaliciónPANPRD),
-      PAN = if_else(!is.na(CoaliciónPANPRD), NA_real_, PAN),
-      PRD = if_else(!is.na(CoaliciónPANPRD), NA_real_, PRD)
-    )
-}
-
-if ("VERDE" %in% names(df_ver)) {
-  df_ver <- df_ver %>%
-    rename(PVEM = VERDE)
-}
-
-if ("CoalicionPRIVERDE" %in% names(df_ver)) {
-  df_ver <- df_ver %>%
-    mutate(
-      CoalicionPRIVERDE = if_else(!is.na(CoalicionPRIVERDE),
-                                  CoalicionPRIVERDE + coalesce(PRI,0) + coalesce(PVEM,0),
-                                  CoalicionPRIVERDE),
-      PRI  = if_else(!is.na(CoalicionPRIVERDE), NA_real_, PRI),
-      PVEM = if_else(!is.na(CoalicionPRIVERDE), NA_real_, PVEM)
-    )
-}
-
-if ("CoalicionPriverde" %in% names(df_ver)) {
-  df_ver <- df_ver %>%
-    mutate(
-      CoalicionPriverde = if_else(!is.na(CoalicionPriverde),
-                                  CoalicionPriverde + coalesce(PRI,0) + coalesce(PVEM,0),
-                                  CoalicionPriverde),
-      PRI  = if_else(!is.na(CoalicionPriverde), NA_real_, PRI),
-      PVEM = if_else(!is.na(CoalicionPriverde), NA_real_, PVEM)
-    )
-}
-
-# collapse (sum) columns by (municipality, section)
-df_collapsed <- df_ver %>%
-  group_by(municipality, section) %>%
-  summarise(across(everything(), ~ sum(. , na.rm=TRUE)), .groups="drop")
-
-# gen nulo=Q + VotosNulos
-df_collapsed <- df_collapsed %>%
-  mutate(
-    nulo = coalesce(Q,0) + coalesce(VotosNulos,0)
-  ) %>%
-  select(-Q, -VotosNulos)
-
-# gen PRI_PVEM=CoalicionPRIVERDE+CoalicionPriverde
-df_collapsed <- df_collapsed %>%
-  mutate(
-    PRI_PVEM = coalesce(CoalicionPRIVERDE,0) + coalesce(CoalicionPriverde,0)
-  ) %>%
-  select(-CoalicionPRIVERDE, -CoalicionPriverde)
-
-# gen PANAL= NuevaAlianza + NuevaALianza + Nuevaalianza
-df_collapsed <- df_collapsed %>%
-  mutate(
-    PANAL = rowSums(across(c("NuevaAlianza","NuevaALianza","Nuevaalianza"), 
-                           ~ as.numeric(.)), na.rm=TRUE)
-  ) %>%
-  select(-NuevaAlianza, -NuevaALianza, -Nuevaalianza)
-
-# gen MC= MovimientoCiudadano + MovimientoCuidadano
-df_collapsed <- df_collapsed %>%
-  mutate(
-    MC = rowSums(across(c("MovimientoCiudadano","MovimientoCuidadano"), 
-                        ~ as.numeric(.)), na.rm=TRUE)
-  ) %>%
-  select(-MovimientoCiudadano, -MovimientoCuidadano)
-
-# replace PT= PT + Pt + pt
-pt_cols <- c("PT","Pt","pt")
-pt_sum <- rowSums(df_collapsed[pt_cols], na.rm=TRUE)
-df_collapsed <- df_collapsed %>%
-  mutate(
-    PT = pt_sum
-  ) %>%
-  select(-any_of(c("Pt","pt")))
-
-# gen PAN_PRD=CoaliciónPANPRD + CoalicionPANPRD
-df_collapsed <- df_collapsed %>%
-  mutate(
-    PAN_PRD = coalesce(CoaliciónPANPRD,0) + coalesce(CoalicionPANPRD,0)
-  ) %>%
-  select(-CoaliciónPANPRD, -CoalicionPANPRD)
-
-# rename (EncuentroSocial CNR) -> (PES no_reg)
-df_collapsed <- df_collapsed %>%
-  rename(
-    PES    = EncuentroSocial,
-    no_reg = CNR
-  )
-
-# create CI_1, CI_2, CI_3 from row sums across specified columns, then manipulate them
-df_collapsed <- df_collapsed %>%
-  rowwise() %>%
-  mutate(
-    CI_1 = sum(c_across(ChistianRomeroPerez:MayrethMartínezPeñaloza), na.rm=TRUE),
-    CI_2 = sum(c_across(c("EduardoCidJuarez","MauricioIvanAguilleMarín","VíctorManuelMurrietaPérez",
-                          "MartínGarcíaMartínez","MiguelÁngelMartínezDionisio","OscarOctacioGreerBecerra",
-                          "EmilioÁlvarezPimentel","AntonioLunaAndrade","RafaelVegaHernández","MayrethMartínezPeñaloza")),
-               na.rm=TRUE),
-    CI_3 = sum(c_across(c("ChristopherCristianCházaro","RubénMorenoArcher")), na.rm=TRUE)
-  ) %>%
-  ungroup() %>%
-  mutate(
-    CI_1 = CI_1 - CI_2 - CI_3
-  ) %>%
-  select(-ChistianRomeroPerez, -MayrethMartínezPeñaloza, -one_of(c("EduardoCidJuarez","MauricioIvanAguilleMarín",
-                                                                   "VíctorManuelMurrietaPérez","MartínGarcíaMartínez","MiguelÁngelMartínezDionisio","OscarOctacioGreerBecerra",
-                                                                   "EmilioÁlvarezPimentel","AntonioLunaAndrade","RafaelVegaHernández","ChristopherCristianCházaro","RubénMorenoArcher")))
-
-# replace MORENA= Morena+MORENA, then drop Morena
-df_collapsed <- df_collapsed %>%
-  mutate(
-    MORENA = if ("MORENA" %in% names(.)) {
-      coalesce(MORENA,0) + coalesce(Morena,0)
+df_2017_list_main <- lapply(sheets_2016, function(sheet) {
+  tryCatch({
+    df <- read_excel("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/Ayuntamientos_2016.xlsx", sheet = sheet, col_types = "text")
+    names(df) <- tolower(names(df))
+    
+    # Replace empty with 0 FIRST
+    df <- df %>% mutate(across(everything(), ~ifelse(is.na(.) | . == "", "0", .)))
+    
+    # THEN handle municipality
+    if ("municipality" %in% names(df)) {
+      mun_value <- df$municipality[1]
+      if (mun_value == "0") mun_value <- NA_character_
+      df$municipality <- mun_value
+      df <- df %>% filter(!is.na(seccion) & seccion != "" & seccion != "TOTAL" & seccion != "0")
     } else {
-      coalesce(Morena,0)
+      df$municipality <- NA_character_
     }
-  ) %>%
-  select(-any_of("Morena"))
+    
+    df
+  }, error = function(e) NULL)
+})
 
-# egen valid=rowtotal(PAN PRI PRD PVEM PT PANAL MC MORENA PES PRI_PVEM PAN_PRD CI_1 CI_2 CI_3)
-df_collapsed <- df_collapsed %>%
-  rowwise() %>%
+df_2017_main <- bind_rows(df_2017_list_main)
+
+
+# Second file - additional municipalities (Ayuntamientos_2016b.xlsx)
+if (file.exists("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/AyuntamientosB/Ayuntamientos_2016b.xlsx")) {
+  sheets_2016b <- excel_sheets("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/AyuntamientosB/Ayuntamientos_2016b.xlsx")
+  
+  df_2017_list_b <- lapply(sheets_2016b, function(sheet) {
+    tryCatch({
+      df <- read_excel("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/Other/AyuntamientosB/Ayuntamientos_2016b.xlsx", sheet = sheet, col_types = "text")
+      names(df) <- tolower(names(df))
+      if ("municipality" %in% names(df)) {
+        df$municipality <- df$municipality[1]
+        df <- df %>% filter(!is.na(seccion) & seccion != "" & seccion != "TOTAL")
+      }
+      df <- df %>% mutate(across(everything(), ~ifelse(is.na(.) | . == "", "0", .)))
+      df
+    }, error = function(e) NULL)
+  })
+  
+  df_2017_b <- bind_rows(df_2017_list_b) %>%
+    filter(!municipality %in% c("Jaltipan", "Zontecomatlán"))
+  
+  df_2017 <- bind_rows(df_2017_main, df_2017_b)
+} else {
+  df_2017 <- df_2017_main
+}
+
+# Clean municipality name
+df_2017 <- df_2017 %>%
+  mutate(municipality = gsub("Reporte de Casillas del municipio de ", "", municipality))
+
+# Drop columns O, P if they exist
+df_2017 <- df_2017 %>%
+  select(-matches("^o$|^p$", ignore.case = TRUE))
+
+# Rename section
+df_2017 <- df_2017 %>%
+  rename(section = seccion)
+
+# Convert to numeric
+df_2017 <- df_2017 %>%
+  mutate(across(-c(municipality, section), ~as.numeric(as.character(.))))
+
+# Handle coalition variants with different spellings/typos
+# PAN_PRD coalition - sum all variants
+df_2017 <- df_2017 %>%
   mutate(
-    valid = sum(c_across(any_of(c(
-      "PAN","PRI","PRD","PVEM","PT","PANAL","MC","MORENA","PES","PRI_PVEM","PAN_PRD","CI_1","CI_2","CI_3"
-    ))), na.rm=TRUE)
+    PAN_PRD = rowSums(select(., matches("coalicion panprd|coalición panprd|coalicion pan-prd", ignore.case = TRUE)), na.rm = TRUE),
+    PAN = ifelse("pan" %in% tolower(names(.)), pan, 0),
+    PRD = ifelse("prd" %in% tolower(names(.)), prd, 0)
   ) %>%
-  ungroup()
+  select(-matches("coalicion panprd|coalición panprd|coalicion pan-prd", ignore.case = TRUE))
 
-# gen total= valid + nulo + no_reg
-df_collapsed <- df_collapsed %>%
+# PRI_PVEM coalition
+df_2017 <- df_2017 %>%
   mutate(
-    total = coalesce(valid,0) + coalesce(nulo,0) + coalesce(no_reg,0)
+    PRI_PVEM = rowSums(select(., matches("coalicion priverde|coalición priverde", ignore.case = TRUE)), na.rm = TRUE),
+    PRI = ifelse("pri" %in% tolower(names(.)), pri, 0),
+    PVEM = rowSums(select(., matches("^verde$|^pvem$", ignore.case = TRUE)), na.rm = TRUE)
   ) %>%
-  select(-nulo, -no_reg)
+  select(-matches("coalicion priverde|coalición priverde", ignore.case = TRUE))
 
-################################################################################
-# 6) Merging with "uniqueids.xlsx" => "uniqueids16.dta", then "LN 2017", etc.
-################################################################################
-
-# We'll replicate with a simpler approach:
-df_uniqueids <- read_excel("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/uniqueids.xlsx") %>%
-  as.data.frame() %>% dplyr::select(-MUN)
-
-df_merged <- df_collapsed %>%
-  left_join(df_uniqueids, by="municipality")
-
-
-# set year=2017, month="June", STATE="VERACRUZ"
-df_merged <- df_merged %>%
+# Standardize party name variants
+df_2017 <- df_2017 %>%
   mutate(
-    year  = 2017,
-    month = "June",
-    STATE = "VERACRUZ"
+    PANAL = rowSums(select(., matches("nueva alianza|nuevaalianza", ignore.case = TRUE)), na.rm = TRUE),
+    MC = rowSums(select(., matches("movimiento ciudadano|movimiento cuidadano", ignore.case = TRUE)), na.rm = TRUE),
+    PT = rowSums(select(., matches("^pt$", ignore.case = TRUE)), na.rm = TRUE),
+    PES = rowSums(select(., matches("encuentro social", ignore.case = TRUE)), na.rm = TRUE),
+    MORENA = rowSums(select(., matches("^morena$", ignore.case = TRUE)), na.rm = TRUE)
   )
 
-################################################################################
-# 7) Merging with LN2017
-################################################################################
+# Independent candidates (CI_1, CI_2, CI_3)
+ci_cols <- names(df_2017)[grepl("Perez|Juarez|Marin|Martinez|Dionisio|Becerra|Pimentel|Andrade|Hernandez|Penaloza|Chazaro|Archer", 
+                                names(df_2017), ignore.case = TRUE)]
+if (length(ci_cols) > 0) {
+  df_2017 <- df_2017 %>%
+    mutate(CI_1 = rowSums(select(., all_of(ci_cols)), na.rm = TRUE))
+}
 
-df_ln17 <- read_dta("../Listas Nominales/LN 2012-2019/2017/LN2017.dta") %>%
-  # keep if entidad==30 & month==5, seccion!=0
-  filter(entidad==30, month==5, seccion!=0) %>%
-  mutate(
-    uniqueid = (entidad*1000) + municipio
-  ) %>%
+# Collapse by municipality and section
+df_2017 <- df_2017 %>%
+  group_by(municipality, section) %>%
+  summarise(across(where(is.numeric), ~sum(., na.rm = TRUE)), .groups = "drop")
+
+# Handle nulos columns
+nulo_cols <- names(df_2017)[grepl("Q|VotosNulos", names(df_2017), ignore.case = TRUE)]
+df_2017 <- df_2017 %>%
+  mutate(nulo = rowSums(select(., any_of(nulo_cols)), na.rm = TRUE))
+
+# Calculate valid and total
+party_cols_2017 <- c("PAN", "PRI", "PRD", "PVEM", "PT", "PANAL", "MC", "MORENA", "PES", 
+                     "PRI_PVEM", "PAN_PRD", "CI_1", "CI_2", "CI_3")
+party_cols_2017 <- party_cols_2017[party_cols_2017 %in% names(df_2017)]
+
+df_2017 <- df_2017 %>%
+  mutate(valid = rowSums(select(., all_of(party_cols_2017)), na.rm = TRUE),
+         total = valid + nulo)
+
+# Read uniqueids mapping
+uniqueids_2017 <- read_excel("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/uniqueids.xlsx") %>%
+  rename_all(tolower) %>%
+  select(municipality, uniqueid, mun) %>%
+  distinct()
+
+df_2017 <- df_2017 %>%
+  left_join(uniqueids_2017, by = "municipality") %>%
+  mutate(municipality = ifelse(!is.na(mun), mun, municipality)) %>%
+  select(-mun)
+
+# Assign uniqueid for any missing
+df_2017 <- df_2017 %>%
+  mutate(municipality = toupper(remove_accents(municipality)),
+         uniqueid = ifelse(is.na(uniqueid), assign_veracruz_uniqueid(municipality), uniqueid),
+         section = as.numeric(section))
+
+# Filter out missing sections
+df_2017 <- df_2017 %>%
+  filter(!is.na(section))
+
+# Merge lista nominal 2017
+ln_2017 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2017/LN2017.dta") %>%
+  filter(entidad == 30, month == 5) %>%
+  mutate(uniqueid = entidad * 1000 + municipio,
+         seccion = as.numeric(seccion)) %>%
+  filter(seccion != 0) %>%
   select(uniqueid, seccion, lista) %>%
-  rename(section=seccion)
+  rename(section = seccion, listanominal = lista)
 
-# merge 1:1 section using LN17_VER.dta => we replicate a left_join 
-df_final <- df_merged %>%
-  left_join(df_ln17, by=c("uniqueid","section")) %>%
-  filter(!is.na(lista))  # drop _merge==2
+df_2017 <- df_2017 %>%
+  left_join(ln_2017, by = c("uniqueid", "section"))
 
-# rename lista -> listanominal
-df_2017 <- df_final %>%
-  rename(listanominal = lista) %>%
-  mutate(
-    turnout = total / listanominal
-  )
+# Municipal aggregates
+df_2017 <- df_2017 %>%
+  group_by(uniqueid) %>%
+  mutate(mun_total = sum(total, na.rm = TRUE),
+         mun_valid = sum(valid, na.rm = TRUE),
+         mun_listanominal = sum(listanominal, na.rm = TRUE),
+         mun_turnout = mun_total / mun_listanominal) %>%
+  ungroup() %>%
+  mutate(turnout = total / listanominal)
+
+df_2017 <- df_2017 %>%
+  mutate(year = 2017,
+         month = "June",
+         STATE = "VERACRUZ")
+
+cat("2017 processed:", nrow(df_2017), "rows\n")
 
 
 ################################################################################
@@ -1509,7 +1499,8 @@ df_2018 <- df_2018 %>%
     municipality= MUNICIPIO,
     listanominal= LISTA_NOMINAL,
     total       = TOTAL
-  )
+  ) %>% 
+  rename_with(~ gsub("-", "", .))
 
 # 2) Create new columns for coalitions
 #    g PAN_PRD = PAN + PRD + PANPRD
@@ -1845,7 +1836,7 @@ data_2021 <- data_2021 %>%
       municipality == "TLACOJALPAN"           ~ 30176,
       municipality == "TLACOLULAN"            ~ 30177,
       municipality == "TLACOTALPAN"           ~ 30178,
-      municipality == "TLACOTEPEC"   ~ 30179,
+      municipality == "TLACOTEPEC DE MEJIA"   ~ 30179,
       municipality == "TLALIXCOYAN"           ~ 30181,
       municipality == "TLALNELHUAYOCAN"       ~ 30182,
       municipality == "TLALTETELA"            ~ 30024,
@@ -1932,6 +1923,90 @@ collapsed_2021 <- collapsed_2021 %>%
     )
   )
 
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 30) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply coalition processing function
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 #####################################
 ### PROCESSING DATA FOR 2025 -------
 #####################################
@@ -2015,11 +2090,11 @@ data_2025 <- data_2025_cons %>%
     section = as.numeric(section),
     uniqueid =  30000 + municipality
   ) %>% 
-  dplyr::filter(section > 0 & section < 9999)
+  dplyr::filter(section > 0)
 
-# Group by municipality, section, and uniqueid, and sum the relevant columns
+# Group by section, and uniqueid, and sum the relevant columns
 collapsed_2025 <- data_2025 %>%
-  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::group_by(section, uniqueid) %>%
   dplyr::summarise(
     across(c(listanominal, PAN:total, PVEM_MORENA:CI_15), 
            \(x) sum(x, na.rm = TRUE))
@@ -2032,8 +2107,15 @@ collapsed_2025 <- collapsed_2025 %>%
     valid = sum(c_across(c(PAN:MORENA, PVEM_MORENA:CI_15)), na.rm = TRUE),
     year = 2025,
     month = "June"
-  )
+  ) 
 
+# Process Coalitions
+collapsed_2025 <- collapsed_2025 %>%
+  mutate(
+    PVEM = PVEM + ifelse(PVEM_MORENA > 0, PVEM_MORENA, 0),
+    MORENA = MORENA + ifelse(PVEM_MORENA > 0, PVEM_MORENA, 0),
+    PVEM_MORENA = ifelse(PVEM_MORENA > 0, 0, PVEM_MORENA)
+  )
 
 # Combine the dataframes, handling different columns by filling with NA
 veracruz_all <- bind_rows(df_2004,

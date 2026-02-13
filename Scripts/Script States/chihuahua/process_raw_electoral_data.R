@@ -584,11 +584,13 @@ data_2021 <- data_2021 %>%
                 no_reg = "CAND. NO REG", 
                 nulos = NULOS,
                 FXM = FxM) %>% 
-  rename_with(~ gsub("NACH", "PANAL", .x))
+  rename_with(~ gsub("NACH", "PANAL", .x)) %>% 
+  rename_with(~ gsub("-", "_", .x))
+  
 
 # Assign unique IDs based on municipality name & create total
 data_2021 <- data_2021 %>%
-  dplyr::mutate(uniqueid = municipality_ids[municipality],
+  dplyr::mutate(uniqueid = NoMpio + 8000,
                 total = rowSums(across(c(PAN:CI_5)),na.rm = TRUE))
 
 # Group by municipality, section, and uniqueid, and sum the relevant columns
@@ -615,10 +617,100 @@ collapsed_2021 <- collapsed_2021 %>%
     turnout = total/listanominal,
     year = 2021,
     month = "June"
-  )
+  ) %>% 
+  filter(total > 0)
 
 rm(ln_2021)
 rm(all_list)
+
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 8) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  ) %>% 
+  mutate(coal2 = case_when(
+    year == 2021 & uniqueid == 8001 ~ "PAN_PRD",
+    TRUE ~ coal2
+  ))
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 
 #####################################
 ### PROCESSING DATA FOR 2024 -------
@@ -666,7 +758,8 @@ data_ocampo <- data_ocampo %>%
 
 # Assign unique IDs based on municipality name & create total
 data_2024 <- data_2024 %>%
-  dplyr::mutate(uniqueid = municipality_ids[municipality])
+  dplyr::mutate(uniqueid = municipality_ids[municipality]) %>% 
+  filter(total > 0)
 
 data_ocampo <- data_ocampo %>%
   dplyr::mutate(uniqueid = municipality_ids[municipality])
@@ -702,6 +795,9 @@ collapsed_ocampo <- collapsed_ocampo %>%
 collapsed_2024 <- bind_rows(collapsed_ocampo,
                             collapsed_2024)
 
+# Apply coalition processing
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
 
 Chihuahua_all <- bind_rows(
   data_1998_collapsed,

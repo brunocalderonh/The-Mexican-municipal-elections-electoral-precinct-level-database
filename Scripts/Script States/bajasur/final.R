@@ -15,7 +15,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, "../../../"))
 
 # Read the Excel files
-state <- read.csv("Data/incumbent data/incumbent JL/incumbent_state_JL.csv")
+state <- read.csv("Data/incumbent data/incumbent JPZ/state_incumbents_jpz_2025.csv")
 db <- read_excel("Data/collapsed database manual cases/bajasur_collapsed_edited.xlsx")
 og <- read.csv("Processed Data/bajasur/bajasur_vote_calculator.csv")
 #create state ID for merging

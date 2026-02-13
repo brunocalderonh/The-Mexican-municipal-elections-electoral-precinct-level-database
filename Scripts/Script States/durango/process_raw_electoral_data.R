@@ -25,7 +25,11 @@ setwd(file.path(script_dir, ""))
 
 
 # Set the working directory (adjust the path as needed)
+<<<<<<< HEAD
 Ayu_Seccion_1995_No_LN <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/1995/Ayu_Seccion_1995_No_LN.csv")
+=======
+Ayu_Seccion_1995_No_LN <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayu_Seccion_1995_No_LN.csv")
+>>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 colnames(Ayu_Seccion_1995_No_LN) <- tolower(colnames(Ayu_Seccion_1995_No_LN))
 # Step 2: Rename columns
 Ayu_Seccion_1995_No_LN <- Ayu_Seccion_1995_No_LN %>%
@@ -135,7 +139,11 @@ collapsed_1995 <- collapsed_1995 %>%
     turnout = total / listanominal)
 
 # Step 1: Load the CSV file
+<<<<<<< HEAD
 Ayu_Seccion_1998_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/1998/Ayu_Seccion_1998_No_LN.csv")
+=======
+Ayu_Seccion_1998_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayu_Seccion_1998_No_LN.csv")
+>>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 colnames(Ayu_Seccion_1998_No_LN) <- tolower(colnames(Ayu_Seccion_1998_No_LN))
 
 # Step 2: Rename columns
@@ -252,7 +260,11 @@ collapsed_1998 <- collapsed_1998 %>%
   )
 
 # Step 1: Load and process the first CSV file
+<<<<<<< HEAD
 Ayu_Seccion_2001_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2001/Ayu_Seccion_2001_No_LN.csv") 
+=======
+Ayu_Seccion_2001_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayu_Seccion_2001_No_LN.csv") 
+>>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 colnames(Ayu_Seccion_2001_No_LN) <- tolower(colnames(Ayu_Seccion_2001_No_LN))
 
 Ayu_Seccion_2001_No_LN <- Ayu_Seccion_2001_No_LN %>%
@@ -265,7 +277,11 @@ Ayu_Seccion_2001_No_LN <- Ayu_Seccion_2001_No_LN %>%
   mutate(across(pan:total, as.numeric))
 
 # Step 2: Load and process the second CSV file
+<<<<<<< HEAD
 durango_data <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2001/Durango_Seccion_2001_No_LN.csv") 
+=======
+durango_data <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Durango_Seccion_2001_No_LN.csv") 
+>>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 colnames(durango_data) <- tolower(colnames(durango_data))
 
 
@@ -380,7 +396,7 @@ collapsed_2001 <- collapsed_2001 %>%
   )
 
 # Step 1: Import the Excel file and filter by date
-lista_nominal <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Other/INE-CI141-2014 Horacio Larreguy Arbesu/pdln10_edms_PEL_2004_2007.xls", 
+lista_nominal <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Other/INE-CI141-2014 Horacio Larreguy Arbesu/pdln10_edms_PEL_2004_2007.xls", 
                             sheet = "pdln10_edms") %>%
   filter(FECHA == "20040704") %>%
   rename(
@@ -391,7 +407,11 @@ lista_nominal <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 19
   summarize(listanominal = sum(listanominal, na.rm = TRUE), .groups = "drop")
 
 # Step 2: Import and process the CSV file
+<<<<<<< HEAD
 Ayu_Seccion_2004_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2004/Ayu_Seccion_2004_No_LN.csv")
+=======
+Ayu_Seccion_2004_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayu_Seccion_2004_No_LN.csv")
+>>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 colnames(Ayu_Seccion_2004_No_LN) <- tolower(colnames(Ayu_Seccion_2004_No_LN))
 
 Ayu_Seccion_2004_No_LN <- Ayu_Seccion_2004_No_LN %>%
@@ -487,7 +507,7 @@ collapsed_2004 <- collapsed_2004 %>%
   arrange(section)
 
 # Step 1: Import the Excel file and filter by date
-lista_nominal <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Other/INE-CI141-2014 Horacio Larreguy Arbesu/pdln10_edms_PEL_2004_2007.xls", 
+lista_nominal <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Other/INE-CI141-2014 Horacio Larreguy Arbesu/pdln10_edms_PEL_2004_2007.xls", 
                             sheet = "pdln10_edms") %>%
   filter(FECHA == "20070701") %>%
   rename(
@@ -499,7 +519,7 @@ lista_nominal <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 19
 
 
 # Step 2: Import and process the dataset
-Ayu_Seccion_2007 <- read_dta("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/Other/Ayu_Seccion_2007.dta") 
+Ayu_Seccion_2007 <- read_dta("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Other/Ayu_Seccion_2007.dta") 
 colnames(Ayu_Seccion_2007) <- tolower(colnames(Ayu_Seccion_2007))
 
 Ayu_Seccion_2007 <- Ayu_Seccion_2007 %>%
@@ -600,7 +620,11 @@ collapsed_2007 <- collapsed_2007 %>%
   arrange(section)
 
 # Step 1: Import and clean the data
+<<<<<<< HEAD
 Ayu_Seccion_2010 <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2010/Ayu_Seccion_2010.csv")
+=======
+Ayu_Seccion_2010 <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayu_Seccion_2010.csv")
+>>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 
 colnames(Ayu_Seccion_2010) <- tolower(colnames(Ayu_Seccion_2010))
 
@@ -693,7 +717,11 @@ collapsed_2010 <- collapsed_2010 %>%
   arrange(section)
 
 # Step 1: Import and clean the data
+<<<<<<< HEAD
 Ayu_Seccion_2013 <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2013/Ayu_Seccion_2013.csv")
+=======
+Ayu_Seccion_2013 <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayu_Seccion_2013.csv")
+>>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 
 colnames(Ayu_Seccion_2013) <- tolower(colnames(Ayu_Seccion_2013))
 
@@ -742,7 +770,7 @@ collapsed_2013 <- collapsed_2013 %>%
       municipality == "CONETO DE COMON" ~ 10003,
       municipality == "CUENCAM" ~ 10004,
       municipality == "DURANGO" ~ 10005,
-      municipality == "EL ORO" ~ 10018,
+      municipality == "El ORO" ~ 10018,
       municipality == "GENERAL SIMN B" ~ 10006,
       municipality == "GMEZ PALACIO" ~ 10007,
       municipality == "GUADALUPE VICTO" ~ 10008,
@@ -795,7 +823,11 @@ collapsed_2013 <- collapsed_2013 %>%
   arrange(section)
 summary(collapsed_2013)
 # Step 1: Import and process sheets from the Excel file
+<<<<<<< HEAD
 file_path <- "../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2016/Ayuntamientos Municipio_2016.xlsx"
+=======
+file_path <- "../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayuntamientos Municipio_2016.xlsx"
+>>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 sheet_names <- excel_sheets(file_path)
 
 # Import each sheet and save it as an individual data frame
@@ -930,7 +962,11 @@ collapsed_2016 <- collapsed_2016 %>%
   )
 
 # Load the data
+<<<<<<< HEAD
 data <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2019/2019_SEE_AYUN _DGO_CAS.csv")
+=======
+data <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/2019_SEE_AYUN _DGO_CAS.csv")
+>>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 colnames(data) <- tolower(colnames(data))
 # Rename columns
 data <- data %>%
@@ -1042,6 +1078,320 @@ collapsed_2019 <- collapsed_2019 %>%
     STATE = "DURANGO"
   )
 
+#####################################
+### PROCESSING DATA FOR 2022. -------
+#####################################
+
+# Load the 2022 dataset from the CSV
+data_2022 <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/durango_2022_processed.csv") %>% 
+  select(-"VA POR DURANGO", -"JUNTOS HACEMOS HISTORIA")
+
+data_2022 <- data_2022 %>%
+  mutate(
+    PAN_PRI_PRD = rowSums(select(., matches("^PAN-PRI-PRD$")), na.rm = TRUE),
+    
+    PAN_PRI = rowSums(select(., matches("^PAN\\r\\r\\nPRI$")), na.rm = TRUE),
+    
+    PAN_PRD = rowSums(select(., matches("^PAN\\r\\r\\nPRD$")), na.rm = TRUE),
+    
+    PRI_PRD = rowSums(select(., matches("^PRI\\r\\r\\nPRD$")), na.rm = TRUE),
+    
+    PVEM_PT_RSP_MORENA = rowSums(select(., matches("^PVEM-PT-RSPD-MOR$")), na.rm = TRUE),
+    
+    PVEM_PT_MORENA = rowSums(select(., matches("^PVEM\\r\\r\\nPT\\r\\r\\nMOR$")), na.rm = TRUE),
+    
+    PVEM_PT_RSP = rowSums(select(., matches("^PVEM\\r\\r\\nPT\\r\\r\\nRSPD$|^PVEM\\r\\r\\nPT\\r\\r\\nRSP$")), na.rm = TRUE),
+    
+    PVEM_RSP_MORENA = rowSums(select(., matches("^PVEM\\r\\r\\nRSPD\\r\\r\\nMOR|^PVEM\\r\\r\\nRSP\\r\\r\\nMOR")), na.rm = TRUE),
+    
+    PT_RSP_MORENA = rowSums(select(., matches("^PT\\r\\r\\nRSPD\\r\\r\\nMOR$")), na.rm = TRUE),
+    
+    PVEM_PT = rowSums(select(., matches("^PVEM\\r\\r\\nPT$")), na.rm = TRUE),
+    
+    PVEM_MORENA = rowSums(select(., matches("^PVEM\\r\\r\\nMOR$")), na.rm = TRUE),
+    
+    PVEM_RSP = rowSums(select(., matches("^PVEM\\r\\r\\nRSPD$")), na.rm = TRUE),
+    
+    PT_MORENA = rowSums(select(., matches("^PT\\r\\r\\nMOR$")), na.rm = TRUE),
+    
+    PT_RSP = rowSums(select(., matches("^PT\\r\\r\\nRSPD$")), na.rm = TRUE),
+    
+    RSP_MORENA = rowSums(select(., matches("^RSPD\\r\\r\\nMOR$")), na.rm = TRUE),
+    
+    PAN = rowSums(select(., matches("^PAN$|^PARTIDO ACCIÓN NACIONAL$")), na.rm = TRUE),
+    PRI = rowSums(select(., matches("^PRI$|^PARTIDO REVOLUCIONARIO INSTITUCIONAL$")), na.rm = TRUE),
+    PRD = PRD,
+    PVEM = rowSums(select(., matches("^PVEM$|^PARTIDO VERDE ECOLOGISTA DE MÉXICO$")), na.rm = TRUE),
+    PT = rowSums(select(., matches("^PT$|^PARTIDO DEL TRABAJO$")), na.rm = TRUE),
+    MC = MC,
+    MORENA = MORENA,
+    RSP = RSPD,
+    
+    no_reg = rowSums(select(., matches("CAND.*NO REG|CANDIDATURA NO REGISTRADA")), na.rm = TRUE),
+    CI_1 = rowSums(select(., matches("CAND.*INDEP")), na.rm = TRUE),
+    nulos = rowSums(select(., matches("VOTOS.*NULOS")), na.rm = TRUE),
+    listanominal = `LISTA NOMINAL`,
+    section = SECCIÓN,
+    CASILLA = `CAS.`,
+  ) %>%
+  select(
+    municipality, section, CASILLA,
+    PAN, PRI, PRD, PVEM, PT, MC, MORENA, RSP,
+    PAN_PRI_PRD, PAN_PRI, PAN_PRD, PRI_PRD,
+    PVEM_PT_RSP_MORENA, PVEM_PT_MORENA, PVEM_PT_RSP, PVEM_RSP_MORENA, PT_RSP_MORENA,
+    PVEM_PT, PVEM_MORENA, PVEM_RSP, PT_MORENA, PT_RSP, RSP_MORENA,CI_1,
+    no_reg, nulos, listanominal
+  )
+
+collapsed_2022 <- data_2022 %>%
+  filter(!grepl("[A-Z]", CASILLA)) %>% 
+  select(-CASILLA) %>% 
+  mutate(
+    valid = rowSums(pick(PAN:CI_1), na.rm = TRUE),
+    total = rowSums(pick(PAN:nulos), na.rm = TRUE),
+    turnout = total/listanominal,
+    uniqueid = case_when(
+      municipality == "CANATLAN" ~ 10001,
+      municipality == "CANELAS" ~ 10002,
+      municipality == "CONETO DE COMONFORT" ~ 10003,
+      municipality == "CUENCAMÉ" ~ 10004,
+      municipality == "DURANGO" ~ 10005,
+      grepl("El ORO", municipality, ignore.case = FALSE) ~ 10018,
+      municipality == "GRAL. SIMÓN BOLIVAR" ~ 10006,
+      municipality == "GÓMEZ PALACIO" ~ 10007,
+      municipality == "GUADALUPE VICTORIA" ~ 10008,
+      municipality == "GUANACEVÍ" ~ 10009,
+      municipality == "HIDALGO" ~ 10010,
+      municipality == "INDÉ" ~ 10011,
+      municipality == "LERDO" ~ 10012,
+      municipality == "MAPIMÍ" ~ 10013,
+      municipality == "MEZQUITAL" ~ 10014,
+      municipality == "NAZAS" ~ 10015,
+      municipality == "NOMBRE DE DIOS" ~ 10016,
+      municipality == "NUEVO IDEAL" ~ 10039,
+      municipality == "OCAMPO" ~ 10017,
+      municipality == "OTAÉZ" ~ 10019,
+      municipality == "PÁNUCO DE CORONADO" ~ 10020,
+      municipality == "PEÑON BLANCO" ~ 10021,
+      municipality == "POANAS" ~ 10022,
+      municipality == "PUEBLO NUEVO" ~ 10023,
+      municipality == "RODEO" ~ 10024,
+      municipality == "SAN BERNARDO" ~ 10025,
+      municipality == "SAN DIMAS" ~ 10026,
+      municipality == "SAN JUAN DE GUADALUPE" ~ 10027,
+      municipality == "SAN JUAN DEL RÍO" ~ 10028,
+      municipality == "SAN LUIS DEL CORDERO" ~ 10029,
+      municipality == "SAN PEDRO EL GALLO" ~ 10030,
+      municipality == "SANTA CLARA" ~ 10031,
+      municipality == "SANTIAGO PAPASQUIARO" ~ 10032,
+      municipality == "SUCHIL" ~ 10033,
+      municipality == "TAMAZULA" ~ 10034,
+      municipality == "TEPEHUANES" ~ 10035,
+      municipality == "TLAHUALILO" ~ 10036,
+      municipality == "TOPIA" ~ 10037,
+      municipality == "VICENTE GUERRERO" ~ 10038,
+      TRUE ~ NA_real_
+    )
+  )
+
+# Calculate final details
+collapsed_2022 <- collapsed_2022 %>%
+  dplyr::mutate(
+    year = 2022,
+    month = "June"
+  )
+
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 10) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply
+collapsed_2022 <- process_coalitions(collapsed_2022, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
+####################################
+### PROCESSING DATA FOR 2025 -------
+#####################################
+
+# Load the 2025 dataset from the CSV
+data_2025 <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Durango_2025.xlsx") %>% 
+  filter(!grepl("^[A-Z]", SECCION))
+
+data_2025 <- data_2025 %>%
+  dplyr::rename(municipality = "MUNICIPIO...8",
+                section = SECCION,
+                listanominal = "L. NOMINAL",
+                total = TOTAL,
+                no_reg = CNR,
+                nulos = VN,
+                CI_1 = INDEPENDIENTE,
+                PES = PESD,
+                PVILL = VILLISTA,
+                PER = RENOVACION
+                )%>%
+  rename_with(~ gsub("-", "_", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    uniqueid = case_when(
+      municipality == "CANATLAN" ~ 10001,
+      municipality == "CANELAS" ~ 10002,
+      municipality == "CONETO DE COMONFORT" ~ 10003,
+      municipality == "CUENCAME" ~ 10004,
+      municipality == "DURANGO" ~ 10005,
+      municipality == "EL ORO" ~ 10018,
+      municipality == "GENERAL SIMON BOLIVAR" ~ 10006,
+      municipality == "GOMEZ PALACIO" ~ 10007,
+      municipality == "GUADALUPE VICTORIA" ~ 10008,
+      municipality == "GUANACEVI" ~ 10009,
+      municipality == "HIDALGO" ~ 10010,
+      municipality == "INDE" ~ 10011,
+      municipality == "LERDO" ~ 10012,
+      municipality == "MAPIMI" ~ 10013,
+      municipality == "MEZQUITAL" ~ 10014,
+      municipality == "NAZAS" ~ 10015,
+      municipality == "NOMBRE DE DIOS" ~ 10016,
+      municipality == "NUEVO IDEAL" ~ 10039,
+      municipality == "OCAMPO" ~ 10017,
+      municipality == "OTAEZ" ~ 10019,
+      municipality == "PANUCO DE CORONADO" ~ 10020,
+      municipality == "PENON BLANCO" ~ 10021,
+      municipality == "POANAS" ~ 10022,
+      municipality == "PUEBLO NUEVO" ~ 10023,
+      municipality == "RODEO" ~ 10024,
+      municipality == "SAN BERNARDO" ~ 10025,
+      municipality == "SAN DIMAS" ~ 10026,
+      municipality == "SAN JUAN DE GUADALUPE" ~ 10027,
+      municipality == "SAN JUAN DEL RIO" ~ 10028,
+      municipality == "SAN LUIS DEL CORDERO" ~ 10029,
+      municipality == "SAN PEDRO DEL GALLO" ~ 10030,
+      municipality == "SANTA CLARA" ~ 10031,
+      municipality == "SANTIAGO PAPASQUIARO" ~ 10032,
+      municipality == "SUCHIL" ~ 10033,
+      municipality == "TAMAZULA" ~ 10034,
+      municipality == "TEPEHUANES" ~ 10035,
+      municipality == "TLAHUALILO" ~ 10036,
+      municipality == "TOPIA" ~ 10037,
+      municipality == "VICENTE GUERRERO" ~ 10038,
+      TRUE ~ NA_real_
+    ),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(total > 0) %>% 
+  select(municipality, section, uniqueid, PAN_PRI:PT_MORENA, no_reg:listanominal)
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2025 <- data_2025 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN_PRI:listanominal), 
+                          sum, na.rm = TRUE))
+
+# Calculate valid votes and final details
+collapsed_2025 <- collapsed_2025 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = sum(c_across(c(PAN_PRI:PT_MORENA)), na.rm = TRUE),
+    year = 2025,
+    month = "June"
+  )
+
+# Process coalitions:
+collapsed_2025 <- collapsed_2025 %>% 
+  mutate(
+    PAN_PRI = PAN_PRI + PAN + PRI,
+    PVEM_PT_MORENA =
+      case_when(
+        uniqueid %in% c(10034, 10019) ~ 0,
+        TRUE ~ (PVEM_PT_MORENA + PVEM_PT + PVEM_MORENA + PT_MORENA + PT + PVEM + MORENA)
+      ),
+    across(c(PVEM_PT, PVEM_MORENA, PT_MORENA, PT, PVEM, MORENA),
+           ~ ifelse(!uniqueid %in% c(10034, 10019), 0, .))
+  ) %>% 
+  select(-PAN, -PRI)
+
+
 # Combine the dataframes, handling different columns by filling with NA
 Durango_all <- bind_rows(collapsed_1995,
                          collapsed_1998,
@@ -1051,6 +1401,8 @@ Durango_all <- bind_rows(collapsed_1995,
                                 collapsed_2010,
                                 collapsed_2013,
                                 collapsed_2016,
-                                collapsed_2019)
+                                collapsed_2019,
+                         collapsed_2022,
+                         collapsed_2025)
 
 data.table::fwrite(Durango_all,"../../../Processed Data/durango/durango_process_raw_data.csv")

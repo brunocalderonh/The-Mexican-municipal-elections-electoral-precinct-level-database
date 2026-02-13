@@ -2073,7 +2073,7 @@ data_2021 <- data_2021 %>%
       municipality == "MAZAPA DE MADERO" ~ 7053,
       municipality == "MAZATAN" ~ 7054,
       municipality == "METAPA" ~ 7055,
-      municipality == "MEZCALAPA" ~ 7123,
+      municipality == "MEZCALAPA" ~ 7124,
       municipality == "MITONTIC" ~ 7056,
       municipality == "MONTECRISTO DE GUERRERO" ~ 7117,
       municipality == "MOTOZINTLA" ~ 7057,
@@ -2091,7 +2091,7 @@ data_2021 <- data_2021 %>%
       municipality == "PUEBLO NUEVO SOLISTAHUACAN" ~ 7072,
       municipality == "RAYON" ~ 7073,
       municipality == "REFORMA" ~ 7074,
-      municipality == "RINCON CHAMULA SAN PEDRO" ~ 7124,
+      municipality == "RINCON CHAMULA SAN PEDRO" ~ 7121,
       municipality == "SABANILLA" ~ 7076,
       municipality == "SALTO DE AGUA" ~ 7077,
       municipality == "SAN ANDRES DURAZNAL" ~ 7118,
@@ -2128,6 +2128,13 @@ data_2021 <- data_2021 %>%
       municipality == "VILLAFLORES" ~ 7108,
       municipality == "YAJALON" ~ 7109,
       municipality == "ZINACANTAN" ~ 7111,
+      municipality == "EMILIANO ZAPATA" ~ 7123,
+      municipality == "FRONTERA COMALAPA" ~ 7034,
+      municipality == "OXCHUC" ~ 7064,
+      municipality == "SILTEPEC" ~ 7080,
+      municipality == "VENUSTIANO CARRANZA" ~ 7106,
+      municipality == "EL PARRAL" ~ 7122,
+      municipality == "HONDURAS DE LA SIERRA" ~ 7125,
       TRUE ~ NA_real_  # Default case for municipalities not in the list
     )
   )
@@ -2194,7 +2201,7 @@ data_ext <- data_ext %>%
   dplyr::mutate(
     uniqueid = case_when(
       municipality == "EL PARRAL" ~ 7122,
-      municipality == "EMILIANO ZAPATA" ~ 7121,
+      municipality == "EMILIANO ZAPATA" ~ 7123,
       municipality == "VENUSTIANO CARRANZA" ~ 7106,
       municipality == "SILTEPEC" ~ 7080,
       TRUE ~ NA_real_  # Default case for municipalities not in the list
@@ -2214,11 +2221,99 @@ collapsed_ext <- data_ext %>%
 # Combine the 2021 and 2022-extraordinary elections
 collapsed_2021 <- bind_rows(collapsed_2021,
                             collapsed_ext) %>% 
-  dplyr::mutate(turnout = total/listanominal)
+  dplyr::mutate(turnout = total/listanominal) %>% 
+  rename(MVC = PMCH,
+         PCU = PCHU,
+         PANAL = PNA)
 
 rm(collapsed_ext)
 rm(data_2021)
 rm(data_ext)
+
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 7) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 
 #####################################
 ### PROCESSING DATA FOR 2024 --------
@@ -2292,6 +2387,7 @@ data_2024 <- data_2024 %>%
       municipality == "BERRIOZABAL" ~ 7012,
       municipality == "BOCHIL" ~ 7013,
       municipality == "CACAHOATAN" ~ 7015,
+      municipality == "CAPITAN LUIS ANGEL VIDAL" ~ 7120,
       municipality == "CATAZAJA" ~ 7016,
       municipality == "CHALCHIHUITAN" ~ 7022,
       municipality == "CHAMULA" ~ 7023,
@@ -2301,20 +2397,17 @@ data_2024 <- data_2024 %>%
       municipality == "CHIAPA DE CORZO" ~ 7027,
       municipality == "CHIAPILLA" ~ 7028,
       municipality == "CHICOASEN" ~ 7029,
+      municipality == "CHICOMUSELO" ~ 7030,
       municipality == "CHILON" ~ 7031,
       municipality == "CINTALAPA" ~ 7017,
       municipality == "COAPILLA" ~ 7018,
       municipality == "COMITAN DE DOMINGUEZ" ~ 7019,
       municipality == "COPAINALA" ~ 7021,
       municipality == "EL BOSQUE" ~ 7014,
-      municipality == "EL PARRAL" ~ 7122,
       municipality == "EL PORVENIR" ~ 7070,
-      municipality == "EMILIANO ZAPATA" ~ 7121,
       municipality == "ESCUINTLA" ~ 7032,
       municipality == "FRANCISCO LEON" ~ 7033,
-      municipality == "FRONTERA COMALAPA" ~ 7034,
       municipality == "FRONTERA HIDALGO" ~ 7035,
-      municipality == "HONDURAS DE LA SIERRA" ~ 7125,
       municipality == "HUEHUETAN" ~ 7037,
       municipality == "HUITIUPAN" ~ 7039,
       municipality == "HUIXTAN" ~ 7038,
@@ -2340,7 +2433,7 @@ data_2024 <- data_2024 %>%
       municipality == "MAZAPA DE MADERO" ~ 7053,
       municipality == "MAZATAN" ~ 7054,
       municipality == "METAPA" ~ 7055,
-      municipality == "MEZCALAPA" ~ 7123,
+      municipality == "MEZCALAPA" ~ 7124,
       municipality == "MITONTIC" ~ 7056,
       municipality == "MONTECRISTO DE GUERRERO" ~ 7117,
       municipality == "MOTOZINTLA" ~ 7057,
@@ -2351,13 +2444,14 @@ data_2024 <- data_2024 %>%
       municipality == "OSTUACAN" ~ 7062,
       municipality == "OSUMACINTA" ~ 7063,
       municipality == "PALENQUE" ~ 7065,
+      municipality == "PANTELHO" ~ 7066,
       municipality == "PANTEPEC" ~ 7067,
       municipality == "PICHUCALCO" ~ 7068,
       municipality == "PIJIJIAPAN" ~ 7069,
       municipality == "PUEBLO NUEVO SOLISTAHUACAN" ~ 7072,
       municipality == "RAYON" ~ 7073,
       municipality == "REFORMA" ~ 7074,
-      municipality == "RINCON CHAMULA SAN PEDRO" ~ 7124,
+      municipality == "RINCON CHAMULA SAN PEDRO" ~ 7121,
       municipality == "SABANILLA" ~ 7076,
       municipality == "SALTO DE AGUA" ~ 7077,
       municipality == "SAN ANDRES DURAZNAL" ~ 7118,
@@ -2366,7 +2460,6 @@ data_2024 <- data_2024 %>%
       municipality == "SAN JUAN CANCUC" ~ 7112,
       municipality == "SAN LUCAS" ~ 7110,
       municipality == "SANTIAGO EL PINAR" ~ 7119,
-      municipality == "SILTEPEC" ~ 7080,
       municipality == "SIMOJOVEL" ~ 7081,
       municipality == "SITALA" ~ 7082,
       municipality == "SOCOLTENANGO" ~ 7083,
@@ -2390,12 +2483,18 @@ data_2024 <- data_2024 %>%
       municipality == "TUZANTAN" ~ 7103,
       municipality == "TZIMOL" ~ 7104,
       municipality == "UNION JUAREZ" ~ 7105,
-      municipality == "VENUSTIANO CARRANZA" ~ 7106,
       municipality == "VILLA CORZO" ~ 7107,
       municipality == "VILLACOMALTITLAN" ~ 7071,
       municipality == "VILLAFLORES" ~ 7108,
       municipality == "YAJALON" ~ 7109,
       municipality == "ZINACANTAN" ~ 7111,
+      municipality == "EMILIANO ZAPATA" ~ 7123,
+      municipality == "FRONTERA COMALAPA" ~ 7034,
+      municipality == "OXCHUC" ~ 7064,
+      municipality == "SILTEPEC" ~ 7080,
+      municipality == "VENUSTIANO CARRANZA" ~ 7106,
+      municipality == "EL PARRAL" ~ 7122,
+      municipality == "HONDURAS DE LA SIERRA" ~ 7125,
       TRUE ~ NA_real_  # Default case for municipalities not in the list
     )
   )
@@ -2479,12 +2578,18 @@ collapsed_ext <- collapsed_ext %>%
 # Combine the 2021 and 2022-extraordinary elections
 collapsed_2024 <- bind_rows(collapsed_2024,
                             collapsed_ext) %>% 
-  dplyr::mutate(turnout = total/listanominal)
+  dplyr::mutate(turnout = total/listanominal)%>% 
+  rename_with(~ gsub("PCHU", "PCU", .x)) %>%
+  rename_with(~ gsub("PMCH", "PMV", .x))
 
 rm(collapsed_ext)
 rm(data_2024)
 rm(data_ext)
 rm(ln_2024)
+
+# Apply coalition processing functon
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
 
 # Combine the dataframes, handling different columns by filling with NA
 chiapas_all <- bind_rows(collapsed_1995,

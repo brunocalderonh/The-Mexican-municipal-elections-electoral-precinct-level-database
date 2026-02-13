@@ -35,7 +35,11 @@ replace_parties <- function(party_str) {
 
 finaldb <- finaldb %>%
   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
-  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
+  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties)) %>% 
+  mutate(incumbent_party_JL = str_replace_all(incumbent_party_JL, "CUHCR", "PRI_PVEM_PANAL"),
+         incumbent_party_JL = str_replace_all(incumbent_party_JL, "PMC", "MC"),
+         incumbent_party_JL = str_replace_all(incumbent_party_JL, "PESH", "PES")
+         )
 
 finaldb <- finaldb %>%
   mutate(incumbent_party_magar = ifelse(year == 2016 & incumbent_party_magar == "PC", "MC", incumbent_party_magar)) %>% 

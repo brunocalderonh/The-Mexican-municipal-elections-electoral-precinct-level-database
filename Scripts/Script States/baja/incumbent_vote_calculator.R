@@ -96,6 +96,12 @@ assign_incumbent_vote <- function(data) {
       
       # Proceed with coalition logic if no individual party is found
       if (!individual_party_found) {
+        # Special case: Remove TRA if it's in the coalition
+        if ("TRA" %in% parties) {
+          parties <- parties[parties != "TRA"]
+          incumbent_party <- paste(parties, collapse = "_")
+        }
+        
         coalition_vars <- names(data)[sapply(names(data), function(x) all(parties %in% str_split(x, "_")[[1]]))]
         
         for (coalition_var in coalition_vars) {
