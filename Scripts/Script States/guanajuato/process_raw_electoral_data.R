@@ -27,7 +27,7 @@ setwd(file.path(script_dir, ""))
 ### Step 1: Process 1997 Data
 ###########################################
 # Load 1997 data
-data_1997 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997.csv")
+data_1997 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1997/Ayu_Seccion_1997.csv")
 
 # Rename and clean columns
 data_1997 <- data_1997 %>%
@@ -96,7 +96,7 @@ rm(data_1997)
 ### Step 1: Process 2000 Data
 ###########################################
 # Load 2000 data
-data_2000 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000.csv")
+data_2000 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2000/Ayu_Seccion_2000.csv")
 
 # Convert column names to lowercase
 data_2000 <- data_2000 %>% rename_with(tolower)
@@ -257,11 +257,11 @@ rm(data_2000)
 ### 2003: Process Municipality Name File
 ###########################################
 
-mun_data <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003_Mun_Number_to_Name.csv") %>%
+mun_data <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003_Mun_Number_to_Name.csv") %>%
   rename(num_municipality = num_mun) %>%
   arrange(num_municipality)
 
-data_2003 <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv")
+data_2003 <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003.csv")
 
 # Convert column names to lowercase
 data_2003 <- data_2003 %>% rename_with(tolower)
@@ -356,7 +356,7 @@ rm(data_2003)
 ###########################################
 
 # Read the 2006 CSV (adjust file path)
-data_2006 <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.csv")
+data_2006 <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2006/Ayu_Seccion_2006.csv")
   
 # Convert column names to lowercase
 data_2006 <- data_2006 %>% rename_with(tolower) 
@@ -524,7 +524,7 @@ rm(data_2006)
 ###########################################
 ### Process 2009 Data
 ###########################################
-data_2009 <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.csv",
+data_2009 <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2009/Ayu_Seccion_2009.csv",
                    encoding = "UTF-8") %>%
   rename(municipality = NOM_MPIO,
          section = SECCION,
@@ -788,7 +788,7 @@ data_2012_collapsed <- data_2012_collapsed %>%
 ### Step 1: Process 2015 Data
 ###########################################
 # Load 2015 data from Excel
-data_2015 <- read_excel("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2015.xlsx", sheet = "Sheet1", col_types = "text")
+data_2015 <- read_excel("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/Ayuntamientos_2015.xlsx", sheet = "Sheet1", col_types = "text")
 
 # Rename and clean columns
 data_2015 <- data_2015 %>%
@@ -866,7 +866,7 @@ rm(data_2015)
 ### Step 2: Process 2018 Data
 ###########################################
 # Load 2018 data
-data_2018 <- read_excel("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx", sheet = "Ayuntamientos", col_types = "text")
+data_2018 <- read_excel("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2018/Ayuntamientos_2018.xlsx", sheet = "Ayuntamientos", col_types = "text")
 data_2018 <- data_2018 %>% 
   rename(municipality=MUNICIPIO,
          section=SECCION,
@@ -902,7 +902,7 @@ rm(data_2018)
 #####################################
 
 # Load the 2021 dataset from the CSV
-data_2021 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/GTO_AYUN_2021.csv", skip = 6)
+data_2021 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2021/GTO_AYUN_2021.csv", skip = 6)
 
 names(data_2021)
 
@@ -999,7 +999,7 @@ collapsed_2021 <- collapsed_2021 %>%
 #####################################
 
 # Load the 2024 dataset from the CSV
-data_2024 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/GTO_AYUN_2024.csv", skip = 6)
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2024/GTO_AYUN_2024.csv", skip = 6)
 
 names(data_2024)
 

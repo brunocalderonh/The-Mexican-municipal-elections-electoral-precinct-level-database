@@ -28,7 +28,7 @@ setwd(file.path(script_dir, ""))
 #####################################
 
 # Load 1999 data
-data_1999 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/Ayu_Seccion_1999.csv")
+data_1999 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/1999/Ayu_Seccion_1999.csv")
 
 # Rename columns for consistency
 data_1999 <- data_1999 %>%
@@ -85,7 +85,7 @@ rm(data_1999)
 #####################################
 
 # Load 2002 data
-data_2002 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/Ayu_Seccion_2002.csv")
+data_2002 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/2002/Ayu_Seccion_2002.csv")
 
 # Rename columns for consistency
 data_2002 <- data_2002 %>%
@@ -141,7 +141,7 @@ rm(data_2002)
 #####################################
 
 # Load 2005 data
-data_2005 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/Ayu_Seccion_2005.csv")
+data_2005 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/2005/Ayu_Seccion_2005.csv")
 
 # Rename columns for consistency
 data_2005 <- data_2005 %>%
@@ -197,7 +197,7 @@ rm(data_2005)
 #####################################
 
 # Load 2008 data
-data_2008 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/Ayu_Seccion_2008.csv")
+data_2008 <- read_csv("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/2008/Ayu_Seccion_2008.csv")
 
 # Rename columns for consistency
 data_2008 <- data_2008 %>%
@@ -255,7 +255,7 @@ rm(data_2008)
 #####################################
 
 # Load 2011 data
-data_2011 <- data.table::fread("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/Ayu_Seccion_2011.csv")
+data_2011 <- data.table::fread("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/2011/Ayu_Seccion_2011.csv")
 names(data_2011)
 # Rename columns for consistency
 data_2011 <- data_2011 %>%
@@ -313,7 +313,7 @@ rm(data_2011)
 #####################################
 
 # Load 2015 data
-data_2015 <- read_excel("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/BCS_2015.xlsx")
+data_2015 <- read_excel("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/2015/BCS_2015.xlsx")
 names(data_2015)
 
 # Load and merge Lista Nominal data
@@ -365,7 +365,7 @@ rm(ln_data_2015)
 #####################################
 
 # Load 2018 data
-data_2018 <- read_excel("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/BCS_2018.xlsx")
+data_2018 <- read_excel("../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/2018/BCS_2018.xlsx")
 names(data_2018)
 
 # Rename columns for consistency
@@ -439,7 +439,7 @@ summary(collapsed_2018)
 #####################################
 
 # Define the folder path
-folder_path <- "../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/21/"
+folder_path <- "../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/2021/"
 
 standard_names <- c("municipality", "section", "casilla", "PAN_PRI_PRD_PH_PRS", "PT", "PVEM", "MC", "MORENA", "BCSC", "PANAL", "PES", "RSP", "FXM", "MORENA_PT", "no_reg", "nulo", "total")
 
@@ -554,7 +554,7 @@ rm(data)
 #####################################
 
 # Define the folder path
-folder_path <- "../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/24/"
+folder_path <- "../../../Data/Raw Electoral Data/Baja California Sur - 1999, 2002, 2005, 2008, 2011,2015,2018,2021,2024/2024/"
 
 standard_names <- c("municipality", "section", "casilla", "PAN_PRI_PRD_PH_PRS", "MORENA_PT_PVEM_PANAL", "MC", "FXM", "ML", "no_reg", "nulo", "total")
 

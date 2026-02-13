@@ -26,7 +26,7 @@ setwd(file.path(script_dir, ""))
 #####################################
 ### PROCESSING DATA FOR 1998
 #####################################
-data_1998 <- read_csv("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_1998.csv")
+data_1998 <- read_csv("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/1998/Ayu_Seccion_1998.csv")
 # Rename columns
 data_1998 <- data_1998 %>%
   dplyr::rename(municipality = NOMBRE, 
@@ -165,7 +165,7 @@ data_1998_collapsed <- data_1998_collapsed %>%
 #####################################
 
 # Import 2001 CSV data
-data_2001 <- data.table::fread("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2001.csv")
+data_2001 <- data.table::fread("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2001/Ayu_Seccion_2001.csv")
 names(data_2001)
 # Rename columns
 data_2001 <- data_2001 %>%
@@ -220,7 +220,7 @@ summary(data_2001_collapsed)
 
 
 # Import 2004 CSV data
-data_2004 <- read_csv("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2004.csv")
+data_2004 <- read_csv("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2004/Ayu_Seccion_2004.csv")
 names(data_2004)
 # Rename columns
 data_2004 <- data_2004 %>%
@@ -266,7 +266,7 @@ data_2004_collapsed <- data_2004_collapsed %>%
   #####################################
   
   # Import 2007 CSV data
-data_2007 <- read_csv("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2007.csv")
+data_2007 <- read_csv("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2007/Ayu_Seccion_2007.csv")
 
   
   # Rename columns
@@ -313,7 +313,7 @@ data_2007_collapsed <- data_2007_collapsed %>%
 ### PROCESSING DATA FOR 2010
 #####################################
 
-data_2010 <- read_csv("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2010.csv")
+data_2010 <- read_csv("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2010/Ayu_Seccion_2010.csv")
 names(data_2010)
 # Rename columns
 data_2010 <- data_2010 %>%
@@ -371,7 +371,7 @@ summary(data_2010_collapsed)
 
 
 # Import 2013 Excel data
-data_2013 <- read_excel("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2013.xlsx", sheet = "Sheet1")
+data_2013 <- read_excel("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2013/Ayu_Seccion_2013.xlsx", sheet = "Sheet1")
 
 # Rename columns
 data_2013 <- data_2013 %>%
@@ -393,7 +393,7 @@ data_2013_collapsed <- data_2013 %>%
   dplyr::summarise(across(PAN:total, sum, na.rm = TRUE))
 
 # Import Listanominal 2013 data
-listanominal_2013 <- read_excel("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Listanominal2013.xlsx", sheet = "Hoja1")
+listanominal_2013 <- read_excel("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2013/Listanominal2013.xlsx", sheet = "Hoja1")
 
 # Rename columns
 listanominal_2013 <- listanominal_2013 %>%
@@ -436,7 +436,7 @@ data_2013_collapsed <- data_2013_collapsed %>%
 ### PROCESSING DATA FOR 2016
 #####################################
 
-data_2016 <- read_excel("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayuntamientos_2016.xlsx", sheet = "Ayuntamientos")
+data_2016 <- read_excel("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2016/Ayuntamientos_2016.xlsx", sheet = "Ayuntamientos")
 
 # Create 'valid' by summing across relevant columns
 data_2016 <- data_2016 %>%
@@ -490,7 +490,7 @@ rm(ln_2016)
 #####################################
 
 # Load the 2018 dataset from the Excel sheet
-data_2018 <- read_excel("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayuntamientos_2018.xlsx", 
+data_2018 <- read_excel("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2018/Ayuntamientos_2018.xlsx", 
                         sheet = "Ayuntamiento")
 names(data_2018)
 # Update PT_MORENA_PES and drop relevant columns for specified municipalities
@@ -556,7 +556,7 @@ data_2018_collapsed <- data_2018_collapsed %>%
 #####################################
 
 # Load the 2021 data
-file_path <- "../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/21/Ayuntamientos 2021.xlsx"
+file_path <- "../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2021/Ayuntamientos 2021.xlsx"
 
 # Get all sheet names
 sheets <- excel_sheets(file_path)
@@ -625,10 +625,10 @@ rm(all_list)
 #####################################
 
 # Load the 2024 dataset from the Excel sheet and the extraordinary election Ocampo
-data_2024 <- read_excel("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/24/ResultadosComputo_2024.xlsx", 
+data_2024 <- read_excel("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2024/ResultadosComputo_2024.xlsx", 
                         sheet = "18.7.1 (AYU)")
 
-data_ocampo <- read_excel("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_2024 EXT_Casillas.xlsx", skip = 5) 
+data_ocampo <- read_excel("../../../Data/Raw Electoral Data/Chihuahua - 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2024/Ayu_2024 EXT_Casillas.xlsx", skip = 5) 
 
 names(data_2024)
 

@@ -28,7 +28,7 @@ setwd(file.path(script_dir, ""))
 #####################################
 
 # Load the 2004 data
-data_2004 <- read_csv("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_2004.csv")
+data_2004 <- read_csv("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/2004/Ayu_Seccion_2004.csv")
 # Check column names for case sensitivity
 names(data_2004)
 
@@ -98,7 +98,7 @@ summary(collapsed_2004)
 #####################################
 
 # Load the 2007 data
-data_2007 <- read_csv("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_2007.csv")
+data_2007 <- read_csv("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/2007/Ayu_Seccion_2007.csv")
 
 # Check column names for case sensitivity
 names(data_2007)
@@ -172,7 +172,7 @@ summary(collapsed_2007)
 #####################################
 
 # Load the 2010 data
-data_2010 <- read_csv("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_2010.csv")
+data_2010 <- read_csv("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/2010/Ayu_Seccion_2010.csv")
 
 # Check column names for case sensitivity
 names(data_2010)
@@ -247,7 +247,7 @@ rm(data_2010)
 #####################################
 
 # Load the 2013 data from Excel
-data_2013 <- read_excel("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/CASILLAS_AYUNTAMIENTOS_2013.xls", sheet = "Ayuntamientos")
+data_2013 <- read_excel("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/2013/CASILLAS_AYUNTAMIENTOS_2013.xls", sheet = "Ayuntamientos")
 
 # Check the column names for case sensitivity
 names(data_2013)
@@ -335,7 +335,7 @@ names(collapsed_2013)
 ####################################
 
 # Load the 2016 data
-data_2016 <- read_excel("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/Municipales2016.xlsx")
+data_2016 <- read_excel("../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/2016/Municipales2016.xlsx")
 
 # Rename columns
 data_2016 <- data_2016 %>%
@@ -400,7 +400,7 @@ rm(ln_data_2016)
 ####################################
 
 # Define the folder path
-folder_path <- "../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/"
+folder_path <- "../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/2019/"
 
 # Process all Excel files from 1 to 11
 for (x in 1:11) {
@@ -491,7 +491,7 @@ collapsed_2019 <- collapsed_2019 %>%
 ####################################
 
 # Define the folder path
-folder_path <- "../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024//2021/"
+folder_path <- "../../../Data/Raw Electoral Data/Aguascalientes - 2004, 2007, 2010, 2013,2016,2019,2021,2024/2021/"
 
 # Process all Excel files from 1 to 11
 for (x in 1:11) {

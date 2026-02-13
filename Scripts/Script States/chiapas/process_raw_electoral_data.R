@@ -28,7 +28,7 @@ setwd(file.path(script_dir, ""))
 #####################################
 
 # Load the 1995 data
-data_1995 <- read_csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_1995.csv")
+data_1995 <- read_csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/1995/Ayu_Seccion_1995.csv")
 names(data_1995)
 # Rename columns
 data_1995 <- data_1995 %>%
@@ -192,7 +192,7 @@ summary(collapsed_1995)
 #####################################
 
 # Load the 1998 data
-data_1998 <- read_csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_1998_No_LN.csv")
+data_1998 <- read_csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/1998/Ayu_Seccion_1998_No_LN.csv")
 names(data_1998)
 # Rename columns
 data_1998 <- data_1998 %>%
@@ -301,7 +301,7 @@ rm(ln_all_months_years)
 ### PROCESSING DATA FOR 2001
 #####################################
 
-data_2001 <- data.table::fread("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2001_No_LN.csv") %>%
+data_2001 <- data.table::fread("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2001/Ayu_Seccion_2001_No_LN.csv") %>%
   dplyr::rename(municipality = MUNICIPIO, 
                 section = "Secci\xf3n",
                 total = TOTAL,
@@ -506,7 +506,7 @@ collapsed_2001 <- collapsed_2001 %>%
 ### PROCESSING DATA FOR 2004
 #####################################
 
-data_2004 <- read.csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2004.csv") %>%
+data_2004 <- read.csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2004/Ayu_Seccion_2004.csv") %>%
   dplyr::rename(municipality = MUNICIPIO, 
          section = SECCION,
          listanominal = "LISTA.NOMINAL",
@@ -675,7 +675,7 @@ rm(data_2004)
 #####################################
 
 # Processing Year 2007
-data_2007 <- read.csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2007.csv") %>%
+data_2007 <- read.csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2007/Ayu_Seccion_2007.csv") %>%
   dplyr::rename(municipality = municipio, 
                 section = seccion,
                 listanominal = "lista.nominal",
@@ -886,7 +886,7 @@ collapsed_2007 <- collapsed_2007 %>%
 ### PROCESSING DATA FOR 2010
 #####################################
 
-data_2010 <- data.table::fread("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_2010_No_LN.csv") %>%
+data_2010 <- data.table::fread("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2010/Ayu_Seccion_2010_No_LN.csv") %>%
   dplyr::rename(municipality = MUNICIPIO, 
          section = "SECCI\xd3N") %>%
   dplyr::filter(municipality != "" & !is.na(section)) %>%
@@ -1055,7 +1055,7 @@ summary(collapsed_2010)
 ### PROCESSING DATA FOR 2012
 #####################################
 
-data_2012 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Ayu_Seccion_No_LN_2012.xlsx") %>%
+data_2012 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2012/Ayu_Seccion_No_LN_2012.xlsx") %>%
   dplyr::rename(municipality = Municipio, 
                 section = Seccion) %>%
   dplyr::mutate(section = as.numeric(section),
@@ -1272,7 +1272,7 @@ collapsed_2012 <- collapsed_2012 %>%
     ))
 
 # Load and merge Lista Nominal data
-ln_2012 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/LN_2012.xlsx")
+ln_2012 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2012/LN_2012.xlsx")
 
 ln_2012 <- ln_2012 %>%
   dplyr::mutate(section = as.numeric(Secc),
@@ -1344,7 +1344,7 @@ rm(data_2012)
 #####################################
 
 # Load the dataset from the specific Excel file
-data_2015 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/01_RESULTADOS_ELECTORALES_CASILLA_2015_AYUNTAMIENTOS_MODXTEECHYTEPJF.xlsx", sheet = "Table 1")
+data_2015 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2015/01_RESULTADOS_ELECTORALES_CASILLA_2015_AYUNTAMIENTOS_MODXTEECHYTEPJF.xlsx", sheet = "Table 1")
 
 # Drop rows for the dissolved government
 data_2015 <- data_2015 %>%
@@ -1641,7 +1641,7 @@ rm(ln_data_2015)
 # ---------------------- 2018 Data Processing ---------------------- #
 
 # Import the 2018 election data
-data_2018 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/Resultados de Computos Municipales por Casilla de la Eleccion de Ayuntamientos - Chiapas 2018.xlsx")
+data_2018 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2018/Resultados de Computos Municipales por Casilla de la Eleccion de Ayuntamientos - Chiapas 2018.xlsx")
 names(data_2018)
 # Rename municipality column
 data_2018 <- data_2018 %>%
@@ -1975,7 +1975,7 @@ collapsed_2018 <- collapsed_2018 %>%
 #####################################
 
 # Load the dataset
-data_2021 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/21/2021_AYUN_LOC_MR_CHIS_CAS.xlsx")
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2021/2021_AYUN_LOC_MR_CHIS_CAS.xlsx")
 
 # Drop rows for the extraordinary elections
 data_2021 <- data_2021 %>%
@@ -2164,7 +2164,7 @@ collapsed_2021 <- data_2021 %>%
   )
 
 # Load the extraordinary election data
-data_ext <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/22_ext/2022_SEE_AYUN_CHIS_CAS.xlsx")
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2022_ext/2022_SEE_AYUN_CHIS_CAS.xlsx")
 
 data_ext <- data_ext %>%
   dplyr::rename(municipality = MUNICIPIO, 
@@ -2225,7 +2225,7 @@ rm(data_ext)
 #####################################
 
 # Load the dataset
-data_2024 <- read_csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/24/20240608_2000_CHIS_AYUN_CAS.csv")
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2024/20240608_2000_CHIS_AYUN_CAS.csv")
 
 # Drop rows for the extraordinary elections
 data_2024 <- data_2024 %>%
@@ -2423,7 +2423,7 @@ collapsed_2024 <- data_2024 %>%
   )
 
 # Load the extraordinary election data
-data_ext <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2024_AYUN_EXT_CHIS.xlsx")
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Chiapas - 1995, 1998, 2001, 2004, 2007, 2010, 2012,2015,2018,2021,2024/2024/2024_AYUN_EXT_CHIS.xlsx")
 
 data_ext <- data_ext %>%
   dplyr::rename(municipality = Municipio, 

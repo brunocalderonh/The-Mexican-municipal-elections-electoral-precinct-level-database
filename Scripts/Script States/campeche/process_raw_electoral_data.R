@@ -28,7 +28,7 @@ setwd(file.path(script_dir, ""))
 ##############################################
 
 # Load the 1997 data
-data_1997 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997_No_LN.xlsx")
+data_1997 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1997/Ayu_Seccion_1997_No_LN.xlsx")
 names(data_1997)
 # Rename columns for consistency
 data_1997 <- data_1997 %>%
@@ -100,7 +100,7 @@ rm(ln_all_months_years)
 ##############################################
 
 # Load the 2000 data
-data_2000 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000_No_LN.xlsx")
+data_2000 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2000/Ayu_Seccion_2000_No_LN.xlsx")
 names(data_2000)
 # Rename columns for consistency
 data_2000 <- data_2000 %>%
@@ -177,7 +177,7 @@ rm(ln_all_months_years)
 ##############################################
 
 # Load the 2003 data
-data_2003 <- read_csv("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv")
+data_2003 <- read_csv("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003.csv")
 names(data_2003)
 # Rename columns for consistency
 data_2003 <- data_2003 %>%
@@ -240,7 +240,7 @@ rm(data_2003)
 ##############################################
 
 # Load the 2006 data
-data_2006 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.xlsx")
+data_2006 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2006/Ayu_Seccion_2006.xlsx")
 names(data_2006)
 # Rename columns for consistency
 data_2006 <- data_2006 %>%
@@ -304,7 +304,7 @@ rm(data_2006)
 ##############################################
 
 # Load the 2009 data
-data_2009 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.xlsx")
+data_2009 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2009/Ayu_Seccion_2009.xlsx")
 names(data_2009)
 # Rename columns for consistency
 data_2009 <- data_2009 %>%
@@ -366,7 +366,7 @@ rm(data_2009)
 ##############################################
 
 # Load the 2012 data
-data_2012 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.xlsx")
+data_2012 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2012/Ayu_Seccion_2012.xlsx")
 names(data_2012)
 # Rename columns for consistency
 data_2012 <- data_2012 %>%
@@ -434,7 +434,7 @@ process_data <- function(sheet_name, unique_id, output_file, file_path) {
 }
 
 # Processing all municipalities for 2015
-file_path_2015 <- "../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/RESULTADOS POR CASILLA - AYUNTAMIENTOS - CANDIDATO.xlsx"
+file_path_2015 <- "../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/RESULTADOS POR CASILLA - AYUNTAMIENTOS - CANDIDATO.xlsx"
 process_data("CALKINI", "4001", "CALKINI", file_path_2015)
 process_data("CAMPECHE", "4002", "CAMPECHE", file_path_2015)
 process_data("CARMEN", "4003", "CARMEN", file_path_2015)
@@ -479,10 +479,10 @@ rm(data_2015)
 ##############################################
 
 # Load and process data for Carmen (2018)
-data_carmen_18 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx", sheet = "CARMEN")
+data_carmen_18 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2018/Ayuntamientos_2018.xlsx", sheet = "CARMEN")
 
 # Process for other municipalities
-data_hoja1 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx", sheet = "Hoja1") %>%
+data_hoja1 <- read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2018/Ayuntamientos_2018.xlsx", sheet = "Hoja1") %>%
   dplyr::filter(Municipio != "Carmen")
 
 # Combine Carmen with other municipalities for 2018
@@ -547,14 +547,14 @@ rm(data_2018)
 ##############################################
 
 # Load 2021 data except Hecelchakan
-data_2021_rest <- readxl::read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/ayuntamientos_2021.xlsx") %>%
+data_2021_rest <- readxl::read_excel("../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2021/ayuntamientos_2021.xlsx") %>%
   select(!contains("%"))
 
 names(data_2021_rest)
 
 # Load 2021 data from Hecelchakan
 data_2021_hec <- read_excel(
-  "../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/AYUNTAMIENTO HECELCHAKÁN-Casilla.xlsx",
+  "../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2021/AYUNTAMIENTO HECELCHAKÁN-Casilla.xlsx",
   skip = 7,
   col_names = c(
     "MUNICIPIO", "CASILLA", 
@@ -629,7 +629,7 @@ rm(data_2021_rest)
 ##############################################
 
 # Define the folder path
-folder_path <- "../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/"
+folder_path <- "../../../Data/Raw Electoral Data/Campeche - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2024/"
 
 names_standard <- c(
   "municipality", "casilla","PAN", "PAN_pct", "PRI", "PRI_pct", "PRD", "PRD_pct",

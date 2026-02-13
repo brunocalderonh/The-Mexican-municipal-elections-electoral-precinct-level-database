@@ -617,7 +617,7 @@ process_sheet <- function(sheet_name, municipality_name, uniqueid) {
     group_by(municipality, uniqueid, section) %>%
     summarize(across(listanominal:total, sum, na.rm = TRUE), .groups = "drop") # Collapse by municipality, uniqueid, and section
   
-  write_dta(data, paste0("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/",municipality_name, "_PS.dta"))
+  write_dta(data, paste0("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/",municipality_name, "_PS.dta"))
 }
 
 # Process each sheet
@@ -631,19 +631,19 @@ process_sheet("MANZANILLO", "MANZANILLO", 6007)
 process_sheet("MINATITLAN", "MINATITLAN", 6008)
 process_sheet("TECOMAN", "TECOMAN", 6009)
 process_sheet("VILLA DE ALVAREZ", "VILLA DE ALVAREZ", 6010)
-
+  
 # Step 2: Append all the processed files
 file_list <- c(
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/ARMERIA_PS.dta", 
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/COLIMA_PS.dta", 
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/COMALA_PS.dta",
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/COQUIMATLAN_PS.dta", 
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/CUAUHTEMOC_PS.dta", 
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/IXTLAHUACAN_PS.dta",
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/MANZANILLO_PS.dta", 
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/MINATITLAN_PS.dta", 
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/TECOMAN_PS.dta",
-  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/VILLA DE ALVAREZ_PS.dta"
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/ARMERIA_PS.dta", 
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/COLIMA_PS.dta", 
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/COMALA_PS.dta",
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/COQUIMATLAN_PS.dta", 
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/CUAUHTEMOC_PS.dta", 
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/IXTLAHUACAN_PS.dta",
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/MANZANILLO_PS.dta", 
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/MINATITLAN_PS.dta", 
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/TECOMAN_PS.dta",
+  "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/VILLA DE ALVAREZ_PS.dta"
 )
 
 # Load and append all files into a single dataframe
