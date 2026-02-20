@@ -25,11 +25,9 @@ setwd(file.path(script_dir, ""))
 
 
 # Set the working directory (adjust the path as needed)
-<<<<<<< HEAD
+
 Ayu_Seccion_1995_No_LN <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/1995/Ayu_Seccion_1995_No_LN.csv")
-=======
 Ayu_Seccion_1995_No_LN <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayu_Seccion_1995_No_LN.csv")
->>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 colnames(Ayu_Seccion_1995_No_LN) <- tolower(colnames(Ayu_Seccion_1995_No_LN))
 # Step 2: Rename columns
 Ayu_Seccion_1995_No_LN <- Ayu_Seccion_1995_No_LN %>%
@@ -139,11 +137,9 @@ collapsed_1995 <- collapsed_1995 %>%
     turnout = total / listanominal)
 
 # Step 1: Load the CSV file
-<<<<<<< HEAD
+
 Ayu_Seccion_1998_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/1998/Ayu_Seccion_1998_No_LN.csv")
-=======
 Ayu_Seccion_1998_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayu_Seccion_1998_No_LN.csv")
->>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 colnames(Ayu_Seccion_1998_No_LN) <- tolower(colnames(Ayu_Seccion_1998_No_LN))
 
 # Step 2: Rename columns
@@ -260,11 +256,9 @@ collapsed_1998 <- collapsed_1998 %>%
   )
 
 # Step 1: Load and process the first CSV file
-<<<<<<< HEAD
 Ayu_Seccion_2001_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2001/Ayu_Seccion_2001_No_LN.csv") 
-=======
+
 Ayu_Seccion_2001_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayu_Seccion_2001_No_LN.csv") 
->>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 colnames(Ayu_Seccion_2001_No_LN) <- tolower(colnames(Ayu_Seccion_2001_No_LN))
 
 Ayu_Seccion_2001_No_LN <- Ayu_Seccion_2001_No_LN %>%
@@ -277,11 +271,9 @@ Ayu_Seccion_2001_No_LN <- Ayu_Seccion_2001_No_LN %>%
   mutate(across(pan:total, as.numeric))
 
 # Step 2: Load and process the second CSV file
-<<<<<<< HEAD
 durango_data <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2001/Durango_Seccion_2001_No_LN.csv") 
-=======
+
 durango_data <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Durango_Seccion_2001_No_LN.csv") 
->>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 colnames(durango_data) <- tolower(colnames(durango_data))
 
 
@@ -407,11 +399,9 @@ lista_nominal <- read_excel("../../../Data/Raw Electoral Data/Durango - 1995, 19
   summarize(listanominal = sum(listanominal, na.rm = TRUE), .groups = "drop")
 
 # Step 2: Import and process the CSV file
-<<<<<<< HEAD
 Ayu_Seccion_2004_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2004/Ayu_Seccion_2004_No_LN.csv")
-=======
+
 Ayu_Seccion_2004_No_LN <- read.csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayu_Seccion_2004_No_LN.csv")
->>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 colnames(Ayu_Seccion_2004_No_LN) <- tolower(colnames(Ayu_Seccion_2004_No_LN))
 
 Ayu_Seccion_2004_No_LN <- Ayu_Seccion_2004_No_LN %>%
@@ -620,11 +610,9 @@ collapsed_2007 <- collapsed_2007 %>%
   arrange(section)
 
 # Step 1: Import and clean the data
-<<<<<<< HEAD
 Ayu_Seccion_2010 <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2010/Ayu_Seccion_2010.csv")
-=======
+
 Ayu_Seccion_2010 <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayu_Seccion_2010.csv")
->>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 
 colnames(Ayu_Seccion_2010) <- tolower(colnames(Ayu_Seccion_2010))
 
@@ -717,11 +705,8 @@ collapsed_2010 <- collapsed_2010 %>%
   arrange(section)
 
 # Step 1: Import and clean the data
-<<<<<<< HEAD
 Ayu_Seccion_2013 <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2013/Ayu_Seccion_2013.csv")
-=======
 Ayu_Seccion_2013 <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayu_Seccion_2013.csv")
->>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 
 colnames(Ayu_Seccion_2013) <- tolower(colnames(Ayu_Seccion_2013))
 
@@ -823,11 +808,9 @@ collapsed_2013 <- collapsed_2013 %>%
   arrange(section)
 summary(collapsed_2013)
 # Step 1: Import and process sheets from the Excel file
-<<<<<<< HEAD
 file_path <- "../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2016/Ayuntamientos Municipio_2016.xlsx"
-=======
+
 file_path <- "../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/Ayuntamientos Municipio_2016.xlsx"
->>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 sheet_names <- excel_sheets(file_path)
 
 # Import each sheet and save it as an individual data frame
@@ -962,11 +945,10 @@ collapsed_2016 <- collapsed_2016 %>%
   )
 
 # Load the data
-<<<<<<< HEAD
+
 data <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019/2019/2019_SEE_AYUN _DGO_CAS.csv")
-=======
+
 data <- read_csv("../../../Data/Raw Electoral Data/Durango - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2022,2025/2019_SEE_AYUN _DGO_CAS.csv")
->>>>>>> f57cf9ccf9a49a58dfc1d1b9b7c20e94f7192338
 colnames(data) <- tolower(colnames(data))
 # Rename columns
 data <- data %>%
