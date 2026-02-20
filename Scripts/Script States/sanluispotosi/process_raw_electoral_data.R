@@ -8,8 +8,14 @@ options(scipen=10)
 
 if (!require("pacman")) install.packages("pacman")  # load packages
 
-pacman::p_load (dplyr, haven, readxl, tidyverse, tidyr, openxlsx, data.table, 
-                stringr, janitor, purrr)
+pacman::p_load (dplyr
+                , haven
+                , readstata13
+                , readxl
+                , tidyverse
+                , tidyr
+                , openxlsx
+                , data.table)
 
 # Set working directory
 # Get the path of the current script
@@ -953,7 +959,7 @@ df_2015 <- df_2015 %>%
 # Collapse by municipality, uniqueid, section
 df_2015 <- df_2015 %>%
   group_by(municipality, uniqueid, section) %>%
-  summarise(across(where(is.numeric), \(x) mean(x, na.rm = TRUE)), .groups = "drop")
+  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop")
 
 # Standardize column names
 party_cols_2015 <- c("PAN", "PRI", "PRD", "PT", "PVEM", "PCP", "PANAL", "PH", "MORENA", "PES", "MC")
@@ -986,49 +992,47 @@ cat("2015:", nrow(df_2015), "rows\n")
 xlsx_path_2018 <- "../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2018/MunicipiosSLP_2018.xlsx"
 sheets_2018 <- excel_sheets(xlsx_path_2018)
 
+
 df_2018_list <- lapply(sheets_2018, function(sheet) {
   tryCatch({
     temp <- read_excel(xlsx_path_2018, sheet = sheet, col_types = "text") %>%
       mutate(municipality = sheet) %>%
-      filter(!is.na("CASILLA / ACTA"), "CASILLA / ACTA" != "") %>%
+      filter(!is.na(CASILLAACTA), CASILLAACTA != "") %>%
       mutate(across(everything(), ~replace(., . == "", "0")))
     return(temp)
   }, error = function(e) return(NULL))
 })
 
+
 df_2018 <- bind_rows(df_2018_list) %>%
-  rename(CASILLAACTA = "CASILLA / ACTA") %>% 
-  select(-any_of(c("O", "P", "section", "CASILLA /ACTA"))) %>%
+  select(-any_of(c("O", "P", "section"))) %>%
   mutate(SECCION = substr(CASILLAACTA, 1, 4)) %>%
-  mutate(across(-c(municipality, CASILLAACTA, SECCION), as.numeric)) %>% 
-  mutate(
-    `PRI-PVEM-PCP` = rowSums(across(any_of(c("PRI-PVEM-PCP", "PRI,PVEM,PCP"))), na.rm = TRUE),
-    `PVEM-PNA`     = rowSums(across(any_of(c("PVEM-PNA",     "PVEM,PNA"))),     na.rm = TRUE),
-    `PRI-PVEM`     = rowSums(across(any_of(c("PRI-PVEM",     "PRI,PVEM"))),     na.rm = TRUE),
-    `PRI-PNA`      = rowSums(across(any_of(c("PRI-PNA",      "PRI,PNA"))),      na.rm = TRUE)
-  ) %>%
-  select(-any_of(c("PRI,PVEM,PCP", "PVEM,PNA", "PRI,PVEM", "PRI,PNA"))) %>%
-  rename_with(~ gsub("[-,]", "", .))
+  mutate(across(-c(municipality, CASILLAACTA, SECCION), as.numeric))
+
 
 # Fix row 3011 per SALVADOR
 if (nrow(df_2018) >= 3011 && "PTMORENAPES" %in% names(df_2018)) {
   df_2018$PTMORENAPES[3011] <- 0
 }
 
+
 # Rename columns per SALVADOR
 df_2018 <- df_2018 %>%
   rename_with(~gsub("PMC", "MC", .)) %>%
   rename_with(~gsub("PNA", "PANAL", .))
+
 
 # Merge with uniqueids
 uniqueids_slp <- read_excel(
   "../../../Data/Raw Electoral Data/San Luis Potosi - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Other/uniqueids.xlsx"
 )
 
+
 df_2018 <- df_2018 %>%
   left_join(uniqueids_slp, by = "municipality") %>%
   mutate(municipality = coalesce(municipality2, municipality)) %>%
   select(-municipality2)
+
 
 # Process coalitions per SALVADOR
 # PAN-PRD-MC coalition
@@ -1050,6 +1054,7 @@ if (all(c("PANPRDMC", "PANPRD", "PRDMC", "PANMC", "PAN", "PRD", "MC") %in% names
     rename(PAN_PRD_MC = PANPRDMC, PAN_MC = PANMC)
 }
 
+
 # PT-MORENA-PES coalition
 if (all(c("PTMORENAPES", "PTMORENA", "PTPES", "MORENAPES", "PT", "MORENA", "PES") %in% names(df_2018))) {
   df_2018 <- df_2018 %>%
@@ -1065,6 +1070,7 @@ if (all(c("PTMORENAPES", "PTMORENA", "PTPES", "MORENAPES", "PT", "MORENA", "PES"
     select(-any_of(c("PTMORENA", "PTPES", "MORENAPES", "PES"))) %>%
     rename(PT_MORENA_PES = PTMORENAPES)
 }
+
 
 # PRI coalition processing
 if (all(c("PRIPVEMPCP", "PRIPVEMPANAL", "PVEMPANAL", "PRIPVEM", "PRIPANAL", 
@@ -1082,20 +1088,19 @@ if (all(c("PRIPVEMPCP", "PRIPVEMPANAL", "PVEMPANAL", "PRIPVEM", "PRIPANAL",
     )
 }
 
+
 # Rename CI column
 if ("CI" %in% names(df_2018)) {
   df_2018 <- df_2018 %>% rename(CI_1 = CI)
 }
 
-non_vote_cols <- c("obs", "CASILLAACTA", "SECCION", "municipality", "uniqueid")
-
 
 # Calculate total per SALVADOR
 df_2018 <- df_2018 %>%
   mutate(
-    uniqueid = if_else(is.na(uniqueid), assign_slp_uniqueid(municipality), uniqueid),
-    total = rowSums(across(-any_of(non_vote_cols)), na.rm = TRUE)
+    uniqueid = if_else(is.na(uniqueid), assign_slp_uniqueid(municipality), uniqueid)
   )
+
 
 # Collapse
 df_2018 <- df_2018 %>%
@@ -1103,8 +1108,8 @@ df_2018 <- df_2018 %>%
   mutate(section = as.numeric(section)) %>%
   select(-any_of(c("CNR", "VTN", "CASILLAACTA", "obs"))) %>%
   group_by(municipality, uniqueid, section) %>%
-  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") %>% 
-  filter(section > 0)
+  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop")
+
 
 # Merge with lista nominal
 ln_2018 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ListadoNominalPREP2018.dta") %>%
@@ -1112,14 +1117,17 @@ ln_2018 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ListadoNo
   rename(listanominal = ListadoNominalINE) %>%
   select(section, listanominal)
 
+
 df_2018 <- df_2018 %>%
   left_join(ln_2018, by = "section")
+
 
 # Calculate valid and finalize
 party_cols_2018 <- c("PAN_MC", "PRI", "PRD", "PT", "PVEM", "PCP", "PANAL", "MORENA", 
                      "PT_MORENA_PES", "PAN", "PRI_PVEM_PCP", "MC", "PAN_PRD_MC",
                      "PRI_PVEM_PANAL", "PVEM_PANAL", "PRI_PVEM", "PRI_PANAL",
                      "PRI_PANAL_PCP", "PRI_PVEM_PANAL_PCP", "PRI_PCP", "CI_1")
+
 
 df_2018 <- df_2018 %>%
   mutate(
@@ -1128,7 +1136,9 @@ df_2018 <- df_2018 %>%
     year = 2018, month = "July", STATE = "SAN LUIS POTOSI"
   )
 
+
 cat("2018:", nrow(df_2018), "rows\n")
+
 
 
 #####################################
@@ -1179,35 +1189,16 @@ data_2021 <- map_dfr(excel_files, read_municipality_file) %>%
     )
   ) %>%
   # Remove original columns
-  select(-c(Municipio, Municipo, Total, TOT, "Dto. Local", "Dto. local","Dto.Local", "Dto. Loc", "No. Mpo.", source))
+  select(-c(Municipio, Municipo, Total, TOT))
 
-vote_cols <- c("PAN","PRI","PRD","PT","PVEM","PCP","PMC","PNA","MORENA","PES",
-               "RSP","FXM","CNR","VTN","CI","PT,PVEM",
-               "PAN,PRI,PRD,PCP","PAN,PRI,PRD","PAN,PRI,PCP","PAN,PRD,PCP",
-               "PRI,PRD,PCP","PAN,PRI","PAN,PRD","PAN,PCP","PRI,PRD",
-               "PRI,PCP","PRD,PCP",
-               "ALIANZA PAN,PRD","ALIANZA PRI,PCP","ALIANZA PAN,PCP",
-               "ALIANZA PRI,PRD,PCP","ALIANZA PAN,PRI","ALIANZA PAN,PRI,PCP")
+
 # Rename columns
 data_2021 <- data_2021 %>%
-  mutate(
-    across(all_of(vote_cols), as.numeric),
-    `PAN,PRI,PCP` = rowSums(across(any_of(c("PAN,PRI,PCP", "ALIANZA PAN,PRI,PCP"))), na.rm = TRUE),
-    `PRI,PRD,PCP` = rowSums(across(any_of(c("PRI,PRD,PCP", "ALIANZA PRI,PRD,PCP"))), na.rm = TRUE),
-    `PAN,PRI` = rowSums(across(any_of(c("PAN,PRI", "ALIANZA PAN,PRI"))), na.rm = TRUE),
-    `PAN,PRD` = rowSums(across(any_of(c("PAN,PRD", "ALIANZA PAN,PRD"))), na.rm = TRUE),
-    `PAN,PCP` = rowSums(across(any_of(c("PAN,PCP", "ALIANZA PAN,PCP"))), na.rm = TRUE),
-    `PAN,PRI,PRD,PCP` = rowSums(across(any_of(c("PAN,PRI,PRD,PCP", "ALIANZA PAN,PRI,PRD,PCP"))), na.rm = TRUE),
-    `PRI,PCP` = rowSums(across(any_of(c("PRI,PCP", "ALIANZA PRI,PCP"))), na.rm = TRUE)
-  ) %>%
-  select(-any_of(c("ALIANZA PAN,PRI,PCP", "ALIANZA PRI,PRD,PCP", 
-                   "ALIANZA PAN,PRI", "ALIANZA PAN,PRD", "ALIANZA PAN,PCP",
-                   "ALIANZA PAN,PRI,PRD,PCP", "ALIANZA PRI,PCP"))) %>%
   dplyr::rename(no_reg = CNR,
                 nulos = VTN,
                 CI_1 = CI,
                 PANAL = PNA) %>%
-  rename_with(~ gsub("ALIANZA ", "", .x)) %>%
+  rename_with(~ gsub("ALIANZA ", "CC_", .x)) %>%
   rename_with(~ gsub(",", "_", .x)) %>% 
   dplyr::mutate(
     section = as.numeric(str_extract(Casilla, "\\d{4}(?=[A-Z])")),
@@ -1221,6 +1212,7 @@ data_2021 <- data_2021 %>%
     municipality = gsub("Ñ", "N", municipality),
     municipality = case_when(municipality == "AHULULCO" ~ "AHUALULCO",
                              TRUE ~ municipality),
+    across(PAN:CC_PAN_PRI_PCP, as.numeric),
     total = as.numeric(total)
   ) %>% 
   dplyr::filter(section > 0)
@@ -1295,9 +1287,10 @@ data_2021 <- data_2021 %>%
 collapsed_2021 <- data_2021 %>%
   dplyr::group_by(municipality, section, uniqueid) %>%
   dplyr::summarise(
-    across(c(PAN:total, total), 
+    across(c(PAN:CC_PAN_PRI_PCP, total), 
            \(x) sum(x, na.rm = TRUE))
-  )
+  ) %>% 
+  dplyr::select(-c("Dto. Local", source, "Dto. local", "Dto. Loc", "Dto.Local", "No. Mpo."))
 
 # Load the Lista Nominal 2021 data and filter by criteria
 ln_2021 <- read_excel("../../../Data/Raw Electoral Data/Listas Nominales/listanom_pef21.xlsx", skip = 3, 
@@ -1317,7 +1310,7 @@ collapsed_2021 <- collapsed_2021 %>%
 collapsed_2021 <- collapsed_2021 %>%
   dplyr::mutate(
     turnout = total/listanominal,
-    valid = sum(c_across(c(PAN:PRD_PCP, MORENA:CI_1)), na.rm = TRUE),
+    valid = sum(c_across(c(PAN:PRD_PCP, MORENA:CC_PAN_PRI_PCP)), na.rm = TRUE),
     year = 2021,
     month = "June"
   )

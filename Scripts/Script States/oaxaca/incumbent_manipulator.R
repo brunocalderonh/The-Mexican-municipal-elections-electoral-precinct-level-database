@@ -19,7 +19,7 @@ setwd(file.path(script_dir, "../../../"))
 mag_db <- read.csv("Data/incumbent data/incumbent magar/aymu.incumbents-mex-pue.csv")
 
 mag_db <- mag_db %>%
-  filter(edon == 20 & yr < 2020)
+  filter(edon == 20)
 
 # Get unique municipality names from mag_db
 unique_municipios_mag <- unique(mag_db$mun)
@@ -65,10 +65,7 @@ newmag <- read.csv("Data/incumbent data/new incumbent magar/aymu1989-on.incumben
          margin = as.numeric(margin)) %>% 
   select(uniqueid, year, incumbent_party_magar, incumbent_candidate_magar, runnerup_party_magar, runnerup_candidate_magar, margin) %>%
   mutate(incumbent_party_magar = toupper(incumbent_party_magar)) %>% 
-  mutate(runnerup_party_magar = toupper(runnerup_party_magar)) %>% 
-  group_by(uniqueid, year) %>%
-  slice(min(2, n())) %>%
-  ungroup() 
+  mutate(runnerup_party_magar = toupper(runnerup_party_magar)) 
 
 # Magar complete
 mag_db <- bind_rows(mag_db, newmag)
@@ -85,6 +82,7 @@ write_csv(mag_db, output_path)
 ####JL incumbent####
 # Read the CSV file
 jl_db <- read.csv("Data/incumbent data/incumbent JL/incumbent_JL.csv")
+
 
 jl_db <- jl_db %>%
   filter(CVE_ENTIDAD == 20) %>%
@@ -107,6 +105,7 @@ output_path <- file.path(output_dir, "incumbent_JL.csv")
 
 # Use write_csv to save the file
 write_csv(jl_db, output_path)
+
 
 
 #### MERGE INTO FINAL DB - INCUMBENT + VOTE ####
