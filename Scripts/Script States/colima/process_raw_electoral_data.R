@@ -25,7 +25,7 @@ setwd(file.path(script_dir, ""))
 
 #######################-------------------1994---------------###############################
 
-ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1994_No_LN.csv")
+ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1994/Ayu_Seccion_1994_No_LN.csv")
 colnames(ayu_seccion) <- tolower(colnames(ayu_seccion))
 # Step 2: Rename columns
 ayu_seccion <- ayu_seccion %>%
@@ -111,7 +111,7 @@ collapsed_1994 <- collapsed_1994 %>%
 #######################-------------------1997---------------###############################
 
 # Step 1: Load the CSV file
-ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997.csv")
+ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1997/Ayu_Seccion_1997.csv")
 colnames(ayu_seccion) <- tolower(colnames(ayu_seccion))
 colnames(ayu_seccion) <- gsub("\\.", "", colnames(ayu_seccion))
 # Step 2: Rename columns
@@ -190,7 +190,7 @@ collapsed_1997 <- collapsed_1997 %>%
 
 #######################-------------------2000---------------###############################
 
-ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000_No_LN.csv")
+ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2000/Ayu_Seccion_2000_No_LN.csv")
 colnames(ayu_seccion) <- tolower(colnames(ayu_seccion))
 colnames(ayu_seccion) <- gsub("\\.", "", colnames(ayu_seccion))
 # Step 2: Rename columns
@@ -289,7 +289,7 @@ collapsed_2000 <- collapsed_2000 %>%
 
 
 # Step 1: Load the CSV file
-ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv")
+ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003.csv")
 colnames(ayu_seccion) <- gsub("\\.", "", colnames(ayu_seccion))
 # Step 2: Rename columns
 ayu_seccion <- ayu_seccion %>%
@@ -358,7 +358,7 @@ collapsed_2003 <- collapsed_2003 %>%
 #######################-------------------2006---------------###############################
 
 # Step 1: Load the CSV file
-ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.csv")
+ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2006/Ayu_Seccion_2006.csv")
 colnames(ayu_seccion) <- tolower(colnames(ayu_seccion))
 colnames(ayu_seccion) <- gsub("\\.", "", colnames(ayu_seccion))
 # Step 2: Rename columns
@@ -431,7 +431,7 @@ collapsed_2006 <- collapsed_2006 %>%
 #######################-------------------2009---------------###############################
 
 # Step 1: Load the CSV file
-ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.csv")
+ayu_seccion <- read.csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2009/Ayu_Seccion_2009.csv")
 colnames(ayu_seccion) <- tolower(colnames(ayu_seccion))
 colnames(ayu_seccion) <- gsub("\\.", "", colnames(ayu_seccion))
 
@@ -590,7 +590,7 @@ collapsed_2012 <- collapsed_2012 %>%
 process_sheet <- function(sheet_name, municipality_name, uniqueid) {
   # Load the Excel sheet
   data <- read_excel(
-    "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/RESULTADOS ELECTORALES DE AYUNTAMIENTO ELECCION 2014-2015.xls",
+    "../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/RESULTADOS ELECTORALES DE AYUNTAMIENTO ELECCION 2014-2015.xls",
     sheet = sheet_name,
     na = "",
     guess_max = 10000
@@ -765,7 +765,7 @@ collapsed_2018 <- collapsed_2018 %>%
 #####################################
 
 # Load the 2021 dataset from the CSV
-data_2021 <- read_csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/2021_SEE_AYUN_COL_CAS.csv")
+data_2021 <- read_csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2021/2021_SEE_AYUN_COL_CAS.csv")
 
 names(data_2021)
 
@@ -911,7 +911,7 @@ collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>%
 #####################################
 
 # Load the 2024 dataset from the CSV
-data_2024 <- read_csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/Base_Ayuntamientos_de_2024.csv", locale = locale(encoding = "latin1"))
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Colima - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2024/Base_Ayuntamientos_de_2024.csv", locale = locale(encoding = "latin1"))
 
 names(data_2024)
 
