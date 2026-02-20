@@ -29,7 +29,7 @@ setwd(file.path(script_dir, ""))
 ###########################################
 
 # Load the 1996 dataset
-data_1996 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayu_Seccion_1996_No_LN.csv")
+data_1996 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/1996/Ayu_Seccion_1996_No_LN.csv")
 
 # Convert column names to lowercase
 data_1996 <- data_1996 %>% rename_with(tolower)
@@ -232,7 +232,7 @@ summary(collapsed_1996)
 ###########################################
 
 # Step 1: Read the 1999 CSV data
-data_1999 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayu_Seccion_1999_No_LN.csv")
+data_1999 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/1999/Ayu_Seccion_1999_No_LN.csv")
 
 # Convert column names to lowercase
 data_1999 <- data_1999 %>% rename_with(tolower)
@@ -406,7 +406,7 @@ pdln12_collapsed <- pdln12_data %>%
   summarise(listanominal = sum(listanominal, na.rm = TRUE))
 
 # Step 2: Process the 2002 CSV data (Ayu_Seccion_2002_No_LN.csv)
-data_2002 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayu_Seccion_2002_No_LN.csv")
+data_2002 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2002/Ayu_Seccion_2002_No_LN.csv")
 
 # Rename columns
 data_2002 <- data_2002 %>%
@@ -567,7 +567,7 @@ listanominal_2005 <- listanominal_2005 %>%
   summarise(listanominal = sum(listanominal, na.rm = TRUE))
 
 # Read the 2005 CSV data
-data_2005 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayu_Seccion_2005_No_LN.csv") 
+data_2005 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2005/Ayu_Seccion_2005_No_LN.csv") 
 
 # Convert column names to lowercase
 data_2005 <- data_2005 %>% rename_with(tolower)
@@ -696,7 +696,7 @@ data_2005_collapsed <- data_2005_collapsed %>%
 ###########################################
 
 # Read the 2008 CSV data
-data_2008 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayu_Seccion_2008.csv") 
+data_2008 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2008/Ayu_Seccion_2008.csv") 
 # Convert column names to lowercase
 data_2008 <- data_2008 %>% rename_with(tolower)
 
@@ -831,7 +831,7 @@ data_2008_collapsed <- data_2008_collapsed %>%
 ###########################################
 
 # Read Excel data for 2009 special elections
-data_2009 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Resultados_eleccion_extraordinaria_2009.xls", sheet = "Extra Malinaltepec", range = "A8:J40") 
+data_2009 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2008/Resultados_eleccion_extraordinaria_2009.xls", sheet = "Extra Malinaltepec", range = "A8:J40") 
 names(data_2009)
 
 data_2009 <- data_2009 %>%
@@ -875,7 +875,7 @@ data_2009_collapsed <- data_2009_collapsed %>%
 ###########################################
 
 # Read the 2012 Excel data
-data_2012 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.xlsx", sheet = "Sheet1") %>%
+data_2012 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2012/Ayu_Seccion_2012.xlsx", sheet = "Sheet1") %>%
   rename(municipality = MUNICIPIO, section = SECCION, total = TOTALES) %>%
   filter(!(municipality == "" | section == "" | is.na(total) | total == 0))
 
@@ -999,7 +999,7 @@ summary(data_2012_collapsed)
 ###########################################
 ### Step 1: Process 2015 Data
 ###########################################
-data_2015 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/Ayuntamientos_Gro_2015.xlsx", 
+data_2015 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2015/Ayuntamientos_Gro_2015.xlsx", 
                         sheet = "Ayuntamientos") %>%
   mutate(across(uniqueid:"coal prd pt pan", as.numeric))
 
@@ -1056,7 +1056,7 @@ data_2015_collapsed <- data_2015_collapsed %>%
 #------------------------------------------------------------
 # Step 1: Import communal candidates 2018.xlsx, sheet MUNCAND
 
-mun_data <- fread("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/communal_candidates_2018.csv")
+mun_data <- fread("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2018/communal_candidates_2018.csv")
 
 # Step 3: For each var in PAN_PRD_MC - MORENA_ES,
 # replace var=0 if var==. and var=1 if var>0
@@ -1079,7 +1079,7 @@ mun_data <- mun_data %>%
 
 #------------------------------------------------------------
 # Step 6: import delimited "2018_SEE_GRO_CAS_AYUN.csv"
-see_data <- fread("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2018_SEE_GRO_CAS_AYUN.csv")
+see_data <- fread("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2018/2018_SEE_GRO_CAS_AYUN.csv")
 
 names(see_data)
 # replace PAN_PRD = v39 if PAN_PRD==.

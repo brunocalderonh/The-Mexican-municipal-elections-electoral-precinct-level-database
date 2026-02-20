@@ -27,7 +27,7 @@ setwd(file.path(script_dir, ""))
 # 1. Read data (Ayu_Seccion_1995.csv)
 #-------------------------------------------------------------
 
-data_1995 <- read_csv("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1995.csv", show_col_types = FALSE)
+data_1995 <- read_csv("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1995/Ayu_Seccion_1995.csv", show_col_types = FALSE)
 names(data_1995) <- tolower(names(data_1995))
 
 #-------------------------------------------------------------
@@ -127,7 +127,7 @@ data_1995 <- data_1995 %>% arrange(section)
 #--------------------------------------------
 # 1. Import Excel data (Ayu_Seccion_1997_No_LN.xlsx)
 #--------------------------------------------
-data_1997 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997_No_LN.xlsx") 
+data_1997 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1997/Ayu_Seccion_1997_No_LN.xlsx") 
 names(data_1997) <- tolower(names(data_1997))
 
 #--------------------------------------------
@@ -143,7 +143,7 @@ data_1997 <- data_1997 %>% filter(!(municipality == "" & is.na(section)))
 
 vars_to_num <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","total")
 data_1997 <- data_1997 %>% mutate(across(all_of(vars_to_num), as.numeric))
-
+names(data_1997)
 #--------------------------------------------
 # 3. Rename parties to uppercase versions
 #--------------------------------------------
@@ -317,7 +317,7 @@ data_1997 <- data_1997 %>%
 data_1997 <- data_1997 %>%
   mutate(seccion = section)
 
-names(data_1997)
+summary(data_1997)
 
 data_1997 <- data_1997 %>%
   group_by(municipality,uniqueid,section) %>%
@@ -336,14 +336,9 @@ data_1997 <- data_1997 %>%
   dplyr::mutate(listanominal = lista) %>% 
   dplyr::select(-lista)
 
-# drop _merge==2 not needed since we did left_join
-# drop _merge ed seccion year month
-drops <- c("year","month","validos" ,
-           "no reg.","nulos","state","day")
+names(data_1997)
+drops <- c("validos","no reg.","nulos")
 data_1997 <- data_1997 %>% select(-all_of(drops))
-
-# rename lista to listanominal
-data_1997 <- data_1997 %>% rename(listanominal = lista)
 
 #--------------------------------------------
 # 7. Create turnout
@@ -363,7 +358,7 @@ data_1997 <- data_1997 %>% arrange(section)
 #-------------------------------------------------------------
 # 1. Read data (Ayu_Seccion_2000_No_LN.csv)
 #-------------------------------------------------------------
-data_2000 <- read_csv("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000_No_LN.csv",
+data_2000 <- read_csv("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2000/Ayu_Seccion_2000_No_LN.csv",
                       show_col_types = FALSE)
 names(data_2000) <- tolower(names(data_2000))
 #-------------------------------------------------------------
@@ -380,6 +375,7 @@ data_2000 <- data_2000 %>%
 data_2000 <- data_2000 %>%
   filter(!(is.na(municipality) & is.na(section)))
 
+summary(data_2000)
 #-------------------------------------------------------------
 # 4. Drop "very weird cases"
 #-------------------------------------------------------------
@@ -544,7 +540,7 @@ data_2000 <- data_2000 %>%
 #    Save them as .dta if desired (omitting commented steps).
 # -----------------------------------------------------
 data_2003_main <- read_csv(
-  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003_No_LN.csv",
+  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003_No_LN.csv",
   show_col_types = FALSE
 )
 
@@ -556,7 +552,7 @@ data_2003_main <- data_2003_main %>%
 # write_dta(data_2003_main, "Ayu_Seccion_2003_No_LN.dta")
 
 data_2003_extra <- read_csv(
-  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003_No_LN_Extra.csv",
+  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003_No_LN_Extra.csv",
   show_col_types = FALSE
 )
 
@@ -836,7 +832,7 @@ data_2003 <- data_2003 %>%
 #-------------------------------------------------------------
 # 1. Import Excel data (Ayu_Seccion_2006_No_LN.xlsx)
 #-------------------------------------------------------------
-data_2006 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006_No_LN.xlsx")
+data_2006 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2006/Ayu_Seccion_2006_No_LN.xlsx")
 names(data_2006) <- tolower(names(data_2006)) # convert column names to lowercase to match case(lower)
 
 #-------------------------------------------------------------
@@ -1094,7 +1090,7 @@ summary(data_2006)
 #-------------------------------------------------------------
 # 1. Read Excel Data
 #-------------------------------------------------------------
-data_2009 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009_No_LN.xlsx")
+data_2009 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2009/Ayu_Seccion_2009_No_LN.xlsx")
 names(data_2009) <- tolower(names(data_2009))
 
 #-------------------------------------------------------------
@@ -1429,7 +1425,7 @@ data_2009 <- data_2009 %>% arrange(section)
 #-------------------------------------------------------------
 # 1. Import Excel data
 #-------------------------------------------------------------
-data_2012 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.xlsx", 
+data_2012 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2012/Ayu_Seccion_2012.xlsx", 
                         sheet = "CasillaXCasilla")
 
 # Convert column names to lowercase
@@ -1700,7 +1696,7 @@ data_2012 <- data_2012 %>%
 #-------------------------------------------------------------
 
 # Import Excel for 2015
-data_2015 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/ResultadosPorCasilla2015.xlsx", 
+data_2015 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/ResultadosPorCasilla2015.xlsx", 
                         sheet="RESULTADOS", 
                         guess_max=100000)
 
@@ -1846,21 +1842,13 @@ data_2015 <- data_2015 %>%
 
 data_2015 <- data_2015 %>% arrange(uniqueid, section)
 
-# ------------------------------------------------------------------
-# SETUP
-# ------------------------------------------------------------------
-rm(list = ls())
-cat("\014")
-options(max.print = 5000, scipen=10)
 
-if (!require("pacman")) install.packages("pacman")
-pacman::p_load(dplyr, haven, readxl, stringr, tidyr, data.table)
 
 # ------------------------------------------------------------------
 # 1. IMPORT EXCEL DATA 2018
 # ------------------------------------------------------------------
 data_2018 <- read_excel(
-  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx", 
+  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2018/Ayuntamientos_2018.xlsx", 
   sheet = "Ayuntamientos",
   guess_max = 100000  # to handle large sheets
 )
@@ -2008,9 +1996,9 @@ data_2018 <- data_2018 %>%
 #####################################
 
 # Load the 2021 data
-data_2021 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/resultados_ayuntamientos_casillas2021.xlsx", skip = 1)
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2021/resultados_ayuntamientos_casillas2021.xlsx", skip = 1)
 
-data_ext <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/resultados_casillaxcasilla-extraordinaria_tlaquepaque2021.xlsx") %>%
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2021/resultados_casillaxcasilla-extraordinaria_tlaquepaque2021.xlsx") %>%
   dplyr::rename(
     FXM = "FUERZA X MÉXICO",
     no_reg = "CANDIDATOS NO REGISTRADOS",
@@ -2236,7 +2224,7 @@ collapsed_2021 <- collapsed_2021 %>%
 #####################################
 
 # Load the 2024 data
-data_2024 <- read_csv("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/2024_SEE_AYUN_JAL_CAS.csv")
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2024/2024_SEE_AYUN_JAL_CAS.csv")
 
 names(data_2024)
 
@@ -2409,15 +2397,18 @@ collapsed_2024 <- collapsed_2024 %>%
 
 
 # Combine the dataframes, handling different columns by filling with NA
-jalisco_all <- bind_rows(data_1997,
+jalisco_all <- bind_rows(data_1995,
+                         data_1997,
                          data_2000,
                          data_2003,
+                         data_2003_extra,
                          data_2006,
                          data_2009,
                          data_2012,
                          data_2015,
                          data_2018,
                          collapsed_2021,
+                         colapsed_ext,
                          collapsed_2024)
 
 data.table::fwrite(jalisco_all,"../../../Processed Data/jalisco/jalisco_process_raw_data.csv")
