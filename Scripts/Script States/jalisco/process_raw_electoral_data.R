@@ -57,8 +57,10 @@ if("votaron" %in% names(data_1995)) {
 # 5. Generate total = rowtotal(pan pri pps prd pfcrn parm pdm pt pvem ppj nulos)
 vars_for_total <- c("pan","pri","pps","prd","pfcrn","parm","pdm","pt","pvem","ppj","nulos")
 vars_for_total <- intersect(vars_for_total, names(data_1995))
+
 data_1995 <- data_1995 %>%
-  mutate(total = rowSums(across(all_of(vars_for_total)), na.rm = TRUE))
+  mutate(total = rowSums(across(all_of(vars_for_total)), na.rm = TRUE),
+        uniqueid = (14000)+ municipality)
 
 #-------------------------------------------------------------
 # 6. Drop if total==. or total==0
