@@ -283,16 +283,12 @@ merged_data <- assign_state_incumbent_vote(merged_data)
 
 PRI_state_vote <- function(data) {
   
-  # Loop through each row of the data
   for (I in 1:nrow(data)) {
     state_incumbent_party <- data$state_incumbent_party[I]
     
-    # Check if state_incumbent_party contains "PRI"
-    if (str_detect(state_incumbent_party, "PRI")) {
-      # Find columns that contain "PRI" in their names
+    if (isTRUE(str_detect(state_incumbent_party, "PRI"))) {
       pri_columns <- names(data)[str_detect(names(data), "PRI")]
       
-      # Loop through each "PRI" column and assign the first valid value found
       for (pri_col in pri_columns) {
         if (!is.na(data[[pri_col]][I]) && data[[pri_col]][I] != 0) {
           data$state_incumbent_vote[I] <- data[[pri_col]][I]

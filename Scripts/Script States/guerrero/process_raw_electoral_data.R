@@ -1259,10 +1259,10 @@ summary(see_data_sum)
 #####################################
 
 # Load the 2021 dataset from the excel
-data_2021 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/21/2021_SEE_AYUN_GRO_SECCI‡N.xlsx", skip = 6) %>% 
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2021/2021_SEE_AYUN_GRO_SECCI‡N.xlsx", skip = 6) %>% 
   filter(!MUNICIPIO == "ILIATENCO")
 
-data_ext <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/21/2021_SEE_AYUN_GRO_CAS_ILIATENCO.xlsx", skip = 6)
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2021/2021_SEE_AYUN_GRO_CAS_ILIATENCO.xlsx", skip = 6)
 
 data_2021 <- bind_rows(data_2021,
                        data_ext)
@@ -1486,7 +1486,7 @@ collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>%
 #####################################
 
 # Load the 2024 dataset from the CSV
-data_2024 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/24/2024_SEE_AYUN_GRO_CAS.csv")
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Guerrero - 1996, 1999, 2002, 2005, 2008, 2012,2015,2018,2021,2024/2024/2024_SEE_AYUN_GRO_CAS.csv")
 
 # Rename columns
 data_2024 <- data_2024 %>%

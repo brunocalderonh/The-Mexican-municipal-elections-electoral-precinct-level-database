@@ -399,7 +399,7 @@ focused1 <- function(data) {
   # Initialize columns if they don't exist in the target data
   if (!"final_incumbent" %in% colnames(target_data)) {
     target_data <- target_data %>%
-      mutate(final_incumbent = NA)  # Track the specific column used
+      mutate(final_incumbent = NA)
   }
   
   # Loop through each row of the filtered data
@@ -416,16 +416,14 @@ focused1 <- function(data) {
     # Check for valid votes in the candidate columns
     valid_found <- FALSE
     for (var in candidate_vars) {
-      if (!is.na(target_data[[var]][I]) && target_data[[var]][I] != 0) {
+      if (isTRUE(!is.na(target_data[[var]][I]) && target_data[[var]][I] != 0 && target_data[[var]][I] != "")) {
         target_data$incumbent_vote[I] <- target_data[[var]][I]
         target_data$party_component[I] <- var
-        target_data$final_incumbent[I] <- var  # Track the specific column used
+        target_data$final_incumbent[I] <- var
         valid_found <- TRUE
         break
       }
     }
-    
-    # If no valid value is found, leave incumbent_vote, party_component, and final_incumbent as NA
   }
   
   # Update the original data with the modified rows
