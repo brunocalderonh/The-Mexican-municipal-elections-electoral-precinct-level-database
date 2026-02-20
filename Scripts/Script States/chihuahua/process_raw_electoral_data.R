@@ -759,7 +759,7 @@ data_ocampo <- data_ocampo %>%
 # Assign unique IDs based on municipality name & create total
 data_2024 <- data_2024 %>%
   dplyr::mutate(uniqueid = municipality_ids[municipality]) %>% 
-  filter(total > 0)
+  filter(total > 0 & section <= 3369)
 
 data_ocampo <- data_ocampo %>%
   dplyr::mutate(uniqueid = municipality_ids[municipality])
