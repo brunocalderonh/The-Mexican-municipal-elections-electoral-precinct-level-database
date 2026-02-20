@@ -2510,7 +2510,6 @@ jalisco_all <- bind_rows(data_1995,
                          data_2015,
                          data_2018,
                          collapsed_2021,
-                         colapsed_ext,
                          collapsed_2024)
 
 data.table::fwrite(jalisco_all,"../../../Processed Data/jalisco/jalisco_process_raw_data.csv")
