@@ -15,7 +15,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, "../../../"))
 
 # Read the Excel files
-state <- read.csv("Data/incumbent data/incumbent JL/incumbent_state_JL.csv")
+state <- read.csv("Data/incumbent data/incumbent JPZ/state_incumbents_jpz_2025.csv")
 db <- read_excel("Data/collapsed database manual cases/coahuila_collapsed_edited.xlsx")
 og <- read.csv("Processed Data/coahuila/coahuila_vote_calculator.csv")
 #create state ID for merging
@@ -389,35 +389,53 @@ merged_data <- correct_runnerup_vote (merged_data)
 
 correct_incumbent_vote_PRI <- function(data) {
   
-  # Initialize the `final_incumbent` column if it doesn't exist
-  if (!"final_incumbent" %in% colnames(data)) {
-    data <- data %>%
-      mutate(final_incumbent = NA)
+  # Ensure final_incumbent exists
+  if (!"final_incumbent" %in% names(data)) {
+    data <- data %>% dplyr::mutate(final_incumbent = NA)
   }
   
-  # Loop through each row and target specific observations
+  # Pick the best available party column
+  party_col_candidates <- c(
+    "incumbent_party_Horacio",
+    "researched_incumbent",
+    "incumbent_party_magar",
+    "incumbent_party_JL"
+  )
+  party_col <- party_col_candidates[party_col_candidates %in% names(data)][1]
+  
+  if (is.na(party_col) || length(party_col) == 0) {
+    stop("No incumbent party column found. Tried: ",
+         paste(party_col_candidates, collapse = ", "))
+  }
+  
+  # Precompute PRI columns once
+  pri_columns <- names(data)[stringr::str_detect(names(data), "PRI")]
+  
   for (I in 1:nrow(data)) {
     
-    # Check if the row matches the specified criteria
-    if (data$uniqueid[I] == 5001 && data$year[I] == 2006 && data$section[I] %in% c(1, 2) && data$incumbent_party_Horacio[I] == "PRI") {
+    uid <- data$uniqueid[I]
+    yr  <- data$year[I]
+    sec <- data$section[I]
+    inc_party <- data[[party_col]][I]
+    
+    # NA-guard
+    if (is.na(uid) || is.na(yr) || is.na(sec) || is.na(inc_party)) next
+    
+    if (uid == 5001 && yr == 2006 && sec %in% c(1, 2) && inc_party == "PRI") {
       
-      # Find columns that contain "PRI" in their names
-      pri_columns <- names(data)[str_detect(names(data), "PRI")]
-      
-      # Loop through each "PRI" column and assign the first non-NA value to `incumbent_vote`
       for (col in pri_columns) {
-        if (!is.na(data[[col]][I]) && data[[col]][I] != 0) {
-          data$incumbent_vote[I] <- data[[col]][I]
-          data$final_incumbent[I] <- col  # Track the column used
+        val <- data[[col]][I]
+        if (!is.na(val) && val != 0) {
+          data$incumbent_vote[I] <- val
+          data$final_incumbent[I] <- "PRI"  # <-- or `col` if you want the exact vote column name
           break
         }
       }
     }
   }
   
-  return(data)
+  data
 }
-
 # Example usage
 merged_data <- correct_incumbent_vote_PRI(merged_data)
 

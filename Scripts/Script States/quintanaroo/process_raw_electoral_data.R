@@ -30,20 +30,22 @@ setwd(file.path(script_dir, ""))
 
 
 # 1) 
-df <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
-colnames(df) <- tolower(colnames(df))
+ # df <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
+# colnames(df) <- tolower(colnames(df))
 ##############################################################################
 # 1) AYUNTAMIENTO 1999
 ##############################################################################
 # Equivalent to: insheet using Ayu_Seccion_1999.csv, clear
 
-df_1999 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_1999.csv") 
+df_1999 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/1999/Ayu_Seccion_1999.csv")
 colnames(df_1999) <- tolower(colnames(df_1999))
 df_1999 <- df_1999 %>%
   # rename municipio -> municipality, seccion -> section
   rename(
     municipality = municipio,
-    section      = seccion
+    section      = seccion,
+    listanominal = "lista nominal",
+    noregistrados = "no registrados"
   ) %>%
   # drop if section==. | total==0
   filter(!is.na(section), total != 0)
@@ -78,29 +80,20 @@ df_1999 <- df_1999 %>%
     .groups      = "drop"
   )
 
-# Merge with all_months_years.dta (ed=23, seccion=section)
-df_1999 <- df_1999 %>%
-  mutate(
-    ed      = 23,
-    seccion = section
-  )
-
 # Read the .dta to replicate "merge 1:m ed seccion using ..."
-df_all_months_years <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista) %>%
-  # keep if month==3 & year==1999
-  filter(month == 3, year == 1999)
+df_all_months_years <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter(state == "QUINTANA ROO" & year == 1999)
 
 df_1999 <- df_1999 %>%
-  left_join(df_all_months_years, by = c("ed","seccion"))
+  left_join(df_all_months_years, by = c("section"))
 
 # drop if _merge==2 => in R, we remove rows with no match (NA in month/year/lista)
 df_1999 <- df_1999 %>%
-  filter(!is.na(month), !is.na(year), !is.na(lista))
+  filter(!is.na(month), !is.na(year), !is.na(listanominal))
 
 # drop _merge ed seccion year month
 df_1999 <- df_1999 %>%
-  select(-ed, -seccion, -year, -month)
+  select(-year, -month)
 
 # replace listanominal = lista if missing>=1 & lista>listanominal
 df_1999 <- df_1999 %>%
@@ -162,11 +155,11 @@ df_1999 <- df_1999[order(df_1999$section), ]
 ##############################################################################
 # 2) AYUNTAMIENTO 2002
 ##############################################################################
-df_2002 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2002_No_Municipios.csv")
+df_2002 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/2002/Ayu_Seccion_2002_No_Municipios.csv")
 colnames(df_2002) <- tolower(colnames(df_2002))
 
 df_2002 <- df_2002 %>%
-  rename(section = seccion, total = vtotal) %>%
+  rename(section = seccion, total = vtotal, noregistrados = "no registrados") %>%
   filter(!is.na(section), total != 0)
 
 # destring pan - total
@@ -210,7 +203,7 @@ df_2002 <- df_2002 %>%
   select(-noregistrados, -nulos)
 
 # Merge with Quintana_Roo_Section_to_Merge_Municipalities_2002.dta
-df_merge_2002_muni <- read_dta("Quintana_Roo_Section_to_Merge_Municipalities_2002.dta")
+df_merge_2002_muni <- read_dta("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/2002/Quintana_Roo_Section_to_Merge_Municipalities_2002.dta")
 
 df_2002 <- df_2002 %>%
   left_join(df_merge_2002_muni, by = "section") %>%
@@ -254,7 +247,7 @@ df_2002 <- df_2002 %>%
 ##############################################################################
 # 3) AYUNTAMIENTO 2005
 ##############################################################################
-df_2005 <- fread("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2005_No_Municipios.csv",
+df_2005 <- fread("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/2005/Ayu_Seccion_2005_No_Municipios.csv",
                  encoding = "Latin-1") 
 # Remove "-" and spaces
 colnames(df_2005) <- tolower(colnames(df_2005))
@@ -262,7 +255,8 @@ names(df_2005) <- gsub("[- ]", "", names(df_2005))
 
 df_2005 <- df_2005 %>%
   rename(section = seccion,
-         total   = votostotales) %>%
+         total   = votostotales,
+         votosvlidos = "votosválidos") %>%
   filter(!is.na(section), total != 0)
 
 # destring panpc - total
@@ -293,7 +287,7 @@ df_2005 <- df_2005 %>%
   select(-votosnulos, -votosvlidos)
 
 # Merge with 2002 municipality references (the same .dta used in code)
-df_merge_2005_muni <- read_dta("Quintana_Roo_Section_to_Merge_Municipalities_2002.dta")
+df_merge_2005_muni <- read_dta("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/2002/Quintana_Roo_Section_to_Merge_Municipalities_2002.dta")
 df_2005 <- df_2005 %>%
   left_join(df_merge_2005_muni, by = "section") %>%
   filter(!is.na(municipality))
@@ -307,7 +301,7 @@ df_2005 <- df_2005 %>%
   )
 
 # Merge listanominal2005
-df_listanom_2005 <- read_dta("Listanominal2005.dta")
+df_listanom_2005 <- read_dta("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/2005/Listanominal2005.dta")
 df_2005 <- df_2005 %>%
   left_join(df_listanom_2005, by = "section") %>%
   filter(!is.na(listanominal))
@@ -326,7 +320,7 @@ df_2005 <- df_2005 %>%
 ##############################################################################
 # 4) AYUNTAMIENTO 2008
 ##############################################################################
-df_2008 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2008.csv") 
+df_2008 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/2008/Ayu_Seccion_2008.csv") 
 # Remove "-" and spaces
 colnames(df_2008) <- tolower(colnames(df_2008))
 names(df_2008) <- gsub("[- ]", "", names(df_2008))
@@ -399,7 +393,7 @@ df_2008 <- df_2008 %>%
 ##############################################################################
 # 5) Tulum Extraordinario 2009
 ##############################################################################
-df_2009 <- read_xlsx("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Tulum Extraordinario 2009.xlsx") %>%
+df_2009 <- read_xlsx("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/2009/Tulum Extraordinario 2009.xlsx") %>%
   rename(section = Sección) %>%
   filter(section != "", section != "TOTALES")
 names(df_2009) <- gsub("[- ]", "", names(df_2009))
@@ -439,7 +433,7 @@ df_2009 <- df_2009 %>%
 ##############################################################################
 # 6) AYUNTAMIENTO 2010
 ##############################################################################
-df_2010 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2010.csv") 
+df_2010 <- read_csv("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/2010/Ayu_Seccion_2010.csv") 
 names(df_2010) <- gsub("[- ]", "", names(df_2010))
 colnames(df_2010) <- tolower(colnames(df_2010))
 
@@ -477,18 +471,14 @@ df_2010 <- df_2010 %>%
     nulos         = sum(nulos, na.rm = TRUE),
     total         = sum(total, na.rm = TRUE),
     .groups       = "drop"
-  ) %>%
-  mutate(
-    ed      = 23,
-    seccion = section
-  )
+  ) 
 
 # Merge with all_months_years.dta
 df_2010 <- df_2010 %>%
-  left_join(df_all_months_years, by = c("ed","seccion")) %>%
-  filter(month == 6, year == 2010) %>%
+  left_join(df_all_months_years, by = c("section")) %>%
+  filter(month == "June", year == 2010) %>%
   filter(!is.na(month), !is.na(year), !is.na(lista)) %>%
-  select(-ed, -seccion, -year, -month)
+  select(-year, -month)
 
 df_2010 <- df_2010 %>%
   mutate(
@@ -551,7 +541,7 @@ all_data <- bind_rows(
 ##############################################################################
 
 # --- Step 1: Read each sheet from "Ayuntamientos_QRoo_2016.xlsx" ---
-excel_file_2016 <- "../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/Ayuntamientos_QRoo_2016.xlsx"
+excel_file_2016 <- "../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/2016/Ayuntamientos_QRoo_2016.xlsx"
 
 # 1) Identify all sheet names
 sheet_names_2016 <- excel_sheets(excel_file_2016)
@@ -566,30 +556,29 @@ for (sname in sheet_names_2016) {
   # Replace empty strings "" with "0" in all columns
   df_sheet[] <- lapply(df_sheet, function(x) ifelse(x == "", "0", x))
   
-  # Save to .dta (similar to "save `sheetname'.dta, replace")
-  # We'll name it something like "Table 2.dta", "Table 4.dta", etc.
-  # If your sheet name is actually "Table 2", then do:
-  # (Better is to make the filename R-friendly, e.g. replace spaces with underscores)
+  # Replace hyphens with underscores in column names (Stata compatibility)
+  names(df_sheet) <- str_replace_all(names(df_sheet), "-", "_")
+  
+  # Also replace other problematic characters in column names
+  names(df_sheet) <- str_replace_all(names(df_sheet), "[^A-Za-z0-9_]", "_")
   
   # For demonstration, we just remove illegal filename characters:
   safe_sname <- str_replace_all(sname, "[^A-Za-z0-9_\\.]", "_")
   write_dta(df_sheet, paste0(safe_sname, ".dta"))
 }
 
-# --- Step 2: Append the .dta files read from each sheet ---
-
-# Example: 
+# --- Step 2: Update file names to match what was actually saved ---
 files_to_append_2016 <- c(
-  "Table 2.dta","Table 4.dta","Table 6.dta","Table 8.dta","Table 10.dta",
-  "Table 12.dta","Table 14.dta","Table 16.dta","Table 18.dta","Table 20.dta",
-  "Table 22.dta","Table 24.dta","Table 26.dta","Table 28.dta","Table 30.dta",
-  "Table 32.dta","Table 34.dta","Table 36.dta","Table 38.dta","Table 40.dta",
-  "Table 42.dta","Table 44.dta","Table 48.dta","Table 50.dta","Table 52.dta",
-  "Table 56.dta","Table 58.dta","Table 64.dta","Table 68.dta","Table 74.dta",
-  "Table 80.dta","Table 82.dta","Table 84.dta","Table 86.dta","Table 88.dta",
-  "Table 90.dta","Table 92.dta","Table 98.dta","Table 100.dta","Table 102.dta",
-  "Table 104.dta","Table 106.dta","Table 108.dta","Table 110.dta","Table 114.dta",
-  "Table 116.dta","Table 120.dta","Table 126.dta"
+  "Table_2.dta","Table_4.dta","Table_6.dta","Table_8.dta","Table_10.dta",
+  "Table_12.dta","Table_14.dta","Table_16.dta","Table_18.dta","Table_20.dta",
+  "Table_22.dta","Table_24.dta","Table_26.dta","Table_28.dta","Table_30.dta",
+  "Table_32.dta","Table_34.dta","Table_36.dta","Table_38.dta","Table_40.dta",
+  "Table_42.dta","Table_44.dta","Table_48.dta","Table_50.dta","Table_52.dta",
+  "Table_56.dta","Table_58.dta","Table_64.dta","Table_68.dta","Table_74.dta",
+  "Table_80.dta","Table_82.dta","Table_84.dta","Table_86.dta","Table_88.dta",
+  "Table_90.dta","Table_92.dta","Table_98.dta","Table_100.dta","Table_102.dta",
+  "Table_104.dta","Table_106.dta","Table_108.dta","Table_110.dta","Table_114.dta",
+  "Table_116.dta","Table_120.dta","Table_126.dta"
 )
 
 all_2016 <- NULL
@@ -602,14 +591,20 @@ for (f in files_to_append_2016) {
     } else {
       all_2016 <- bind_rows(all_2016, temp_df)
     }
+  } else {
+    message(paste("File not found:", f))
   }
+}
+
+# Check if any files were loaded
+if (is.null(all_2016)) {
+  stop("No files were found! Check that the .dta files exist in the current directory.")
 }
 
 # --- Step 3: Convert all columns to numeric (similar to "destring *, replace") ---
 all_2016[] <- lapply(all_2016, function(x) as.numeric(as.character(x)))
 
 # --- Step 4: Rename variables  ---
-# rename (SECCION CNR VN VT ES NA CI) (section no_reg nulo total PES PANAL CI_1)
 all_2016 <- all_2016 %>%
   rename(
     section = SECCION,
@@ -617,7 +612,7 @@ all_2016 <- all_2016 %>%
     nulo    = VN,
     total   = VT,
     PES     = ES,
-    PANAL   = "NA",
+    PANAL   = "NA", 
     CI_1    = CI
   )
 
@@ -627,19 +622,19 @@ all_2016 <- all_2016 %>%
 # We'll replicate them:
 all_2016 <- all_2016 %>%
   mutate(
-    PRIPVEMNA = ifelse(!is.na(PRIPVEMNA),
-                       PRIPVEMNA + coalesce(PRIPVEM,0) + coalesce(PRINA,0) +
-                         coalesce(PVEMNA,0) + coalesce(PRI,0) + coalesce(PVEM,0) + coalesce(PANAL,0),
-                       PRIPVEMNA)
+    PRIPVEMNA = ifelse(!is.na(PRI_PVEM_NA),
+                       PRI_PVEM_NA + coalesce(PRI_PVEM,0) + coalesce(PRI_NA,0) +
+                         coalesce(PVEM_NA,0) + coalesce(PRI,0) + coalesce(PVEM,0) + coalesce(PANAL,0),
+                       PRI_PVEM_NA)
   ) %>%
-  select(-PRIPVEM, -PRINA, -PVEMNA, -PRI, -PVEM, -PANAL) %>%
-  rename(PRI_PVEM_PANAL = PRIPVEMNA) %>%
+  select(-PRI_PVEM, -PRI_NA, -PVEM_NA, -PRI, -PVEM, -PANAL) %>%
+  rename(PRI_PVEM_PANAL = PRI_PVEM_NA) %>%
   mutate(
-    PANPRD = ifelse(!is.na(PANPRD),
-                    PANPRD + coalesce(PAN,0) + coalesce(PRD,0),
-                    PANPRD)
+    PANPRD = ifelse(!is.na(PAN_PRD),
+                    PAN_PRD + coalesce(PAN,0) + coalesce(PRD,0),
+                    PAN_PRD)
   ) %>%
-  select(-PAN, -PRD) %>%
+  select(-PAN, -PRD, -PAN_PRD) %>%
   rename(PAN_PRD = PANPRD)
 
 # We skip the aggregator code: "collapse (sum) PT-CI_1 total, by (municipality uniqueid section)"
@@ -654,9 +649,8 @@ all_2016 <- all_2016 %>%
 # If they do not exist yet, adapt as needed.
 
 # Step: merge LN2016
-ln2016 <- read_dta("../Listas Nominales/LN 2012-2019/2016/LN2016.dta") %>%
+ln2016 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2016/LN2016.dta") %>%
   filter(entidad == 23, month == 5) %>%
-  mutate(uniqueid = (entidad*1000 + municipio)) %>%
   filter(seccion != 0) %>%
   select(uniqueid, seccion, lista)
 
@@ -665,7 +659,7 @@ ln2016 <- ln2016 %>%
 
 # We do not have "municipality" + "uniqueid" here, but let's replicate as best as possible:
 all_2016 <- all_2016 %>%
-  left_join(ln2016, by = "section")
+  left_join(ln2016, by = c("section"))
 
 # drop if _merge==2 => means drop rows that did not match
 # In R, after left_join, those unmatched in LN2016 remain with NA. We remove them:
@@ -696,7 +690,7 @@ all_2016 <- all_2016 %>%
 ##############################################################################
 
 # --- Step 1: Read each sheet from "Ayuntamientos_QRoo_2018.xlsx" ---
-excel_file_2018 <- "Ayuntamientos_QRoo_2018.xlsx"
+excel_file_2018 <- "../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/2018/Ayuntamientos_QRoo_2018.xlsx"
 sheet_names_2018 <- excel_sheets(excel_file_2018)
 
 for (sname in sheet_names_2018) {
@@ -780,7 +774,7 @@ all_2018 <- all_2018 %>%
   )
 
 # --- Step 3: Merge with LN18_QROO (ListadoNominalPREP2018.dta) ---
-ln2018 <- read_dta("../Listas Nominales/ListadoNominalPREP2018.dta") %>%
+ln2018 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ListadoNominalPREP2018.dta") %>%
   filter(STATE == "QUINTANA ROO") %>%
   select(STATE, section, ListadoNominalINE)
 
@@ -800,7 +794,7 @@ all_2018 <- all_2018 %>%
 #####################################
 
 # Load the 2021 dataset from the excel
-data_2021 <- read_delim("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/21/QROO_AYUN_2021.csv", skip = 3, delim = "|")
+data_2021 <- read_delim("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/2021/QROO_AYUN_2021.csv", skip = 3, delim = "|")
 
 # Rename columns
 data_2021 <- data_2021 %>%
@@ -863,12 +857,97 @@ collapsed_2021 <- collapsed_2021 %>%
     month = "June"
   )
 
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 23) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_replace_all(regex("CQR", ignore_case = TRUE), "CQROO") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply coalition processing function
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 #####################################
 ### PROCESSING DATA FOR 2024 -------
 #####################################
 
 # Load the 2024 dataset from the excel
-data_2024 <- read_delim("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/24/QROO_AYUN_2024.csv", skip = 3, delim = "|")
+data_2024 <- read_delim("../../../Data/Raw Electoral Data/Quintana Roo - 1999, 2002, 2005, 2008, 2010, 2013,2016,2018,2021,2024/2024/QROO_AYUN_2024.csv", skip = 3, delim = "|")
 
 # Rename columns
 data_2024 <- data_2024 %>%
@@ -930,6 +1009,9 @@ collapsed_2024 <- collapsed_2024 %>%
     month = "June"
   )
 
+# Apply coalition processing function
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
 
 final_data <- bind_rows(all_data,all_2016, all_2018, collapsed_2021, collapsed_2024)
 

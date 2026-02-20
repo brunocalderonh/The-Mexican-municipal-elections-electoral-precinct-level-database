@@ -311,15 +311,17 @@ data <- data %>%
   mutate(ed = 21, seccion = section)
 
 # Merge the data with an external dataset (all_months_years.dta) by 'ed' and 'seccion'
-external_data <- read_dta("../../all_months_years.dta") %>%
-  filter(month == 9 & year == 1998)
+external_data <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter(month == "September" & year == 1998 & state == "PUEBLA") %>% 
+  rename(ed = state,
+         seccion = section)
 
 # Merge by 'ed' and 'seccion', keeping 'month', 'year', and 'lista' from the external data
 merged_data <- data %>%
-  left_join(external_data %>% select(ed, seccion, month, year, lista), by = c("ed", "seccion"))
+  left_join(external_data %>% select(seccion, month, year, lista), by = c("seccion"))
 
 # Drop unnecessary columns after merging
-filtered_data <- filtered_data %>%
+filtered_data <- merged_data %>%
   select(-ed, -seccion, -year, -month)
 
 # Rename 'lista' to 'listanominal'
@@ -369,19 +371,20 @@ data <- data %>%
 
 # Add new columns for 'ed' and 'seccion'
 data <- data %>%
-  mutate(ed = 21, seccion = section)
+  mutate(ed = 21, seccion = as.numeric(section))
 
 # Merge the dataset with external data (all_months_years.dta) by 'ed' and 'seccion'
-external_data <- read_dta("../../all_months_years.dta")%>%
-  filter(month == 9 & year == 2001)
+external_data <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta")%>%
+  filter(month == "September" & year == 2001 & state == "PUEBLA") %>% 
+  rename(seccion = section)
 
 # Merge, keeping 'month', 'year', and 'lista' from the external data
 data <- data %>%
-  left_join(external_data %>% select(ed, seccion, month, year, lista), by = c("ed", "seccion"))
+  left_join(external_data %>% select(seccion, month, year, lista), by = c("seccion"))
 
 # Drop unwanted columns after the merge
 data <- data %>%
-  select(-_merge, -ed, -seccion, -year, -month)
+  select(-ed, -seccion, -year, -month)
 
 # Replace 'listanominal' with 'lista' if 'missing' flag is 1 or greater
 data <- data %>%
@@ -632,7 +635,7 @@ data <- data %>%
       municipality == "ZONGOZOTLA" ~ 21215,
       municipality == "ZOQUIAPAN" ~ 21216,
       municipality == "ZOQUITLAN" ~ 21217,
-      TRUE ~ uniqueid # Retain existing uniqueid if no match
+      TRUE ~ NA # Retain existing uniqueid if no match
     )
   )
 
@@ -642,7 +645,8 @@ data <- data %>%
 
 # Add year and month columns
 data_2001 <- data %>%
-  mutate(year = 2001, month = "November")
+  mutate(year = 2001, month = "November",
+         section = as.numeric(section))
 
 # Import the Excel sheet and specify the range of cells to read
 data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Resultados por casilla elección 2002 Molcaxac.xlsx", sheet = "aytos", range = "A8:V16", col_names = TRUE)
@@ -979,7 +983,7 @@ data <- data %>%
       municipality == "ZONGOZOTLA" ~ 21215,
       municipality == "ZOQUIAPAN" ~ 21216,
       municipality == "ZOQUITLAN" ~ 21217,
-      TRUE ~ uniqueid # Retain existing uniqueid if no match
+      TRUE ~ NA 
     )
   )
 
@@ -989,7 +993,8 @@ data <- data %>%
 
 # Add year and month columns
 data_2004 <- data %>%
-  mutate(year = 2004, month = "November")
+  mutate(year = 2004, month = "November",
+         section = as.numeric(section))
 
 # Sort the data by 'section'
 data <- data %>%
@@ -1002,7 +1007,7 @@ colnames(data) <- tolower(colnames(data))
 data <- data %>%
   rename(
     municipality = municipio,
-    section = seccion  # Renaming 'sección' to 'seccin' and then 'seccin' to 'section'
+    section = "sección"  # Renaming 'sección' to 'seccin' and then 'seccin' to 'section'
   )
 
 # Drop the 'total' column if it exists
@@ -1308,7 +1313,7 @@ data <- data %>%
     PANAL = PARTIDONUEVAALIANZA,
     PAS = "ALTERNATIVASOCIALDEMÓCRATA,PARTIDOPOLÍTICONACIONAL",
     total = VotaciónTotal,
-    listanominal = ListaNominal
+    listanominal = "ListaNominal"
   )
 
 # Drop rows where 'section' is missing
@@ -1346,7 +1351,8 @@ colnames(data) <- tolower(colnames(data))
 data <- data %>%
   rename(
     municipality = municipio,
-    section = seccion
+    section = seccion,
+    listanominal = "lista nominal"
   )
 
 # Drop rows where both 'municipality' is empty and 'section' is missing (NA)
@@ -1664,14 +1670,16 @@ data <- data %>%
     TRUE ~ 0  # Default value for other municipalities
   ))
 
+
 # Collapse the data by 'municipality', 'uniqueid', and 'section'
 collapsed_data <- data %>%
   group_by(municipality, uniqueid, section) %>%
   summarize(across(c(PAN:PANAL, total), sum, na.rm = TRUE))
 
 # Load the auxiliary dataset to get 'listanominal'
-aux_data <- read_dta("../../all_months_years.dta") %>%
-  filter(ed == 21, month == 6, year == 2011) %>%
+aux_data <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter(state == "PUEBLA", month == "June", year == 2011) %>%
+  rename(listanominal = lista) %>% 
   select(section, listanominal)
 
 # Merge the auxiliary dataset to the collapsed data on 'section'
@@ -1718,7 +1726,7 @@ data <- data %>%
 
 # Drop columns 'N' and 'O' (assuming there are no corresponding column names in the provided code)
 data <- data %>%
-  select(-N, -O)
+  select(-"...14", -"...15")
 
 # Compress 'municipality' by removing extra spaces
 data <- data %>%
@@ -1741,7 +1749,8 @@ collapsed_data <- collapsed_data %>%
   )
 
 # Merge with 'Coaliciones_2013.dta' on 'municipality'
-coalition_data <- read_dta("Coaliciones_2013.dta")
+coalition_data <- read_dta("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Other/Coaliciones_2013.dta") %>% 
+  rename(coalition = coalicion)
 
 collapsed_data <- collapsed_data %>%
   left_join(coalition_data, by = "municipality") %>%
@@ -1771,7 +1780,7 @@ collapsed_data <- collapsed_data %>%
 
 # Drop unnecessary columns
 collapsed_data <- collapsed_data %>%
-  select(-VOTOSNULOS, -CANDIDATOSNOREGISTRADOS)
+  select(-"VOTOS NULOS", -"CANDIDATOS NO REGISTRADOS")
 
 # Calculate turnout
 collapsed_data <- collapsed_data %>%
@@ -2304,17 +2313,17 @@ puebla_2018 <- puebla_2018 %>%
 coalitions <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/puebla_coalitions_2018.xlsx", sheet = "Sheet1")
 
 # Replace missing values (NA) in cc_* columns with 0
-puebla_2018 <- puebla_2018 %>%
+coalitions <- coalitions %>%
   mutate(across(starts_with("cc_"), ~ replace_na(., 0)))
 
 # Rename columns
 puebla_2018 <- puebla_2018 %>%
   rename(
-    PANAL = NA,
+    PANAL = "NA",
     PRI_PANAL = PRI_NA,
     PANAL_PCPP = NA_PCPP,
-    CI_1 = CANDIDATURAINDEPENDIENTE,
-    CI_2 = CANDIDATURAINDEPENDIENTE2,
+    CI_1 = "CANDIDATURA INDEPENDIENTE",
+    CI_2 = "CANDIDATURA INDEPENDIENTE 2",
     total = TOTAL
   )
 
@@ -2323,10 +2332,13 @@ collapsed_data <- puebla_2018 %>%
   group_by(municipality, uniqueid, section) %>%
   summarise(across(c(PAN:CI_2, total), sum, na.rm = TRUE), .groups = "drop")
 
+collapsed_data <- collapsed_data %>% 
+  left_join(coalitions, by = "municipality")
+
 # Save the collapsed data
 saveRDS(collapsed_data, file = "collapsed_puebla_2018.rds")
 
-# Generating composite variables and handling conditions
+# Generating composite variables and handling coalitions
 
 collapsed_data <- collapsed_data %>%
   mutate(
@@ -2373,10 +2385,15 @@ collapsed_data <- collapsed_data %>%
                   PAN_PCPP_PSI, PRD_MC_PCPP, PRD_MC_PSI, PRD_PCPP_PSI, MC_PCPP_PSI, PAN_PRD, PAN_MC, PAN_PCPP,
                   PAN_PSI, PRD_MC, PRD_PCPP, PRD_PSI, MC_PCPP, MC_PSI, PCPP_PSI), ~if_else(cc_PAN_PRD_MC_PCPP_PSI == 1, NA, .)))
 
-# Drop unwanted variables and rename 
+# Drop unwanted variables (only the coalition columns that were combined into "2" versions)
 collapsed_data <- collapsed_data %>%
-  select(-c(PAN_PRD_MC_PCPP_PSI, PAN_PRD_MC_PSI, PAN_PRD_PCPP_PSI, PAN_PRD_MC_PCPP, PAN_MC_PCPP_PSI, PRD_MC_PCPP_PSI, ...)) %>%
-  rename_with(~str_replace(., "2", ""), contains("2"))
+  select(-c(PAN_PRD_MC_PCPP_PSI, PAN_PRD_MC_PSI, PAN_PRD_PCPP_PSI, PAN_PRD_MC_PCPP, 
+            PAN_MC_PCPP_PSI, PRD_MC_PCPP_PSI, PAN_PRD_MC, PAN_PRD_PCPP, PAN_PRD_PSI, 
+            PAN_MC_PCPP, PAN_MC_PSI, PAN_PCPP_PSI, PRD_MC_PCPP, PRD_MC_PSI, 
+            PRD_PCPP_PSI, MC_PCPP_PSI, PAN_PRD, PAN_MC, PAN_PCPP, PAN_PSI, 
+            PRD_MC, PRD_PCPP, PRD_PSI, MC_PCPP, MC_PSI, PCPP_PSI, 
+            PANAL_PCPP, PVEM_PCPP_PSI, PVEM_PSI, PVEM_PCPP, PRI_PANAL, starts_with("cc_"))) %>%
+  rename_with(~str_replace(., "2$", ""), ends_with("2") & !matches("^CI_"))
 
 # Replace values for PT_MORENA_PES
 collapsed_data <- collapsed_data %>%
@@ -2384,7 +2401,7 @@ collapsed_data <- collapsed_data %>%
 
 # Drop unwanted variables
 collapsed_data <- collapsed_data %>%
-  select(-c(PT, MORENA, PES, PT_MORENA, PT_PES, MORENA_PES, PRD_MC_PCPP_PSI))
+  select(-c(PT, MORENA, PES, PT_MORENA, PT_PES, MORENA_PES))
 
 # Generate new columns based on row sums
 collapsed_data <- collapsed_data %>%
@@ -2395,18 +2412,17 @@ collapsed_data <- collapsed_data %>%
                                 MC_PCPP_PSI, MC_PCPP, MC_PSI, PANAL_PCPP, PVEM_PCPP_PSI, PVEM_PSI, PVEM_PCPP, PCPP_PSI, PRI_PANAL, CI_1, CI_2), na.rm = TRUE))
 
 # Add year, month, STATE, and incumbent_vote columns
-puebla_data_2018 <- puebla_data %>%
+puebla_data_2018 <- collapsed_data %>%
   mutate(
     year = 2018,
-    month = "July",
-    STATE = "PUEBLA",
+    month = "July"
   )
 
 # Drop all columns starting with 'cc'
 puebla_data_2018 <- puebla_data_2018 %>% select(-starts_with("cc"))
 
 # Load the Listado Nominal PREP 2018 data
-prep_data <- readRDS("../Listas Nominales/ListadoNominalPREP2018.rds")  # Adjust to the correct file path
+prep_data <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ListadoNominalPREP2018.dta")  # Adjust to the correct file path
 
 # Filter for PUEBLA state
 prep_data <- prep_data %>% filter(STATE == "PUEBLA")
@@ -2435,7 +2451,7 @@ data_2018 <- puebla_data_2018 %>%
 # Import CSV files and save them as individual RDS files
 municipalities <- c("AHUAZOTEPEC", "CAÑADA MORELOS", "MAZAPILTEPEC DE JUAREZ", "OCOYUCAN", "TEPEOJUMA")
 for (x in municipalities) {
-  file_path <- paste0("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/20190609_0800_CW_PRESIDENTE_MUNICIPAL/PRESIDENTE_MUNICIPAL_", x, "_2019.csv")
+  file_path <- paste0("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/PRESIDENTE_MUNICIPAL_", x, "_2019.csv")
   data <- read_csv(file_path, col_names = TRUE)
   saveRDS(data, paste0(x, ".rds"))
 }
@@ -2450,11 +2466,13 @@ for (x in municipalities[-length(municipalities)]) {
 
 
 # Continue with the necessary manipulations
+names(append_data) <- tolower(names(append_data))
 append_data <- append_data %>%
   rename(section = seccion) %>%
   filter(!is.na(section)) %>%
   rename(listanominal = lista_nominal_casilla,
-         total = total_votos_calculados)
+         total = total_votos_calculados) %>% 
+  select(-c(observaciones:fecha_hora))
 
 # Conditional recoding based on municipality
 append_data <- append_data %>%
@@ -2546,7 +2564,8 @@ data_2019 <- append_data_collapsed %>%
 #####################################
 
 # Load the 2021 dataset
-data_2021 <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/21/RESULTADOS_COMPUTOS_MUNICIPALES_POR_PARTIDO_POLITICO_NIVEL_CASILLA.xlsx", skip = 4)
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/21/RESULTADOS_COMPUTOS_MUNICIPALES_POR_PARTIDO_POLITICO_NIVEL_CASILLA.xlsx", skip = 4) %>% 
+  select(-"ES")
 
 data_ext <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Puebla_Electoral_Data_2022.xlsx")
 
@@ -2563,7 +2582,6 @@ data_2021 <- data_2021 %>%
                 nulos = NUM_VOTOS_NULOS,
                 valid = NUMERO_VOTOS_VALIDOS,
                 PANAL = NAP, 
-                CPP = PCPP,
                 CI_1 = CAND_IND_1,
                 CI_2 = CAND_IND_2) %>%
   dplyr::mutate(
@@ -2577,7 +2595,9 @@ data_2021 <- data_2021 %>%
     municipality = gsub("Ñ", "N", municipality),
     section = as.numeric(section)
   ) %>% 
-  dplyr::filter(section > 0)
+  dplyr::filter(section > 0 & total > 0) %>% 
+  rename_with(~ gsub("NAEM", "PANAL", .x)) %>% 
+  rename_with(~ gsub("CAND_IND", "CI_", .x))
 
 data_ext <- data_ext %>%
   dplyr::rename(municipality = MUNICIPIO,
@@ -2641,6 +2661,7 @@ data_2021 <- data_2021 %>%
       municipality == "CALPAN" ~ 21026,
       municipality == "CALTEPEC" ~ 21027,
       municipality == "CANADA DE MORELOS" ~ 21099,
+      municipality == "CANADA MORELOS" ~ 21099,
       municipality == "CAMOCUAUTLA" ~ 21028,
       municipality == "CAXHUACAN" ~ 21029,
       municipality == "CHALCHICOMULA DE SESMA" ~ 21045,
@@ -2707,6 +2728,7 @@ data_2021 <- data_2021 %>%
       municipality == "JUAN GALINDO" ~ 21091,
       municipality == "JUAN N. MENDEZ" ~ 21092,
       municipality == "MAGDALENA TLATLAUQUITEPEC" ~ 21095,
+      municipality == "LA MAGDALENA TLATLAUQUITEPEC" ~ 21095,
       municipality == "LAFRAGUA" ~ 21093,
       municipality == "LIBRES" ~ 21094,
       municipality == "LOS REYES DE JUAREZ" ~ 21118,
@@ -2880,6 +2902,90 @@ collapsed_2021 <- collapsed_2021 %>%
       TRUE ~ "June"
     ))
 
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 21) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply coalition processing function
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 rm(data_2021)
 rm(data_ext)
 rm(listanominal_2021)
@@ -2943,7 +3049,7 @@ data_ext <- data_ext %>%
     section = as.numeric(section),
     across(c(PAN:total), as.numeric)
   ) %>% 
-  dplyr::filter(section > 0)
+  dplyr::filter(section > 0 & total > 0)
 
 # Merge 2024 and extraordinary elections
 data_2024 <- bind_rows(data_2024, data_ext)
@@ -3208,10 +3314,14 @@ collapsed_2024 <- collapsed_2024 %>%
       TRUE ~ "June"
     ))
 
-# Append the data
-puebla_all <- bind_rows(data_2014, data_2018, data_2019, collapsed_2021, collapsed_2024)
+# Apply coalition processing function
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
 
-puebla_combined <- bind_rows(puebla_all_data, puebla_all)
+# Append the data
+puebla_combined <- bind_rows(df_1998, data_2001, data_2002, data_2004, data_2007,
+                             data_2008, data_2010, data_2011, data_2013,
+                             data_2014, data_2018, data_2019, collapsed_2021, collapsed_2024)
 
 # Replace `municipality` values with uppercase
 puebla_combined <- puebla_combined %>%

@@ -27,7 +27,7 @@ setwd(file.path(script_dir, ""))
 ###############################################################################
 # 1) Read CSV (equivalent to: insheet using Ayu_Seccion_1994_No_LN.csv, clear)
 ###############################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1994_No_LN.csv",
+df <- read_csv("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1994/Ayu_Seccion_1994_No_LN.csv",
                show_col_types = FALSE)  # adjust path if needed
 colnames(df) <- tolower(colnames(df))
 ###############################################################################
@@ -234,7 +234,7 @@ df_1994 <- df_merged %>%
 ###############################################################################
 # 1) Read CSV (equivalent to: insheet using Ayu_Seccion_1997_No_LN.csv, clear)
 ###############################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1997/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 ###############################################################################
 # 2) Rename columns (municipio -> municipality, seccion -> section)
@@ -389,9 +389,7 @@ df_collapsed <- df_collapsed %>%
     valid   = rowSums(
       select(., PAN, PRI, PRD, PartCardenista, PT, PVEM, PPS, PDM),
       na.rm = TRUE
-    ),
-    ed      = 26,
-    seccion = section
+    )
   )
 
 ###############################################################################
@@ -404,22 +402,23 @@ df_collapsed <- df_collapsed %>%
 #      drop _merge ed seccion year month
 ###############################################################################
 # Read the external .dta
-df_using <- read_dta("../../all_months_years.dta") %>%
-  select(ed, seccion, month, year, lista)
+df_using <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  select(state, section, month, year, lista) %>% 
+  filter(state == "SONORA")
 
 # Perform the merge. 
 # We'll do a left_join to preserve rows in df_collapsed, and then
 # filter out rows that don't match
 df_merged <- df_collapsed %>%
-  left_join(df_using, by = c("ed", "seccion")) %>%
+  left_join(df_using, by = c("section")) %>%
   # drop the rows with no match from the "using" side
   filter(!is.na(lista)) %>%
   # keep only rows for month==7 & year==1997
-  filter(month == 7, year == 1997)
+  filter(month == "July", year == 1997)
 
 # Drop columns _merge (not created by default), ed, seccion, year, month
 df_merged <- df_merged %>%
-  select(-ed, -seccion, -year, -month)
+  select(-year, -month)
 
 # rename lista to listanominal
 df_merged <- df_merged %>%
@@ -439,7 +438,7 @@ df_1997 <- df_merged %>%
 # 1) Read Excel file (equivalent to "import excel ..., clear firstrow case(lower)")
 #    Adjust path/filename as needed.
 ################################################################################
-df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000.xlsx", skip = 0) %>%
+df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2000/Ayu_Seccion_2000.xlsx", skip = 0) %>%
   rename_all(tolower)
 names(df)
 ################################################################################
@@ -617,7 +616,7 @@ df_2000 <- df_collapsed %>%
 ################################################################################
 # 1) Read CSV 
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 ################################################################################
 # 2) Rename variables (municipio -> municipality, casilla -> section)
@@ -888,7 +887,7 @@ df_2003 <- df_collapsed %>%
 ################################################################################
 # 1) Read Excel file
 ################################################################################
-df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2006.xlsx") %>%
+df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2006/Ayu_Seccion_2006.xlsx") %>%
   # If you want all column names to be lowercase, uncomment below:
   # rename_all(tolower) %>%
   as.data.frame()  # optional, to ensure a regular data frame
@@ -1060,7 +1059,7 @@ df_2006 <- df_collapsed %>%
 # 1) Read Excel file, dropping unused columns (DISTRITO, CASILLA),
 #    rename columns, and drop empty municipality rows
 ###############################################################################
-df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/CASILLAS_AYUNTAMIENTOS_2012.xlsx",
+df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2012/CASILLAS_AYUNTAMIENTOS_2012.xlsx",
                  sheet = "ELECCION AYUNTAMIENTO",
                  col_types = "text")
 
@@ -1302,7 +1301,7 @@ df_2012 <- df_collapsed %>%
 ################################################################################
 # 1) Read Excel
 ################################################################################
-df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/ComputoMpalAyuntamiento2015_casilla.xlsx",
+df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/ComputoMpalAyuntamiento2015_casilla.xlsx",
                  sheet = "RES. CASILLA MUNICIPIOS")
 
 # Remove "-" and spaces
@@ -1488,7 +1487,7 @@ df_collapsed <- df_collapsed %>%
 ################################################################################
 
 # (A) Read LN2015.dta
-df_ln <- read_dta("../Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
+df_ln <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>%
   filter(entidad == 26, month == 6) %>%
   mutate(
     uniqueid = (entidad * 1000) + municipio
@@ -1540,7 +1539,7 @@ df_2015 <- df_merged %>%
 ###############################################################################
 # 1) Read Excel
 ###############################################################################
-df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx", sheet = "Sheet1") %>%
+df <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2018/Ayuntamientos_2018.xlsx", sheet = "Sheet1") %>%
   select(-any_of("uniqueid"))
 
 ###############################################################################
@@ -1753,12 +1752,13 @@ df_2018 <- df_collapsed %>%
     STATE = "SONORA"
   )
 
+
 #####################################
 ### PROCESSING DATA FOR 2021 -------
 #####################################
 
 # Load the 2021 dataset from the excel
-data_2021 <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/21/TABLA_DE_RESULTADOS_AYUNTAMIENTO.xlsx", skip = 1)
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2021/TABLA_DE_RESULTADOS_AYUNTAMIENTO.xlsx", skip = 1)
 
 # Rename columns
 data_2021 <- data_2021 %>%
@@ -1769,7 +1769,8 @@ data_2021 <- data_2021 %>%
                 no_reg = num_votos_can_nreg,
                 nulos = num_votos_nulos,
                 valid = numero_votos_validos,
-                CC_PRI_PAN_PRD = "VA X SONORA",
+                CC_PAN_PRI_PRD = "VA X SONORA",
+                PAN_PRI_PRD = "COALICI0N PAN-PRI-PRD" ,
                 MC = "MOVIMIENTO CIUDADANO",
                 PES = "PARTIDO ENCUENTRO SOLIDARIO",
                 RSP = "REDES SOCIALES PROGRESISTAS",
@@ -1890,7 +1891,7 @@ data_2021 <- data_2021 %>%
 collapsed_2021 <- data_2021 %>%
   dplyr::group_by(municipality, section, uniqueid) %>%
   dplyr::summarise(
-    across(c(PAN:total), 
+    across(c(CC_PAN_PRI_PRD:total), 
            \(x) sum(x, na.rm = TRUE))
   )
 
@@ -1902,12 +1903,110 @@ collapsed_2021 <- collapsed_2021 %>%
     month =  "June"
   )
 
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 26) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: extract party names from a column name (handles all CC/CO variations)
+  extract_parties <- function(col_name) {
+    # Remove CC_ or CO_ prefix if present
+    col_name <- sub("^(CC|CO)_", "", col_name)
+    # Remove _CO or _CC suffix if present
+    col_name <- sub("_(CO|CC)$", "", col_name)
+    # Split by underscore
+    strsplit(col_name, "_")[[1]]
+  }
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    coal_parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      col_parties <- extract_parties(col)
+      # Check if all parties in the column match the coalition parties
+      setequal(col_parties, coal_parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+
+# Apply coalition processing function
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
+
 #####################################
 ### PROCESSING DATA FOR 2024 -------
 #####################################
 
 # Load the 2024 dataset from the excel
-data_2024 <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/24/TABLA_DE_RESULTADOS_AYUNTAMIENTO_2024_mod.xlsx", skip = 1)
+data_2024 <- read_excel("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2024/TABLA_DE_RESULTADOS_AYUNTAMIENTO_2024_mod.xlsx", skip = 1)
 
 # Rename columns
 data_2024 <- data_2024 %>%
@@ -2033,6 +2132,10 @@ collapsed_2024 <- collapsed_2024 %>%
     year = 2024,
     month =  "June"
   )
+
+# Apply coalition processing function
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
 
 # Combine the dataframes, handling different columns by filling with NA
 SONORA_all <- bind_rows(df_1994,

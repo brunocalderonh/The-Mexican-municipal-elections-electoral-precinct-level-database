@@ -26,7 +26,9 @@ replace_parties <- function(party_str) {
                     "PCM2" = "PCM",
                     "PFCRN" = "PartCardenista",
                     "PASD" = "PAS",
-                    "FUERCIUD" = "FC"
+                    "FUERCIUD" = "FC",
+                    "PROGRESA" = "PMP",
+                    "PESM" = "PES"
                     )
   
   for (replacement in names(replacements)) {

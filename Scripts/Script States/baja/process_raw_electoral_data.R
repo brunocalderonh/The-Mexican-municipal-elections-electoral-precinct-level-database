@@ -30,7 +30,7 @@ setwd(file.path(script_dir, ""))
 #####################################
 
 # Load the 1995 data
-data_1995 <- read_csv("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_1995_No_LN.csv")
+data_1995 <- read_csv("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/1995/Ayu_Seccion_1995_No_LN.csv")
 
 # Rename columns for easier manipulation
 data_1995 <- data_1995 %>%
@@ -111,7 +111,7 @@ rm(data_1995)
 #####################################
 
 # Load the 1998 data
-data_1998 <- data.table::fread("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_1998_No_LN.csv")
+data_1998 <- data.table::fread("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/1998/Ayu_Seccion_1998_No_LN.csv")
 names(data_1998)
 # Rename columns
 data_1998 <- data_1998 %>%
@@ -176,7 +176,7 @@ rm(data_1998)
 ### PROCESSING DATA FOR 2001
 #####################################
 
-data_2001 <- read_csv("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_2001_No_LN.csv")
+data_2001 <- read_csv("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/2001/Ayu_Seccion_2001_No_LN.csv")
 names(data_2001)
 # Rename columns
 data_2001 <- data_2001 %>%
@@ -247,7 +247,7 @@ rm(data_2001)
 ### PROCESSING DATA FOR 2004
 #####################################
 
-data_2004 <- read_csv("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_2004.csv")
+data_2004 <- read_csv("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/2004/Ayu_Seccion_2004.csv")
 names(data_2004)
 
 # Rename columns
@@ -308,7 +308,7 @@ rm(data_2004)
 ### PROCESSING DATA FOR 2007
 #####################################
 
-data_2007 <- data.table::fread("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_2007.csv")
+data_2007 <- data.table::fread("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/2007/Ayu_Seccion_2007.csv")
 names(data_2007)
 # Rename columns
 data_2007 <- data_2007 %>%
@@ -370,7 +370,7 @@ rm(data_2007)
 ### PROCESSING DATA FOR 2010
 #####################################
 
-data_2010 <- read_csv("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_2010.csv")
+data_2010 <- read_csv("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/2010/Ayu_Seccion_2010.csv")
 names(data_2010)
 # Rename columns
 data_2010 <- data_2010 %>%
@@ -430,7 +430,7 @@ rm(data_2010)
 ### PROCESSING DATA FOR 2013
 #####################################
 
-data_2013 <- read_csv("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/Ayu_Seccion_2013.csv")
+data_2013 <- read_csv("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/2013/Ayu_Seccion_2013.csv")
 names(data_2013)
 # Rename columns
 data_2013 <- data_2013 %>%
@@ -488,7 +488,7 @@ rm(data_2013)
 #####################################
 
 # Load 2016 data from Excel
-data_2016 <- readxl::read_excel("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/Baja California_2016.xlsx", sheet = 1)
+data_2016 <- readxl::read_excel("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/2016/Baja California_2016.xlsx", sheet = 1)
 names(data_2016)
 # Rename columns for consistency
 data_2016 <- data_2016 %>%
@@ -535,7 +535,7 @@ rm(data_2016)
 #####################################
 
 # Load 2019 data
-data_2019 <- readxl::read_excel("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/ComputoPorCasilla_Mun.xlsx", sheet = "Todos_Ayuntamientos", range = "A6:AF4811")
+data_2019 <- readxl::read_excel("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/2019/ComputoPorCasilla_Mun.xlsx", sheet = "Todos_Ayuntamientos", range = "A6:AF4811")
 names(data_2019)
 # Rename and clean columns
 data_2019 <- data_2019 %>%
@@ -598,7 +598,7 @@ rm(data_2019)
 #####################################
 
 # Load 2021 data
-data_2021 <- readxl::read_excel("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/21/ComputoPorCasilla_Mun_Ajustado_Tribunal_SG.xls", range = "A6:AF4973")
+data_2021 <- readxl::read_excel("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/2021/ComputoPorCasilla_Mun_Ajustado_Tribunal_SG.xls", range = "A6:AF4973")
 names(data_2021)
 
 # Rename and clean columns
@@ -616,12 +616,13 @@ data_2021 <- data_2021 %>%
     PVEM_MORENA = `PVEM+\r\nMORENA`,
     PT_MORENA = `PT+\r\nMORENA`,
     PT_PVEM = `PT+PVEM`,
-    ind1 = `Rogelio Castro Segovia`,
-    ind2 = `Marco Antonio Vizcarra Calderón`,
-    ind3 = `Cesar Iván Sanchez Alvarez`,
-    ind4 = `Celso Arturo Figueroa Medel`,
-    ind5 = `Luis Fernando Serrano García`,
-    nulos = `VOTO NULO`) 
+    CI_1 = `Rogelio Castro Segovia`,
+    CI_2 = `Marco Antonio Vizcarra Calderón`,
+    CI_3 = `Cesar Iván Sanchez Alvarez`,
+    CI_4 = `Celso Arturo Figueroa Medel`,
+    CI_5 = `Luis Fernando Serrano García`,
+    nulos = `VOTO NULO`) %>% 
+  filter(section > 0 & total > 0)
 
 names(data_2021)
 
@@ -641,8 +642,8 @@ data_2021 <- data_2021 %>%
 names(data_2021)
 # Collapse by municipality and section
 collapsed_2021 <- data_2021 %>%
-  dplyr::group_by(uniqueid, section) %>%
-  dplyr::summarise(across(c(PAN:PVEM_MORENA, total, listanominal), \(x) sum(x, na.rm = TRUE)))
+  dplyr::group_by(uniqueid, municipality, section) %>%
+  dplyr::summarise(across(c(PAN:PVEM_MORENA, nulos, total, listanominal), \(x) sum(x, na.rm = TRUE)))
 
 # Calculate valid votes
 collapsed_2021 <- collapsed_2021 %>%
@@ -659,12 +660,97 @@ collapsed_2021 <- collapsed_2021 %>%
 
 rm(data_2021)
 
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 2) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply function to process coalitions
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
+
 #####################################
 ### PROCESSING DATA FOR 2024  ----
 #####################################
 
 # Load 2024 data
-data_2024 <- readxl::read_excel("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/24/ComputoPorCasilla_Mun Encabezados.xls", range = "A6:V5396")
+data_2024 <- readxl::read_excel("../../../Data/Raw Electoral Data/Baja California - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2019,2021,2024/2024/ComputoPorCasilla_Mun Encabezados.xls", range = "A6:V5396")
 names(data_2024)
 
 # Rename and clean columns
@@ -678,8 +764,9 @@ data_2024 <- data_2024 %>%
     PVEM_MORENA = `PVEM + MORENA`,
     MORENA_FXM = `MORENA + FPM`,
     PVEM_FXM = `PVEM + FPM`,
-    ind1 = `Alfredo Aviña Galvan`,
-    nulos = `VOTO NULO`) 
+    CI_1 = `Alfredo Aviña Galvan`,
+    nulos = `VOTO NULO`) %>% 
+  filter(section > 0 & total > 0)
 
 names(data_2024)
 
@@ -692,7 +779,7 @@ data_2024 <- data_2024 %>%
       municipality == "MEXICALI" ~ 2002,
       municipality == "TECATE" ~ 2003,
       municipality == "TIJUANA" ~ 2004,
-      municipality == "ROSARITO" ~ 2005,
+      municipality == "PLAYAS DE ROSARITO" ~ 2005,
       municipality == "SAN QUINTIN" ~ 2006,
       municipality == "SAN FELIPE" ~ 2007,
       TRUE ~ NA_real_
@@ -702,13 +789,13 @@ data_2024 <- data_2024 %>%
 
 # Collapse by municipality and section
 collapsed_2024 <- data_2024 %>%
-  dplyr::group_by(uniqueid, section) %>%
-  dplyr::summarise(across(c(PAN:ind1, total, listanominal), \(x) sum(x, na.rm = TRUE)))
+  dplyr::group_by(uniqueid, municipality, section) %>%
+  dplyr::summarise(across(c(PAN:CI_1, nulos, total, listanominal), \(x) sum(x, na.rm = TRUE)))
 
 # Calculate valid votes
 collapsed_2024 <- collapsed_2024 %>%
   dplyr::rowwise() %>%
-  dplyr::mutate(valid = sum(c_across(PAN:ind1), na.rm = TRUE))
+  dplyr::mutate(valid = sum(c_across(PAN:CI_1), na.rm = TRUE))
 
 # Calculate turnout
 collapsed_2024 <- collapsed_2024 %>%
@@ -720,6 +807,9 @@ collapsed_2024 <- collapsed_2024 %>%
 
 rm(data_2024)
 
+# Apply function to process coalitions
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
 
 
 #####################################
