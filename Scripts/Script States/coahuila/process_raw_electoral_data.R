@@ -504,7 +504,7 @@ data_2005 <- data_2005 %>%
 # *****************************
 
 # Step 16: Load and merge 'ListaNominal2005.rds' by 'section'
-lista_nominal_2005 <- read.dta13("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/2005/Other/ListaNominal2005.dta")
+lista_nominal_2005 <- read.dta13("../../../Data/Raw Electoral Data/Coahuila - 1996, 1999, 2002, 2005, 2009, 2013,2017,2018,2021,2024/Other/ListaNominal2005.dta")
 data_2005 <- left_join(data_2005, lista_nominal_2005, 
                           by = "section")
 
