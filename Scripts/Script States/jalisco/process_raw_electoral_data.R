@@ -70,7 +70,7 @@ data_1995 <- data_1995 %>% filter(!is.na(total) & total != 0)
 #-------------------------------------------------------------
 # 7. destring listanominal - total, replace
 # Convert these variables to numeric if they're not already.
-vars_to_num <- c("lista nominal","pan","pri","pps","prd","pfcrn","parm","pdm","pt","pvem","ppj","nulos","total")
+vars_to_num <- c("lista nominal","pan","pri","pps","prd","pfcrn","parm","pdm","pt","pvem","ppj","nulos", "uniqueid", "total")
 vars_to_num <- intersect(vars_to_num, names(data_1995))
 data_1995 <- data_1995 %>% mutate(across(all_of(vars_to_num), as.numeric))
 
@@ -81,7 +81,8 @@ data_1995 <- data_1995 %>%
   rename(listanominal="lista nominal") %>% 
   group_by(municipality, section) %>%
   summarise(across(c(listanominal:total), 
-                   sum, na.rm = TRUE), .groups = "drop")
+                   sum, na.rm = TRUE), .groups = "drop") %>% 
+  select(-municipality)
 #-------------------------------------------------------------
 # 12. Rename parties
 #-------------------------------------------------------------
