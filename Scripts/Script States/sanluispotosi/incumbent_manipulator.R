@@ -20,7 +20,7 @@ mag_db <- read.csv("Data/incumbent data/incumbent magar/aymu.incumbents-que-zac.
 
 
 mag_db <- mag_db %>%
-  filter(edon == 24)
+  filter(edon == 24 & yr < 2020)
 
 # Get unique municipality names from mag_db
 unique_municipios_mag <- unique(mag_db$mun)
@@ -66,7 +66,10 @@ newmag <- read.csv("Data/incumbent data/new incumbent magar/aymu1989-on.incumben
          margin = as.numeric(margin)) %>% 
   select(uniqueid, year, incumbent_party_magar, incumbent_candidate_magar, runnerup_party_magar, runnerup_candidate_magar, margin) %>%
   mutate(incumbent_party_magar = toupper(incumbent_party_magar)) %>% 
-  mutate(runnerup_party_magar = toupper(runnerup_party_magar)) 
+  mutate(runnerup_party_magar = toupper(runnerup_party_magar)) %>% 
+  group_by(uniqueid, year) %>%
+  slice(min(2, n())) %>%
+  ungroup()
 
 # Magar complete
 mag_db <- bind_rows(mag_db, newmag)
