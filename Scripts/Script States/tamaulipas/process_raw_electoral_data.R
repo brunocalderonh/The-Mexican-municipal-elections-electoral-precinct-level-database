@@ -139,11 +139,9 @@ df_collapse <- df_collapse %>%
 ################################################################################
 
 df_collapse <- df_collapse %>%
-  rowwise() %>%
   mutate(
-    valid = sum(c_across(c("PAN","PRI","PRD","PT","PVEM","PARM","PartCardenista")), na.rm=TRUE)
-  ) %>%
-  ungroup()
+    valid = rowSums(select(., any_of(c("PAN","PRI","PRD","PT","PVEM","PARM","PartCardenista"))), na.rm = TRUE)
+  )
 
 
 ################################################################################
@@ -172,7 +170,8 @@ df_join <- df_collapse %>%
   mutate(
     turnout = total / listanominal,
     year    = 1998,
-    month   = "November"
+    month   = "November",
+    STATE   = "TAMAULIPAS"
   )
 
 ################################################################################
@@ -260,14 +259,11 @@ df_merged <- df_collapse %>%
 ################################################################################
 
 df_1995 <- df_merged %>%
-  rowwise() %>%
   mutate(
-    valid = sum(c_across(c("PAN","PRI","PRD","PartCardenista","PARM","PT","PVEM")), na.rm=TRUE)
-  ) %>%
-  ungroup() %>%
-  mutate(
+    valid = rowSums(select(., any_of(c("PAN","PRI","PRD","PartCardenista","PARM","PT","PVEM"))), na.rm = TRUE),
     year  = 1995,
-    month = "November"
+    month = "November",
+    STATE = "TAMAULIPAS"
   )
 
 ################################################################################
@@ -445,9 +441,11 @@ df_merged <- df_merged %>%
 
 df_2001 <- df_merged %>%
   mutate(
+    valid   = rowSums(select(., any_of(c("PAN","PRI","PRD","PT","PVEM","PC","PSN","PAS","PT_PVEM","PAS_PT_PVEM"))), na.rm = TRUE),
     turnout = total / listanominal,
     year    = 2001,
-    month   = "October"
+    month   = "October",
+    STATE   = "TAMAULIPAS"
   )
 
 ################################################################################
@@ -569,15 +567,13 @@ df_collapsed <- df_collapsed %>%
 ################################################################################
 
 df_collapsed <- df_collapsed %>%
-  rowwise() %>%
   mutate(
-    valid = sum(c_across(c("PAN","PRI","PRD_PC","PT","PVEM")), na.rm=TRUE)
-  ) %>%
-  ungroup()
+    valid = rowSums(select(., any_of(c("PAN","PRI","PRD_PC","PT","PVEM"))), na.rm = TRUE)
+  )
 
 df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta") %>%
   select(state, section, month, year, lista) %>% 
-  filter(state == "TABASCO")
+  filter(state == "TAMAULIPAS")
 
 df_merged <- df_collapsed %>%
   left_join(df_all, by=c("section")) %>%
@@ -590,7 +586,8 @@ df_2004<- df_merged %>%
   mutate(
     turnout = total / listanominal,
     year    = 2004,
-    month   = "November"
+    month   = "November",
+    STATE   = "TAMAULIPAS"
   ) %>%
   arrange(section)
 
@@ -641,6 +638,7 @@ df_collapsed <- df_collapsed %>%
     PT     = pt,
     PVEM   = pvem,
     PC     = pc,
+    PRD_PT = prdpt,
     PAS    = pas
   )
 
@@ -712,14 +710,11 @@ df_collapsed <- df_collapsed %>%
 ################################################################################
 
 df_2007 <- df_collapsed %>%
-  rowwise() %>%
   mutate(
-    valid = sum(c_across(c("PAN","PRI","PRD","PT","PVEM","PC","PAS")), na.rm=TRUE)
-  ) %>%
-  ungroup() %>%
-  mutate(
+    valid = rowSums(select(., any_of(c("PAN","PRI","PRD","PRD_PT","PT","PVEM","PC","PAS"))), na.rm = TRUE),
     year  = 2007,
-    month = "November"
+    month = "November",
+    STATE = "TAMAULIPAS"
   ) %>%
   arrange(section)
 
@@ -782,7 +777,7 @@ df_collapsed <- df_2010 %>%
 
 df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta") %>%
   select(state, section, month, year, lista) %>% 
-  filter(state == "TABASCO")
+  filter(state == "TAMAULIPAS")
 
 df_join <- df_collapsed %>%
   left_join(df_all, by=c("section")) %>%
@@ -882,16 +877,11 @@ df_join <- df_join %>%
 ################################################################################
 
 df_2010 <- df_join %>%
-  rowwise() %>%
   mutate(
-    valid = sum(c_across(c(
-      "PAN","PRI","PRI_PANAL","PRI_PVEM_PANAL","PRD","PT","PVEM","PANAL","PC"
-    )), na.rm=TRUE)
-  ) %>%
-  ungroup() %>%
-  mutate(
+    valid = rowSums(select(., any_of(c("PAN","PRI","PRI_PANAL","PRI_PVEM_PANAL","PRD","PT","PVEM","PANAL","PC"))), na.rm = TRUE),
     year  = 2010,
-    month = "July"
+    month = "July",
+    STATE = "TAMAULIPAS"
   ) %>%
   arrange(section)
 
@@ -1023,14 +1013,11 @@ df_collapse <- df_collapse %>%
 ################################################################################
 
 df_2013 <- df_collapse %>%
-  rowwise() %>%
   mutate(
-    valid = sum(c_across(c("PAN","PRI","PRI_PVEM_PANAL","PRD","PT","PVEM","PANAL","PC")), na.rm=TRUE)
-  ) %>%
-  ungroup() %>%
-  mutate(
+    valid = rowSums(select(., any_of(c("PAN","PRI","PRI_PVEM_PANAL","PRD","PT","PVEM","PANAL","PC"))), na.rm = TRUE),
     year  = 2013,
-    month = "July"
+    month = "July",
+    STATE = "TAMAULIPAS"
   ) %>%
   arrange(section)
 
@@ -1208,13 +1195,13 @@ df_all <- df_all %>%
     ),
     PRI   = if_else(!is.na(PRI_PVEM_PANAL), NA_real_, PRI),
     PVEM  = if_else(!is.na(PRI_PVEM_PANAL), NA_real_, PVEM),
-    PNA   = if_else(!is.na(PRI_PVEM_PANAL), NA_real_, PANAL)
+    PANAL = if_else(!is.na(PRI_PVEM_PANAL), NA_real_, PANAL)
   ) %>%
   select(-any_of(c("PRI_PVEM","PRI_PANAL","PVEM_PANAL")))
 
 # order CI_* after "PRI_" => adapt if you want a custom reorder
 # collapse (sum) PAN-nulo, by(municipality section)
-vote_cols2 <- c("PAN","PRI","PRD","PVEM","PT","MC","PANAL","Morena","ES","PRI_PVEM_PANAL","CI_1","CI_2","CI_3","nulo","no_reg")
+vote_cols2 <- c("PAN","PRI","PRD","PVEM","PT","MC","PANAL","MORENA","PES","PRI_PVEM_PANAL","CI_1","CI_2","CI_3","nulo","no_reg")
 
 df_collapse2 <- df_all %>%
   group_by(municipality, section) %>%
@@ -1224,13 +1211,11 @@ df_collapse2 <- df_all %>%
 # Part F: compute valid, total, drop no_reg nulo, merge municipality codes, merge LN2016, final
 ################################################################################
 
-# valid=rowtotal(PAN PRI PRD PVEM PT MC PNA Morena ES PRI_PVEM_PANAL CI_1..CI_3)
+# valid=rowtotal(PAN PRI PRD PVEM PT MC PANAL MORENA PES PRI_PVEM_PANAL CI_1..CI_3)
 df_collapse2 <- df_collapse2 %>%
-  rowwise() %>%
   mutate(
-    valid = sum(c_across(any_of(c("PAN","PRI","PRD","PVEM","PT","MC","PNA","Morena","ES","PRI_PVEM_PANAL","CI_1","CI_2","CI_3"))), na.rm=TRUE)
+    valid = rowSums(select(., any_of(c("PAN","PRI","PRD","PVEM","PT","MC","PANAL","MORENA","PES","PRI_PVEM_PANAL","CI_1","CI_2","CI_3"))), na.rm = TRUE)
   ) %>%
-  ungroup() %>%
   mutate(
     total = valid + coalesce(nulo,0) + coalesce(no_reg,0)
   ) %>%
@@ -1631,11 +1616,12 @@ collapsed_2021 <- collapsed_2021 %>%
 # Calculate valid votes and final details
 collapsed_2021 <- collapsed_2021 %>%
   dplyr::mutate(
-    total = sum(c_across(PAN:CI_13), na.rm = TRUE),
+    total = rowSums(across(PAN:CI_13), na.rm = TRUE),
     turnout = total/listanominal,
-    valid = sum(c_across(c(PAN:PT_MORENA, CI_1:CI_13)), na.rm = TRUE),
+    valid = rowSums(across(c(PAN:PT_MORENA, CI_1:CI_13)), na.rm = TRUE),
     year = 2021,
-    month = "June"
+    month = "June",
+    STATE = "TAMAULIPAS"
   )
 
 # Check and process coalitions
@@ -2010,11 +1996,12 @@ collapsed_2024 <- collapsed_2024 %>%
 # Calculate valid votes and final details
 collapsed_2024 <- collapsed_2024 %>%
   dplyr::mutate(
-    total = sum(c_across(PAN:CI_2), na.rm = TRUE),
+    total = rowSums(across(PAN:CI_2), na.rm = TRUE),
     turnout = total/listanominal,
-    valid = sum(c_across(c(PAN:PVEM_MORENA, CI_1:CI_2)), na.rm = TRUE),
+    valid = rowSums(across(c(PAN:PVEM_MORENA, CI_1:CI_2)), na.rm = TRUE),
     year = 2024,
-    month = "June"
+    month = "June",
+    STATE = "TAMAULIPAS"
   ) %>% 
   filter(total > 0)
 
@@ -2051,4 +2038,3 @@ Tamaulipas_all <- Tamaulipas_all %>%
   )
 
 data.table::fwrite(Tamaulipas_all,"../../../Processed Data/tamaulipas/tamaulipas_process_raw_data.csv")
-
