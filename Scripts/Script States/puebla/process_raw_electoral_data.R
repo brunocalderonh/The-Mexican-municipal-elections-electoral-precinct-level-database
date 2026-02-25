@@ -334,7 +334,7 @@ filtered_data <- filtered_data %>%
 
 # Add year and month columns
 df_1998 <- filtered_data %>%
-  mutate(year = 1998, month = "November")
+  mutate(year = 1998, month = "November", STATE = "PUEBLA")
 rm(filtered_data)
 
 # Read the CSV file
@@ -645,7 +645,7 @@ data <- data %>%
 
 # Add year and month columns
 data_2001 <- data %>%
-  mutate(year = 2001, month = "November",
+  mutate(year = 2001, month = "November", STATE = "PUEBLA",
          section = as.numeric(section))
 
 # Import the Excel sheet and specify the range of cells to read
@@ -717,7 +717,7 @@ collapsed_data <- collapsed_data %>%
 
 # Add year and month columns
 data_2002 <- collapsed_data %>%
-  mutate(year = 2002, month = "June")
+  mutate(year = 2002, month = "June", STATE = "PUEBLA")
 
 # Read the CSV file
 data <- read_csv("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Ayu_Seccion_2004.csv")
@@ -993,12 +993,80 @@ data <- data %>%
 
 # Add year and month columns
 data_2004 <- data %>%
-  mutate(year = 2004, month = "November",
+  mutate(year = 2004, month = "November", STATE = "PUEBLA",
          section = as.numeric(section))
 
 # Sort the data by 'section'
 data <- data %>%
   arrange(section)
+
+################################################################################
+# 2005 EXTRAORDINARIO - JOHN lines 898-952
+# Santa Ines Ahuatempan (uniqueid 21147)
+################################################################################
+
+data_2005 <- tryCatch({
+  # File has encoding-dependent name: "ResultadosDeLaElección...2005.xlsx"
+  base_dir <- "../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024"
+  file_2005 <- list.files(base_dir, pattern = ".*2005\\.xlsx$", full.names = TRUE)[1]
+  if (is.na(file_2005)) file_2005 <- file.path(base_dir, "ResultadosDeLaEleccionVotacionXCasilla Aytos extra. 2005.xlsx")
+  read_excel(file_2005, sheet = "ayto", range = "A7:N15", col_names = TRUE)
+}, error = function(e) {
+  message("2005 file not found: ", e$message)
+  NULL
+})
+
+if (!is.null(data_2005)) {
+  # Rename columns with encoding-safe pattern matching
+  col_names_2005 <- names(data_2005)
+  section_col <- grep("ecci", col_names_2005, value = TRUE)[1]
+  pan_col <- grep("ACIONAL|^PAN$", col_names_2005, value = TRUE)[1]
+  pt_col <- grep("TRABAJO|^PT$", col_names_2005, value = TRUE)[1]
+  pc_col <- grep("ONVERGENCIA|^PC$", col_names_2005, value = TRUE)[1]
+  total_col <- grep("otal$", col_names_2005, value = TRUE)
+  total_col <- total_col[length(total_col)]
+  
+  data_2005 <- data_2005 %>%
+    rename(section = !!section_col, total = !!total_col) %>%
+    filter(!is.na(section)) %>%
+    mutate(
+      section = as.numeric(section),
+      municipality = "SANTA INES AHUATEMPAN EXTRAORDINARIO",
+      uniqueid = 21147
+    ) %>%
+    mutate(across(where(is.character), ~suppressWarnings(as.numeric(.)))) %>%
+    rename_with(toupper) %>%
+    rename(section = SECTION, municipality = MUNICIPALITY, uniqueid = UNIQUEID, total = TOTAL)
+  
+  # Ensure PAN, PRI, PRD, PT, PVEM, PC columns exist
+  for (party in c("PAN", "PRI", "PRD", "PT", "PVEM", "PC")) {
+    if (!party %in% names(data_2005)) data_2005[[party]] <- 0
+  }
+  
+  data_2005 <- data_2005 %>%
+    group_by(municipality, uniqueid, section) %>%
+    summarise(across(c(PAN, PRI, PRD, PT, PVEM, PC, total), sum, na.rm = TRUE), .groups = "drop")
+  
+  # Merge LN from all_months_years.dta (JOHN: ed==21, month==4, year==2005)
+  ln_2005 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+    filter(ed == 21 & month == 4 & year == 2005) %>%
+    rename(listanominal = lista, section = seccion) %>%
+    select(section, listanominal) %>%
+    distinct(section, .keep_all = TRUE)
+  
+  data_2005 <- data_2005 %>%
+    left_join(ln_2005, by = "section") %>%
+    mutate(
+      turnout = total / listanominal,
+      valid = PAN + PRI + PRD + PT + PVEM + PC,
+      year = 2005, month = "May", STATE = "PUEBLA"
+    )
+  
+  cat("2005:", nrow(data_2005), "rows\n")
+} else {
+  data_2005 <- NULL
+  cat("2005: SKIPPED (file not found)\n")
+}
 
 # Import the Excel file with case normalization (convert to lowercase) and keep first row as headers
 data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Ayu_Seccion_2007.xlsx", .name_repair = "minimal")
@@ -1293,7 +1361,7 @@ collapsed_data <- collapsed_data %>%
 
 # Add year and month columns
 data_2007 <- collapsed_data %>%
-  mutate(year = 2007, month = "November")
+  mutate(year = 2007, month = "November", STATE = "PUEBLA")
 
 # Import the Excel sheet with specified cell range
 data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/ResultadosDeLaElecciónVotaciónXCasilla Aytos extra. 2008.xlsx", sheet = "ayto", range = "A7:R25", col_names = TRUE)
@@ -1342,7 +1410,7 @@ collapsed_data <- collapsed_data %>%
 
 # Add year and month columns
 data_2008 <- collapsed_data %>%
-  mutate(year = 2008, month = "June")
+  mutate(year = 2008, month = "June", STATE = "PUEBLA")
 
 # Import the Excel file and convert column names to lowercase
 data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/Ayu_Seccion_2010.xlsx", .name_repair = "minimal")
@@ -1631,7 +1699,7 @@ collapsed_data <- collapsed_data %>%
 
 # Add year and month columns
 data_2010 <- collapsed_data %>%
-  mutate(year = 2010, month = "July")
+  mutate(year = 2010, month = "July", STATE = "PUEBLA")
 
 # Sort the data by 'section'
 collapsed_data <- collapsed_data %>%
@@ -1697,7 +1765,7 @@ collapsed_data <- collapsed_data %>%
 
 # Add year and month columns
 data_2011 <- collapsed_data %>%
-  mutate(year = 2011, month = "July")
+  mutate(year = 2011, month = "July", STATE = "PUEBLA")
 
 # Import the Excel sheet with specified cell range
 data <- read_excel("../../../Data/Raw Electoral Data/Puebla - 1998, 2001, 2004, 2007, 2010,  2013,2018,2021,2024/RESULTADOS_POR_CASILLA_AYUNTAMIENTOS Y DIPUTADOS_2012_2013.xlsx", 
@@ -2023,7 +2091,7 @@ collapsed_data <- collapsed_data %>%
 
 # Add 'year' and 'month' columns
 data_2013 <- collapsed_data %>%
-  mutate(year = 2013, month = "July")
+  mutate(year = 2013, month = "July", STATE = "PUEBLA")
 
 # Sort by 'section' (optional in R, as this might not be needed before saving)
 data_2013 <- data_2013 %>%
@@ -2415,7 +2483,8 @@ collapsed_data <- collapsed_data %>%
 puebla_data_2018 <- collapsed_data %>%
   mutate(
     year = 2018,
-    month = "July"
+    month = "July",
+    STATE = "PUEBLA"
   )
 
 # Drop all columns starting with 'cc'
@@ -2552,12 +2621,11 @@ append_data_collapsed <- append_data_collapsed %>%
 
 # Generate the 'valid' variable (rowtotal equivalent)
 append_data_collapsed <- append_data_collapsed %>%
-  rowwise() %>%
-  mutate(valid = sum(c_across(PRI:PT_MORENA_PES), na.rm = TRUE))
+  mutate(valid = rowSums(across(PRI:PT_MORENA_PES), na.rm = TRUE))
 
 # Add year and month
 data_2019 <- append_data_collapsed %>%
-  mutate(year = 2019, month = "June")
+  mutate(year = 2019, month = "June", STATE = "PUEBLA")
 
 #####################################
 ### PROCESSING DATA FOR 2021 -------
@@ -2870,7 +2938,7 @@ collapsed_ext <- data_ext %>%
            \(x) sum(x, na.rm = TRUE))
   ) %>% 
   dplyr::mutate(
-    valid = sum(c_across(PAN:PAN_PRD), na.rm = TRUE),
+    valid = rowSums(across(PAN:PAN_PRD), na.rm = TRUE),
   )
 
 # Get the municipalities that appear in the ext data
@@ -2900,7 +2968,9 @@ collapsed_2021 <- collapsed_2021 %>%
     month = case_when(
       municipality %in% c("SAN JOSE MIAHUATLAN", "TEOTLALCO", "TLAHUAPAN") ~ "March",
       TRUE ~ "June"
-    ))
+    ),
+    STATE = "PUEBLA"
+  )
 
 # Check and process coalitions
 magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
@@ -3304,7 +3374,7 @@ collapsed_2024 <- collapsed_2024%>%
 collapsed_2024 <- collapsed_2024 %>%
   dplyr::mutate(
     turnout = total/listanominal,
-    valid = sum(c_across(PAN:MORENA_FXM), na.rm = TRUE),
+    valid = rowSums(across(PAN:MORENA_FXM), na.rm = TRUE),
     year = case_when(
       municipality %in% c("AYOTOXCO DE GUERRERO", "CHIGNAHUAPAN", "VENUSTIANO CARRANZA", "XIUTETELCO") ~ 2025,
       TRUE ~ 2024
@@ -3312,14 +3382,16 @@ collapsed_2024 <- collapsed_2024 %>%
     month = case_when(
       municipality %in% c("AYOTOXCO DE GUERRERO", "CHIGNAHUAPAN", "VENUSTIANO CARRANZA", "XIUTETELCO") ~ "March",
       TRUE ~ "June"
-    ))
+    ),
+    STATE = "PUEBLA"
+  )
 
 # Apply coalition processing function
 collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
   select(-coal1, -coal2, -coal3, -coal4)
 
 # Append the data
-puebla_combined <- bind_rows(df_1998, data_2001, data_2002, data_2004, data_2007,
+puebla_combined <- bind_rows(df_1998, data_2001, data_2002, data_2004, data_2005, data_2007,
                              data_2008, data_2010, data_2011, data_2013,
                              data_2014, data_2018, data_2019, collapsed_2021, collapsed_2024)
 

@@ -1,4 +1,3 @@
-
 rm(list = ls())
 cat("\014")
 options(max.print = 5000, scipen = 10)
@@ -32,7 +31,7 @@ remove_accents <- function(x) {
 
 cat(paste0("=========================================\n"))
 cat(paste0("Processing ", STATE_NAME, " electoral data\n"))
-cat(paste0("Election years: 1995, 1998, 2001, 2004, 2005, 2007, 2008, 2011, 2012, 2015, 2018\n"))
+cat(paste0("Election years: 1995, 1998, 2001, 2004, 2005(ext), 2007, 2008(ext), 2011, 2012(ext), 2015, 2015(ext), 2018, 2021, 2024\n"))
 cat(paste0("=========================================\n"))
 
 # Load all_months_years LN data (used by multiple years)
@@ -652,6 +651,35 @@ data_1998 <- data_1998 %>%
   )
 
 # -------------------------------------------------------------------
+# 8. MERGE with all_months_years.dta to backfill missing listanominal
+#    (Stata JOHN: merge 1:m ed seccion using all_months_years.dta, keep if month==9 & year==1998)
+# -------------------------------------------------------------------
+ln_1998 <- tryCatch({
+  ln_tmp <- read_dta(file.path(ln_path, "all_months_years.dta"))
+  # Handle both numeric and string month formats
+  if(is.numeric(ln_tmp$month)) {
+    ln_tmp <- ln_tmp %>% filter(ed == state_ed & month == 9 & year == 1998)
+  } else {
+    ln_tmp <- ln_tmp %>% filter(ed == state_ed & month == "September" & year == 1998)
+  }
+  ln_tmp %>%
+    rename(section = seccion, lista_ln = lista) %>%
+    select(section, lista_ln) %>%
+    distinct(section, .keep_all = TRUE)
+}, error = function(e) {
+  cat("WARNING: Could not load LN data for 1998 backfill\n")
+  data.frame(section = integer(0), lista_ln = numeric(0))
+})
+
+data_1998 <- data_1998 %>%
+  left_join(ln_1998, by = "section")
+
+# Replace listanominal with LN from official source where missing (missing>=1)
+data_1998 <- data_1998 %>%
+  mutate(listanominal = if_else(missing >= 1 & !is.na(lista_ln), lista_ln, listanominal)) %>%
+  select(-missing, -any_of("lista_ln"))
+
+# -------------------------------------------------------------------
 # 10. gen turnout = total/listanominal
 # -------------------------------------------------------------------
 data_1998 <- data_1998 %>%
@@ -680,6 +708,32 @@ data_1998 <- data_1998 %>%
     month="November"
   ) %>% 
   select(-municipality)
+
+# -------------------------------------------------------------------
+# 13. MERGE with 1995 data to get uniqueids
+#     (Stata JOHN: sort section; merge section using Michoacan_Section_1995_to_Merge_with_1998.dta)
+# -------------------------------------------------------------------
+data_1995_for_merge <- data_1995 %>%
+  select(municipality, section, uniqueid) %>%
+  distinct(section, .keep_all = TRUE)
+
+data_1998 <- data_1998 %>%
+  left_join(data_1995_for_merge, by = "section")
+
+# Fix specific unmatched sections (from JOHN Stata)
+data_1998 <- data_1998 %>%
+  mutate(
+    uniqueid = case_when(
+      section == 935 & is.na(uniqueid) ~ 16051L,
+      section == 2675 & is.na(uniqueid) ~ 16053L,
+      TRUE ~ as.integer(uniqueid)
+    ),
+    municipality = case_when(
+      section == 935 & municipality == "" | (section == 935 & is.na(municipality)) ~ "M.CASTELLANOS",
+      section == 2675 & municipality == "" | (section == 2675 & is.na(municipality)) ~ "MORELIA",
+      TRUE ~ municipality
+    )
+  )
 
 # -------------------------------------------------------------------
 # 1. READ CSV
@@ -905,6 +959,10 @@ data_2004 <- data_2004 %>%
          total = Total,
          section = seccion)
 
+# Drop anomalous observation (Stata JOHN line 417)
+data_2004 <- data_2004 %>%
+  filter(!(municipality == "Ario" & section == 170))
+
 data_2004 <- data_2004 %>%
   filter(!(municipality == "" & is.na(section)))
 data_2004 <- data_2004 %>% filter(!is.na(total) & total != 0)
@@ -966,7 +1024,6 @@ names(data_2005) <- gsub("[- ]", "", names(data_2005))
 # Suppose the second column is named something like "B". 
 # We'll rename them or directly refer to them by col index if needed.
 # Check names(data_2005) to see actual column names.
-names(data_2005)
 
 # For clarity, let's assume column B is literally named "B".
 # Filter for rows where str_detect(B,"ecci")
@@ -1509,17 +1566,25 @@ data_2008 <- data_2008 %>%
 #    rename lista -> listanominal, rename seccion->section
 # -------------------------------------------------------------------
 months_data <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta")
-names(months_data)
+
+# Handle both numeric and string month formats (Stata JOHN uses month==4)
+if(is.numeric(months_data$month)) {
+  months_data <- months_data %>%
+    filter(ed == state_ed & month == 4 & year == 2008)
+} else {
+  months_data <- months_data %>%
+    filter(ed == state_ed & month == "April" & year == 2008)
+}
 
 months_data <- months_data %>%
-  filter(state == "MICHOACAN ", month == "April", year==2008) %>%
-  select(lista, section)
+  rename(section = seccion, listanominal = lista) %>%
+  select(section, listanominal) %>%
+  distinct(section, .keep_all = TRUE)
 
 # Now restore data_2008 and merge 1:1 on section
 # Instead of preserve/restore, we'll just do a left_join in R:
 data_2008 <- data_2008 %>%
-  left_join(months_data, by="section") %>% 
-  rename(listanominal = lista)
+  left_join(months_data, by="section")
 
 # drop if _merge==2 => not needed with left_join
 # but we can filter out unmatched rows if listanominal is NA:
@@ -1554,7 +1619,6 @@ data_2008 <- data_2008 %>%
 # -------------------------------------------------------------------
 # Adjust file path to your local environment:
 data_2011 <- read_dta("../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018,2021,2024/2011/Ayu_Seccion_2011.dta")
-names(data_2011)
 # -------------------------------------------------------------------
 # 2. REPLACE municipality = proper(municipality)
 #    R doesn't have a built-in 'proper()' for strings. We'll do:
@@ -1875,14 +1939,24 @@ data_2012 <- data_2012 %>%
 # -------------------------------------------------------------------
 months_data <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta")
 
+# Stata JOHN uses: keep if ed==16 & fecha=="01/07/2012" & year==2012
+# Handle both numeric and string month formats
+if(is.numeric(months_data$month)) {
+  months_data <- months_data %>%
+    filter(ed == state_ed & month == 7 & year == 2012)
+} else {
+  months_data <- months_data %>%
+    filter(ed == state_ed & month == "July" & year == 2012)
+}
+
 months_data <- months_data %>%
-  filter(state == "MICHOACAN ", month == "July", year==2012) %>%
-  select(lista, section)
+  rename(section = seccion, listanominal = lista) %>%
+  select(section, listanominal) %>%
+  distinct(section, .keep_all = TRUE)
 
 # in R, we "restore" data_2012 and left_join
 data_2012 <- data_2012 %>%
-  left_join(months_data, by="section") %>% 
-  rename( listanominal = lista)
+  left_join(months_data, by="section")
 
 # drop if _merge==2 => in left_join we can filter out unmatched
 data_2012 <- data_2012 %>% filter(!is.na(listanominal))
@@ -1924,11 +1998,6 @@ data_2015 <- data_2015 %>%
     month= "July"
   )
 
-<<<<<<< HEAD
-names(data_2015)
-=======
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
-
 ###############################################################################
 ### 1. Import Excel extraordinary elections
 ###############################################################################
@@ -1940,7 +2009,6 @@ data_sahuayo <- read_excel(
 )
 
 # Check current column names
-names(data_sahuayo)
 
 gen_excel_col_names <- function(n) {
   # Generates Excel-like column names from A..Z, AA..ZZ, etc.
@@ -1965,7 +2033,6 @@ new_names <- gen_excel_col_names(n_cols)
 names(data_sahuayo) <- new_names
 
 # Check
-names(data_sahuayo)
 
 ###############################################################################
 ### 2. Rename columns
@@ -2045,54 +2112,6 @@ data_sahuayo <- data_sahuayo %>%
     month = "December"
   )
 
-<<<<<<< HEAD
-=======
-###############################################################################
-### PART 1. READ SHEETS FROM "Ayuntamientos_Mich_2018.xlsx" AND SAVE EACH AS .DTA
-###############################################################################
-
-sheet_list <- excel_sheets("../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018,2021,2024/Ayuntamientos_Mich_2018.xlsx")
-
-for (sheetname in sheet_list) {
-  message(paste("Processing sheet:", sheetname))
-  
-  # 1) Read the sheet
-  df_sheet <- read_excel(
-    "../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018,2021,2024/Ayuntamientos_Mich_2018.xlsx",
-    sheet = sheetname, 
-    col_names = TRUE
-  )
-  
-  # 2) Check for ID_MUNICIPIO
-  if (!"ID_MUNICIPIO" %in% names(df_sheet)) {
-    message("No ID_MUNICIPIO column in sheet: ", sheetname, ", skipping.")
-    next
-  }
-  
-  # 3) Drop rows where ID_MUNICIPIO is blank
-  df_sheet <- df_sheet %>%
-    filter(ID_MUNICIPIO != "")
-  
-  # 4) Convert all columns to character, replace blanks "" with "0"
-  for (cn in names(df_sheet)) {
-    df_sheet[[cn]] <- as.character(df_sheet[[cn]])
-    df_sheet[[cn]][df_sheet[[cn]] == ""] <- "0"
-  }
-  
-  # 5) Sanitize column names so that saving to .dta won't fail
-  #    We'll remove any space or special character, replace with underscore
-  df_sheet <- df_sheet %>% 
-    rename_with(~ gsub("[^A-Za-z0-9_]", "_", .x))
-  
-  # 6) Build the output filename
-  file_out <- paste0(sheetname, ".dta")
-  
-  # 7) Save as .dta
-  haven::write_dta(df_sheet, file_out)
-  message(paste("Saved:", file_out))
-}
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
-
 ###############################################################################
 ### PROCESSING 2018 ELECTION
 ###############################################################################
@@ -2109,386 +2128,15 @@ data_2018 <- bind_rows(lapply(sheet_names, function(s) {
   df
 }))
 
-<<<<<<< HEAD
 # Convert all columns to appropriate types
 data_2018 <- data_2018 %>%
   mutate(across(-any_of(c("MUNICIPIO", "CASILLA", "ID_MUNICIPIO")),
                 ~suppressWarnings(as.numeric(as.character(.)))))
 
-names(data_2018)
-=======
-# 3) Initialize an empty data frame to hold appended data
-all_hoja <- NULL
-
-# 4) Loop through each file, read & append
-for(fname in files_to_append) {
-  if(!file.exists(fname)) {
-    message("File not found, skipping: ", fname)
-    next
-  }
-  message("Appending file: ", fname)
-  
-  temp_df <- haven::read_dta(fname)
-  
-  if(is.null(all_hoja)) {
-    # first .dta sets up the structure
-    all_hoja <- temp_df
-  } else {
-    # subsequent .dta -> "append" by binding rows
-    all_hoja <- dplyr::bind_rows(all_hoja, temp_df)
-  }
-}
-
-
-all_hoja <- all_hoja %>% 
-  mutate(municipality = str_to_title(MUNICIPIO))
-
-###############################################################################
-### 0. Remove all .dta files that were previously written, keep working with `all_hoja`
-###############################################################################
-
-# Suppose we had a vector `files_to_append` referencing all .dta files we wrote.
-files_to_append <- c(
-  "Hoja1 (2).dta", "Hoja1 (3).dta", "Hoja1 (4).dta", "Hoja1 (5).dta", "Hoja1 (6).dta",
-  "Hoja1 (7).dta", "Hoja1 (8).dta", "Hoja1 (9).dta", "Hoja1 (10).dta", "Hoja1 (11).dta",
-  "Hoja1 (12).dta", "Hoja1 (13).dta", "Hoja1 (14).dta", "Hoja1 (15).dta", "Hoja1 (16).dta",
-  "Hoja1 (17).dta", "Hoja1 (18).dta", "Hoja1 (19).dta", "Hoja1 (20).dta", "Hoja1 (21).dta",
-  "Hoja1 (22).dta", "Hoja1 (23).dta", "Hoja1 (24).dta", "Hoja1 (25).dta", "Hoja1 (26).dta",
-  "Hoja1 (27).dta", "Hoja1 (28).dta", "Hoja1 (29).dta", "Hoja1 (30).dta", "Hoja1 (31).dta",
-  "Hoja1 (32).dta", "Hoja1 (33).dta", "Hoja1 (34).dta", "Hoja1 (35).dta", "Hoja1 (36).dta",
-  "Hoja1 (37).dta", "Hoja1 (38).dta", "Hoja1 (39).dta", "Hoja1 (40).dta", "Hoja1 (41).dta",
-  "Hoja1 (42).dta", "Hoja1 (43).dta", "Hoja1 (44).dta", "Hoja1 (45).dta", "Hoja1 (46).dta",
-  "Hoja1 (47).dta", "Hoja1 (48).dta", "Hoja1 (49).dta", "Hoja1 (50).dta", "Hoja1 (51).dta",
-  "Hoja1 (52).dta", "Hoja1 (53).dta", "Hoja1 (54).dta", "Hoja1 (55).dta", "Hoja1 (56).dta",
-  "Hoja1 (57).dta", "Hoja1 (58).dta", "Hoja1 (59).dta", "Hoja1 (60).dta", "Hoja1 (61).dta",
-  "Hoja1 (62).dta", "Hoja1 (63).dta", "Hoja1 (64).dta", "Hoja1 (65).dta", "Hoja1 (66).dta",
-  "Hoja1 (67).dta", "Hoja1 (68).dta", "Hoja1 (69).dta", "Hoja1 (70).dta", "Hoja1 (71).dta",
-  "Hoja1 (72).dta", "Hoja1 (73).dta", "Hoja1 (74).dta", "Hoja1 (75).dta", "Hoja1 (76).dta",
-  "Hoja1 (77).dta", "Hoja1 (78).dta", "Hoja1 (79).dta", "Hoja1 (80).dta", "Hoja1 (81).dta",
-  "Hoja1 (82).dta", "Hoja1 (83).dta", "Hoja1 (84).dta", "Hoja1 (85).dta", "Hoja1 (86).dta",
-  "Hoja1 (87).dta", "Hoja1 (88).dta", "Hoja1 (89).dta", "Hoja1 (90).dta", "Hoja1 (91).dta",
-  "Hoja1 (92).dta", "Hoja1 (93).dta", "Hoja1 (94).dta", "Hoja1 (95).dta", "Hoja1 (96).dta",
-  "Hoja1 (97).dta", "Hoja1 (98).dta", "Hoja1 (99).dta", "Hoja1 (100).dta", "Hoja1 (101).dta",
-  "Hoja1 (102).dta", "Hoja1 (103).dta", "Hoja1 (104).dta", "Hoja1 (105).dta", "Hoja1 (106).dta",
-  "Hoja1 (107).dta", "Hoja1 (108).dta", "Hoja1 (109).dta", "Hoja1 (110).dta", "Hoja1 (111).dta",
-  "Hoja1 (112).dta", "Hoja1 (113).dta"
-)
-
-message("Deleting all individual .dta files we wrote earlier...")
-
-for(fname in files_to_append) {
-  if(file.exists(fname)) {
-    file.remove(fname)
-    message("Removed: ", fname)
-  } else {
-    message("File not found, skipping removal: ", fname)
-  }
-}
-
-message("Now continuing with `all_hoja`...")
-
-###############################################################################
-### 1. We assume you already have `df` in memory (the appended data).
-###############################################################################
-
-# "gen uniqueid=0"
-df <- all_hoja %>%
-  mutate(uniqueid = NA)
-
-# Then replicate each "replace uniqueid=16001 if municipality=='Acuitzio'", etc.
-# In R, we do `case_when` or a chain of `if_else`.
-df <- df %>%
-  mutate(
-    uniqueid = case_when(
-      municipality == "Acuitzio" ~ 16001,
-      municipality == "Aguililla" ~ 16002,
-      municipality == "Álvaro Obregón" ~ 16003,
-      municipality == "Angamacutiro" ~ 16004,
-      municipality == "Angangueo" ~ 16005,
-      municipality == "Apatzingán" ~ 16006,
-      municipality == "Áporo" ~ 16007,
-      municipality == "Aquila" ~ 16008,
-      municipality == "Ario" ~ 16009,
-      municipality == "Arteaga" ~ 16010,
-      municipality == "Brisenas" | municipality == "BriseÑAs" ~ 16011,
-      municipality == "Buenavista" ~ 16012,
-      municipality == "Carácuaro" ~ 16013,
-      municipality == "Charapan" ~ 16021,
-      municipality == "Charo" ~ 16022,
-      municipality == "Chavinda" ~ 16023,
-      municipality == "Cheran" ~ 16024,
-      municipality == "Chilchota" ~ 16025,
-      municipality == "Chinicuila" ~ 16026,
-      municipality == "Chucándiro" ~ 16027,
-      municipality == "Churintzio" ~ 16028,
-      municipality == "Churumuco" ~ 16029,
-      municipality == "Coahuayana" ~ 16014,
-      municipality == "Coalcomán De Vazquez Pallares" ~ 16015,
-      municipality == "Coeneo" ~ 16016,
-      municipality == "Cojumatlán De Régules" ~ 16074,
-      municipality == "Contepec" ~ 16017,
-      municipality == "Copándaro" ~ 16018,
-      municipality == "Cotija" ~ 16019,
-      municipality == "Cuitzeo" ~ 16020,
-      municipality == "Ecuandureo" ~ 16030,
-      municipality == "Epitacio Huerta" ~ 16031,
-      municipality == "Erongarícuaro" ~ 16032,
-      municipality == "Gabriel Zamora" ~ 16033,
-      municipality == "Hidalgo" ~ 16034,
-      municipality == "Huandacareo" ~ 16036,
-      municipality == "Huaníqueo" ~ 16037,
-      municipality == "Huetamo" ~ 16038,
-      municipality == "Huiramba" ~ 16039,
-      municipality == "Indaparapeo" ~ 16040,
-      municipality == "Irimbo" ~ 16041,
-      municipality == "Ixtlán" ~ 16042,
-      municipality == "Jacona" ~ 16043,
-      municipality == "Jiménez" ~ 16044,
-      municipality == "Jiquilpan" ~ 16045,
-      municipality == "José Sixto Verduzco" ~ 16113,
-      municipality == "Juárez" ~ 16046,
-      municipality == "Jungapeo" ~ 16047,
-      municipality == "La Huacana" ~ 16035,
-      municipality == "La Piedad" ~ 16069,
-      municipality == "Lagunillas" ~ 16048,
-      municipality == "Lázaro Cárdenas" ~ 16052,
-      municipality == "Los Reyes" ~ 16075,
-      municipality == "Madero" ~ 16049,
-      municipality == "Maravatío" ~ 16050,
-      municipality == "Marcos Castellanos" ~ 16051,
-      municipality == "Morelia" ~ 16053,
-      municipality == "Morelos" ~ 16054,
-      municipality == "Múgica" ~ 16055,
-      municipality == "Nahuátzen" ~ 16056,
-      municipality == "Nocupétaro" ~ 16057,
-      municipality == "Nuevo Parangaricutiro" ~ 16058,
-      municipality == "Nuevo Urecho" ~ 16059,
-      municipality == "Numarán" ~ 16060,
-      municipality == "Ocampo" ~ 16061,
-      municipality == "Pajacuarán" ~ 16062,
-      municipality == "Panindícuaro" ~ 16063,
-      municipality == "Paracho" ~ 16065,
-      municipality == "Parácuaro" ~ 16064,
-      municipality == "Pátzcuaro" ~ 16066,
-      municipality == "Penjamillo" ~ 16067,
-      municipality == "Peribán" ~ 16068,
-      municipality == "Purépero" ~ 16070,
-      municipality == "Puruándiro" ~ 16071,
-      municipality == "Queréndaro" ~ 16072,
-      municipality == "Quiroga" ~ 16073,
-      municipality == "Sahuayo" ~ 16076,
-      municipality == "Salvador Escalante" ~ 16079,
-      municipality == "San Lucas" ~ 16077,
-      municipality == "Santa Ana Maya" ~ 16078,
-      municipality == "Senguio" ~ 16080,
-      municipality == "Susupuato" ~ 16081,
-      municipality == "Tacámbaro" ~ 16082,
-      municipality == "Tancítaro" ~ 16083,
-      municipality == "Tangamandapio" ~ 16084,
-      municipality == "Tangancícuaro" ~ 16085,
-      municipality == "Tanhuato" ~ 16086,
-      municipality == "Taretan" ~ 16087,
-      municipality == "Tarímbaro" ~ 16088,
-      municipality == "Tepalcatepec" ~ 16089,
-      municipality == "Tingambato" ~ 16090,
-      municipality == "Tingüindín" ~ 16091,
-      municipality == "Tiquicheo" | municipality=="Tiquicheo De Nicolas Romero" ~ 16092,
-      municipality == "Tlalpujahua" ~ 16093,
-      municipality == "Tlazazalca" ~ 16094,
-      municipality == "Tocumbo" ~ 16095,
-      municipality == "Tumbiscatio" ~ 16096,
-      municipality == "Turicato" ~ 16097,
-      municipality == "Tuxpan" ~ 16098,
-      municipality == "Tuzantla" ~ 16099,
-      municipality == "Tzintzuntzan" ~ 16100,
-      municipality == "Tzitzio" ~ 16101,
-      municipality == "Uruapan" ~ 16102,
-      municipality == "Venustiano Carranza" ~ 16103,
-      municipality == "Villamar" ~ 16104,
-      municipality == "Vista Hermosa" ~ 16105,
-      municipality == "Yurécuaro" ~ 16106,
-      municipality == "Zacapu" ~ 16107,
-      municipality == "Zamora" ~ 16108,
-      municipality == "Zináparo" ~ 16109,
-      municipality == "Zinapécuaro" ~ 16110,
-      municipality == "Ziracuaretiro" ~ 16111,
-      municipality == "Zitácuaro" ~ 16112,
-      TRUE ~ uniqueid # keep old value if none matched
-    )
-  )
-
-###############################################################################
-### 2. "destring *, replace" => Convert all columns to numeric if possible
-###############################################################################
-# Convert to numeric only if the column contains all numeric values (allowing for NAs)
-df <- df %>%
-  mutate(across(where(is.character), ~ {
-    numeric_version <- suppressWarnings(as.numeric(.x))
-    # If conversion creates NAs where there weren't NAs before, keep as character
-    if (sum(is.na(numeric_version)) > sum(is.na(.x))) {
-      .x  # Keep as character
-    } else {
-      numeric_version  # Convert to numeric
-    }
-  }))
-
-###############################################################################
-### 1) Generate or update coalition columns (PAN_PRD_PMC, etc.)
-###    Then zero out the base parties if the coalition col is not missing
-###############################################################################
-
-# Example: g PAN_PRD_PMC = CO_PAN_PRD_PMC + CO_PAN_PRD + ... if CO_PAN_PRD_PMC != .
-# In R, we do: if(!is.na(df$CO_PAN_PRD_PMC)) => sum them, else NA
-if(all(c("CO_PAN_PRD_PMC","CO_PAN_PRD","CO_PAN_PMC","CO_PRD_PMC","PAN","PMC","PRD") %in% names(df))) {
-  
-  df <- df %>%
-    mutate(
-      # replicate "g PAN_PRD_PMC = (CO_PAN_PRD_PMC + CO_PAN_PRD + CO_PAN_PMC + CO_PRD_PMC + PAN + PMC + PRD) if CO_PAN_PRD_PMC !=."
-      # i.e. only sum if CO_PAN_PRD_PMC is not NA, else leave as NA
-      PAN_PRD_PMC = if_else(!is.na(CO_PAN_PRD_PMC),
-                            rowSums(across(c(CO_PAN_PRD_PMC, CO_PAN_PRD, CO_PAN_PMC, CO_PRD_PMC, PAN, PMC, PRD)), na.rm=TRUE),
-                            NA_real_
-      ),
-      # replicate "replace PAN=. if CO_PAN_PRD_PMC!=."
-      PAN = if_else(!is.na(CO_PAN_PRD_PMC), NA_real_, PAN),
-      PMC = if_else(!is.na(CO_PAN_PRD_PMC), NA_real_, PMC),
-      PRD = if_else(!is.na(CO_PAN_PRD_PMC), NA_real_, PRD),
-      # replicate "gen coalfrente = CO_PAN_PRD_PMC!=."
-      coalfrente = if_else(!is.na(CO_PAN_PRD_PMC), 1, 0)
-    ) %>%
-    # replicate "drop CO_PAN_PRD_PMC CO_PAN_PRD CO_PAN_PMC CO_PRD_PMC"
-    select(-CO_PAN_PRD_PMC, -CO_PAN_PRD, -CO_PAN_PMC, -CO_PRD_PMC)
-}
-
-
-# Similarly, do the logic for the other coalition blocks:
-
-if(all(c("CC_PAN_PMC","PAN","PMC") %in% names(df))) {
-  df <- df %>%
-    mutate(
-      PAN_PMC = if_else(!is.na(CC_PAN_PMC),
-                        rowSums(across(c(CC_PAN_PMC, PAN, PMC)), na.rm=TRUE),
-                        NA_real_
-      ),
-      PAN = if_else(!is.na(CC_PAN_PMC), 0, PAN),
-      PMC = if_else(!is.na(CC_PAN_PMC), 0, PMC),
-      coalpanmc = if_else(!is.na(CC_PAN_PMC), 1, 0)
-    ) %>%
-    select(-CC_PAN_PMC)
-}
-
-if(all(c("CC_PAN_PRD","PAN","PRD") %in% names(df))) {
-  df <- df %>%
-    mutate(
-      PAN_PRD = if_else(!is.na(CC_PAN_PRD),
-                        rowSums(across(c(CC_PAN_PRD, PAN, PRD)), na.rm=TRUE),
-                        NA_real_
-      ),
-      PAN = if_else(!is.na(CC_PAN_PRD), 0, PAN),
-      PRD = if_else(!is.na(CC_PAN_PRD), 0, PRD),
-      coalpanprd = if_else(!is.na(CC_PAN_PRD), 1, 0)
-    ) %>%
-    select(-CC_PAN_PRD)
-}
-
-if(all(c("CC_PRD_PMC","PRD","PMC") %in% names(df))) {
-  df <- df %>%
-    mutate(
-      PRD_PMC = if_else(!is.na(CC_PRD_PMC),
-                        rowSums(across(c(CC_PRD_PMC, PRD, PMC)), na.rm=TRUE),
-                        NA_real_
-      ),
-      PRD = if_else(!is.na(CC_PRD_PMC), 0, PRD),
-      PMC = if_else(!is.na(CC_PRD_PMC), 0, PMC),
-      coalprdmc = if_else(!is.na(CC_PRD_PMC), 1, 0)
-    ) %>%
-    select(-CC_PRD_PMC)
-}
-
-if(all(c("CC_PRD_PVEM","PRD","PVEM") %in% names(df))) {
-  df <- df %>%
-    mutate(
-      PRD_PVEM = if_else(!is.na(CC_PRD_PVEM),
-                         rowSums(across(c(CC_PRD_PVEM, PRD, PVEM)), na.rm=TRUE),
-                         NA_real_
-      ),
-      PRD = if_else(!is.na(CC_PRD_PVEM), 0, PRD),
-      PVEM = if_else(!is.na(CC_PRD_PVEM), 0, PVEM),
-      coalprdpvem = if_else(!is.na(CC_PRD_PVEM), 1, 0)
-    ) %>%
-    select(-CC_PRD_PVEM)
-}
-
-if(all(c("CO_PT_MORENA","PT","MORENA") %in% names(df))) {
-  df <- df %>%
-    mutate(
-      PT_MORENA = if_else(!is.na(CO_PT_MORENA),
-                          rowSums(across(c(CO_PT_MORENA, PT, MORENA)), na.rm=TRUE),
-                          NA_real_
-      ),
-      PT = if_else(!is.na(CO_PT_MORENA), 0, PT),
-      MORENA = if_else(!is.na(CO_PT_MORENA), 0, MORENA),
-      coalptmorena = if_else(!is.na(CO_PT_MORENA), 1, 0)
-    ) %>%
-    select(-CO_PT_MORENA)
-}
-
-###############################################################################
-### 2) rename SECCION->section, rename PNA->PANAL, rename *PMC->*MC, etc.
-###############################################################################
-# We'll do them if they exist:
-if("SECCION" %in% names(df)) {
-  df <- df %>% rename(section = SECCION)
-}
-if("PNA" %in% names(df)) {
-  df <- df %>% rename(PANAL = PNA)
-}
-
-# For rename `*PMC` -> `*MC`, we can do:
-names(df) <- gsub("PMC$", "MC", names(df))
-
-
-###############################################################################
-### 4) collapse (sum) PAN-CI_2 NOREG NULO (first) coal*, by (municipality section uniqueid)
-###    In R, let's define a group_by() and summarize().
-###############################################################################
-# We'll identify these columns if they exist. Then do a "by (municipality, section, uniqueid)"
-
-group_vars <- c("municipality","section","uniqueid")
-
-# Suppose we want to sum all columns from "PAN" to "CI_2", plus NOREG, NULO, and "coal..." columns
-# We'll pick them if they exist:
-all_cols <- names(df)
-start_idx <- match("PAN", all_cols)
-end_idx   <- match("CI_2", all_cols)
-if(!is.na(start_idx) & !is.na(end_idx)) {
-  collapse_vars <- all_cols[start_idx:end_idx]
-} else {
-  # fallback
-  collapse_vars <- c("PAN","PRI","PRD","PT","PVEM","MC","PANAL","MORENA","PES","CI_1","CI_2","NOREG","NULO")
-}
-# also add any "coal" columns if you want:
-collapse_vars <- union(collapse_vars, grep("^coal", all_cols, value=TRUE))
-
-data_2018 <- df %>%
-  group_by(across(all_of(group_vars))) %>%
-  summarize(across(all_of(collapse_vars), sum, na.rm=TRUE), .groups="drop")
-
-###############################################################################
-### 5) egen valid = rowtotal(...) => row sum of parties
-###    gen total= valid + NULO + NOREG => drop NOREG NULO
-###############################################################################
-data_2018 <- data_2018 %>%
-  rowwise() %>%
-  mutate(valid = sum(c_across(c("PAN","PRI","PRD","PT","PVEM","MC","PANAL","MORENA","PES","CI_1","CI_2")),
-                     na.rm=TRUE)) %>%
-  ungroup()
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
-
 data_2018 <- data_2018 %>%
   mutate(municipality = toupper(trimws(MUNICIPIO)),
-         section = suppressWarnings(as.numeric(substr(SECCION, 1, 4)))) %>%
-  select(-any_of(c("MUNICIPIO", "CASILLA", "ID_MUNICIPIO")))
+         section = suppressWarnings(as.numeric(substr(as.character(SECCION), 1, 4)))) %>%
+  select(-any_of(c("MUNICIPIO", "CASILLA", "ID_MUNICIPIO", "SECCION")))
 
 data_2018$municipality <- remove_accents(data_2018$municipality)
 
@@ -2502,7 +2150,6 @@ data_2018 <- data_2018 %>%
 # 1. PAN_PRD_PMC: full 3-way coalition (coalfrente)
 data_2018 <- data_2018 %>%
   mutate(
-<<<<<<< HEAD
     PAN_PRD_MC = ifelse(!is.na(CO_PAN_PRD_PMC),
                         coalesce(CO_PAN_PRD_PMC, 0) + coalesce(CO_PAN_PRD, 0) + coalesce(CO_PAN_PMC, 0) +
                           coalesce(CO_PRD_PMC, 0) + coalesce(PAN, 0) + coalesce(PMC, 0) + coalesce(PRD, 0),
@@ -2512,11 +2159,6 @@ data_2018 <- data_2018 %>%
     PRD = ifelse(!is.na(CO_PAN_PRD_PMC), NA_real_, PRD)
   ) %>%
   select(-any_of(c("CO_PAN_PRD_PMC", "CO_PAN_PRD", "CO_PAN_PMC", "CO_PRD_PMC")))
-=======
-    total = valid + NULOS + NOREG
-  ) %>%
-  select(-NOREG, -NULOS)
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
 
 # 2. PAN_MC (candidatura comun)
 data_2018 <- data_2018 %>%
@@ -2528,23 +2170,7 @@ data_2018 <- data_2018 %>%
   ) %>%
   select(-any_of("CC_PAN_PMC"))
 
-<<<<<<< HEAD
 # 3. PAN_PRD (candidatura comun)
-=======
-###############################################################################
-### 6) preserve, then use LN data => we read "ListadoNominalPREP2018.dta", keep if STATE=="MICHOACAN"
-###    Then save as "MICH_LN18.dta"
-###    Then restore
-###############################################################################
-ln2018 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ListadoNominalPREP2018.dta") %>%
-  filter(STATE == "MICHOACAN")
-
-###############################################################################
-### 9) merge 1:1 STATE section using MICH_LN18.dta => left_join by (STATE, section)
-###    drop _merge
-###    erase MICH_LN18.dta
-###############################################################################
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
 data_2018 <- data_2018 %>%
   mutate(
     PAN_PRD = ifelse(!is.na(CC_PAN_PRD),
@@ -2851,7 +2477,6 @@ write.csv(results$combined_data, paste0(output_path, "michoacan_2021_combined.cs
 # Load the 2021 dataset
 data_2021 <- read_csv("../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018,2021,2024/21/michoacan_2021_combined.csv")
 
-names(data_2021)
 
 # Rename columns
 data_2021 <- data_2021 %>%
@@ -3016,9 +2641,9 @@ collapsed_2021 <- data_2021 %>%
 # Calculate valid votes and final details
 collapsed_2021 <- collapsed_2021 %>%
   dplyr::mutate(
-    total = sum(c_across(PAN:nulos), na.rm = TRUE),
+    total = rowSums(across(PAN:nulos), na.rm = TRUE),
     turnout = total/listanominal,
-    valid = sum(c_across(PAN:CI_12), na.rm = TRUE),
+    valid = rowSums(across(PAN:CI_12), na.rm = TRUE),
     year = 2021,
     month = "June"
   )
@@ -3132,7 +2757,6 @@ data_2024 <- read_excel("../../../Data/Raw Electoral Data/Michoacan - 1995, 1998
 data_ext <- read_excel("../../../Data/Raw Electoral Data/Michoacan - 1995, 1998, 2001, 2004, 2007, 2011,2015,2018,2021,2024/resultados_X_casilla_irimbo_2024.xlsx") %>% 
   mutate(Municipio = "IRIMBO")
 
-names(data_2024)
 
 data_2024 <- bind_rows(data_2024, data_ext)
 
@@ -3301,7 +2925,7 @@ collapsed_2024 <- data_2024 %>%
 collapsed_2024 <- collapsed_2024 %>%
   dplyr::mutate(
     turnout = total/listanominal,
-    valid = sum(c_across(PAN:PVEM_MORENA_CC), na.rm = TRUE),
+    valid = rowSums(across(PAN:PVEM_MORENA_CC), na.rm = TRUE),
     year = 2024,
     month = case_when(
       municipality == "IRIMBO" ~ "December",
@@ -3331,4 +2955,3 @@ michoacan_all <- bind_rows(data_1995,
                            collapsed_2024)
 
 data.table::fwrite(michoacan_all,"../../../Processed Data/michoacan/michoacan_process_raw_data.csv")
-

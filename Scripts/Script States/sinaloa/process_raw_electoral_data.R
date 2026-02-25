@@ -1,7 +1,7 @@
 ################################################################################
 # SINALOA ELECTORAL DATA PROCESSING PIPELINE
 # Complete Production-Ready R
-# Years: 2001, 2004, 2007, 2010, 2013, 2016, 2018
+# Years: 2001, 2004, 2007, 2010, 2013, 2016, 2018, 2021, 2024
 ################################################################################
 
 rm(list = ls())
@@ -19,50 +19,6 @@ setwd(file.path(script_dir, ""))
 # ==============================================================================
 # HELPER FUNCTIONS
 # ==============================================================================
-<<<<<<< HEAD
-=======
-
-remove_accents <- function(x) {
-  x %>%
-    str_replace_all("á|Á", "A") %>% str_replace_all("é|É", "E") %>%
-    str_replace_all("í|Í", "I") %>% str_replace_all("ó|Ó", "O") %>%
-    str_replace_all("ú|Ú", "U") %>% str_replace_all("ñ|Ñ", "N")
-}
-
-# Complete Sinaloa uniqueid mapping
-assign_sinaloa_uniqueid <- function(municipality) {
-  case_when(
-    municipality == "AHOME" ~ 25001,
-    municipality == "ANGOSTURA" ~ 25002,
-    municipality == "BADIRAGUATO" ~ 25003,
-    municipality == "CONCORDIA" ~ 25004,
-    municipality == "COSALA" ~ 25005,
-    municipality == "CULIACAN" ~ 25006,
-    municipality == "CHOIX" ~ 25007,
-    municipality == "ELOTA" ~ 25008,
-    municipality == "ESCUINAPA" ~ 25009,
-    municipality == "EL FUERTE" ~ 25010,
-    municipality == "FUERTE" ~ 25010,
-    municipality == "GUASAVE" ~ 25011,
-    grepl("MAZATL", municipality) ~ 25012,
-    municipality == "MOCORITO" ~ 25013,
-    municipality == "ROSARIO" ~ 25014,
-    municipality == "EL ROSARIO" ~ 25014,
-    municipality == "SALVADOR ALVARADO" ~ 25015,
-    municipality == "SAN IGNACIO" ~ 25016,
-    municipality == "SINALOA" ~ 25017,
-    municipality == "NAVOLATO" ~ 25018,
-    TRUE ~ NA_real_
-  )
-}
-
-##############################################################################
-# 1) Ayu_Seccion_2001_No_LN.csv
-##############################################################################
-df_2001 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2001_No_LN.csv") 
-colnames(df_2001) <- tolower(colnames(df_2001))
-names(df_2001) <- gsub("[- ]", "", names(df_2001))
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
 
 remove_accents <- function(x) {
   x %>%
@@ -99,41 +55,48 @@ assign_sinaloa_uniqueid <- function(municipality) {
 }
 
 ################################################################################
-# 2001 PROCESSING - JOHN lines 8-150
+# 2001 PROCESSING - JOHN lines 8-210
+# JOHN does 12+ coalition absorptions then valid = rowtotal of all party + coalition columns.
+# Since sum(absorbed) = sum(original), we skip absorption and include ALL columns in valid.
 ################################################################################
 
 df_2001 <- read_csv(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2001_No_LN.csv",
+  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2001_No_LN.csv",
   show_col_types = FALSE
 )
 
 names(df_2001) <- tolower(names(df_2001))
 
 df_2001 <- df_2001 %>%
-<<<<<<< HEAD
   rename(municipality = municipio, section = seccion) %>%
-  filter(!(municipality == "" & is.na(section)), !is.na(total), total != 0) %>%
-  mutate(across(c(pan, pri, prd, pt, pvem, pc, cdppn, psn, psd, pas, pmp, total), as.numeric)) %>%
+  filter(!(municipality == "" & is.na(section))) %>%
+  mutate(across(where(is.character), ~suppressWarnings(as.numeric(.)))) %>%
   group_by(municipality, section) %>%
   summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") %>%
+  mutate(total = rowSums(select(., any_of(c(
+    "pan","pri","prd","pt","pvem","cdppn","psn","pas","pbs",
+    "noregistrados","nulos",
+    "panprdpvem","panpvem","prdpt","ptpsn","psnpbs",
+    "ptpascdppnpsn","prdcdppn","panprd","ptpbs",
+    "panprdptpvem","ptcdppnpsn","prdpvem","ptcdppnpbs"))), na.rm = TRUE)) %>%
+  filter(total > 0) %>%
   rename(
-    PAN = pan, PRI = pri, PRD = prd, PT = pt, PVEM = pvem, PC = pc,
-    CDPPN = cdppn, PSN = psn, PSD = psd, PAS = pas, PartidoMexicoPosible = pmp
-=======
-  # e.g., sum pan prd pvem panprdpvem if panprdpvem!=.
-  mutate(
-    total = rowSums(pick(any_of(vars_2001)), na.rm = TRUE),
-    panprdpvem = ifelse(!is.na(panprdpvem),
-                        panprdpvem + coalesce(pan,0) + coalesce(prd,0) + coalesce(pvem,0),
-                        panprdpvem),
-    pan        = ifelse(!is.na(panprdpvem), 0, pan),
-    prd        = ifelse(!is.na(panprdpvem), 0, prd),
-    pvem       = ifelse(!is.na(panprdpvem), 0, pvem)
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
+    PAN = pan, PRI = pri, PRD = prd, PT = pt, PVEM = pvem,
+    PC = cdppn, PSN = psn, PAS = pas, PBS = pbs,
+    PAN_PRD_PVEM = panprdpvem, PAN_PVEM = panpvem, PRD_PT = prdpt,
+    PT_PSN = ptpsn, PSN_PBS = psnpbs, PT_PAS_PC_PSN = ptpascdppnpsn,
+    PRD_PC = prdcdppn, PAN_PRD = panprd, PT_PBS = ptpbs,
+    PAN_PRD_PT_PVEM = panprdptpvem, PT_PC_PSN = ptcdppnpsn,
+    PRD_PVEM = prdpvem, PT_PC_PBS = ptcdppnpbs
   ) %>%
+  select(-any_of(c("noregistrados", "nulos", "psd", "pmp"))) %>%
   mutate(
     uniqueid = assign_sinaloa_uniqueid(municipality),
-    valid = rowSums(select(., PAN, PRI, PRD, PT, PVEM, PC, CDPPN, PSN, PSD, PAS, PartidoMexicoPosible), na.rm = TRUE),
+    valid = rowSums(select(., any_of(c(
+      "PAN","PRI","PRD","PT","PVEM","PC","PSN","PAS","PBS",
+      "PAN_PRD_PVEM","PAN_PVEM","PRD_PT","PT_PSN","PSN_PBS",
+      "PT_PAS_PC_PSN","PRD_PC","PAN_PRD","PT_PBS",
+      "PAN_PRD_PT_PVEM","PT_PC_PSN","PRD_PVEM","PT_PC_PBS"))), na.rm = TRUE),
     year = 2001, month = "November", STATE = "SINALOA"
   )
 
@@ -144,195 +107,55 @@ cat("2001:", nrow(df_2001), "rows\n")
 ################################################################################
 
 df_2004 <- read_csv(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2004_No_LN.csv",
+  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2004_No_LN.csv",
   show_col_types = FALSE
 )
 
-<<<<<<< HEAD
 names(df_2004) <- tolower(names(df_2004))
-=======
-df_2001 <- df_2001 %>%
-  mutate(
-    turnout = total / listanominal,
-    # drop noregistrados, nulos => already dropped
-    uniqueid = case_when(
-      municipality=="AHOME"             ~ 25001,
-      municipality=="ANGOSTURA"         ~ 25002,
-      municipality=="BADIRAGUATO"       ~ 25003,
-      municipality=="CHOIX"             ~ 25007,
-      municipality=="CONCORDIA"         ~ 25004,
-      municipality=="COSALA"            ~ 25005,
-      municipality=="CULIACAN"          ~ 25006,
-      municipality=="EL FUERTE"         ~ 25010,
-      municipality=="ELOTA"             ~ 25008,
-      municipality=="ESCUINAPA"         ~ 25009,
-      municipality=="GUASAVE"           ~ 25011,
-      municipality=="MAZATLAN"          ~ 25012,
-      municipality=="MOCORITO"          ~ 25013,
-      municipality=="NAVOLATO"          ~ 25018,
-      municipality=="ROSARIO"           ~ 25014,
-      municipality=="SALVADOR ALVARADO" ~ 25015,
-      municipality=="SAN IGNACIO"       ~ 25016,
-      municipality=="SINALOA"           ~ 25017,
-      TRUE                              ~ 0
-    )
-  ) 
-
-# aggregator, rowranks, winner => omitted
-df_2001 <- df_2001 %>%
-  mutate(
-    year  = 2001,
-    month = "November"
-  ) %>%
-  arrange(section) %>% 
-  select(-distrito)
-
-##############################################################################
-# 2) Ayu_Seccion_LN_2004.xlsx
-##############################################################################
-df_ln_2004 <- read_excel("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_LN_2004.xlsx", 
-                         sheet="Sheet1", 
-                         col_names=TRUE)
-names(df_ln_2004) <- gsub("[- ]", "", names(df_ln_2004))
-
-df_ln_2004 <-df_ln_2004 %>%
-  # rename SECCIÓN->SECCIN if needed
-  # drop if SECCIN==.
-  filter(!is.na(SECCIÓN)) %>%
-  rename(
-    section      = SECCIÓN,
-    listanominal = LISTANOMINAL
-  ) %>%
-  # aggregator collapse => omitted
-  arrange(section)
-
-
-##############################################################################
-# 3) Ayu_Seccion_2004_No_LN.csv
-##############################################################################
-df_2004 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2004_No_LN.csv") 
-colnames(df_2004) <- tolower(colnames(df_2004))
-names(df_2004) <- gsub("[- ]", "", names(df_2004))
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
 
 df_2004 <- df_2004 %>%
   rename(municipality = municipio, section = seccion) %>%
   filter(!(municipality == "" & is.na(section)), !is.na(total), total != 0) %>%
-  mutate(across(where(is.numeric), as.numeric))
-
-# Handle PRI-PANAL coalition per JOHN
-df_2004 <- df_2004 %>%
-  mutate(
-<<<<<<< HEAD
-    PRI_PANAL = if_else(!is.na(pripanal), pri + panal + pripanal, as.numeric(NA)),
-    pri = if_else(!is.na(pripanal), 0, pri),
-    panal = if_else(!is.na(pripanal), 0, panal)
-=======
-    prdpt = ifelse(!is.na(prdpt), prdpt + coalesce(prd,0)+coalesce(pt,0), prdpt),
-    prd   = ifelse(!is.na(prdpt), 0, prd),
-    pt    = ifelse(!is.na(prdpt), 0, pt),
-    prdptpbs = ifelse(!is.na(prdptpbs), prdptpbs + coalesce(prd,0)+coalesce(pt,0)+coalesce(pbs,0), prdptpbs),
-    prd    = ifelse(!is.na(prdptpbs),0, prd),
-    pt     = ifelse(!is.na(prdptpbs),0, pt),
-    pbs    = ifelse(!is.na(prdptpbs),0, pbs),
-    prdpbs = ifelse(!is.na(prdpbs), prdpbs+coalesce(prd,0)+coalesce(pbs,0), prdpbs),
-    prd    = ifelse(!is.na(prdpbs),0, prd),
-    pbs    = ifelse(!is.na(prdpbs),0, pbs),
-    panprd = ifelse(!is.na(panprd), panprd+coalesce(pan,0)+coalesce(prd,0), panprd),
-    pan    = ifelse(!is.na(panprd),0, pan),
-    prd    = ifelse(!is.na(panprd),0, prd),
-    prdptpc = ifelse(!is.na(prdptpc), prdptpc+coalesce(prd,0)+coalesce(pt,0)+coalesce(pc,0), prdptpc),
-    prd     = ifelse(!is.na(prdptpc),0, prd),
-    pt      = ifelse(!is.na(prdptpc),0, pt),
-    pc      = ifelse(!is.na(prdptpc),0, pc),
-    total = rowSums(pick(any_of(vars_2004)), na.rm = TRUE)
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
-  )
-
-df_2004 <- df_2004 %>%
+  mutate(across(where(is.numeric), as.numeric)) %>%
   group_by(municipality, section) %>%
-  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") %>%
+  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop")
+
+# Recalculate total per JOHN (includes noregistrados + nulos)
+df_2004 <- df_2004 %>%
+  mutate(total = rowSums(select(., any_of(c(
+    "pan","pri","prd","pt","pvem","pc","pbs",
+    "noregistrados","nulos",
+    "prdpt","prdptpbs","prdpbs","panprd","pripvempbs","prdptpc"))), na.rm = TRUE)) %>%
+  filter(total > 0)
+
+# Rename per JOHN
+df_2004 <- df_2004 %>%
   rename(
-    PAN = pan, PRI = pri, PRD = prd, PT = pt, PVEM = pvem, PC = pc, PANAL = panal
+    PAN = pan, PRI = pri, PRD = prd, PT = pt, PVEM = pvem, PC = pc, PBS = pbs,
+    PAN_PRD = panprd, PRD_PT = prdpt, PRD_PT_PC = prdptpc,
+    PRD_PT_PBS = prdptpbs, PRD_PBS = prdpbs, PRI_PVEM_PBS = pripvempbs
   ) %>%
+  select(-any_of(c("noregistrados", "nulos"))) %>%
   mutate(
-    PRI_PANAL = coalesce(PRI_PANAL, 0),
     uniqueid = assign_sinaloa_uniqueid(municipality),
-    valid = rowSums(select(., PAN, PRI, PRD, PT, PVEM, PC, PANAL, PRI_PANAL), na.rm = TRUE),
-    year = 2004, month = "October", STATE = "SINALOA"
+    valid = rowSums(select(., any_of(c(
+      "PAN","PRI","PRD","PT","PVEM","PC","PBS",
+      "PRD_PT","PRD_PT_PBS","PRD_PBS","PAN_PRD","PRI_PVEM_PBS","PRD_PT_PC"))), na.rm = TRUE),
+    year = 2004, month = "November", STATE = "SINALOA"
   )
 
 cat("2004:", nrow(df_2004), "rows\n")
 
-<<<<<<< HEAD
 ################################################################################
 # 2007 PROCESSING - JOHN lines 359-510
 ################################################################################
-=======
-df_2004 <- df_2004 %>%
-  mutate(
-    year  = 2004,
-    month = "November"
-  ) %>%
-  arrange(section) %>% 
-  select(-distrito)
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
 
 df_2007 <- read_csv(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2007_No_LN.csv",
+  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2007_No_LN.csv",
   show_col_types = FALSE
 )
 
-<<<<<<< HEAD
 names(df_2007) <- tolower(names(df_2007))
-=======
-##############################################################################
-# 4) Ayu_Seccion_LN_2007.xlsx
-##############################################################################
-df_ln_2007 <- read_excel("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_LN_2007.xlsx", sheet="Sheet1", col_names=TRUE) 
-
-names(df_ln_2007) <- gsub("[- ]", "", names(df_ln_2007))
-
-df_ln_2007 <- df_ln_2007 %>%
-  filter(!is.na(SECCIÓN)) %>%
-  rename(section=SECCIÓN, listanominal=LISTANOMINAL) %>%
-  mutate(missing = (listanominal==0))
-
-
-df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
-  filter(state=="SINALOA", month=="Speptember", year==2007) %>%
-  select(section, lista)
-
-df_ln_2007 <- df_ln_2007 %>%
-  left_join(df_all, by="section") %>%
-  filter(!is.na(lista)) %>%
-  mutate(
-    listanominal = ifelse(missing>=1 & lista>listanominal, lista, listanominal)
-  ) %>%
-  select(-missing, -lista) %>%
-  arrange(section)
-
-##############################################################################
-# 5) Ayu_Seccion_2007_No_LN.csv
-##############################################################################
-df_2007 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2007_No_LN.csv")
-colnames(df_2007) <- tolower(colnames(df_2007))
-names(df_2007) <- gsub("[- ]", "", names(df_2007))
-
-df_2007 <- df_2007 %>% 
-  rename(municipality=municipio, section=seccion) %>%
-  filter(!(municipality=="" & is.na(section)))
-
-vars_2007 <- c("pan","pripanal","prd","pt","pvem","pc","pas","noregistrados",
-               "nulos","pripanalprd","prdptpc","prdpt","pripanalpc","ptpas")
-
-for (v in vars_2007) {
-  if (v %in% names(df_2007)) {
-    df_2007[[v]] <- as.numeric(df_2007[[v]])
-  }
-}
-
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
 
 df_2007 <- df_2007 %>%
   rename(municipality = municipio, section = seccion) %>%
@@ -342,51 +165,27 @@ df_2007 <- df_2007 %>%
 # Process coalitions per JOHN
 df_2007 <- df_2007 %>%
   mutate(
-<<<<<<< HEAD
-    # PRI-PANAL-PRD coalition
+    # PRI-PANAL-PRD coalition (JOHN: replace pripanalprd = pripanalprd + pripanal + prd if pripanalprd!=.)
     pripanalprd = if_else(!is.na(pripanalprd), pripanalprd + coalesce(pripanal, 0) + coalesce(prd, 0), pripanalprd),
     pripanal = if_else(!is.na(pripanalprd), 0, pripanal),
-    prd_temp = if_else(!is.na(pripanalprd), 0, prd),
+    prd = if_else(!is.na(pripanalprd), 0, prd),
     # PRD-PT-PC coalition
     prdptpc = if_else(!is.na(prdptpc), prdptpc + coalesce(prd, 0) + coalesce(pt, 0) + coalesce(pc, 0), prdptpc),
     prd = if_else(!is.na(prdptpc), 0, prd),
-    pt_temp = if_else(!is.na(prdptpc), 0, pt),
-    pc_temp = if_else(!is.na(prdptpc), 0, pc),
+    pt = if_else(!is.na(prdptpc), 0, pt),
+    pc = if_else(!is.na(prdptpc), 0, pc),
     # PRD-PT coalition
     prdpt = if_else(!is.na(prdpt), prdpt + coalesce(prd, 0) + coalesce(pt, 0), prdpt),
+    prd = if_else(!is.na(prdpt), 0, prd),
+    pt = if_else(!is.na(prdpt), 0, pt),
     # PRI-PANAL-PC coalition
     pripanalpc = if_else(!is.na(pripanalpc), pripanalpc + coalesce(pripanal, 0) + coalesce(pc, 0), pripanalpc),
+    pripanal = if_else(!is.na(pripanalpc), 0, pripanal),
+    pc = if_else(!is.na(pripanalpc), 0, pc),
     # PT-PAS coalition
-    ptpas = if_else(!is.na(ptpas), ptpas + coalesce(pt, 0) + coalesce(pas, 0), ptpas)
-=======
-    total = rowSums(pick(any_of(vars_2007)), na.rm = TRUE),
-    pripanalprd = ifelse(!is.na(pripanalprd),
-                         pripanalprd + coalesce(pripanal,0)+coalesce(prd,0),
-                         pripanalprd),
-    pripanal    = ifelse(!is.na(pripanalprd),0, pripanal),
-    prd         = ifelse(!is.na(pripanalprd),0, prd),
-    prdptpc     = ifelse(!is.na(prdptpc),
-                         prdptpc + coalesce(prd,0)+coalesce(pt,0)+coalesce(pc,0),
-                         prdptpc),
-    prd         = ifelse(!is.na(prdptpc),0, prd),
-    pt          = ifelse(!is.na(prdptpc),0, pt),
-    pc          = ifelse(!is.na(prdptpc),0, pc),
-    prdpt       = ifelse(!is.na(prdpt),
-                         prdpt + coalesce(prd,0)+coalesce(pt,0),
-                         prdpt),
-    prd         = ifelse(!is.na(prdpt),0, prd),
-    pt          = ifelse(!is.na(prdpt),0, pt),
-    pripanalpc  = ifelse(!is.na(pripanalpc),
-                         pripanalpc + coalesce(pripanal,0)+coalesce(pc,0),
-                         pripanalpc),
-    pripanal    = ifelse(!is.na(pripanalpc),0, pripanal),
-    pc          = ifelse(!is.na(pripanalpc),0, pc),
-    ptpas       = ifelse(!is.na(ptpas),
-                         ptpas+coalesce(pt,0)+coalesce(pas,0),
-                         ptpas),
-    pt          = ifelse(!is.na(ptpas),0, pt),
-    pas         = ifelse(!is.na(ptpas),0, pas)
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
+    ptpas = if_else(!is.na(ptpas), ptpas + coalesce(pt, 0) + coalesce(pas, 0), ptpas),
+    pt = if_else(!is.na(ptpas), 0, pt),
+    pas = if_else(!is.na(ptpas), 0, pas)
   )
 
 df_2007 <- df_2007 %>%
@@ -406,7 +205,6 @@ df_2007 <- df_2007 %>%
     PRI_PC_PANAL = pripanalpc, PT_PAS = ptpas
   ) %>%
   mutate(
-<<<<<<< HEAD
     uniqueid = assign_sinaloa_uniqueid(municipality),
     valid = rowSums(select(., PAN, PRI_PANAL, PRD, PT, PVEM, PC, PAS, 
                            PRI_PRD_PANAL, PRD_PT_PC, PRD_PT, PRI_PC_PANAL, PT_PAS), na.rm = TRUE),
@@ -421,61 +219,14 @@ cat("2007:", nrow(df_2007), "rows\n")
 ################################################################################
 
 df_2010 <- read_csv(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2010.csv",
-  show_col_types = FALSE
-)
-=======
-    turnout = total/listanominal,
-    uniqueid = case_when(
-      municipality=="AHOME"             ~ 25001,
-      municipality=="ANGOSTURA"         ~ 25002,
-      municipality=="BADIRAGUATO"       ~ 25003,
-      municipality=="CHOIX"             ~ 25007,
-      municipality=="CONCORDIA"         ~ 25004,
-      municipality=="COSALA"            ~ 25005,
-      municipality=="CULIACAN"          ~ 25006,
-      municipality=="EL FUERTE"         ~ 25010,
-      municipality=="ELOTA"             ~ 25008,
-      municipality=="ESCUINAPA"         ~ 25009,
-      municipality=="GUASAVE"           ~ 25011,
-      municipality=="MAZATLAN"          ~ 25012,
-      municipality=="MOCORITO"          ~ 25013,
-      municipality=="NAVOLATO"          ~ 25018,
-      municipality=="ROSARIO"           ~ 25014,
-      municipality=="SALVADOR ALVARADO" ~ 25015,
-      municipality=="SAN IGNACIO"       ~ 25016,
-      municipality=="SINALOA"           ~ 25017,
-      TRUE                              ~ 0
-    )
-  )  %>%
-  mutate(
-    year  = 2007,
-    month = "October"
-  ) %>%
-  arrange(section) %>% 
-  select(-DISTRITO)
-
-################################################################################
-# 2010 PROCESSING - JOHN lines 514-590
-# NOTE: Fixed valid calculation issue
-################################################################################
-
-df_2010 <- read_csv(
   "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2010.csv",
   show_col_types = FALSE
-) %>% 
-  rename_with(~ str_remove_all(., "-"))
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
+)
 
 names(df_2010) <- tolower(names(df_2010))
 
 df_2010 <- df_2010 %>%
-<<<<<<< HEAD
   rename(municipality = municipio, section = seccion) %>%
-=======
-  rename(municipality = nombre_municipio, section = seccion, listanominal = lista_nominal,
-         noregistrados = "no registrados") %>%
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
   filter(!(municipality == "" & is.na(section)), !is.na(total), total != 0) %>%
   mutate(across(c(listanominal, panprdptpc, pripvempanal, noregistrados, nulos, total), as.numeric))
 
@@ -486,7 +237,6 @@ df_2010 <- df_2010 %>%
     PAN_PRD_PT_PC = panprdptpc,
     PRI_PVEM_PANAL = pripvempanal
   ) %>%
-<<<<<<< HEAD
   mutate(
     turnout = total / listanominal,
     uniqueid = assign_sinaloa_uniqueid(municipality),
@@ -503,7 +253,7 @@ cat("2010:", nrow(df_2010), "rows\n")
 ################################################################################
 
 df_2013 <- read_dta(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayu_Seccion_2013.dta"
+  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2013.dta"
 )
 
 df_2013 <- df_2013 %>%
@@ -530,7 +280,7 @@ cat("2013:", nrow(df_2013), "rows\n")
 # Excel file with multiple sheets
 ################################################################################
 
-xlsx_path_2016 <- "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/Ayuntamientos_2016.xlsx"
+xlsx_path_2016 <- "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayuntamientos_2016.xlsx"
 sheets_2016 <- excel_sheets(xlsx_path_2016)
 
 df_2016_list <- lapply(sheets_2016, function(sheet) {
@@ -607,7 +357,7 @@ cat("2016:", nrow(df_2016), "rows\n")
 ################################################################################
 
 df_2018 <- read_excel(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018/02 Resultados_Ayuntamientos_Sinaloa_2018_Casilla.xlsx",
+  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/02 Resultados_Ayuntamientos_Sinaloa_2018_Casilla.xlsx",
   sheet = "2018_SEE_AYUN_SIN_CAS"
 )
 
@@ -621,8 +371,8 @@ df_2018 <- df_2018 %>%
 df_2018 <- df_2018 %>%
   mutate(
     PAN_PRD_MC_PAS = rowSums(select(., any_of(c("PAN", "PRD", "MC", "PAS", 
-      "C_PAN_PRD_MC_PAS", "C_PAN_PRD_MC", "C_PAN_PRD_PAS", "C_PAN_MC_PAS", "C_PRD_MC_PAS",
-      "C_PAN_PRD", "C_PAN_MC", "C_PAN_PAS", "C_PRD_MC", "C_PRD_PAS", "C_MC_PAS"))), na.rm = TRUE)
+                                                "C_PAN_PRD_MC_PAS", "C_PAN_PRD_MC", "C_PAN_PRD_PAS", "C_PAN_MC_PAS", "C_PRD_MC_PAS",
+                                                "C_PAN_PRD", "C_PAN_MC", "C_PAN_PAS", "C_PRD_MC", "C_PRD_PAS", "C_MC_PAS"))), na.rm = TRUE)
   ) %>%
   select(-any_of(c("PAN", "PRD", "MC", "PAS", "C_PAN_PRD_MC_PAS", "C_PAN_PRD_MC", 
                    "C_PAN_PRD_PAS", "C_PAN_MC_PAS", "C_PRD_MC_PAS", "C_PAN_PRD", 
@@ -635,7 +385,7 @@ df_2018 <- df_2018 %>%
     PT_MORENA_PES = if_else(
       !(municipality %in% no_pt_morena_pes),
       rowSums(select(., any_of(c("PT", "MORENA", "ES", "C_PT_MORENA_ES", 
-                                  "C_PT_MORENA", "C_PT_ES", "C_MORENA_ES"))), na.rm = TRUE),
+                                 "C_PT_MORENA", "C_PT_ES", "C_MORENA_ES"))), na.rm = TRUE),
       NA_real_
     ),
     PT = if_else(!(municipality %in% no_pt_morena_pes), NA_real_, PT),
@@ -644,18 +394,6 @@ df_2018 <- df_2018 %>%
   rename(PES = ES) %>%
   mutate(PES = if_else(!(municipality %in% c("SAN IGNACIO", "ROSARIO", "ESCUINAPA")), NA_real_, PES)) %>%
   select(-any_of(c("C_PT_MORENA_ES", "C_PT_MORENA", "C_PT_ES", "C_MORENA_ES")))
-=======
-  mutate(
-    turnout = total / listanominal,
-    uniqueid = assign_sinaloa_uniqueid(municipality),
-    # FIXED: valid should include both coalitions
-    valid = rowSums(select(., PAN_PRD_PT_PC, PRI_PVEM_PANAL), na.rm = TRUE),
-    year = 2010, month = "July", STATE = "SINALOA"
-  ) %>%
-  select(-noregistrados, -nulos)
-
-cat("2010:", nrow(df_2010), "rows\n")
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
 
 # PRI-PVEM-PANAL coalition
 no_pri_pvem_panal <- c("SAN IGNACIO", "ROSARIO", "ESCUINAPA")
@@ -665,7 +403,7 @@ df_2018 <- df_2018 %>%
     PRI_PVEM_PANAL = if_else(
       !(municipality %in% no_pri_pvem_panal),
       rowSums(select(., any_of(c("PRI", "PVEM", "PANAL", "CC_PRI_PVEM_NA", 
-                                  "CC_PRI_PVEM", "CC_PRI_NA", "CC_PVEM_NA"))), na.rm = TRUE),
+                                 "CC_PRI_PVEM", "CC_PRI_NA", "CC_PVEM_NA"))), na.rm = TRUE),
       NA_real_
     ),
     PRI = if_else(!(municipality %in% no_pri_pvem_panal), NA_real_, PRI),
@@ -688,155 +426,9 @@ df_2018 <- df_2018 %>%
   group_by(municipality, uniqueid, section) %>%
   summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop")
 
-<<<<<<< HEAD
 # Calculate valid
 party_cols_2018 <- c("PRI", "PVEM", "PANAL", "PES", "PAIS", "PAN_PRD_MC_PAS", 
                      "PT_MORENA_PES", "PRI_PVEM_PANAL", "CI_1", "CI_2", "CI_3", "CI_4")
-=======
-for (sname in sheet_names_2016) {
-  df_sheet <- read_excel(excel_2016, sheet=sname, col_types="text") %>%
-    mutate(municipality = sname) %>%
-    filter(`CASILLA (SECCIÓN)` != "") %>%
-    mutate(across(everything(), ~ ifelse(.=="", "0", .)))
-  
-  # Clean column names for Stata compatibility
-  names(df_sheet) <- str_replace_all(names(df_sheet), "[^A-Za-z0-9_]", "_")
-  
-  # Shorten long column names to fit Stata's 32-character limit
-  names(df_sheet) <- substr(names(df_sheet), 1, 32)
-  
-  # Make sure names are unique after truncation
-  names(df_sheet) <- make.unique(names(df_sheet), sep = "_")
-  
-  safe_name <- str_replace_all(sname, "[^A-Za-z0-9_\\. ]", "_")
-  write_dta(df_sheet, paste0(safe_name, ".dta"))
-}
-
-# Then the script appends e.g. CHOIX.dta, FUERTE.dta, etc.
-files_2016 <- c("CHOIX.dta","FUERTE.dta","AHOME.dta","SINALOA.dta","GUASAVE.dta",
-                "ANGOSTURA.dta","SALVADOR ALVARADO.dta","MOCORITO.dta",
-                "BADIRAGUATO.dta","CULIACAN.dta","NAVOLATO.dta","COSALA.dta",
-                "ELOTA.dta","SAN IGNACIO.dta","MAZATLAN.dta","CONCORDIA.dta",
-                "ROSARIO.dta","ESCUINAPA.dta")
-
-all_2016 <- NULL
-for (f in files_2016) {
-  if (file.exists(f)) {
-    tmp <- read_dta(f)
-    all_2016 <- bind_rows(all_2016, tmp)
-  } else {
-    message(paste("File not found:", f))
-  }
-}
-
-# Clean up - the column name is now CASILLA__SECCIÓN_ after cleaning
-all_2016 <- all_2016 %>%
-  mutate(across(-c(municipality), as.numeric))
-
-# Find the actual casilla column name after cleaning
-casilla_col <- names(all_2016)[str_detect(names(all_2016), "CASILLA.*SECCI")]
-
-all_2016 <- all_2016 %>%
-  filter(!is.na(!!sym(casilla_col))) %>%
-  rename(
-    section = !!sym(casilla_col),
-    no_reg  = "VOTOS_A_CANDIDATOS_NO_REGISTRADO",
-    nulo    = "VOTOS_NULOS",
-    total   = "VOTACI_N_TOTAL"
-  ) %>%
-  mutate(
-    uniqueid = case_when(
-      municipality=="AHOME"             ~ 25001,
-      municipality=="ANGOSTURA"         ~ 25002,
-      municipality=="BADIRAGUATO"       ~ 25003,
-      municipality=="CHOIX"             ~ 25007,
-      municipality=="CONCORDIA"         ~ 25004,
-      municipality=="COSALA"            ~ 25005,
-      municipality=="CULIACAN"          ~ 25006,
-      municipality=="EL FUERTE"         ~ 25010,
-      municipality=="ELOTA"             ~ 25008,
-      municipality=="ESCUINAPA"         ~ 25009,
-      municipality=="GUASAVE"           ~ 25011,
-      municipality=="MAZATLAN"          ~ 25012,
-      municipality=="MOCORITO"          ~ 25013,
-      municipality=="NAVOLATO"          ~ 25018,
-      municipality=="ROSARIO"           ~ 25014,
-      municipality=="SALVADOR ALVARADO" ~ 25015,
-      municipality=="SAN IGNACIO"       ~ 25016,
-      municipality=="SINALOA"           ~ 25017,
-      TRUE                              ~ NA
-    )
-  )
-
-# rename MC_MAS -> MC_PAS, MAS->PAS in code => replicate partial
-all_2016 <- all_2016 %>%
-  rename(
-    MC_PAS = MC_MAS,
-    PAS    = MAS
-  ) %>%
-  mutate(
-    # replace PRI_PANAL=PRI+PANAL+PRI_PANAL if PRI_PANAL!=. => aggregator step => omitted
-    # We'll do partial coalition merges but not aggregator by municipality.
-    PRI_PANAL = ifelse(!is.na(PRI_PANAL), PRI_PANAL + coalesce(PRI,0)+coalesce(PANAL,0), PRI_PANAL),
-    PRI       = ifelse(!is.na(PRI_PANAL), NA, PRI),
-    PANAL     = ifelse(!is.na(PRI_PANAL), NA, PANAL),
-    
-    MC_PAS    = ifelse(!is.na(MC_PAS), MC_PAS + coalesce(MC,0)+coalesce(PAS,0), MC_PAS),
-    MC        = ifelse(!is.na(MC_PAS), NA, MC),
-    PAS       = ifelse(!is.na(MC_PAS), NA, PAS)
-  )
-
-# aggregator => omitted
-# Keep partial lumps
-
-# Now merging LN2016 => replicate partial
-df_ln2016 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2016/LN2016.dta") %>%
-  filter(entidad==25, month==5, seccion!=0) %>%
-  select(uniqueid, section=seccion, lista)
-
-all_2016 <- all_2016 %>%
-  group_by(municipality, uniqueid, section) %>%
-  summarise(across(everything(), ~sum(.x, na.rm=TRUE)), .groups="drop")
-
-all_2016 <- all_2016 %>%
-  left_join(df_ln2016, by=c("section", "uniqueid")) %>%
-  filter(!is.na(lista)) %>%
-  rename(listanominal=lista)
-
-all_2016 <- all_2016 %>%
-  mutate(
-    year  = 2016,
-    month = "June",
-    STATE = "SINALOA",
-    turnout = total/listanominal
-  )
-
-
-# aggregator => omitted
-# rowranks => omitted
-# winner => omitted
-
-write_dta(all_2016, "Sinaloa_Section_2016.dta")
-
-# remove the small .dta files
-for (f in files_2016) {
-  if (file.exists(f)) file.remove(f)
-}
-
-##############################################################################
-# 10) 02 Resultados_Ayuntamientos_Sinaloa_2018_Casilla.xlsx
-##############################################################################
-df_2018 <- read_excel("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/02 Resultados_Ayuntamientos_Sinaloa_2018_Casilla.xlsx",
-                      sheet="2018_SEE_AYUN_SIN_CAS", col_names=TRUE) %>%
-  rename(section=SECCION, listanominal=LISTA_NOMINAL, total=TOTAL_VOTOS) %>%
-  filter(ESTATUS_ACTA!="Paquete no entregado") %>%
-  mutate(
-    municipality = str_to_upper(MUNICIPIO)
-  )
-
-# aggregator merges => omitted
-# partial coalition merges are done, skipping aggregator by municipality.
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
 
 df_2018 <- df_2018 %>%
   mutate(
@@ -851,62 +443,8 @@ cat("2018:", nrow(df_2018), "rows\n")
 # FINAL APPEND AND OUTPUT
 ################################################################################
 
-# Combine all years
-sinaloa_all <- bind_rows(df_2001, df_2004, df_2007, df_2010, df_2013, df_2016, df_2018)
+cat("\n2001-2018 processing complete.\n")
 
-# Final corrections per SALVADOR
-sinaloa_all <- sinaloa_all %>%
-  mutate(
-<<<<<<< HEAD
-    municipality = if_else(municipality == "EL ROSARIO", "ROSARIO", municipality),
-    municipality = if_else(uniqueid == 25012, "MAZATLAN", municipality)
-=======
-    PT_MORENA_PES = ifelse(municipality!="CONCORDIA" & municipality!="ROSARIO" & municipality!="ESCUINAPA",
-                           PT + MORENA + ES + C_PT_MORENA_ES + C_PT_MORENA + C_PT_ES + C_MORENA_ES,
-                           NA_real_)
-  ) %>%
-  rename(PES=ES) %>%
-  select(-PT, -MORENA, -PES, -C_PT_MORENA_ES, -C_PT_MORENA, -C_PT_ES, -C_MORENA_ES)
-
-df_2018 <- df_2018 %>%
-  rename(PANAL="NA") %>%
-  mutate(
-    # create PRI_PVEM_PANAL
-    PRI_PVEM_PANAL = ifelse(municipality!="SAN IGNACIO" & municipality!="ROSARIO" & municipality!="ESCUINAPA",
-                            PRI + PVEM + PANAL + CC_PRI_PVEM_NA + CC_PRI_PVEM + CC_PRI_NA + CC_PVEM_NA,
-                            NA_real_),
-    PANAL = NA_real_
-  ) %>%
-  select(-CC_PRI_PVEM_NA, -CC_PRI_PVEM, -CC_PRI_NA, -CC_PVEM_NA, -PRI, -PVEM)
-
-df_2018 <- df_2018 %>%
-  rename(
-    CI_1 = CAND_IND1,
-    CI_2 = CAND_IND2,
-    CI_3 = CAND_IND3,
-    CI_4 = CAND_IND4
-  ) %>%
-  mutate(
-    uniqueid = case_when(
-      municipality=="CHOIX" ~ 25007,
-      # ...
-      municipality=="ESCUINAPA" ~ 25009,
-      TRUE~NA_real_
-    )
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
-  )
-
-# Order columns
-sinaloa_all <- sinaloa_all %>%
-  select(STATE, municipality, section, uniqueid, year, month, everything())
-
-cat("\nFinal dataset:", nrow(sinaloa_all), "rows\n")
-cat("Years:", paste(sort(unique(sinaloa_all$year)), collapse = ", "), "\n")
-
-<<<<<<< HEAD
-# Write output
-data.table::fwrite(sinaloa_all, "../../../Processed Data/sinaloa/sinaloa_process_raw_data.csv")
-=======
 #####################################
 ### PROCESSING DATA FOR 2021 -------
 #####################################
@@ -990,9 +528,10 @@ collapsed_2021 <- collapsed_2021 %>%
 collapsed_2021 <- collapsed_2021 %>%
   dplyr::mutate(
     turnout = total/listanominal,
-    valid = sum(c_across(PAN:CC_MORENA_PAS), na.rm = TRUE),
+    valid = rowSums(across(PAN:CC_MORENA_PAS), na.rm = TRUE),
     year = 2021,
-    month = "June"
+    month = "June",
+    STATE = "SINALOA"
   )
 
 # Check and process coalitions
@@ -1164,16 +703,17 @@ collapsed_2024 <- collapsed_2024 %>%
 collapsed_2024 <- collapsed_2024 %>%
   dplyr::mutate(
     turnout = total/listanominal,
-    valid = sum(c_across(PAN:CC_PVEM_MORENA), na.rm = TRUE),
+    valid = rowSums(across(PAN:CC_PVEM_MORENA), na.rm = TRUE),
     year = 2024,
-    month = "June"
+    month = "June",
+    STATE = "SINALOA"
   )
 
 # Apply coalition processing function
 collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
   select(-coal1, -coal2, -coal3, -coal4)
 
-df_combo <- bind_rows(df_2001, df_2004, df_2007, df_2010, df_2013, all_2016, df_2018, collapsed_2021, collapsed_2024) %>%
+df_combo <- bind_rows(df_2001, df_2004, df_2007, df_2010, df_2013, df_2016, df_2018, collapsed_2021, collapsed_2024) %>%
   mutate(
     municipality = case_when(
       municipality=="EL ROSARIO" ~ "ROSARIO",
@@ -1183,6 +723,5 @@ df_combo <- bind_rows(df_2001, df_2004, df_2007, df_2010, df_2013, all_2016, df_
   )
 
 data.table::fwrite(df_combo,"../../../Processed Data/sinaloa/sinaloa_process_raw_data.csv")
->>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
 
 cat("Output saved to: ../../../Processed Data/sinaloa/sinaloa_process_raw_data.csv\n")

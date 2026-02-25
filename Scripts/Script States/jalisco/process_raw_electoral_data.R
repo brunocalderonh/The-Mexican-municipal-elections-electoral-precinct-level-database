@@ -60,7 +60,7 @@ vars_for_total <- intersect(vars_for_total, names(data_1995))
 
 data_1995 <- data_1995 %>%
   mutate(total = rowSums(across(all_of(vars_for_total)), na.rm = TRUE),
-        uniqueid = (14000)+ municipality)
+         uniqueid = (14000)+ municipality)
 
 #-------------------------------------------------------------
 # 6. Drop if total==. or total==0
@@ -74,15 +74,20 @@ vars_to_num <- c("lista nominal","pan","pri","pps","prd","pfcrn","parm","pdm","p
 vars_to_num <- intersect(vars_to_num, names(data_1995))
 data_1995 <- data_1995 %>% mutate(across(all_of(vars_to_num), as.numeric))
 
+# Handle listanominal==0 as missing per Stata JOHN
+data_1995 <- data_1995 %>%
+  rename(listanominal="lista nominal") %>%
+  mutate(missing_ln = as.numeric(listanominal == 0))
+
 names(data_1995)
 #-------------------------------------------------------------
 # 9. collapse (sum) missing listanominal - total, by (municipality section)
 data_1995 <- data_1995 %>%
-  rename(listanominal="lista nominal") %>% 
-  group_by(municipality, section) %>%
-  summarise(across(c(listanominal:total), 
-                   sum, na.rm = TRUE), .groups = "drop") %>% 
-  select(-municipality)
+  group_by(uniqueid, municipality, section) %>%
+  summarise(across(c(missing_ln, listanominal:total), 
+                   sum, na.rm = TRUE), .groups = "drop") %>%
+  mutate(listanominal = if_else(missing_ln >= 1, NA_real_, listanominal)) %>%
+  select(-missing_ln, -municipality)
 #-------------------------------------------------------------
 # 12. Rename parties
 #-------------------------------------------------------------
@@ -117,9 +122,21 @@ valid_vars <- intersect(valid_vars, names(data_1995))
 data_1995 <- data_1995 %>% mutate(valid = rowSums(across(all_of(valid_vars)), na.rm=TRUE))
 
 #-------------------------------------------------------------
+# Fix sections 2300 and 3338 per Stata (sections that exist in 1995 but not 1997)
+data_1995 <- data_1995 %>%
+  mutate(uniqueid = case_when(
+    is.na(uniqueid) & section == 2300 ~ 14089L,
+    is.na(uniqueid) & section == 3338 ~ 14092L,
+    TRUE ~ uniqueid
+  ))
+
+#-------------------------------------------------------------
 # 21. gen year = 1995
 #    gen month = "February"
+# NOTE: Per Stata JOHN, drop turnout and listanominal for 1995
+#       (1995 has its own LN in the CSV but Stata drops it)
 data_1995 <- data_1995 %>%
+  select(-turnout, -listanominal) %>%
   mutate(year = 1995,
          month = "February")
 
@@ -331,7 +348,7 @@ data_1997 <- data_1997 %>%
 lista_nominal <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta")
 
 lista_nominal <- lista_nominal %>% 
-  dplyr::filter(state == "JALISCO" & month == "January" & year == 1997)
+  dplyr::filter(state == "JALISCO" & month == "December" & year == 1997)
 
 # Merge the datasets
 data_1997 <- data_1997 %>%
@@ -339,13 +356,10 @@ data_1997 <- data_1997 %>%
   dplyr::mutate(listanominal = lista) %>% 
   dplyr::select(-lista)
 
-# <<<<<<< HEAD
 names(data_1997)
 drops <- c("validos","no reg.","nulos")
-data_1997 <- data_1997 %>% select(-all_of(drops))
-
-# =======
-# >>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
+drops <- intersect(drops, names(data_1997))
+if(length(drops) > 0) data_1997 <- data_1997 %>% select(-all_of(drops))
 #--------------------------------------------
 # 7. Create turnout
 #--------------------------------------------
@@ -453,15 +467,23 @@ data_2000 <- data_2000 %>%
          PCD = pcd,
          PARM = parm,
          PAS = pas,
-         PDS = "d. s.",
          PSN = psn)
+
+# Rename ds/d.s./d. s. -> PDS (column name varies by CSV encoding)
+if("ds" %in% names(data_2000)) {
+  data_2000 <- data_2000 %>% rename(PDS = ds)
+} else if("d. s." %in% names(data_2000)) {
+  data_2000 <- data_2000 %>% rename(PDS = `d. s.`)
+} else if("d.s." %in% names(data_2000)) {
+  data_2000 <- data_2000 %>% rename(PDS = `d.s.`)
+}
 
 #-------------------------------------------------------------
 # 10. drop noregistrados nulos if they exist
 #-------------------------------------------------------------
-drop_vars <- c("noregistrados", "nulos")
+drop_vars <- c("noregistrados", "nulos", "no registrados")
 drop_vars <- intersect(drop_vars, names(data_2000))
-data_2000 <- data_2000 %>% select(-all_of(drop_vars))
+if(length(drop_vars) > 0) data_2000 <- data_2000 %>% select(-all_of(drop_vars))
 
 #-------------------------------------------------------------
 # 11. egen valid = rowtotal(PAN PRI PRD PT PVEM PC PCD PSN PARM PAS PDS)
@@ -518,9 +540,8 @@ data_2000 <- data_2000 %>%
          month = "November")
 
 #-------------------------------------------------------------
-# 16. drop no registrados
+# 16. (no registrados already dropped above)
 #-------------------------------------------------------------
-data_2000 <- data_2000 %>% select(-"no registrados")
 
 #-------------------------------------------------------------
 # 17. sort section
@@ -617,7 +638,19 @@ data_2003 <- data_2003 %>%
 
 # -----------------------------------------------------
 # 7. Rename party variables
+#    Handle both possible column name formats (with/without spaces/hyphens)
 # -----------------------------------------------------
+# Helper function for safe rename
+safe_rename <- function(df, new_name, old_names) {
+  for (old in old_names) {
+    if (old %in% names(df)) {
+      df <- df %>% rename(!!new_name := !!old)
+      return(df)
+    }
+  }
+  return(df)
+}
+
 data_2003 <- data_2003 %>%
   rename(
     PAN = pan,
@@ -628,16 +661,18 @@ data_2003 <- data_2003 %>%
     PVEM = pvem,
     PSN = psn,
     PAS = pas,
-    ElBarzon = "el barzon",
-    MexicoPosible = "mexico posible",
     PLM = plm,
-    FC = fc,
-    PRD_PAS = "prd-pas",
-    PRD_PC = "prd-pc",
-    PRD_PVEM = "prd-pvem",
-    PVEM_PAS = "pvem-pas",
-    PRD_PVEM_PAS = "prd-pvem-pas"
+    FC = fc
   )
+
+# These columns may have spaces/hyphens or not, depending on CSV format
+data_2003 <- safe_rename(data_2003, "ElBarzon", c("elbarzon", "el barzon"))
+data_2003 <- safe_rename(data_2003, "MexicoPosible", c("mexicoposible", "mexico posible"))
+data_2003 <- safe_rename(data_2003, "PRD_PAS", c("prdpas", "prd-pas"))
+data_2003 <- safe_rename(data_2003, "PRD_PC", c("prdpc", "prd-pc"))
+data_2003 <- safe_rename(data_2003, "PRD_PVEM", c("prdpvem", "prd-pvem"))
+data_2003 <- safe_rename(data_2003, "PVEM_PAS", c("pvempas", "pvem-pas"))
+data_2003 <- safe_rename(data_2003, "PRD_PVEM_PAS", c("prdpvempas", "prd-pvem-pas"))
 
 # -----------------------------------------------------
 # 8. Generate uniqueid based on municipality
@@ -817,7 +852,7 @@ data_2003 <- data_2003 %>%
 
 names(data_2003)
 # drop if _merge==2 is not needed because left_join doesn’t create _merge
-data_2003 <- data_2003 %>% select(-seccion, -year, -month, -state, -state)
+data_2003 <- data_2003 %>% select(-seccion, -year, -month, -state)
 
 # rename lista -> listanominal
 data_2003 <- data_2003 %>% rename(listanominal = lista)
@@ -882,11 +917,17 @@ data_2006 <- data_2006 %>%
 data_2006 <- data_2006 %>%
   rename(PAN = pan,
          PRI = pri,
-         PRD_PT = "prd-pt",
          PC = pc,
          PVEM = pvem,
          PANAL = panal,
          PAS = pas)
+
+# Handle prd-pt vs prdpt naming
+if("prd-pt" %in% names(data_2006)) {
+  data_2006 <- data_2006 %>% rename(PRD_PT = `prd-pt`)
+} else if("prdpt" %in% names(data_2006)) {
+  data_2006 <- data_2006 %>% rename(PRD_PT = prdpt)
+}
 
 #-------------------------------------------------------------
 # 6. Clean municipality names
@@ -894,6 +935,7 @@ data_2006 <- data_2006 %>%
 #-------------------------------------------------------------
 data_2006 <- data_2006 %>%
   mutate(municipality = str_replace_all(municipality, "Á", "A"),
+         municipality = str_replace_all(municipality, "É", "E"),
          municipality = str_replace_all(municipality, "Í", "I"),
          municipality = str_replace_all(municipality, "Ó", "O"),
          municipality = str_replace_all(municipality, "Ú", "U"),
@@ -1228,6 +1270,7 @@ data_2009 <- data_2009 %>%
 #-------------------------------------------------------------
 data_2009 <- data_2009 %>%
   mutate(municipality = str_replace_all(municipality, "Á", "A"),
+         municipality = str_replace_all(municipality, "É", "E"),
          municipality = str_replace_all(municipality, "Í", "I"),
          municipality = str_replace_all(municipality, "Ó", "O"),
          municipality = str_replace_all(municipality, "Ú", "U"),
@@ -1503,6 +1546,7 @@ data_2012 <- data_2012 %>%
 #-------------------------------------------------------------
 data_2012 <- data_2012 %>%
   mutate(municipality = str_replace_all(municipality, "Á", "A"),
+         municipality = str_replace_all(municipality, "É", "E"),
          municipality = str_replace_all(municipality, "Í", "I"),
          municipality = str_replace_all(municipality, "Ó", "O"),
          municipality = str_replace_all(municipality, "Ú", "U"),
@@ -1668,7 +1712,7 @@ data_2012 <- data_2012 %>%
 #-------------------------------------------------------------
 # 10. egen valid = rowtotal(PAN PRD PANAL PRI_PVEM PT_PC)
 #-------------------------------------------------------------
-valid_vars <- c("pan","prd","PANAL","PRI_PVEM","PT_PC")
+valid_vars <- c("PAN","PRD","PANAL","PRI_PVEM","PT_PC")
 valid_vars <- intersect(valid_vars, names(data_2012))
 
 data_2012 <- data_2012 %>%
@@ -1696,6 +1740,278 @@ data_2012 <- data_2012 %>%
 data_2012 <- data_2012 %>%
   mutate(year = 2012,
          month = "July")
+
+#####################################################################
+### 1998 EXTRAORDINARIO - Juchitlán
+#####################################################################
+
+data_1998_ext <- read_excel(
+  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1998/Juchitlan Extraordinario 1998.xlsx"
+)
+
+names(data_1998_ext) <- tolower(names(data_1998_ext))
+
+# Rename section column (may have accented name)
+sec_col <- grep("secc", names(data_1998_ext), ignore.case = TRUE, value = TRUE)[1]
+if(!is.na(sec_col)) data_1998_ext <- data_1998_ext %>% rename(section = !!sec_col)
+
+# Rename totals
+if("totales" %in% names(data_1998_ext)) {
+  data_1998_ext <- data_1998_ext %>% rename(total = totales)
+}
+
+data_1998_ext <- data_1998_ext %>%
+  filter(!is.na(section)) %>%
+  filter(!is.na(total) & total != 0) %>%
+  mutate(across(where(is.character), as.numeric))
+
+# Collapse by municipality and section
+data_1998_ext <- data_1998_ext %>%
+  group_by(section) %>%
+  summarize(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop")
+
+# Rename party columns to uppercase
+if("pan" %in% names(data_1998_ext)) data_1998_ext <- data_1998_ext %>% rename(PAN = pan)
+if("pri" %in% names(data_1998_ext)) data_1998_ext <- data_1998_ext %>% rename(PRI = pri)
+
+data_1998_ext <- data_1998_ext %>%
+  mutate(
+    uniqueid = 14052L,
+    municipality = "JUCHITLAN EXTRAORDINARIO",
+    valid = rowSums(across(c(PAN, PRI)), na.rm = TRUE)
+  )
+
+# Merge LN: month==12 & year==1997 & ed==14
+lista_nominal <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta") %>%
+  filter(state == "JALISCO" & month == "December" & year == 1997) %>%
+  select(section, lista) %>%
+  rename(listanominal = lista)
+
+data_1998_ext <- data_1998_ext %>%
+  left_join(lista_nominal, by = "section") %>%
+  mutate(
+    turnout = total / listanominal,
+    year = 1998L,
+    month = "February"
+  ) %>%
+  arrange(section)
+
+#####################################################################
+### 2004 EXTRAORDINARIO - Tamazula de Gordiano
+#####################################################################
+
+data_2004_ext <- read_excel(
+  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2004/Tamazula Extraordinario 2004.xlsx"
+)
+
+names(data_2004_ext) <- tolower(names(data_2004_ext))
+
+sec_col <- grep("secc", names(data_2004_ext), ignore.case = TRUE, value = TRUE)[1]
+if(!is.na(sec_col)) data_2004_ext <- data_2004_ext %>% rename(section = !!sec_col)
+
+if("totales" %in% names(data_2004_ext)) {
+  data_2004_ext <- data_2004_ext %>% rename(total = totales)
+}
+
+# Rename CONV -> MC per Stata JOHN
+if("conv" %in% names(data_2004_ext)) {
+  data_2004_ext <- data_2004_ext %>% rename(mc = conv)
+}
+
+data_2004_ext <- data_2004_ext %>%
+  filter(!is.na(section)) %>%
+  filter(!is.na(total) & total != 0) %>%
+  mutate(across(where(is.character), as.numeric))
+
+data_2004_ext <- data_2004_ext %>%
+  group_by(section) %>%
+  summarize(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop")
+
+# Rename party columns
+if("pan" %in% names(data_2004_ext)) data_2004_ext <- data_2004_ext %>% rename(PAN = pan)
+if("pri_pvem" %in% names(data_2004_ext)) data_2004_ext <- data_2004_ext %>% rename(PRI_PVEM = pri_pvem)
+if("prd" %in% names(data_2004_ext)) data_2004_ext <- data_2004_ext %>% rename(PRD = prd)
+if("pt" %in% names(data_2004_ext)) data_2004_ext <- data_2004_ext %>% rename(PT = pt)
+if("mc" %in% names(data_2004_ext)) data_2004_ext <- data_2004_ext %>% rename(MC = mc)
+
+valid_vars_ext <- intersect(c("PAN","PRI_PVEM","PRD","PT","MC"), names(data_2004_ext))
+
+data_2004_ext <- data_2004_ext %>%
+  mutate(
+    uniqueid = 14085L,
+    municipality = "TAMAZULA EXTRAORDINARIO",
+    valid = rowSums(across(all_of(valid_vars_ext)), na.rm = TRUE)
+  )
+
+# Merge LN: month==9 & year==2003 & ed==14
+lista_nominal <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta") %>%
+  filter(state == "JALISCO" & month == "September" & year == 2003) %>%
+  select(section, lista) %>%
+  rename(listanominal = lista)
+
+data_2004_ext <- data_2004_ext %>%
+  left_join(lista_nominal, by = "section") %>%
+  mutate(
+    turnout = total / listanominal,
+    year = 2004L,
+    month = "January"
+  ) %>%
+  arrange(section)
+
+#####################################################################
+### 2007 EXTRAORDINARIO - Tuxcueca
+#####################################################################
+
+data_2007_ext <- read_excel(
+  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2007/Tuxcueca Extraordinario 2007.xlsx"
+)
+
+names(data_2007_ext) <- tolower(names(data_2007_ext))
+
+sec_col <- grep("secc", names(data_2007_ext), ignore.case = TRUE, value = TRUE)[1]
+if(!is.na(sec_col)) data_2007_ext <- data_2007_ext %>% rename(section = !!sec_col)
+
+if("totales" %in% names(data_2007_ext)) {
+  data_2007_ext <- data_2007_ext %>% rename(total = totales)
+}
+
+# Rename PVEM_CONV -> PVEM_MC per Stata JOHN
+if("pvem_conv" %in% names(data_2007_ext)) {
+  data_2007_ext <- data_2007_ext %>% rename(pvem_mc = pvem_conv)
+}
+
+data_2007_ext <- data_2007_ext %>%
+  filter(!is.na(section)) %>%
+  filter(!is.na(total) & total != 0) %>%
+  mutate(across(where(is.character), as.numeric))
+
+data_2007_ext <- data_2007_ext %>%
+  group_by(section) %>%
+  summarize(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop")
+
+# Rename party columns
+if("pan" %in% names(data_2007_ext)) data_2007_ext <- data_2007_ext %>% rename(PAN = pan)
+if("pri" %in% names(data_2007_ext)) data_2007_ext <- data_2007_ext %>% rename(PRI = pri)
+if("pt" %in% names(data_2007_ext)) data_2007_ext <- data_2007_ext %>% rename(PT = pt)
+if("asc" %in% names(data_2007_ext)) data_2007_ext <- data_2007_ext %>% rename(ASC = asc)
+if("pvem_mc" %in% names(data_2007_ext)) data_2007_ext <- data_2007_ext %>% rename(PVEM_MC = pvem_mc)
+
+valid_vars_ext <- intersect(c("PAN","PRI","PT","ASC","PVEM_MC"), names(data_2007_ext))
+
+data_2007_ext <- data_2007_ext %>%
+  mutate(
+    uniqueid = 14107L,
+    municipality = "TUXCUECA EXTRAORDINARIO",
+    valid = rowSums(across(all_of(valid_vars_ext)), na.rm = TRUE)
+  )
+
+# Merge LN: month==1 & year==2007 & ed==14
+lista_nominal <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta") %>%
+  filter(state == "JALISCO" & month == "January" & year == 2007) %>%
+  select(section, lista) %>%
+  rename(listanominal = lista)
+
+data_2007_ext <- data_2007_ext %>%
+  left_join(lista_nominal, by = "section") %>%
+  mutate(
+    turnout = total / listanominal,
+    year = 2007L,
+    month = "February"
+  ) %>%
+  arrange(section)
+
+#####################################################################
+### 2009 EXTRAORDINARIO - Gómez Farías + San Cristóbal de la Barranca
+#####################################################################
+
+data_2009_ext_gf <- read_excel(
+  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2009/CASxCAS_GomezF2009.xls",
+  sheet = "Gomez farias",
+  range = "A7:N25"
+)
+
+data_2009_ext_sc <- read_excel(
+  "../../../Data/Raw Electoral Data/Jalisco - 1995, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2009/CASxCAS_SnCristobal2009.xls",
+  sheet = "San cristobal",
+  range = "A7:N19"
+)
+
+data_2009_ext <- bind_rows(data_2009_ext_gf, data_2009_ext_sc)
+names(data_2009_ext) <- tolower(names(data_2009_ext))
+
+# Rename columns
+sec_col <- grep("secc", names(data_2009_ext), ignore.case = TRUE, value = TRUE)[1]
+if(!is.na(sec_col)) data_2009_ext <- data_2009_ext %>% rename(section = !!sec_col)
+
+mun_col <- grep("municipio|mun", names(data_2009_ext), ignore.case = TRUE, value = TRUE)[1]
+if(!is.na(mun_col)) data_2009_ext <- data_2009_ext %>% rename(municipality = !!mun_col)
+
+# Rename total column
+total_col <- grep("total.*emitida|totales|total", names(data_2009_ext), ignore.case = TRUE, value = TRUE)[1]
+if(!is.na(total_col) && total_col != "total") {
+  data_2009_ext <- data_2009_ext %>% rename(total = !!total_col)
+}
+
+# Rename PRD_PT_CONV -> PRD_PT_MC per Stata JOHN
+conv_col <- grep("prd_pt_conv|prdptconv", names(data_2009_ext), ignore.case = TRUE, value = TRUE)[1]
+if(!is.na(conv_col)) data_2009_ext <- data_2009_ext %>% rename(PRD_PT_MC = !!conv_col)
+
+data_2009_ext <- data_2009_ext %>%
+  filter(!is.na(section)) %>%
+  filter(!is.na(total) & total != 0) %>%
+  mutate(across(-municipality, as.numeric))
+
+data_2009_ext <- data_2009_ext %>%
+  group_by(municipality, section) %>%
+  summarize(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop")
+
+# Rename party columns
+if("pan" %in% names(data_2009_ext)) data_2009_ext <- data_2009_ext %>% rename(PAN = pan)
+if("pri" %in% names(data_2009_ext)) data_2009_ext <- data_2009_ext %>% rename(PRI = pri)
+if("pvem" %in% names(data_2009_ext)) data_2009_ext <- data_2009_ext %>% rename(PVEM = pvem)
+if("panal" %in% names(data_2009_ext)) data_2009_ext <- data_2009_ext %>% rename(PANAL = panal)
+
+# Assign uniqueid based on municipality
+data_2009_ext <- data_2009_ext %>%
+  mutate(
+    municipality = toupper(municipality),
+    municipality = str_replace_all(municipality, "Á|Ã"", "A"),
+    municipality = str_replace_all(municipality, "É", "E"),
+    municipality = str_replace_all(municipality, "Í|Ã", "I"),
+    municipality = str_replace_all(municipality, "Ó|Ã"", "O"),
+    municipality = str_replace_all(municipality, "Ú|Ãš", "U"),
+    municipality = str_replace_all(municipality, "Ñ|Ã'", "N")
+  ) %>%
+  mutate(uniqueid = case_when(
+    grepl("GOMEZ", municipality) ~ 14079L,
+    grepl("CRISTOBAL", municipality) ~ 14071L,
+    TRUE ~ NA_integer_
+  )) %>%
+  mutate(municipality = case_when(
+    uniqueid == 14079 ~ "GOMEZ FARIAS EXTRAORDINARIO",
+    uniqueid == 14071 ~ "SAN CRISTOBAL DE LA BARRANCA EXTRAORDINARIO",
+    TRUE ~ municipality
+  ))
+
+valid_vars_ext <- intersect(c("PAN","PRI","PVEM","PANAL","PRD_PT_MC"), names(data_2009_ext))
+
+data_2009_ext <- data_2009_ext %>%
+  mutate(valid = rowSums(across(all_of(valid_vars_ext)), na.rm = TRUE))
+
+# Merge LN: month==11 & year==2009 & ed==14
+lista_nominal <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta") %>%
+  filter(state == "JALISCO" & month == "November" & year == 2009) %>%
+  select(section, lista) %>%
+  rename(listanominal = lista)
+
+data_2009_ext <- data_2009_ext %>%
+  left_join(lista_nominal, by = "section") %>%
+  mutate(
+    turnout = total / listanominal,
+    year = 2009L,
+    month = "December"
+  ) %>%
+  arrange(section)
 
 #-------------------------------------------------------------
 #2015
@@ -1811,22 +2127,22 @@ summary(data_2015)
 data_2015 <- data_2015 %>%
   mutate(section = ifelse((uniqueid==14098 & section==995) | 
                             (uniqueid==14098 & section==1548) |
-                             (uniqueid==14101 & section==2024) | 
+                            (uniqueid==14101 & section==2024) | 
                             (uniqueid==14101 & section==2025) |
-                             (uniqueid==14044 & section==2462) | 
+                            (uniqueid==14044 & section==2462) | 
                             (uniqueid==14039 & (section==2484 |
                                                   section==2485 | section==2486)) |
-                             (uniqueid==14039 & section==2484) | (uniqueid==14101 & section==2563) |
-                             (uniqueid==14098 & section==2720) | (uniqueid==14098 & section==2721) |
-                             (uniqueid==14070 & section==2729) | (uniqueid==14098 & section==3206),
-                           NA, section))
+                            (uniqueid==14039 & section==2484) | (uniqueid==14101 & section==2563) |
+                            (uniqueid==14098 & section==2720) | (uniqueid==14098 & section==2721) |
+                            (uniqueid==14070 & section==2729) | (uniqueid==14098 & section==3206),
+                          NA, section))
 
 
 #Lista Nominal
 
 lista_nominal <- read.dta13("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2015/LN2015.dta") %>% 
   filter(month == 6 &
-          entidad ==14) %>%
+           entidad ==14) %>%
   mutate(uniqueid = (entidad*1000)+municipio) %>%
   filter(seccion!=0) %>%
   arrange(uniqueid,seccion) %>%
@@ -1847,15 +2163,6 @@ data_2015 <- data_2015 %>%
   relocate(STATE, municipality, uniqueid, section, year, month)
 
 data_2015 <- data_2015 %>% arrange(uniqueid, section)
-
-# <<<<<<< HEAD
-# =======
-# ------------------------------------------------------------------
-# SETUP
-# ------------------------------------------------------------------
-cat("\014")
-options(max.print = 5000, scipen=10)
-# >>>>>>> a21cdeff03c45281c2c187a1d1995c0e6006ce33
 
 
 # ------------------------------------------------------------------
@@ -1941,8 +2248,12 @@ data_2018 <- data_2018 %>%
     PAN = if_else(!is.na(coaljf) & coaljf==1, NA_real_, PAN),
     PRD = if_else(!is.na(coaljf) & coaljf==1, NA_real_, PRD),
     MC  = if_else(!is.na(coaljf) & coaljf==1, NA_real_, MC)
-  ) %>%
-  select(-PAN_PRD_MC, -PAN_PRD, -PAN_MC, -PRD_MC)
+  )
+
+# Remove sub-coalition columns but KEEP PAN_PRD_MC
+sub_coal_vars <- c("PAN_PRD", "PAN_MC", "PRD_MC")
+sub_coal_vars <- intersect(sub_coal_vars, names(data_2018))
+if(length(sub_coal_vars) > 0) data_2018 <- data_2018 %>% select(-all_of(sub_coal_vars))
 
 # ------------------------------------------------------------------
 # 4. RENAME & COLLAPSE
@@ -1961,7 +2272,7 @@ data_2018 <- data_2018 %>%
 data_2018 <- data_2018 %>%
   group_by(municipality,uniqueid,section) %>%
   summarize(
-    across(PAN:PT_MORENA_PES, sum, na.rm=TRUE),
+    across(c(PAN:PT_MORENA_PES, PAN_PRD_MC), sum, na.rm=TRUE),
     .groups="drop"
   )
 
@@ -2002,6 +2313,10 @@ data_2018 <- data_2018 %>% rename(listanominal = ListadoNominalINE)
 data_2018 <- data_2018 %>%
   mutate(turnout=total/listanominal)
 
+# Add year and month
+data_2018 <- data_2018 %>%
+  mutate(year = 2018,
+         month = "July")
 
 # Omit municipal aggregator steps (mun_listanominal, mun_turnout)
 
@@ -2216,7 +2531,7 @@ tlaquepaque_listanominal <- collapsed_2021 %>%
   select(municipality, section, listanominal)
 
 collapsed_ext <- collapsed_ext %>% 
-  left_join(tlaquepaque_listanominal %>% select(section, listanominal), by = c("section", "municipality"))
+  left_join(tlaquepaque_listanominal %>% select(section, listanominal), by = "section")
 
 # Add tlaquepaque ext to data
 collapsed_2021 <- bind_rows(collapsed_ext, collapsed_2021 %>% 
@@ -2502,13 +2817,17 @@ collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>%
 
 
 # Combine the dataframes, handling different columns by filling with NA
+# NOTE: data_2003 already includes the Extra data (combined during processing)
 jalisco_all <- bind_rows(data_1995,
                          data_1997,
+                         data_1998_ext,
                          data_2000,
                          data_2003,
-                         data_2003_extra,
+                         data_2004_ext,
                          data_2006,
+                         data_2007_ext,
                          data_2009,
+                         data_2009_ext,
                          data_2012,
                          data_2015,
                          data_2018,
@@ -2516,4 +2835,3 @@ jalisco_all <- bind_rows(data_1995,
                          collapsed_2024)
 
 data.table::fwrite(jalisco_all,"../../../Processed Data/jalisco/jalisco_process_raw_data.csv")
-
