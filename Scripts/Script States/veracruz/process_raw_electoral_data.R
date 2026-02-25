@@ -311,9 +311,7 @@ df_collapsed <- df_ayusec %>%
 # generate total = rowtotal(pan fide prd prv no_reg nulos)
 # drop if total==. or total==0
 df_collapsed <- df_collapsed %>%
-  rowwise() %>%
-  mutate(total = sum(c_across(c(pan, fide, prd, prv, no_reg, nulos)), na.rm=TRUE)) %>%
-  ungroup() %>%
+  mutate(total = rowSums(select(., pan, fide, prd, prv, no_reg, nulos), na.rm = TRUE)) %>%
   filter(!(is.na(total) | total==0))
 
 # rename columns
@@ -577,14 +575,11 @@ df_merged <- df_merged %>%
 #    sort section, and save
 ################################################################################
 df_2004 <- df_merged %>%
-  rowwise() %>%
   mutate(
-    valid = sum(c_across(c(PAN, PRI_PVEM, PRD_PT_PC, PRV)), na.rm=TRUE)
-  ) %>%
-  ungroup() %>%
-  mutate(
+    valid = rowSums(select(., PAN, PRI_PVEM, PRD_PT_PC, PRV), na.rm = TRUE),
     year  = 2004,
-    month = "September"
+    month = "September",
+    STATE = "VERACRUZ"
   ) %>%
   arrange(section)
 
@@ -978,16 +973,11 @@ df_merged <- df_merged %>%
 #    year=2010, month="July", sort by section, save "Veracruz_Section_2010.dta"
 ################################################################################
 df_2010 <- df_merged %>%
-  rowwise() %>%
   mutate(
-    valid = sum(c_across(any_of(c(
-      "PAN","PANAL","PRD","PT","PC","PAN_PANAL","PRI_PVEM_PRV","PRD_PT_PC"
-    ))), na.rm = TRUE)
-  ) %>%
-  ungroup() %>%
-  mutate(
+    valid = rowSums(select(., any_of(c("PAN","PANAL","PRD","PT","PC","PAN_PANAL","PRI_PVEM_PRV","PRD_PT_PC"))), na.rm = TRUE),
     year  = 2010,
-    month = "July"
+    month = "July",
+    STATE = "VERACRUZ"
   ) %>%
   arrange(section)
 
@@ -1288,7 +1278,8 @@ df_2013 <- df_merged %>%
   mutate(
     turnout = total / listanominal,
     year    = 2013,
-    month   = "July"
+    month   = "July",
+    STATE   = "VERACRUZ"
   ) %>%
   arrange(section)
 
@@ -1568,14 +1559,11 @@ df_2018_collapsed <- df_2018_collapsed %>%
 # 8) egen valid=rowtotal(PAN_PRD PRI_PVEM MORENA_PT_PES PANAL PES)
 #    gen year=2018, gen month="March"
 df_2018_collapsed <- df_2018_collapsed %>%
-  rowwise() %>%
   mutate(
-    valid = sum(c_across(c(PAN_PRD, PRI_PVEM, MORENA_PT_PES, PANAL, PES)), na.rm=TRUE)
-  ) %>%
-  ungroup() %>%
-  mutate(
+    valid = rowSums(select(., any_of(c("PAN_PRD", "PRI_PVEM", "MORENA_PT_PES", "PANAL", "PES"))), na.rm = TRUE),
     year = 2018,
-    month= "March"
+    month= "March",
+    STATE = "VERACRUZ"
   )
 
 #####################################
@@ -1920,7 +1908,8 @@ collapsed_2021 <- collapsed_2021 %>%
     month = case_when(
       municipality %in% c("AMATITLAN", "TLACOTEPEC", "JESUS CARRANZA", "CHICONAMEL") ~ "March",
       TRUE ~ "June"
-    )
+    ),
+    STATE = "VERACRUZ"
   )
 
 # Check and process coalitions
@@ -2104,9 +2093,10 @@ collapsed_2025 <- data_2025 %>%
 collapsed_2025 <- collapsed_2025 %>%
   dplyr::mutate(
     turnout = total/listanominal,
-    valid = sum(c_across(c(PAN:MORENA, PVEM_MORENA:CI_15)), na.rm = TRUE),
+    valid = rowSums(across(c(PAN:MORENA, PVEM_MORENA:CI_15)), na.rm = TRUE),
     year = 2025,
-    month = "June"
+    month = "June",
+    STATE = "VERACRUZ"
   ) 
 
 # Process Coalitions
