@@ -1388,16 +1388,48 @@ df_2017 <- df_2017 %>%
     PANAL = rowSums(select(., matches("nueva alianza|nuevaalianza", ignore.case = TRUE)), na.rm = TRUE),
     MC = rowSums(select(., matches("movimiento ciudadano|movimiento cuidadano", ignore.case = TRUE)), na.rm = TRUE),
     PT = rowSums(select(., matches("^pt$", ignore.case = TRUE)), na.rm = TRUE),
-    PES = rowSums(select(., matches("encuentro social", ignore.case = TRUE)), na.rm = TRUE),
+    PES = rowSums(select(., matches("encuentro.?social", ignore.case = TRUE)), na.rm = TRUE),
     MORENA = rowSums(select(., matches("^morena$", ignore.case = TRUE)), na.rm = TRUE)
   )
 
-# Independent candidates (CI_1, CI_2, CI_3)
-ci_cols <- names(df_2017)[grepl("Perez|Juarez|Marin|Martinez|Dionisio|Becerra|Pimentel|Andrade|Hernandez|Penaloza|Chazaro|Archer", 
-                                names(df_2017), ignore.case = TRUE)]
-if (length(ci_cols) > 0) {
+# Independent candidates (CI_1, CI_2, CI_3) — per SALVADOR do-file definitions
+# All candidate columns matching individual candidate name patterns
+ci_all_cols <- names(df_2017)[grepl(
+  "Perez|Romero|Juarez|Cid|Marin|Aguille|Martinez|Murrieta|Dionisio|Becerra|Greer|Pimentel|Alvarez|Andrade|Luna|Hernandez|Vega|Penaloza|Mayreth|Chazaro|Christopher|Archer|Moreno",
+  names(df_2017), ignore.case = TRUE)]
+# Exclude any party/metadata columns that might accidentally match
+ci_all_cols <- ci_all_cols[!ci_all_cols %in% c("municipality", "section", "pan", "pri", "prd", "pvem", "pt",
+                                                "morena", "PAN", "PRI", "PRD", "PVEM", "PT", "MORENA",
+                                                "PANAL", "MC", "PES", "PAN_PRD", "PRI_PVEM")]
+
+# CI_3: ChristopherCristianCházaro + RubénMorenoArcher (SAL L320)
+ci_3_cols <- ci_all_cols[grepl("Chazaro|Christopher|Archer", ci_all_cols, ignore.case = TRUE)]
+
+# CI_2: 10 specific candidates (SAL L318-319)
+# EduardoCidJuarez, MauricioIvanAguilleMarín, VíctorManuelMurrietaPérez,
+# MartínGarcíaMartínez, MiguelÁngelMartínezDionisio, OscarOctacioGreerBecerra,
+# EmilioÁlvarezPimentel, AntonioLunaAndrade, RafaelVegaHernández, MayrethMartínezPeñaloza
+ci_2_cols <- ci_all_cols[grepl(
+  "Cid|Aguille|Murrieta|Dionisio|Greer|Becerra|Pimentel|Alvarez|Luna|Andrade|Vega|Hernandez|Mayreth|Penaloza",
+  ci_all_cols, ignore.case = TRUE)]
+ci_2_cols <- setdiff(ci_2_cols, ci_3_cols)
+
+# CI_1: remaining candidate columns (SAL L317: CI_1 = all - CI_2 - CI_3)
+ci_1_cols <- setdiff(ci_all_cols, c(ci_2_cols, ci_3_cols))
+
+if (length(ci_all_cols) > 0) {
   df_2017 <- df_2017 %>%
-    mutate(CI_1 = rowSums(select(., all_of(ci_cols)), na.rm = TRUE))
+    mutate(
+      CI_1 = if (length(ci_1_cols) > 0) rowSums(select(., all_of(ci_1_cols)), na.rm = TRUE) else 0,
+      CI_2 = if (length(ci_2_cols) > 0) rowSums(select(., all_of(ci_2_cols)), na.rm = TRUE) else 0,
+      CI_3 = if (length(ci_3_cols) > 0) rowSums(select(., all_of(ci_3_cols)), na.rm = TRUE) else 0
+    ) %>%
+    select(-any_of(ci_all_cols))  # drop individual candidate columns per SAL L322
+}
+
+# Rename cnr → no_reg (SAL: rename CNR no_reg)
+if ("cnr" %in% names(df_2017)) {
+  df_2017 <- df_2017 %>% rename(no_reg = cnr)
 }
 
 # Collapse by municipality and section
@@ -1417,7 +1449,7 @@ party_cols_2017 <- party_cols_2017[party_cols_2017 %in% names(df_2017)]
 
 df_2017 <- df_2017 %>%
   mutate(valid = rowSums(select(., all_of(party_cols_2017)), na.rm = TRUE),
-         total = valid + nulo)
+         total = valid + nulo + ifelse("no_reg" %in% names(.), no_reg, 0))
 
 # Read uniqueids mapping
 uniqueids_2017 <- read_excel("../../../Data/Raw Electoral Data/Veracruz 2000, 2004, 2007, 2010, 2013,2016,2021,2025/uniqueids.xlsx") %>%
