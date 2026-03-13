@@ -49,6 +49,26 @@ mag_db <- mag_db %>%
   mutate(incumbent_party_magar = toupper(incumbent_party_magar)) %>% 
   mutate(runnerup_party_magar = toupper(runnerup_party_magar))
 
+### New Magar incumbents
+newmag <- read.csv("Data/incumbent data/new incumbent magar/aymu1989-on.incumbents.csv") %>% 
+  filter(edon == 31 & yr >= 2020) %>% 
+  mutate(across(c(part, part2nd), ~ gsub("-", "_", .))) %>%
+  rename( incumbent_party_magar = part) %>%
+  rename( incumbent_candidate_magar = incumbent) %>%
+  rename( runnerup_party_magar = part2nd) %>%
+  rename( runnerup_candidate_magar = runnerup) %>%
+  rename( margin = mg) %>% 
+  rename( year = yr) %>%
+  rename(uniqueid = inegi)  %>%
+  mutate(uniqueid = as.numeric(uniqueid),
+         margin = as.numeric(margin)) %>% 
+  select(uniqueid, year, incumbent_party_magar, incumbent_candidate_magar, runnerup_party_magar, runnerup_candidate_magar, margin) %>%
+  mutate(incumbent_party_magar = toupper(incumbent_party_magar)) %>% 
+  mutate(runnerup_party_magar = toupper(runnerup_party_magar)) 
+
+# Magar complete
+mag_db <- bind_rows(mag_db, newmag)
+
 # Set the path to save the CSV file relative to the repository's root
 output_dir <- file.path(getwd(), "Processed Data/yucatan/Incumbents")
 output_path <- file.path(output_dir, "incumbent_magar.csv")

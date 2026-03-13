@@ -50,13 +50,19 @@ replace_parties <- function(party_str, year) {
   return(party_str)
 }
 
+# replace_prd_mc <- function(party_str) {
+#   # Punctual replacement: Only replace "PRD_MC" when it is the entire string
+#   if (party_str == "PRD_MC") {
+#     party_str <- "PRD_PC"
+#   }
+#   
+#   return(party_str)
+# }
+
 replace_prd_mc <- function(party_str) {
-  # Punctual replacement: Only replace "PRD_MC" when it is the entire string
-  if (party_str == "PRD_MC") {
-    party_str <- "PRD_PC"
-  }
-  
-  return(party_str)
+  if (is.na(party_str) || party_str == "") return(party_str)
+  if (party_str == "PRD_MC") return("PRD_PC")
+  party_str
 }
 
 # Apply the functions to incumbent_party_magar and runnerup_party_magar

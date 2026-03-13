@@ -54,7 +54,13 @@ finaldb <- finaldb %>%
   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
   mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties)) %>%
   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace1)) %>%
-  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace1))
+  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace1)) %>% 
+  mutate(incumbent_party_JL = gsub("PMACH", "PMV", incumbent_party_JL)) %>% 
+  mutate(incumbent_party_JL = gsub("PCHU", "PCU", incumbent_party_JL)) %>% 
+  mutate(incumbent_party_JL = gsub("CHIAPAS UNIDO", "PCU", incumbent_party_JL)) %>% 
+  mutate(incumbent_party_JL = gsub("PNA", "PANAL", incumbent_party_JL)) 
+
+  
 
 
 assign_incumbent_vote <- function(data) {

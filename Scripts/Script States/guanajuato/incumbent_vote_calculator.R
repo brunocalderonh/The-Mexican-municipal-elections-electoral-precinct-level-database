@@ -35,7 +35,8 @@ replace_parties <- function(party_str) {
 
 finaldb <- finaldb %>%
   mutate(incumbent_party_magar = sapply(incumbent_party_magar, replace_parties)) %>%
-  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties))
+  mutate(runnerup_party_magar = sapply(runnerup_party_magar, replace_parties)) %>% 
+  mutate(incumbent_party_JL = sapply(incumbent_party_JL, replace_parties))
 
 replace_parties1 <- function(party_str) {
   replacements <- c( "PAS_" = "PAS")

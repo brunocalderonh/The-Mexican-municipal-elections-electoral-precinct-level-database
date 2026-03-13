@@ -341,4 +341,3 @@ finaldb <- assign_incumbent_vote(finaldb)
   
   # Confirm file saved correctly
   cat("File saved at:", output_path)
-  

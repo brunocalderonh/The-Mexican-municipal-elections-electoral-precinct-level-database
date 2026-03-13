@@ -27,7 +27,7 @@ setwd(file.path(script_dir, ""))
 ### Step 1: Process 1997 Data
 ###########################################
 # Load 1997 data
-data_1997 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_1997.csv")
+data_1997 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1997/Ayu_Seccion_1997.csv")
 
 # Rename and clean columns
 data_1997 <- data_1997 %>%
@@ -96,12 +96,12 @@ rm(data_1997)
 ### Step 1: Process 2000 Data
 ###########################################
 # Load 2000 data
-data_2000 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2000.csv")
+data_2000 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2000/Ayu_Seccion_2000.csv")
 
 # Convert column names to lowercase
 data_2000 <- data_2000 %>% rename_with(tolower)
 
-# Rename variables to match Stata code
+# Rename variables
 data_2000 <- data_2000 %>%
   rename(municipality = nom_mpio,
          section = seccion) %>%
@@ -151,7 +151,7 @@ data_2000 <- data_2000 %>%
 ### Party Aggregation
 ###########################################
 
-# Create dummy variables by municipality as in Stata
+# Create dummy variables by municipality
 data_2000 <- data_2000 %>%
   group_by(municipality) %>%
   mutate(dummy_prd_pt_pas_cd = sum(prd_pt_pas_cd > 0),
@@ -162,7 +162,7 @@ data_2000 <- data_2000 %>%
          dummy_prd_pt_pas = as.numeric(dummy_prd_pt_pas > 0),
          dummy_prd_pas_cd = as.numeric(dummy_prd_pas_cd > 0))
 
-# Replace and aggregate votes as in Stata
+# Replace and aggregate votes
 data_2000 <- data_2000 %>%
   mutate(
     prd_pt_pas_cd = if_else(dummy_prd_pt_pas_cd == 1, prd_pt_pas_cd + prd + pt + pas + pcd, prd_pt_pas_cd),
@@ -204,7 +204,7 @@ data_2000 <- data_2000 %>%
          PCD = pcd,
          PSN = psn,
          PARM = parm,
-         PC = cdppn,  # cdppn is renamed to PC per Stata code
+         PC = cdppn,  # cdppn is renamed to PC 
          PDS = ds,
          PRD_PT_PAS_PCD = prd_pt_pas_cd,
          PRD_PT_PAS = prd_pt_pas,
@@ -257,11 +257,11 @@ rm(data_2000)
 ### 2003: Process Municipality Name File
 ###########################################
 
-mun_data <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003_Mun_Number_to_Name.csv") %>%
+mun_data <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003_Mun_Number_to_Name.csv") %>%
   rename(num_municipality = num_mun) %>%
   arrange(num_municipality)
 
-data_2003 <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2003.csv")
+data_2003 <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003.csv")
 
 # Convert column names to lowercase
 data_2003 <- data_2003 %>% rename_with(tolower)
@@ -292,20 +292,8 @@ data_2003 <- data_2003 %>%
   summarise(across(all_of(num_cols), sum, na.rm = TRUE), .groups = "drop")
 
 ###########################################
-### Rename Parties as in Stata
+### Rename Parties
 ###########################################
-# rename pan PAN
-# rename pri PRI
-# rename prd PRD
-# rename pt PT
-# rename pvem PVEM
-# rename c PC
-# rename psn PSN
-# rename pas PAS
-# rename mp MexicoPosible
-# rename plm PLM
-# rename fc FC
-
 data_2003 <- data_2003 %>%
   rename(PAN = pan,
          PRI = pri,
@@ -368,7 +356,7 @@ rm(data_2003)
 ###########################################
 
 # Read the 2006 CSV (adjust file path)
-data_2006 <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2006.csv")
+data_2006 <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2006/Ayu_Seccion_2006.csv")
   
 # Convert column names to lowercase
 data_2006 <- data_2006 %>% rename_with(tolower) 
@@ -536,7 +524,7 @@ rm(data_2006)
 ###########################################
 ### Process 2009 Data
 ###########################################
-data_2009 <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayu_Seccion_2009.csv",
+data_2009 <- fread("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2009/Ayu_Seccion_2009.csv",
                    encoding = "UTF-8") %>%
   rename(municipality = NOM_MPIO,
          section = SECCION,
@@ -553,7 +541,6 @@ data_2009 <- data_2009 %>%
 data_2009 <- data_2009 %>% rename_with(tolower) 
 
 # Convert columns to numeric
-# Based on Stata code: pan - psd pcomun total comn mayoria
 num_cols_2009 <- c("listanominal","pan","pri",
                    "prd","pt","pvem","conv",
                    "v13","psd","pcomun",
@@ -569,7 +556,6 @@ data_2009 <- data_2009 %>%
 
 # Coalition formation steps:
 # dummy_pan_pvem, dummy_prd_pvem, dummy_pri_prd, dummy_pri_prd_pvem, dummy_pri_pvem
-# We'll replicate the logic as in Stata.
 
 data_2009 <- data_2009 %>%
   mutate(dummy_pan_pvem = ifelse(municipality == "JERECUARO", 1, 0),
@@ -624,7 +610,7 @@ data_2009 <- data_2009 %>%
          pcomun = ifelse(dummy_pri_pvem == 1, 0, pcomun)) %>%
   select(-dummy_pri_pvem)
 
-# Drop comn, pcomun, mayoria as in Stata
+# Drop comn, pcomun, mayoria
 data_2009 <- data_2009 %>%
   select(-comn, -pcomun, -mayoria)
 
@@ -687,9 +673,9 @@ rm(data_2009)
 ###########################################
 ### Read 2012 Data
 ###########################################
-data_2012 <- read_dta("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Other/Ayu_Seccion_2012.dta") %>%
+data_2012 <- read_dta("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Other/Ayu_Seccion_2012.dta") %>%
   rename(section = Casilla,
-         PANAL = `NA`)  # 'NA' is a reserved word in R, ensure the variable was actually named 'NA' in Stata. Adjust if needed.
+         PANAL = `NA`)
 
 ###########################################
 ### Compute Total Votes
@@ -732,8 +718,6 @@ data_2012 <- data_2012 %>%
 ###########################################
 ### Collapse by Municipality and Section
 ###########################################
-# Stata:
-# collapse (sum) PAN - PRI_PVEM total, by (municipality section)
 
 # Identify all variables from PAN to PRI_PVEM plus total:
 vars_to_collapse <- c("PAN", "PRI", "PRD", "PT", "PVEM", "PC", "PANAL", "PAN_PANAL", "PRI_PVEM", "Noregistrados", "Nulos", "total")
@@ -745,7 +729,6 @@ data_2012 <- data_2012 %>%
 ###########################################
 ### Unique ID Assignment
 ###########################################
-# Stata assigns uniqueid based on municipality
 
 unique_ids <- c("ABASOLO" = 11001, "ACAMBARO" = 11002, "APASEO EL ALTO" = 11004, "APASEO EL GRANDE" = 11005, 
                 "ATARJEA" = 11006, "CELAYA" = 11007, "COMONFORT" = 11009, "CORONEO" = 11010, "CORTAZAR" = 11011, 
@@ -805,7 +788,7 @@ data_2012_collapsed <- data_2012_collapsed %>%
 ### Step 1: Process 2015 Data
 ###########################################
 # Load 2015 data from Excel
-data_2015 <- read_excel("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2015.xlsx", sheet = "Sheet1", col_types = "text")
+data_2015 <- read_excel("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2015/Ayuntamientos_2015.xlsx", sheet = "Sheet1", col_types = "text")
 
 # Rename and clean columns
 data_2015 <- data_2015 %>%
@@ -883,7 +866,7 @@ rm(data_2015)
 ### Step 2: Process 2018 Data
 ###########################################
 # Load 2018 data
-data_2018 <- read_excel("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018/Ayuntamientos_2018.xlsx", sheet = "Ayuntamientos", col_types = "text")
+data_2018 <- read_excel("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2018/Ayuntamientos_2018.xlsx", sheet = "Ayuntamientos", col_types = "text")
 data_2018 <- data_2018 %>% 
   rename(municipality=MUNICIPIO,
          section=SECCION,
@@ -914,6 +897,289 @@ data_2018_collapsed <- data_2018 %>%
 
 rm(data_2018)
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset from the CSV
+data_2021 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2021/GTO_AYUN_2021.csv", skip = 6)
+
+names(data_2021)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS_CALCULADO,
+                no_reg = NO_REGISTRADOS,
+                nulos = NULOS,
+                PANAL = NA_Gto) %>%
+  rename_with(~ gsub("CAND_IND_", "CI_", .x), starts_with("cand_ind")) %>% 
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  )
+
+# Assign uniqueids
+data_2021 <- data_2021 %>%
+  mutate(uniqueid = case_when(
+    municipality == "ABASOLO" ~ 11001,
+    municipality == "ACAMBARO" ~ 11002,
+    municipality == "APASEO EL ALTO" ~ 11004,
+    municipality == "APASEO EL GRANDE" ~ 11005,
+    municipality == "ATARJEA" ~ 11006,
+    municipality == "CELAYA" ~ 11007,
+    municipality == "COMONFORT" ~ 11009,
+    municipality == "CORONEO" ~ 11010,
+    municipality == "CORTAZAR" ~ 11011,
+    municipality == "CUERAMARO" ~ 11012,
+    municipality == "DOCTOR MORA" ~ 11013,
+    municipality == "DOLORES HIDALGO CUNA DE LA INDEPENDENCIA NACIONAL" ~ 11014,
+    municipality == "GUANAJUATO" ~ 11015,
+    municipality == "HUANIMARO" ~ 11016,
+    municipality == "IRAPUATO" ~ 11017,
+    municipality == "JARAL DEL PROGRESO" ~ 11018,
+    municipality == "JERECUARO" ~ 11019,
+    municipality == "LEON" ~ 11020,
+    municipality == "MANUEL DOBLADO" ~ 11008,
+    municipality == "MOROLEON" ~ 11021,
+    municipality == "OCAMPO" ~ 11022,
+    municipality == "PENJAMO" ~ 11023,
+    municipality == "PUEBLO NUEVO" ~ 11024,
+    municipality == "PURISIMA DEL RINCON" ~ 11025,
+    municipality == "ROMITA" ~ 11026,
+    municipality == "SALAMANCA" ~ 11027,
+    municipality == "SALVATIERRA" ~ 11028,
+    municipality == "SAN DIEGO DE LA UNION" ~ 11029,
+    municipality == "SAN FELIPE" ~ 11030,
+    municipality == "SAN FRANCISCO DEL RINCON" ~ 11031,
+    municipality == "SAN JOSE ITURBIDE" ~ 11032,
+    municipality == "SAN LUIS DE LA PAZ" ~ 11033,
+    municipality == "SAN MIGUEL DE ALLENDE" ~ 11003,
+    municipality == "SANTA CATARINA" ~ 11034,
+    municipality == "SANTA CRUZ DE JUVENTINO ROSAS" ~ 11035,
+    municipality == "SANTIAGO MARAVATIO" ~ 11036,
+    municipality == "SILAO DE LA VICTORIA" ~ 11037,
+    municipality == "TARANDACUAO" ~ 11038,
+    municipality == "TARIMORO" ~ 11039,
+    municipality == "TIERRA BLANCA" ~ 11040,
+    municipality == "URIANGATO" ~ 11041,
+    municipality == "VALLE DE SANTIAGO" ~ 11042,
+    municipality == "VICTORIA" ~ 11043,
+    municipality == "VILLAGRAN" ~ 11044,
+    municipality == "XICHU" ~ 11045,
+    municipality == "YURIRIA" ~ 11046,
+    TRUE ~ NA
+  ))
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:listanominal), 
+                          sum, na.rm = TRUE))
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    valid = sum(c_across(PAN:PRI_PRD), na.rm = TRUE),
+    turnout = total/listanominal,
+    year = 2021,
+    month = "June"
+  )
+
+# Check and process coalitions
+magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 
+  filter(yr >= 2020 & edon == 11) %>% 
+  select(yr, inegi, coal1, coal2, coal3, coal4) %>% 
+  rename(
+    year = yr,
+    uniqueid = inegi) %>% 
+  mutate(
+    across(
+      coal1:coal4,
+      ~ str_replace_all(., "-", "_") |> 
+        str_replace_all(regex("PNA", ignore_case = TRUE), "PANAL") |> 
+        str_to_upper()
+    )
+  )
+
+process_coalitions <- function(electoral_data, magar_data) {
+  
+  # Store grouping and ungroup
+  original_groups <- dplyr::groups(electoral_data)
+  merged <- electoral_data %>%
+    ungroup() %>%
+    left_join(magar_data, by = c("uniqueid", "year")) %>%
+    as.data.frame()
+  
+  # Get party columns (exclude metadata)
+  metadata_cols <- c("uniqueid", "section", "municipality", "year", "month", "no_reg", "nulos", 
+                     "total", "CI_2", "CI_1", "listanominal", "valid", "turnout",
+                     "coal1", "coal2", "coal3", "coal4")
+  party_cols <- setdiff(names(merged), metadata_cols)
+  party_cols <- party_cols[sapply(merged[party_cols], is.numeric)]
+  
+  # Get unique coalitions
+  all_coalitions <- unique(c(merged$coal1, merged$coal2, merged$coal3, merged$coal4))
+  all_coalitions <- all_coalitions[all_coalitions != "NONE" & !is.na(all_coalitions)]
+  
+  # Helper: find columns belonging to a coalition
+  get_coalition_cols <- function(coal_name) {
+    parties <- strsplit(coal_name, "_")[[1]]
+    party_cols[sapply(party_cols, function(col) {
+      all(strsplit(col, "_")[[1]] %in% parties)
+    })]
+  }
+  
+  # Calculate coalition votes (with temp names to avoid conflicts)
+  for (coal in all_coalitions) {
+    merged[[paste0("NEW_", coal)]] <- sapply(1:nrow(merged), function(i) {
+      active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+      if (coal %in% active) {
+        sum(unlist(merged[i, get_coalition_cols(coal)]), na.rm = TRUE)
+      } else {
+        0
+      }
+    })
+  }
+  
+  # Zero out constituent columns
+  for (i in 1:nrow(merged)) {
+    active <- c(merged$coal1[i], merged$coal2[i], merged$coal3[i], merged$coal4[i])
+    active <- active[active != "NONE" & !is.na(active)]
+    for (coal in active) {
+      merged[i, get_coalition_cols(coal)] <- 0
+    }
+  }
+  
+  # Rename temp columns to final names
+  for (coal in all_coalitions) {
+    merged[[coal]] <- merged[[paste0("NEW_", coal)]]
+    merged[[paste0("NEW_", coal)]] <- NULL
+  }
+  
+  # Convert to tibble and restore grouping
+  result <- as_tibble(merged)
+  if (length(original_groups) > 0) {
+    result <- result %>% group_by(!!!original_groups)
+  }
+  
+  return(result)
+}
+
+# Apply coalition processing function
+collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset from the CSV
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Guanajuato - 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/2024/GTO_AYUN_2024.csv", skip = 6)
+
+names(data_2024)
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  select(-starts_with("P_")) %>% 
+  dplyr::rename(municipality = UBICACION,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NoReg,
+                nulos = Nulos,
+                valid = NUM_VOTOS_VALIDOS
+  ) %>%
+  rename_with(~ gsub("CAND_IND_", "CI_", .x), starts_with("cand_ind")) %>% 
+  dplyr::mutate(
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  )
+
+# Assign uniqueids
+data_2024 <- data_2024 %>%
+  mutate(uniqueid = case_when(
+    municipality == "ABASOLO" ~ 11001,
+    municipality == "ACAMBARO" ~ 11002,
+    municipality == "APASEO EL ALTO" ~ 11004,
+    municipality == "APASEO EL GRANDE" ~ 11005,
+    municipality == "ATARJEA" ~ 11006,
+    municipality == "CELAYA" ~ 11007,
+    municipality == "COMONFORT" ~ 11009,
+    municipality == "CORONEO" ~ 11010,
+    municipality == "CORTAZAR" ~ 11011,
+    municipality == "CUERAMARO" ~ 11012,
+    municipality == "DOCTOR MORA" ~ 11013,
+    municipality == "DOLORES HIDALGO CUNA DE LA INDEPENDENCIA NACIONAL" ~ 11014,
+    municipality == "GUANAJUATO" ~ 11015,
+    municipality == "HUANIMARO" ~ 11016,
+    municipality == "IRAPUATO" ~ 11017,
+    municipality == "JARAL DEL PROGRESO" ~ 11018,
+    municipality == "JERECUARO" ~ 11019,
+    municipality == "LEON" ~ 11020,
+    municipality == "MANUEL DOBLADO" ~ 11008,
+    municipality == "MOROLEON" ~ 11021,
+    municipality == "OCAMPO" ~ 11022,
+    municipality == "PENJAMO" ~ 11023,
+    municipality == "PUEBLO NUEVO" ~ 11024,
+    municipality == "PURISIMA DEL RINCON" ~ 11025,
+    municipality == "ROMITA" ~ 11026,
+    municipality == "SALAMANCA" ~ 11027,
+    municipality == "SALVATIERRA" ~ 11028,
+    municipality == "SAN DIEGO DE LA UNION" ~ 11029,
+    municipality == "SAN FELIPE" ~ 11030,
+    municipality == "SAN FRANCISCO DEL RINCON" ~ 11031,
+    municipality == "SAN JOSE ITURBIDE" ~ 11032,
+    municipality == "SAN LUIS DE LA PAZ" ~ 11033,
+    municipality == "SAN MIGUEL DE ALLENDE" ~ 11003,
+    municipality == "SANTA CATARINA" ~ 11034,
+    municipality == "SANTA CRUZ DE JUVENTINO ROSAS" ~ 11035,
+    municipality == "SANTIAGO MARAVATIO" ~ 11036,
+    municipality == "SILAO DE LA VICTORIA" ~ 11037,
+    municipality == "TARANDACUAO" ~ 11038,
+    municipality == "TARIMORO" ~ 11039,
+    municipality == "TIERRA BLANCA" ~ 11040,
+    municipality == "URIANGATO" ~ 11041,
+    municipality == "VALLE DE SANTIAGO" ~ 11042,
+    municipality == "VICTORIA" ~ 11043,
+    municipality == "VILLAGRAN" ~ 11044,
+    municipality == "XICHU" ~ 11045,
+    municipality == "YURIRIA" ~ 11046,
+    TRUE ~ NA
+  ))
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(across(c(PAN:valid, total, listanominal), 
+                          sum, na.rm = TRUE))
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    year = 2024,
+    month = "June"
+  )
+
+# Apply coalition processing function
+collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>% 
+  select(-coal1, -coal2, -coal3, -coal4)
+
 # Combine the dataframes, handling different columns by filling with NA
 guanajuato_all <- bind_rows(data_1997_collapsed,
                             data_2000_collapsed,
@@ -922,9 +1188,11 @@ guanajuato_all <- bind_rows(data_1997_collapsed,
                             data_2009_collapsed,
                             data_2012_collapsed,
                             data_2015_collapsed,
-                            data_2018_collapsed) %>% 
+                            data_2018_collapsed,
+                            collapsed_2021,
+                            collapsed_2024) %>% 
   select(-c(NULO,NOREG,Nulos,Noregistrados))
 
 
-data.table::fwrite(guanajuato_all,"../../../Processed Data/Guanajuato/Guanajuato_process_raw_data.csv")
+data.table::fwrite(guanajuato_all,"../../../Processed Data/guanajuato/guanajuato_process_raw_data.csv")
 

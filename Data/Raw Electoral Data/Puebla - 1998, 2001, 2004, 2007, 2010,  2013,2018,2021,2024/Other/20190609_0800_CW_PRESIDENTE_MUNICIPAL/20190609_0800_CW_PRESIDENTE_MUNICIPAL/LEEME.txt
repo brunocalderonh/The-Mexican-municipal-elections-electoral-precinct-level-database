@@ -1,0 +1,263 @@
+﻿*************************************************************************
+*	 	Elección Extraordinaria | Puebla 2019			*
+*									*
+*		Cómputos Distritales					*
+*************************************************************************
+
+   
+
+A. El Programa de Cómputos Web permite la descarga de la base de datos a través de un archivo zip, el cual contiene archivos CSV.
+
+
+B. Los archivos CSV contienen la información de todas las actas de la base de datos y se nombran como "GUBERNATURA_2018.csv" y "PRESIDENTE_MUNICIPAL_[MUNICIPIO].csv" según el tipo de cargo que corresponda.
+
+
+C.  La información en el archivo CSV se divide en dos secciones:
+
+   
+
+a. Primera sección, encabezado: 
+
+
+
+i. Se presenta la hora y la fecha de la generación de reportes y son correspondientes a las que aparece en los reportes HTML. Ejemplo:
+ 05/06/2019 18:00 (UTC-5)
+
+     
+ii. Se presenta el estatus de las actas que se están incluyendo y sus respectivos porcentajes calculados, separados por pipes "|", ejemplo:
+
+		
+ACTAS_ESPERADAS|ACTAS_COMPUTADAS|PORCENTAJE_ACTAS_COMPUTADAS|LISTA_NOMINAL_ACTAS_COMPUTADAS|
+TOTAL|PORCENTAJE_PARTICIPACION_CIUDADANA
+
+  
+La descripción de cada campo se muestra a continuación:
+
+	
+1. ACTAS_ESPERADAS - Número de Actas correspondientes, por cada tipo de elección, de todas las casillas aprobadas por el Consejo Distrital Federal. Este conjunto de Actas de Escrutinio y cómputo conforma el Catálogo de Actas esperadas.
+
+		
+2. ACTAS_COMPUTADAS - Número de Actas de las casillas aprobadas, de las cuales se tiene su correspondiente Acta de Escrutinio y Cómputo al momento del corte de información; la suma total de votos no excede la lista nominal aprobada para la casilla a la que pertenece dicha acta, más el número de representantes de partidos políticos o candidaturas independientes y no caen en cualquiera de los supuestos siguientes: todos los campos en los cuales asientan votos para un partido, una coalición, candidaturas no registradas y votos nulos son ilegibles; o todos ellos están vacíos. 
+
+		
+3. PORCENTAJE_ACTAS_COMPUTADAS - Porcentaje de Actas calculado respecto del total de actas esperadas, que al momento del corte de información, han sido computadas. Los decimales son expresados a cuatro posiciones y el decimal de la cuarta posición es truncado y no redondeado.   
+	
+		
+4. LISTA_NOMINAL_ACTAS_COMPUTADAS - Es el agregado del número de ciudadanos con derecho a votar respecto a las casilla que integran la lista nominal de las casillas aprobadas, cuyas actas ya han sido computadas.
+
+		
+5. TOTAL - El total de votos emitidos. El total de votos se calcula mediante la suma que realiza automáticamente el sistema informático de Cómputos.
+	    
+	        
+6. PORCENTAJE_PARTICIPACION_CIUDADANA - Porcentaje de ciudadanos que votaron con base en la lista nominal de las casillas aprobadas, cuyas actas ya han sido computadas. 
+
+
+   
+
+b.  Segunda sección, datos del Acta de Escrutinio y Cómputo. 
+Corresponde a los datos de identificación del acta de escrutinio y cómputo, extraídos de la base de datos; cada línea corresponde a un acta, están separados por pipes "|". Los datos son los siguientes:
+
+      
+
+CLAVE_CASILLA|CLAVE_ACTA|ID_ESTADO|ESTADO|ID_DISTRITO|DISTRITO|SECCION|NUM_CASILLA|TIPO_CASILLA|EXT_CONTIGUA|PAN|PRI|PRD|PVEM|PT|MOVIMIENTO CIUDADANO|PANAL|MORENA|ENCUENTRO SOCIAL|C_P1_PX|C_P1_P2_PX|CAND_IND_1|CAND_IND_2|CAND_IND_X|NO_REGISTRADOS|NULOS|TOTAL_VOTOS_CALCULADO|
+
+LISTA_NOMINAL|OBSERVACIONES|MECANISMOS_TRASLADO|FECHA_HORA_VERIFICACION
+
+
+	
+
+1. CLAVE_CASILLA - Clave única de casilla.		
+	
+	
+2. CLAVE_ACTA - Clave única de acta.
+		
+	
+3. ID_ESTADO - Muestra el identificador de la Entidad.
+	
+	
+4. NOMBRE_ESTADO - Indica el nombre de la Entidad Federativa a la que corresponde el Acta.
+	
+	
+5. ID_DISTRITO - Número del Distrito Electoral de la Entidad acorde al tipo de elección.	
+
+	
+6. NOMBRE_DISTRITO - Nombre del distrito electoral de la entidad acorde al tipo de elección.
+
+	
+7. SECCION - Corresponde a la clave de la sección de la casilla.
+
+	
+8. ID_CASILLA - Número de la casilla. 
+
+	
+9. TIPO_CASILLA - Se refiere al tipo de casilla; 
+			
+B.- Básica
+			
+C.- Contigua
+			
+E.- Extraordinaria
+			
+S.- Especial
+
+VE.- Acta de voto  desde el extranjero
+			
+
+	
+10. EXT_CONTIGUA - Número de casilla contigua a una casilla de tipo extraordinaria.
+        
+        
+11. CASILLA - Identifica el tipo de casilla y toma los siguientes valores:
+                 
+1. Urbana
+		 
+2. No Urbana
+
+        
+12. NUM_ACTA_IMPRESO - Número que el Acta de Escrutinio y Cómputo trae impreso.
+
+	
+13. PAN - Número de votos para el Partido Acción Nacional
+
+	
+14. PRI - Número de votos para el Partido Revolucionario Institucional
+
+	
+15. PRD - Número de votos para el Partido de la Revolución Democrática
+
+16. PT - Número de votos para el Partido del Trabajo
+	
+17. PVEM - Número de votos para el Partido Verde Ecologista de México
+	
+18. MOVIMIENTO CIUDADANO- Número de votos para el Partido Movimiento Ciudadano
+
+19. CPP - Número de votos para el Partido Compromiso por Puebla 
+
+20. PSI - Número de votos para el partido Pacto Social de Integración Partido Político
+
+21. MORENA - Número de votos para el Partido Morena
+
+22. NUEVA ALIANZA PUEBLA - Número de votos para el Partido Nueva Alianza Puebla
+
+23. ENCUENTRO SOCIAL - Número de votos para el Partido Encuentro Social		
+
+	
+22. PAN_PRD_MC - Número de votos para la candidatura común de gubernatura (cuando la candidatura común no existe se indica con un guion “-”).		
+
+	23. PAN_PRD - Número de votos para la combinación de la candidatura común (cuando la candidatura común no existe se indica con un guion “-”).
+    
+	24. PAN_MC - Número de votos para la combinación de la candidatura común (cuando la candidatura común no existe se indica con un guion “-”).
+
+      
+	25. PRD_MC - Número de votos para la combinación de la candidatura común (cuando la candidatura común no existe se indica con un guion “-”).
+
+       
+26. PT_PVEM_MORENA - Número de votos para la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA (cuando la coalición no existe para la candidatura en cuestión, se indica con un guion “-”).
+
+        
+	27. PT_PVEM - Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA(cuando la combinación no existe para la candidatura en cuestión, se indica con un guion “-”).
+
+		   
+	28. PT_MORENA - Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA (cuando la combinación no existe para la candidatura en cuestión, se indica con un guion “-”).
+
+			
+	29. PVEM_MORENA - Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA (cuando la combinación no existe para la candidatura en cuestión, se indica con un guion “-”).
+
+
+30. PAN_CPP - Número de votos para la candidatura común del municipio de Ahuazotepec PAN_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+31. PRI_CPP - Número de votos para la candidatura común del municipio de Mazapiltecec de Juarez PRI_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+32. PAN_PRD_MC_CPP Número de votos para la candidatura común del municipio de Cañada de Morelos PAN_PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).		
+ 
+	33. PAN_PRD_MC - Número de votos para la combinación de la candidatura común PAN_PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+	34. PAN_PRD_CPP - Número de votos para la combinación de la candidatura común PAN_PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+	35. PAN_MC_CPP - Número de votos para la combinación de la candidatura común PAN_PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+	36. PRD_MC_CPP - Número de votos para la combinación de la candidatura común PAN_PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+	37. PAN_PRD - Número de votos para la combinación de la candidatura común PAN_PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+	38. PAN_MC - Número de votos para la combinación de la candidatura común PAN_PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+	39. PAN_CPP - Número de votos para la combinación de la candidatura común PAN_PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+	40. PRD_MC - Número de votos para la combinación de la candidatura común PAN_PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+	41. PRD_CPP - Número de votos para la combinación de la candidatura común PAN_PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+	42. MC_CPP - Número de votos para la combinación de la candidatura común PAN_PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+43. PRD_MC_CPP - Número de votos para la candidatura común PRD_MC_CPP, de Ocoyucan (cuando la candidatura común no existe se indica con un guion “-”).
+
+	44. PRD_MC - Número de votos para la combinación de la candidatura común PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+	45. PRD_CPP - Número de votos para la combinación de la candidatura común PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).
+
+	46. MC_CPP - Número de votos para la combinación de la candidatura común PRD_MC_CPP (cuando la candidatura común no existe se indica con un guion “-”).	
+
+46. PT_PVEM_MORENA_PES - Número de votos para la la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA de municipio de Ahuazotepec, Cañada de Morelos y Ocoyucan  PT_PVEM_MORENA_PES 
+
+	47. PT_PVEM_MORENA - Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA_PES, (cuando la candidatura común no existe se indica con un guion “-”).
+
+	48. PT_PVEM_PES- Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA_PES, (cuando la candidatura común no existe se indica con un guion “-”).
+
+	49. PT_MORENA_PES - Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA_PES, (cuando la candidatura común no existe se indica con un guion “-”).
+
+	50. PVEM_MORENA_PES - Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA_PES, (cuando la candidatura común no existe se indica con un guion “-”).
+
+	51. PT_PVEM - Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA_PES, (cuando la candidatura común no existe se indica con un guion “-”).
+
+	52. PT_MORENA - Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA_PES, (cuando la candidatura común no existe se indica con un guion “-”).
+
+	53. PT_PES - Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA_PES, (cuando la candidatura común no existe se indica con un guion “-”).
+
+	54.PVEM_MORENA - Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA_PES, (cuando la candidatura común no existe se indica con un guion “-”).
+
+	55. PVEM_PES - Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA_PES, (cuando la candidatura común no existe se indica con un guion “-”).
+
+	56. MORENA_PES - Número de votos para la combinación de la coalición JUNTOS HAREMOS HISTORIA EN PUEBLA PT_PVEM_MORENA_PES, (cuando la candidatura común no existe se indica con un guion “-”).
+	
+
+
+57. CNR - Número de votos para candidaturas no registradas
+	
+58. VN - Número de votos nulos
+
+59. TOTAL_VOTOS_CALCULADO -  Suma de los votos asentados en las actas para: los partidos políticos, combinaciones de estos, candidatos independientes, votos para candidaturas no registradas y votos nulos. El total de votos se calcula mediante la suma que realiza automáticamente el sistema informático de Cómputos Web.
+
+	
+60. LISTA_NOMINAL_CASILLA -  Número de ciudadanos con derecho a votar que integran la lista nominal de las Actas de Escrutinio y Cómputo computadas.
+
+        
+61. REPRESENTANTES_PP_CI - Número de ciudadanos representantes de partido político que votaron en la casilla.
+
+	
+62. OBSERVACIONES - Indica con la leyenda:
+		
+	* Actas de Cotejo - Es el proceso que realiza el Consejo Distrital, mediante el cual compara las Actas de Escrutinio y Cómputo que se extraen del paquete electoral, contra la que obra en poder de la presidencia del Consejo, de la representación de los partidos políticos.
+	
+	* Actas de Recuento - Un paquete es objeto de votos cuando: 
+		-Los resultados de las actas no coinciden, o se detectaren alteraciones evidentes en las actas que generen duda fundada sobre el resultado de la elección en la casilla.
+		-No existiere el acta de escrutinio y cómputo en el expediente de la casilla ni obrare en poder del presidente del consejo.
+		-Existan errores o inconsistencias evidentes en los distintos elementos de las actas, salvo que pueden corregirse o aclararse con otros elementos a satisfacción plena de quién lo haya solicitado.
+		-El número de votos nulos sea mayor a la diferencia entre los candidatos ubicados en el primero y segundo lugares en votación, y
+		-Todos los votos hayan sido depositados a favor de un mismo partido
+	                
+	* Actas no recibidas de casillas no instaladas - Cuando no se cuenta con el Acta de Escrutinio y Cómputo de casilla, debido a que el día de la Jornada Electoral alguna o varias casillas no fueron instaladas.
+			
+	* Actas de casillas instaladas de paquetes no recibidos - No se cuenta con el Acta de Escrutinio y Cómputo, ya que al término de la Jornada Electoral puede ocurrir que alguno o varios paquetes electorales no sean recibidos en la sede del Consejo Distrital.
+
+63. COMPUTADA . Muestra Si, si el acta se encuentra computada, No, en caso contrario.
+
+61. MECANISMOS_TRASLADO -  Indica los mecanismos de traslado aprobados por los Consejos Distritales del INE aplicables para cada uno de los paquetes electorales, desde la casilla hasta el Consejo respectivo correspondiente. Dichos mecanismos de traslado se implementan cuando las condiciones geográficas, de infraestructura, sociopolíticas y/o meteorológicas dificultan significativamente el traslado directo al Consejo respectivo en tiempo y forma.
+
+ Los valores que puede tomar son los siguientes: 
+(D) para los Dispositivos de Apoyo para el Traslado de Presidentes de Mesas Directiva de Casilla; 
+(F) e (I), para los Centros de Recepción y Traslado fijos e itinerantes, respectivamente. Si el traslado del Acta no se realiza mediante alguno de estos mecanismos, el campo aparece vacío.
+
+64. FECHA_HORA - Último movimiento registrado en el acta (Tiempo del Centro).
+	
+	

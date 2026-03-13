@@ -15,7 +15,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, "../../../"))
 
 # Read the Excel files
-state <- read.csv("Data/incumbent data/incumbent JL/incumbent_state_JL.csv")
+state <- read.csv("Data/incumbent data/incumbent JPZ/state_incumbents_jpz_2025.csv")
 db <- read_excel("Data/collapsed database manual cases/colima_collapsed_edited.xlsx")
 og <- read.csv("Processed Data/colima/colima_vote_calculator.csv")
 #create state ID for merging
@@ -279,21 +279,52 @@ assign_state_incumbent_vote <- function(data) {
 }
 merged_data <- assign_state_incumbent_vote(merged_data)
 
+# correct_runnerup_vote_pan <- function(data) {
+#   
+#   # Loop through each row of the data
+#   for (I in 1:nrow(data)) {
+#     # Check if runnerup_party_magar is "PAN"
+#     if (data$runnerup_party_magar[I] == "PAN") {
+#       
+#       # Find columns that contain "PAN" but not "PANAL"
+#       pan_cols <- names(data)[str_detect(names(data), "\\bPAN\\b") & !str_detect(names(data), "\\bPANAL\\b")]
+#       
+#       # Assign the first non-NA, non-zero value from columns containing PAN (e.g., PAN_ADC)
+#       for (pan_col in pan_cols) {
+#         if (!is.na(data[[pan_col]][I]) && data[[pan_col]][I] != 0) {
+#           data$runnerup_vote[I] <- data[[pan_col]][I]
+#           data$runnerup_vote_party_component[I] <- pan_col
+#           break
+#         }
+#       }
+#     }
+#   }
+#   
+#   return(data)
+# }
+
 correct_runnerup_vote_pan <- function(data) {
+  
+  # Get PAN columns once outside the loop to improve speed
+  pan_cols <- names(data)[str_detect(names(data), "\\bPAN\\b") & !str_detect(names(data), "\\bPANAL\\b")]
   
   # Loop through each row of the data
   for (I in 1:nrow(data)) {
-    # Check if runnerup_party_magar is "PAN"
-    if (data$runnerup_party_magar[I] == "PAN") {
+    
+    # FIX: Check if value is not NA before checking equality
+    if (!is.na(data$runnerup_party_magar[I]) && data$runnerup_party_magar[I] == "PAN") {
       
-      # Find columns that contain "PAN" but not "PANAL"
-      pan_cols <- names(data)[str_detect(names(data), "\\bPAN\\b") & !str_detect(names(data), "\\bPANAL\\b")]
-      
-      # Assign the first non-NA, non-zero value from columns containing PAN (e.g., PAN_ADC)
+      # Assign the first non-NA, non-zero value from columns containing PAN
       for (pan_col in pan_cols) {
         if (!is.na(data[[pan_col]][I]) && data[[pan_col]][I] != 0) {
           data$runnerup_vote[I] <- data[[pan_col]][I]
-          data$runnerup_vote_party_component[I] <- pan_col
+          # Make sure 'runnerup_vote_party_component' exists in dataframe before assigning, or create it if needed
+          if("runnerup_vote_party_component" %in% names(data)) {
+            data$runnerup_vote_party_component[I] <- pan_col
+          } else {
+            # If column doesn't exist, you might want to create it first or handle it
+            data$runnerup_vote_party_component[I] <- pan_col 
+          }
           break
         }
       }
