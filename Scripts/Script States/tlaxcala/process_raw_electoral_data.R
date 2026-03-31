@@ -941,7 +941,6 @@ cat("2016 processed:", nrow(df_2016), "rows\n")
 ################################################################################
 ## Append All Years
 ################################################################################
-
 # Standardize columns across all dataframes
 all_years <- list(df_2001, df_2004, df_2007, df_2010, df_2013, df_2013_ext, df_2014_ext, df_2016,
                   collapsed_2021, collapsed_2024)
