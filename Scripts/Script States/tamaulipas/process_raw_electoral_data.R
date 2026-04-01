@@ -31,7 +31,7 @@ setwd(script_dir)
 df_tam <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_1998_No_LN.csv", 
                    show_col_types=FALSE) 
 colnames(df_tam) <- tolower(colnames(df_tam))
-names(df_tam) <- gsub("[- ]", "", names(df_tam))
+names(df_tam) <- gsub("[^a-z0-9_]", "", names(df_tam))
 
 
 df_tam <-df_tam %>%
@@ -197,7 +197,7 @@ df_1998 <- df_join %>%
 df_1995 <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_1995_No_Municipalities_No_LN.csv", 
                     show_col_types=FALSE) 
 colnames(df_1995) <- tolower(colnames(df_1995))
-names(df_1995) <- gsub("[- ]", "", names(df_1995))
+names(df_1995) <- gsub("[^a-z0-9_]", "", names(df_1995))
 
 df_1995 <-df_1995 %>%
   rename(section = seccion) %>%
@@ -274,7 +274,7 @@ df_2001 <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2
                     show_col_types=FALSE) 
 
 colnames(df_2001) <- tolower(colnames(df_2001))
-names(df_2001) <- gsub("[- ]", "", names(df_2001))
+names(df_2001) <- gsub("[^a-z0-9_]", "", names(df_2001))
 
 df_2001 <-df_2001 %>%
   rename(
@@ -460,7 +460,7 @@ df_2004 <- read_excel(
 ) %>%
   as.data.frame()
 colnames(df_2004) <- tolower(colnames(df_2004))
-names(df_2004) <- gsub("[- ]", "", names(df_2004))
+names(df_2004) <- gsub("[^a-z0-9_]", "", names(df_2004))
 # rename municipio->municipality, seccion->section
 df_2004 <- df_2004 %>%
   rename(
@@ -598,7 +598,7 @@ df_2004<- df_merged %>%
 df_2007 <- read_csv("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2007.csv", 
                     show_col_types=FALSE)
 colnames(df_2007) <- tolower(colnames(df_2007))
-names(df_2007) <- gsub("[. ]", "", names(df_2007))
+names(df_2007) <- gsub("[^a-z0-9_]", "", names(df_2007))
 
 
 df_2007 <-df_2007 %>%
@@ -729,7 +729,7 @@ df_2010 <- read_excel(
 ) %>%
   as.data.frame()
 colnames(df_2010) <- tolower(colnames(df_2010))
-names(df_2010) <- gsub("[- ]", "", names(df_2010))
+names(df_2010) <- gsub("[^a-z0-9_]", "", names(df_2010))
 # rename municipio->municipality, seccion->section (some versions might use "sección")
 if ("municipio" %in% names(df_2010)) {
   df_2010 <- df_2010 %>% rename(municipality = municipio)
@@ -896,7 +896,7 @@ df_2013 <- read_excel(
 ) %>%
   as.data.frame()
 colnames(df_2013) <- tolower(colnames(df_2013))
-names(df_2013) <- gsub("[. ]", "", names(df_2013))
+names(df_2013) <- gsub("[^a-z0-9_]", "", names(df_2013))
 # rename municipio->municipality, seccion->section, listadonominal->listanominal
 df_2013 <- df_2013 %>%
   rename(

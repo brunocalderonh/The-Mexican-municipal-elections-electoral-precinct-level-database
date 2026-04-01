@@ -183,6 +183,7 @@ ln_2004 <- read.csv("Ayu_Seccion_2004_LN.csv", stringsAsFactors = FALSE) %>%
 # Read main data
 df_2004 <- read.csv("Ayu_Seccion_2004_No_LN.csv", stringsAsFactors = FALSE)
 names(df_2004) <- tolower(names(df_2004))
+names(df_2004) <- gsub("[^a-z0-9_]", "", names(df_2004))
 
 df_2004 <- df_2004 %>%
   rename(municipality = municipio,
@@ -341,6 +342,7 @@ cat("2007 processed:", nrow(df_2007), "rows\n")
 
 df_2010 <- read.csv("Ayu_Seccion_2010.csv", stringsAsFactors = FALSE)
 names(df_2010) <- tolower(names(df_2010))
+names(df_2010) <- gsub("[^a-z0-9_]", "", names(df_2010))
 
 df_2010 <- df_2010 %>%
   rename(municipality = nombre_municipio,
@@ -941,6 +943,7 @@ cat("2016 processed:", nrow(df_2016), "rows\n")
 ################################################################################
 ## Append All Years
 ################################################################################
+
 # Standardize columns across all dataframes
 all_years <- list(df_2001, df_2004, df_2007, df_2010, df_2013, df_2013_ext, df_2014_ext, df_2016,
                   collapsed_2021, collapsed_2024)
