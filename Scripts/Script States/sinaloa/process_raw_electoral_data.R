@@ -117,7 +117,7 @@ names(df_2004) <- gsub("[^a-z0-9_]", "", names(df_2004))
 
 df_2004 <- df_2004 %>%
   rename(municipality = municipio, section = seccion) %>%
-  filter(!(municipality == "" & is.na(section)), !is.na(total), total != 0) %>%
+  filter(!(municipality == "" & is.na(section))) %>%
   mutate(across(where(is.numeric), as.numeric)) %>%
   group_by(municipality, section) %>%
   summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop")
@@ -230,7 +230,7 @@ names(df_2010) <- tolower(names(df_2010))
 names(df_2010) <- gsub("[^a-z0-9_]", "", names(df_2010))
 
 df_2010 <- df_2010 %>%
-  rename(municipality = municipio, section = seccion) %>%
+  rename(municipality = nombre_municipio, section = seccion, listanominal = lista_nominal) %>%
   filter(!(municipality == "" & is.na(section)), !is.na(total), total != 0) %>%
   mutate(across(c(listanominal, panprdptpc, pripvempanal, noregistrados, nulos, total), as.numeric))
 
@@ -256,8 +256,8 @@ cat("2010:", nrow(df_2010), "rows\n")
 # 2013 PROCESSING - JOHN lines 595-643
 ################################################################################
 
-df_2013 <- read_dta(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2013/Ayu_Seccion_2013.dta"
+df_2013 <- read_excel(
+  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2013/Ayu_Seccion_2013.xlsx"
 )
 
 df_2013 <- df_2013 %>%
