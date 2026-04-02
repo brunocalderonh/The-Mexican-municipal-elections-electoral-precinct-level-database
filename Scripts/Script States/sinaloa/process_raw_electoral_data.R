@@ -61,11 +61,12 @@ assign_sinaloa_uniqueid <- function(municipality) {
 ################################################################################
 
 df_2001 <- read_csv(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2001_No_LN.csv",
+  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2001/Ayu_Seccion_2001_No_LN.csv",
   show_col_types = FALSE
 )
 
 names(df_2001) <- tolower(names(df_2001))
+names(df_2001) <- gsub("[^a-z0-9_]", "", names(df_2001))
 
 df_2001 <- df_2001 %>%
   rename(municipality = municipio, section = seccion) %>%
@@ -107,11 +108,12 @@ cat("2001:", nrow(df_2001), "rows\n")
 ################################################################################
 
 df_2004 <- read_csv(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2004_No_LN.csv",
+  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2004/Ayu_Seccion_2004_No_LN.csv",
   show_col_types = FALSE
 )
 
 names(df_2004) <- tolower(names(df_2004))
+names(df_2004) <- gsub("[^a-z0-9_]", "", names(df_2004))
 
 df_2004 <- df_2004 %>%
   rename(municipality = municipio, section = seccion) %>%
@@ -151,11 +153,12 @@ cat("2004:", nrow(df_2004), "rows\n")
 ################################################################################
 
 df_2007 <- read_csv(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2007_No_LN.csv",
+  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2007/Ayu_Seccion_2007_No_LN.csv",
   show_col_types = FALSE
 )
 
 names(df_2007) <- tolower(names(df_2007))
+names(df_2007) <- gsub("[^a-z0-9_]", "", names(df_2007))
 
 df_2007 <- df_2007 %>%
   rename(municipality = municipio, section = seccion) %>%
@@ -219,11 +222,12 @@ cat("2007:", nrow(df_2007), "rows\n")
 ################################################################################
 
 df_2010 <- read_csv(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2010.csv",
+  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2010/Ayu_Seccion_2010.csv",
   show_col_types = FALSE
 )
 
 names(df_2010) <- tolower(names(df_2010))
+names(df_2010) <- gsub("[^a-z0-9_]", "", names(df_2010))
 
 df_2010 <- df_2010 %>%
   rename(municipality = municipio, section = seccion) %>%
@@ -253,7 +257,7 @@ cat("2010:", nrow(df_2010), "rows\n")
 ################################################################################
 
 df_2013 <- read_dta(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayu_Seccion_2013.dta"
+  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2013/Ayu_Seccion_2013.dta"
 )
 
 df_2013 <- df_2013 %>%
@@ -280,7 +284,7 @@ cat("2013:", nrow(df_2013), "rows\n")
 # Excel file with multiple sheets
 ################################################################################
 
-xlsx_path_2016 <- "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/Ayuntamientos_2016.xlsx"
+xlsx_path_2016 <- "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2016/Ayuntamientos_2016.xlsx"
 sheets_2016 <- excel_sheets(xlsx_path_2016)
 
 df_2016_list <- lapply(sheets_2016, function(sheet) {
@@ -357,7 +361,7 @@ cat("2016:", nrow(df_2016), "rows\n")
 ################################################################################
 
 df_2018 <- read_excel(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/02 Resultados_Ayuntamientos_Sinaloa_2018_Casilla.xlsx",
+  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2018/02 Resultados_Ayuntamientos_Sinaloa_2018_Casilla.xlsx",
   sheet = "2018_SEE_AYUN_SIN_CAS"
 )
 

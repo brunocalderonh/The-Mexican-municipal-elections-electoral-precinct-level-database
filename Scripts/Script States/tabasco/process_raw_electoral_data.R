@@ -28,7 +28,7 @@ setwd(file.path(script_dir, ""))
 ################################################################################
 # 1) Read CSV (equivalent to: insheet using "Ayu_Seccion_1997_No_LN.csv", clear)
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/1997/Ayu_Seccion_1997_No_LN.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 ################################################################################
 # 2) Rename columns, drop empty municipality/section, and drop total == NA or 0
@@ -162,7 +162,7 @@ df_1997 <- df_merged %>%
 ################################################################################
 # 1) Read CSV (equivalent to "insheet using Ayu_Seccion_2000_No_LN.csv, clear")
 ################################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2000_No_LN.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/2000/Ayu_Seccion_2000_No_LN.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[^a-z0-9_]", "", names(df))
 ################################################################################
@@ -294,7 +294,7 @@ df_2000 <- df_merged %>%
 ################################################################################
 # 1) Read CSV
 ################################################################################
-df <- fread("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2003.csv", 
+df <- fread("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003.csv", 
             encoding = "Latin-1")
 colnames(df) <- tolower(colnames(df))
 names(df) <- gsub("[^a-z0-9_]", "", names(df))
@@ -449,7 +449,7 @@ df_2003 <- df_merged %>%
 #    cellrange(A4:L2429) firstrow clear
 ################################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/estadistica_electoral_2006.xls",
+  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/2006/estadistica_electoral_2006.xls",
   sheet = "Casillas Regidores",
   range = "A4:L2429",    # cell range A4:L2429
   col_names = TRUE
@@ -594,7 +594,7 @@ df_2006 <- df_merged %>%
 ###############################################################################
 # 1) Read CSV (Equivalent to: insheet using "Ayu_Seccion_2009.csv", clear)
 ###############################################################################
-df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2009.csv", show_col_types = FALSE)
+df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/2009/Ayu_Seccion_2009.csv", show_col_types = FALSE)
 names(df) <- gsub("[^a-z0-9_]", "", names(df))
 colnames(df) <- tolower(colnames(df))
 ###############################################################################
@@ -713,7 +713,7 @@ df_2009 <- df_collapsed %>%
 # 1) Read Excel 
 ###############################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayu_Seccion_2012.xlsx",
+  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/2012/Ayu_Seccion_2012.xlsx",
   sheet = "Sheet1",
   col_names = TRUE
 ) %>%
@@ -864,7 +864,7 @@ df_2012 <- df_merged %>%
 #    import excel "Ayuntamientos_2015.xlsx", sheet("DESGLOSE") clear firstrow)
 ################################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2015.xlsx",
+  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/2015/Ayuntamientos_2015.xlsx",
   sheet = "DESGLOSE",
   col_names = TRUE
 ) %>%
@@ -1045,7 +1045,7 @@ df_2015 <- df_merged %>%
 #    import excel "Ayuntamientos_2018.xlsx", sheet("1 TAB RES AYUN") clear firstrow)
 ###############################################################################
 df <- read_excel(
-  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/Ayuntamientos_2018.xlsx",
+  path = "../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/2018/Ayuntamientos_2018.xlsx",
   sheet = "1 TAB RES AYUN",
   col_names = TRUE
 ) %>%
