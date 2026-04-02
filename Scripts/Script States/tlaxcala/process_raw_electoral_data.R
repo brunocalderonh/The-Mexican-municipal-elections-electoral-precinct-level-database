@@ -9,7 +9,8 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(dplyr, haven, readxl, tidyverse, data.table, stringr)
 
 # Set working directory
-setwd("D:/Dropbox/Incumbency Advantage/Data Analysis/Raw Data/Precinct/Tlaxcala 2001, 2004, 2007, 2010, 2013")
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+setwd(script_dir)
 
 ################################################################################
 ## Helper Functions
@@ -104,12 +105,14 @@ assign_tlaxcala_uniqueid <- function(municipality) {
 ## 2001
 ################################################################################
 
-df_2001 <- read_excel("2001/Ayu_Seccion_2001_No_LN.xlsx") %>%
+df_2001 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2001/Ayu_Seccion_2001_No_LN.xlsx") %>%
   rename_all(tolower)
+
 
 df_2001 <- df_2001 %>%
   rename(municipality = municipio,
-         section = seccion) %>%
+         section = seccion,
+         partidodemocrata = "partido democrata") %>%
   filter(!(is.na(municipality) | municipality == "") | !is.na(section)) %>%
   mutate(across(c(pri, pan, prd, pt, pvem, partidodemocrata, psn, pc, pas, pcdt, pjs, nulos), 
                 ~as.numeric(as.character(.))))
@@ -146,10 +149,10 @@ df_2001 <- df_2001 %>%
   filter(section != 150 | is.na(section))
 
 # Merge lista nominal from all_months_years.dta
-all_months <- read_dta("../../all_months_years.dta") %>%
-  filter(ed == 29, month == 9, year == 2001) %>%
-  select(seccion, lista) %>%
-  rename(section = seccion, listanominal = lista)
+all_months <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter(state == "TLAXCALA", month == "September", year == 2001) %>%
+  select(section, lista) %>%
+  rename(listanominal = lista)
 
 df_2001 <- df_2001 %>%
   left_join(all_months, by = "section")
@@ -176,12 +179,12 @@ cat("2001 processed:", nrow(df_2001), "rows\n")
 ################################################################################
 
 # Read lista nominal
-ln_2004 <- read.csv("2004/Ayu_Seccion_2004_LN.csv", stringsAsFactors = FALSE) %>%
-  rename(section = seccion) %>%
+ln_2004 <- read.csv("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2004/Ayu_Seccion_2004_LN.csv", stringsAsFactors = FALSE) %>%
+  rename(section = Seccion, listanominal = "Lista.Nominal") %>%
   select(section, listanominal)
 
 # Read main data
-df_2004 <- read.csv("2004/Ayu_Seccion_2004_No_LN.csv", stringsAsFactors = FALSE)
+df_2004 <- read.csv("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2004/Ayu_Seccion_2004_No_LN.csv", stringsAsFactors = FALSE)
 names(df_2004) <- tolower(names(df_2004))
 names(df_2004) <- gsub("[^a-z0-9_]", "", names(df_2004))
 
@@ -203,10 +206,11 @@ df_2004 <- df_2004 %>%
   left_join(ln_2004, by = "section")
 
 # Also try merge from all_months_years
-all_months_2004 <- read_dta("../../all_months_years.dta") %>%
-  filter(ed == 29, month == 10, year == 2004) %>%
-  select(seccion, lista) %>%
-  rename(section = seccion, lista = lista)
+all_months_2004 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter(state == "TLAXCALA", month == "October", year == 2004) %>%
+  select(section, lista) %>%
+  rename(listanominal = lista)
+
 
 df_2004 <- df_2004 %>%
   left_join(all_months_2004, by = "section") %>%
@@ -261,7 +265,7 @@ cat("2004 processed:", nrow(df_2004), "rows\n")
 ################################################################################
 
 # Read lista nominal 2007
-ln_2007 <- read_excel("2007/Listanominal2007.xlsx", sheet = "datos") %>%
+ln_2007 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2007/Listanominal2007.xlsx", sheet = "datos") %>%
   rename(section = section) %>%
   select(section, listanominal)
 
@@ -340,7 +344,7 @@ cat("2007 processed:", nrow(df_2007), "rows\n")
 ## 2010
 ################################################################################
 
-df_2010 <- read.csv("2010/Ayu_Seccion_2010.csv", stringsAsFactors = FALSE)
+df_2010 <- read.csv("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2010/Ayu_Seccion_2010.csv", stringsAsFactors = FALSE)
 names(df_2010) <- tolower(names(df_2010))
 names(df_2010) <- gsub("[^a-z0-9_]", "", names(df_2010))
 
@@ -446,12 +450,12 @@ cat("2010 processed:", nrow(df_2010), "rows\n")
 ################################################################################
 
 # Read lista nominal 2013
-ln_2013 <- read_excel("2013/Listanominal2013.xlsx", sheet = "datos") %>%
+ln_2013 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2013/Listanominal2013.xlsx", sheet = "datos") %>%
   rename(section = section) %>%
   select(section, listanominal)
 
 # Read main data
-df_2013 <- read_excel("2013/Ayu_Seccion_2013.xlsx", sheet = "Sheet1")
+df_2013 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2013/Ayu_Seccion_2013.xlsx", sheet = "Sheet1")
 names(df_2013) <- tolower(names(df_2013))
 
 df_2013 <- df_2013 %>%
@@ -535,7 +539,7 @@ cat("2013 processed:", nrow(df_2013), "rows\n")
 ## 2013 Extraordinary (December) - APETATITLAN DE ANTONIO CARVAJAL
 ################################################################################
 
-df_2013_ext <- read_excel("2013/Resultados Extraordinaria 8 Diciembre 2013.xlsx", sheet = "Sheet1")
+df_2013_ext <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2013/Resultados Extraordinaria 8 Diciembre 2013.xlsx", sheet = "Sheet1")
 
 df_2013_ext <- df_2013_ext %>%
   rename(section = `Sección`,
@@ -558,10 +562,11 @@ df_2013_ext <- df_2013_ext %>%
   summarise(across(everything(), ~sum(., na.rm = TRUE)), .groups = "drop")
 
 # Merge lista nominal from all_months_years
-all_months_2013_ext <- read_dta("../../all_months_years.dta") %>%
-  filter(ed == 29, month == 11, year == 2013) %>%
-  select(seccion, lista) %>%
-  rename(section = seccion, listanominal = lista)
+all_months_2013_ext <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter(state == "TLAXCALA", month == "November", year == 2013) %>%
+  select(section, lista) %>%
+  rename(listanominal = lista)
+
 
 df_2013_ext <- df_2013_ext %>%
   left_join(all_months_2013_ext, by = "section")
@@ -586,7 +591,7 @@ cat("2013 Extraordinary processed:", nrow(df_2013_ext), "rows\n")
 ## 2014 Extraordinary (February) - ACUAMANALA DE MIGUEL HIDALGO
 ################################################################################
 
-df_2014_ext <- read_excel("2014/Resultados Extraordinaria 23 Febrero 2014.xlsx", 
+df_2014_ext <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2014/Resultados Extraordinaria 23 Febrero 2014.xlsx", 
                           sheet = "Hoja1", range = "A6:K13")
 
 df_2014_ext <- df_2014_ext %>%
@@ -609,10 +614,10 @@ df_2014_ext <- df_2014_ext %>%
   summarise(across(everything(), ~sum(., na.rm = TRUE)), .groups = "drop")
 
 # Merge lista nominal from all_months_years
-all_months_2014_ext <- read_dta("../../all_months_years.dta") %>%
-  filter(ed == 29, month == 1, year == 2014) %>%
-  select(seccion, lista) %>%
-  rename(section = seccion, listanominal = lista)
+all_months_2014_ext <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter(state == "TLAXCALA", month == "January", year == 2014) %>%
+  select(section, lista) %>%
+  rename(listanominal = lista)
 
 df_2014_ext <- df_2014_ext %>%
   left_join(all_months_2014_ext, by = "section")
@@ -638,7 +643,7 @@ cat("2014 Extraordinary processed:", nrow(df_2014_ext), "rows\n")
 ################################################################################
 
 # Read all sheets from Excel file
-sheets_2016 <- excel_sheets("2016/Ayuntamientos_Tlaxcala_2016.xlsx")
+sheets_2016 <- excel_sheets("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2016/Ayuntamientos_Tlaxcala_2016.xlsx")
 
 # Table numbers to read (matching SALVADOR do-file)
 table_nums <- c(1,2,3,4,5,7,8,9,11,13,15,16,17,18,19,20,22,23,25,26,27,28,29,30,

@@ -734,8 +734,8 @@ names(df_2010) <- gsub("[^a-z0-9_]", "", names(df_2010))
 if ("municipio" %in% names(df_2010)) {
   df_2010 <- df_2010 %>% rename(municipality = municipio)
 }
-if ("sección" %in% names(df_2010)) {
-  df_2010 <- df_2010 %>% rename(section = sección)
+if ("seccin" %in% names(df_2010)) {
+  df_2010 <- df_2010 %>% rename(section = "seccin")
 }
 
 # drop if municipality=="" & section==.
@@ -1266,7 +1266,7 @@ mun_names <- c("Abasolo","Aldama","Altamira","AntiguoMorelos","Burgos","Bustamen
 for (x in mun_names) {
   # Read Excel file, skipping first 5 rows and using row 6 as headers
   df_mun <- read_excel(
-    path = paste0("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2018/", x, ".xlsx"),
+    path = paste0("../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2018/Ayuntamientos 2018/", x, ".xlsx"),
     sheet = 1,
     skip = 5,  # Skip first 5 rows
     col_names = TRUE,
@@ -1462,7 +1462,7 @@ library(purrr)
 library(stringr)
 
 # Set the directory path for Tamaulipas 2021 files
-data_dir <- "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/21/"
+data_dir <- "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2021/"
 
 # Get all Excel files in the directory
 excel_files <- list.files(data_dir, pattern = "\\.xlsx$", full.names = TRUE)
@@ -1713,7 +1713,7 @@ collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>%
 #####################################
 
 # Set the directory path for Tamaulipas 2024 files
-data_dir_24 <- "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/24"
+data_dir_24 <- "../../../Data/Raw Electoral Data/Tamaulipas - 1995, 1998, 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2024"
 
 # Get all Excel files in the directory, excluding temporary files
 excel_files_24 <- list.files(data_dir_24, pattern = "\\.(xlsx|xls)$", full.names = TRUE) %>%
