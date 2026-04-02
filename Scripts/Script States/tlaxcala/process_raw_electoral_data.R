@@ -104,7 +104,7 @@ assign_tlaxcala_uniqueid <- function(municipality) {
 ## 2001
 ################################################################################
 
-df_2001 <- read_excel("Ayu_Seccion_2001_No_LN.xlsx") %>%
+df_2001 <- read_excel("2001/Ayu_Seccion_2001_No_LN.xlsx") %>%
   rename_all(tolower)
 
 df_2001 <- df_2001 %>%
@@ -176,12 +176,12 @@ cat("2001 processed:", nrow(df_2001), "rows\n")
 ################################################################################
 
 # Read lista nominal
-ln_2004 <- read.csv("Ayu_Seccion_2004_LN.csv", stringsAsFactors = FALSE) %>%
+ln_2004 <- read.csv("2004/Ayu_Seccion_2004_LN.csv", stringsAsFactors = FALSE) %>%
   rename(section = seccion) %>%
   select(section, listanominal)
 
 # Read main data
-df_2004 <- read.csv("Ayu_Seccion_2004_No_LN.csv", stringsAsFactors = FALSE)
+df_2004 <- read.csv("2004/Ayu_Seccion_2004_No_LN.csv", stringsAsFactors = FALSE)
 names(df_2004) <- tolower(names(df_2004))
 names(df_2004) <- gsub("[^a-z0-9_]", "", names(df_2004))
 
@@ -261,12 +261,12 @@ cat("2004 processed:", nrow(df_2004), "rows\n")
 ################################################################################
 
 # Read lista nominal 2007
-ln_2007 <- read_excel("Listanominal2007.xlsx", sheet = "datos") %>%
+ln_2007 <- read_excel("2007/Listanominal2007.xlsx", sheet = "datos") %>%
   rename(section = section) %>%
   select(section, listanominal)
 
 # Read main data
-df_2007 <- read_excel("Ayu_Seccion_2007.xlsx", sheet = "Sheet1")
+df_2007 <- read_excel("2007/Ayu_Seccion_2007.xlsx", sheet = "Sheet1")
 names(df_2007) <- tolower(names(df_2007))
 
 df_2007 <- df_2007 %>%
@@ -340,7 +340,7 @@ cat("2007 processed:", nrow(df_2007), "rows\n")
 ## 2010
 ################################################################################
 
-df_2010 <- read.csv("Ayu_Seccion_2010.csv", stringsAsFactors = FALSE)
+df_2010 <- read.csv("2010/Ayu_Seccion_2010.csv", stringsAsFactors = FALSE)
 names(df_2010) <- tolower(names(df_2010))
 names(df_2010) <- gsub("[^a-z0-9_]", "", names(df_2010))
 
@@ -446,12 +446,12 @@ cat("2010 processed:", nrow(df_2010), "rows\n")
 ################################################################################
 
 # Read lista nominal 2013
-ln_2013 <- read_excel("Listanominal2013.xlsx", sheet = "datos") %>%
+ln_2013 <- read_excel("2013/Listanominal2013.xlsx", sheet = "datos") %>%
   rename(section = section) %>%
   select(section, listanominal)
 
 # Read main data
-df_2013 <- read_excel("Ayu_Seccion_2013.xlsx", sheet = "Sheet1")
+df_2013 <- read_excel("2013/Ayu_Seccion_2013.xlsx", sheet = "Sheet1")
 names(df_2013) <- tolower(names(df_2013))
 
 df_2013 <- df_2013 %>%
@@ -535,7 +535,7 @@ cat("2013 processed:", nrow(df_2013), "rows\n")
 ## 2013 Extraordinary (December) - APETATITLAN DE ANTONIO CARVAJAL
 ################################################################################
 
-df_2013_ext <- read_excel("Resultados Extraordinaria 8 Diciembre 2013.xlsx", sheet = "Sheet1")
+df_2013_ext <- read_excel("2013/Resultados Extraordinaria 8 Diciembre 2013.xlsx", sheet = "Sheet1")
 
 df_2013_ext <- df_2013_ext %>%
   rename(section = `Sección`,
@@ -586,7 +586,7 @@ cat("2013 Extraordinary processed:", nrow(df_2013_ext), "rows\n")
 ## 2014 Extraordinary (February) - ACUAMANALA DE MIGUEL HIDALGO
 ################################################################################
 
-df_2014_ext <- read_excel("Resultados Extraordinaria 23 Febrero 2014.xlsx", 
+df_2014_ext <- read_excel("2014/Resultados Extraordinaria 23 Febrero 2014.xlsx", 
                           sheet = "Hoja1", range = "A6:K13")
 
 df_2014_ext <- df_2014_ext %>%
@@ -638,7 +638,7 @@ cat("2014 Extraordinary processed:", nrow(df_2014_ext), "rows\n")
 ################################################################################
 
 # Read all sheets from Excel file
-sheets_2016 <- excel_sheets("Ayuntamientos_Tlaxcala_2016.xlsx")
+sheets_2016 <- excel_sheets("2016/Ayuntamientos_Tlaxcala_2016.xlsx")
 
 # Table numbers to read (matching SALVADOR do-file)
 table_nums <- c(1,2,3,4,5,7,8,9,11,13,15,16,17,18,19,20,22,23,25,26,27,28,29,30,
@@ -650,7 +650,7 @@ table_sheets <- table_sheets[table_sheets %in% sheets_2016]
 
 df_2016_list <- lapply(table_sheets, function(sheet) {
   tryCatch({
-    df <- read_excel("Ayuntamientos_Tlaxcala_2016.xlsx", sheet = sheet, 
+    df <- read_excel("2016/Ayuntamientos_Tlaxcala_2016.xlsx", sheet = sheet, 
                      col_types = "text")
     names(df) <- tolower(names(df))
     df <- df %>% filter(!is.na(section) & section != "")
@@ -686,7 +686,7 @@ df_2016 <- df_2016 %>%
   summarise(across(everything(), ~sum(., na.rm = TRUE)), .groups = "drop")
 
 # Read uniqueids mapping
-uniqueids_2016 <- read_excel("uniqueids16.xlsx") %>%
+uniqueids_2016 <- read_excel("2016/uniqueids16.xlsx") %>%
   rename_all(tolower) %>%
   select(municipality, uniqueid, municipio) %>%
   distinct()
@@ -734,7 +734,7 @@ df_2016 <- df_2016 %>%
 #####################################
 
 # Load the 2021 dataset from the excel
-data_2021 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/ayun_tlax_2021.xlsx") %>% 
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2021/ayun_tlax_2021.xlsx") %>% 
   rename_with(~ gsub("CAND_IND", "CI_", .) %>% 
                 gsub("CAND_IND0", "CI_", .)) %>% 
   rename(
@@ -748,7 +748,7 @@ data_2021 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2
   ) 
 
 # Load the 
-data_ext <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/ayun_tlax_2021_ext.xlsx") %>%
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2021/ayun_tlax_2021_ext.xlsx") %>%
   rename_with(~ gsub("CAND_IND", "CI_", .)) %>% 
   rename(
     PANAL = PANALT,
@@ -794,7 +794,7 @@ collapsed_2021 <- collapsed_2021 %>%
 #####################################
 
 # Load the 2024 dataset from the excel
-data_2024 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2024_SEE_AYUN_TLAX_CAS.xlsx") %>% 
+data_2024 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2024/2024_SEE_AYUN_TLAX_CAS.xlsx") %>% 
   rename(
     municipality = MUNICIPIO,
     section = SECCION,
