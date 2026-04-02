@@ -1181,7 +1181,8 @@ collapsed_2022 <- collapsed_2022 %>%
   dplyr::mutate(
     year = 2022,
     month = "June"
-  )
+  ) %>% 
+  filter(!is.na(section))
 
 # Check and process coalitions
 magar_coal <- read_csv("../../../Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>% 

@@ -421,6 +421,7 @@ db00 <- read_excel("Data/municipal magar data splitcoal/mu-coalSplit2000s.xlsx")
 db10 <- read_excel("Data/municipal magar data splitcoal/mu-coalSplit2010s.xlsx")
 db20 <- read_excel("Data/municipal magar data splitcoal/mu-coalSplit2020s.xlsx")
 
+
 magar_mun_db <- rbind(db70,db80)
 magar_mun_db <- rbind(magar_mun_db, db90)
 magar_mun_db <- rbind(magar_mun_db,db00)
@@ -679,9 +680,41 @@ mun_db <- mun_db %>%
   mutate(
     INDEP = coalesce(!!!syms(indep_columns))
   ) %>%
-  select(-all_of(indep_columns))
+  select(-all_of(indep_columns)) %>% 
+  filter(year < 2020)
 
+# Load new db20
+db20_new <- read_csv("Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>%
+  filter(yr >= 2020)
 
+db20_new_processed <- db20_new %>%
+  mutate(
+    PRI    = as.character(round(pri * efec)),
+    PAN    = as.character(round(pan * efec)),
+    PRD    = as.character(round(prd * efec)),
+    PVEM   = as.character(round(pvem * efec)),
+    PT     = as.character(round(pt * efec)),
+    MC     = as.character(round(mc * efec)),
+    MORENA = as.character(round(morena * efec)),
+    OTH    = as.character(round(oth * efec))
+  ) %>%
+  rename(year = yr, mun_code = inegi) %>%
+  select(mun_code, year, PRI, PAN, PRD, PVEM, PT, MC, MORENA, OTH)
+
+# Get incumbent/runnerup from final_df for 2020+ years
+mun_db_new <- final_df %>%
+  filter(year >= 2020) %>%
+  select(mun_code, year, incumbent_party, runnerup_party) %>%
+  group_by(mun_code, year) %>%
+  summarise(
+    incumbent_party = first(incumbent_party),
+    runnerup_party  = first(runnerup_party),
+    .groups = "drop"
+  ) %>%
+  left_join(db20_new_processed, by = c("mun_code", "year"))
+
+# Append
+mun_db <- bind_rows(mun_db, mun_db_new)
 
 assign_incumbent_vote <- function(data) {
   

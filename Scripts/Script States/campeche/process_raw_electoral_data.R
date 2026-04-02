@@ -833,7 +833,9 @@ collapsed_2024 <- combined_2024 %>%
 collapsed_2024 <- collapsed_2024 %>%
   dplyr::mutate(year = 2024,
                 month = "June",
-                turnout = total / listanominal)
+                turnout = total / listanominal) %>% 
+  filter(!is.na(section))
+  
 rm(data)
 rm(temp_data)
 rm(combined_2024)

@@ -6,6 +6,7 @@ library(readxl)
 library(dplyr)
 library(readr)
 library(rstudioapi)
+library(stringr)
 
 # Get the path of the current script
 script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)

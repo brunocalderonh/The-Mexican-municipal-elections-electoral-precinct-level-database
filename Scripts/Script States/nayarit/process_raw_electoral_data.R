@@ -738,6 +738,168 @@ data_2017 <- data_2017 %>%
 collapsed_2017 <- data_2017
 cat(paste0("  2017: ", nrow(collapsed_2017), " obs\n"))
 
+#####################################
+### PROCESSING DATA FOR 2021 -------
+#####################################
+
+# Load the 2021 dataset from the excel
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/2021/BaseDatosPresidenciaYSindicatura.xlsx", skip = 5)
+
+data_ext <- read_excel("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/2021/PyS21-Ext.xlsx", skip = 5, sheet = "YES") %>% 
+  dplyr::mutate(CABECERA_MUNICIPAL = "LA YESCA")
+
+data_2021 <- bind_rows(data_2021, data_ext)
+names(data_2021)
+
+# Rename columns
+data_2021 <- data_2021 %>%
+  dplyr::rename(municipality = CABECERA_MUNICIPAL,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NO_REGISTRADOS,
+                nulos = NULOS,
+                CI_1 = CI) %>%
+  rename_with(~ gsub("NAN", "PANAL", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section),
+    municipality = case_when(municipality == "BUCERIAS" ~ "BAHIA DE BANDERAS",
+                             municipality == "JESUS MARIA" ~ "DEL NAYAR",
+                             TRUE ~ municipality)
+  ) %>% 
+  dplyr::filter(section > 0 & listanominal > 0)
+
+# Assign uniqueids
+data_2021 <- data_2021 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "ACAPONETA" ~ 18001,
+      municipality == "AHUACATLAN" ~ 18002,  
+      municipality == "AMATLAN DE CANAS" ~ 18003, 
+      municipality == "BAHIA DE BANDERAS" ~ 18020, 
+      municipality == "COMPOSTELA" ~ 18004,
+      municipality == "HUAJICORI" ~ 18005,
+      municipality == "IXTLAN DEL RIO" ~ 18006,  
+      municipality == "JALA" ~ 18007,
+      municipality == "DEL NAYAR" ~ 18009,  
+      municipality == "ROSAMORADA" ~ 18010,
+      municipality == "RUIZ" ~ 18011,  
+      municipality == "SAN BLAS" ~ 18012,
+      municipality == "SAN PEDRO LAGUNILLAS" ~ 18013,
+      municipality == "SANTA MARIA DEL ORO" ~ 18014,
+      municipality == "SANTIAGO IXCUINTLA" ~ 18015,
+      municipality == "TECUALA" ~ 18016,
+      municipality == "TEPIC" ~ 18017,
+      municipality == "TUXPAN" ~ 18018,
+      municipality == "LA YESCA" ~ 18019,
+      municipality == "XALISCO" ~ 18008,
+      TRUE ~ NA_real_
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2021 <- data_2021 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2021 <- collapsed_2021 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = rowSums(across(PAN:MORENA_PANAL), na.rm = TRUE),
+    year = 2021,
+    month = case_when(
+      municipality == "LA YESCA" ~ "December",
+      TRUE ~ "June"
+    ))
+
+#####################################
+### PROCESSING DATA FOR 2024 -------
+#####################################
+
+# Load the 2024 dataset from the excel
+data_2024 <- read_excel("../../../Data/Raw Electoral Data/Nayarit - 1996, 1999, 2002, 2005, 2008, 2011,2014,2017,2021,2024/2024/Presidencias y Sindicaturas.xlsx", skip = 5)
+
+names(data_2024)
+
+# Rename columns
+data_2024 <- data_2024 %>%
+  dplyr::rename(municipality = MUNICIPIO,
+                section = SECCION,
+                listanominal = LISTA_NOMINAL,
+                total = TOTAL_VOTOS,
+                no_reg = NO_REGISTRADOS,
+                nulos = NULOS) %>%
+  rename_with(~ gsub("NAN", "PANAL", .x)) %>% 
+  dplyr::mutate(
+    municipality = toupper(municipality),
+    municipality = gsub("Á", "A", municipality),
+    municipality = gsub("É", "E", municipality),
+    municipality = gsub("Í", "I", municipality),
+    municipality = gsub("Ó", "O", municipality),
+    municipality = gsub("Ú", "U", municipality),
+    municipality = gsub("Ü", "U", municipality),
+    municipality = gsub("Ñ", "N", municipality),
+    section = as.numeric(section)
+  ) %>% 
+  dplyr::filter(section > 0)
+
+# Assign uniqueids
+data_2024 <- data_2024 %>% 
+  mutate(
+    uniqueid = case_when(
+      municipality == "ACAPONETA" ~ 18001,
+      municipality == "AHUACATLAN" ~ 18002,  
+      municipality == "AMATLAN DE CANAS" ~ 18003, 
+      municipality == "BAHIA DE BANDERAS" ~ 18020, 
+      municipality == "COMPOSTELA" ~ 18004,
+      municipality == "HUAJICORI" ~ 18005,
+      municipality == "IXTLAN DEL RIO" ~ 18006,  
+      municipality == "JALA" ~ 18007,
+      municipality == "DEL NAYAR" ~ 18009,  
+      municipality == "ROSAMORADA" ~ 18010,
+      municipality == "RUIZ" ~ 18011,  
+      municipality == "SAN BLAS" ~ 18012,
+      municipality == "SAN PEDRO LAGUNILLAS" ~ 18013,
+      municipality == "SANTA MARIA DEL ORO" ~ 18014,
+      municipality == "SANTIAGO IXCUINTLA" ~ 18015,
+      municipality == "TECUALA" ~ 18016,
+      municipality == "TEPIC" ~ 18017,
+      municipality == "TUXPAN" ~ 18018,
+      municipality == "LA YESCA" ~ 18019,
+      municipality == "XALISCO" ~ 18008,
+      TRUE ~ NA_real_
+    )
+  )
+
+# Group by municipality, section, and uniqueid, and sum the relevant columns
+collapsed_2024 <- data_2024 %>%
+  dplyr::group_by(municipality, section, uniqueid) %>%
+  dplyr::summarise(
+    across(c(PAN:listanominal), 
+           \(x) sum(x, na.rm = TRUE))
+  )
+
+# Calculate valid votes and final details
+collapsed_2024 <- collapsed_2024 %>%
+  dplyr::mutate(
+    turnout = total/listanominal,
+    valid = rowSums(across(PAN:MORENA_FXM), na.rm = TRUE),
+    year = 2024,
+    month = "June"
+  )
+
 ###############################################################################
 ### COMBINE ALL YEARS
 ###############################################################################
@@ -745,7 +907,8 @@ cat("\nCombining all years...\n")
 
 all_data <- bind_rows(
   collapsed_1996, collapsed_1999, collapsed_2002, collapsed_2005,
-  collapsed_2008, collapsed_2011, collapsed_2014, collapsed_2017
+  collapsed_2008, collapsed_2011, collapsed_2014, collapsed_2017,
+  collapsed_2021, collapsed_2024
 )
 
 cat(paste0("Total observations: ", nrow(all_data), "\n"))
@@ -753,5 +916,5 @@ cat(paste0("Years: ", paste(sort(unique(all_data$year)), collapse = ", "), "\n")
 
 # Save
 dir.create(processed_path, showWarnings = FALSE, recursive = TRUE)
-write.csv(all_data, file.path(processed_path, "Nayarit_process_raw_data.csv"))
+write.csv(all_data, file.path(processed_path, "nayarit_process_raw_data.csv"))
 

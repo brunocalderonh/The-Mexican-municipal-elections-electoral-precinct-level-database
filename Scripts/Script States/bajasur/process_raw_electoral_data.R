@@ -657,7 +657,7 @@ collapsed_2024 <- collapsed_2024 %>%
                 year = 2024,
                 month = "June",
                 uniqueid = as.numeric(uniqueid)
-  )
+  ) %>% filter(!is.na(section))
 
 rm(ln_2024)
 rm(collapsed_data)

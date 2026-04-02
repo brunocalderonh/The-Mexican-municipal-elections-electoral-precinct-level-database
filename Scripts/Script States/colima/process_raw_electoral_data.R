@@ -93,8 +93,7 @@ collapsed_1994 <- collapsed_1994 %>%
 data_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/ln_all_months_years.dta")
 
 data_all <- data_all %>% 
-  dplyr::filter(state == "COLIMA" & month == "March" & year == 2000)  # Keep only records for June 2013
-
+  dplyr::filter(state == "COLIMA" & month == "March" & year == 2000)
 # Merge the datasets
 collapsed_1994 <- collapsed_1994 %>%
   dplyr::left_join(data_all %>% dplyr::select(section,lista), by = c("section")) %>% 
