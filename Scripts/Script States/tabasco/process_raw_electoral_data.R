@@ -305,7 +305,7 @@ names(df) <- gsub("[^a-z0-9_]", "", names(df))
 df <- df %>%
   rename(
     municipality = municipio,
-    section      = sección
+    section      = seccin
   ) %>%
   filter(!(municipality == "" & is.na(section))) %>%
   filter(!(is.na(total) | total == 0))
@@ -455,7 +455,6 @@ df <- read_excel(
   col_names = TRUE
 ) %>%
   as.data.frame()  # optional, for consistent data.frame behavior
-names(df) <- gsub("[^a-z0-9_]", "", names(df))
 ################################################################################
 # 2) Rename columns and convert municipality to uppercase without accents
 ################################################################################
@@ -471,7 +470,7 @@ df <- df %>%
   )
 
 df <- df %>%
-  rename(section = SECCIÓN)
+  rename(section = "SECCIÓN")
 
 ################################################################################
 # 3) Rename further columns:
@@ -486,12 +485,12 @@ df <- df %>%
 df <- df %>%
   rename(
     PRD_PT       = CPBT,
-    PANAL        = NUEVAALIANZA,
+    PANAL        = "NUEVA ALIANZA",
     PAS          = ALTERNATIVA,
-    noregistrados = CANDIDATOSNOREGISTRADOS,
-    nulos        = VOTOSNULOS
+    noregistrados = "CANDIDATOS NO REGISTRADOS",
+    nulos        = "VOTOS NULOS"
   ) %>%
-  rename(total = VOTACIÓNTOTAL)
+  rename(total = "VOTACIÓN TOTAL")
 
 ################################################################################
 # 4) Drop rows where municipality=="" AND section is missing, or total is missing/zero
