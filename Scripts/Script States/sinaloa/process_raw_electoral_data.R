@@ -66,7 +66,7 @@ df_2001 <- read_csv(
 )
 
 names(df_2001) <- tolower(names(df_2001))
-names(df_2001) <- gsub("[^a-z0-9_]", "", names(df_2001))
+names(df_2001) <- gsub("[^a-zA-Z0-9_]", "", names(df_2001))
 
 df_2001 <- df_2001 %>%
   rename(municipality = municipio, section = seccion) %>%
@@ -113,11 +113,11 @@ df_2004 <- read_csv(
 )
 
 names(df_2004) <- tolower(names(df_2004))
-names(df_2004) <- gsub("[^a-z0-9_]", "", names(df_2004))
+names(df_2004) <- gsub("[^a-zA-Z0-9_]", "", names(df_2004))
 
 df_2004 <- df_2004 %>%
   rename(municipality = municipio, section = seccion) %>%
-  filter(!(municipality == "" & is.na(section))) %>%
+  filter(!(municipality == "" & is.na(section)), !is.na(total), total != 0) %>%
   mutate(across(where(is.numeric), as.numeric)) %>%
   group_by(municipality, section) %>%
   summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop")
@@ -158,7 +158,7 @@ df_2007 <- read_csv(
 )
 
 names(df_2007) <- tolower(names(df_2007))
-names(df_2007) <- gsub("[^a-z0-9_]", "", names(df_2007))
+names(df_2007) <- gsub("[^a-zA-Z0-9_]", "", names(df_2007))
 
 df_2007 <- df_2007 %>%
   rename(municipality = municipio, section = seccion) %>%
@@ -227,10 +227,10 @@ df_2010 <- read_csv(
 )
 
 names(df_2010) <- tolower(names(df_2010))
-names(df_2010) <- gsub("[^a-z0-9_]", "", names(df_2010))
+names(df_2010) <- gsub("[^a-zA-Z0-9_]", "", names(df_2010))
 
 df_2010 <- df_2010 %>%
-  rename(municipality = nombre_municipio, section = seccion, listanominal = lista_nominal) %>%
+  rename(municipality = municipio, section = seccion) %>%
   filter(!(municipality == "" & is.na(section)), !is.na(total), total != 0) %>%
   mutate(across(c(listanominal, panprdptpc, pripvempanal, noregistrados, nulos, total), as.numeric))
 
@@ -254,28 +254,93 @@ cat("2010:", nrow(df_2010), "rows\n")
 
 ################################################################################
 # 2013 PROCESSING - JOHN lines 595-643
+# Excel file with multiple sheets (one per municipality) 
 ################################################################################
 
-df_2013 <- read_excel(
-  "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2013/Ayu_Seccion_2013.xlsx"
-)
+xlsx_path_2013 <- "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2013/Ayu_Seccion_2013.xlsx"
 
-df_2013 <- df_2013 %>%
-  rename(municipality = Municipio, section = Seccion, total = Total, listanominal = ListaNominal) %>%
-  mutate(
-    turnout = total / listanominal,
-    uniqueid = assign_sinaloa_uniqueid(municipality)
-  ) %>%
-  select(-any_of(c("NoRegistrados", "Nulos")))
-
-# Rename party columns to match expected format
-if ("PAN_PRD_PT" %in% names(df_2013)) {
+# Try multi-sheet Excel first; fall back to .dta if Excel not found
+if (file.exists(xlsx_path_2013)) {
+  sheets_2013 <- excel_sheets(xlsx_path_2013)
+  cat("2013: Reading", length(sheets_2013), "sheets from Excel\n")
+  
+  df_2013_list <- lapply(sheets_2013, function(sheet) {
+    tryCatch({
+      temp <- read_excel(xlsx_path_2013, sheet = sheet, col_types = "text")
+      if (nrow(temp) == 0) return(NULL)
+      temp <- temp %>% mutate(municipality = sheet)
+      return(temp)
+    }, error = function(e) return(NULL))
+  })
+  
+  df_2013 <- bind_rows(df_2013_list)
+  names(df_2013) <- tolower(names(df_2013))
+  names(df_2013) <- gsub("[^a-zA-Z0-9_]", "", names(df_2013))
+  
+  df_2013 <- df_2013 %>%
+    mutate(across(-municipality, ~suppressWarnings(as.numeric(.)))) %>%
+    filter(!is.na(seccion))
+  
+  # Rename to match expected format
+  df_2013 <- df_2013 %>%
+    rename(section = seccion) %>%
+    rename_with(~gsub("^total$", "total", .), .cols = everything())
+  
+  # Rename listanominal if needed
+  if ("listanominal" %in% names(df_2013)) {
+    # already good
+  } else if ("lista_nominal" %in% names(df_2013)) {
+    df_2013 <- df_2013 %>% rename(listanominal = lista_nominal)
+  } else if ("listanominal" %in% tolower(gsub("[^a-zA-Z0-9]", "", names(df_2013)))) {
+    # handle edge case
+  }
+  
+  # Collapse by municipality + section
+  vote_cols_2013 <- setdiff(names(df_2013)[sapply(df_2013, is.numeric)], c("section"))
+  df_2013 <- df_2013 %>%
+    group_by(municipality, section) %>%
+    summarise(across(all_of(intersect(vote_cols_2013, names(.))), sum, na.rm = TRUE), .groups = "drop")
+  
   df_2013 <- df_2013 %>%
     mutate(
-      valid = rowSums(select(., any_of(c("PAN_PRD_PT", "PRI_PVEM_PANAL", "PAS", "PC", "PRI_PVEM_PANAL_PAS"))), na.rm = TRUE),
-      year = 2013, month = "July", STATE = "SINALOA"
+      municipality = toupper(municipality),
+      municipality = gsub("Á", "A", municipality),
+      municipality = gsub("É", "E", municipality),
+      municipality = gsub("Í", "I", municipality),
+      municipality = gsub("Ó", "O", municipality),
+      municipality = gsub("Ú", "U", municipality),
+      municipality = gsub("Ñ", "N", municipality)
+    ) %>%
+    select(-any_of(c("noregistrados", "nulos", "no_registrados")))
+  
+} else {
+  # Fallback: read .dta file (JOHN pattern)
+  dta_path_2013 <- "../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2013/Ayu_Seccion_2013.dta"
+  df_2013 <- read_dta(dta_path_2013)
+  
+  df_2013 <- df_2013 %>%
+    rename(municipality = Municipio, section = Seccion, total = Total, listanominal = ListaNominal) %>%
+    select(-any_of(c("NoRegistrados", "Nulos")))
+}
+
+df_2013 <- df_2013 %>%
+  mutate(
+    uniqueid = assign_sinaloa_uniqueid(municipality),
+    turnout = total / listanominal
+  )
+
+# JOHN valid: rowtotal(PAN_PRD_PT PRI_PVEM_PANAL PAS PC PRI_PVEM_PANAL_PAS)
+# If valid already in source, use it; otherwise compute
+if (!"valid" %in% names(df_2013)) {
+  df_2013 <- df_2013 %>%
+    mutate(
+      valid = rowSums(select(., any_of(c("PAN_PRD_PT", "PRI_PVEM_PANAL", "PAS", "PC", "PRI_PVEM_PANAL_PAS",
+                                          "pan_prd_pt", "pri_pvem_panal", "pas", "pc", "pri_pvem_panal_pas"))), na.rm = TRUE)
     )
 }
+
+df_2013 <- df_2013 %>%
+  mutate(year = 2013, month = "July", STATE = "SINALOA")
 
 cat("2013:", nrow(df_2013), "rows\n")
 

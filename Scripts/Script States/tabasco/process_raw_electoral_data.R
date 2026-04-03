@@ -164,7 +164,7 @@ df_1997 <- df_merged %>%
 ################################################################################
 df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/2000/Ayu_Seccion_2000_No_LN.csv", show_col_types = FALSE)
 colnames(df) <- tolower(colnames(df))
-names(df) <- gsub("[^a-z0-9_]", "", names(df))
+names(df) <- gsub("[^a-zA-Z0-9_]", "", names(df))
 ################################################################################
 # 2) Rename columns, drop rows where municipality=="" & section==. (NA),
 #    and drop rows where total is NA or 0
@@ -297,7 +297,7 @@ df_2000 <- df_merged %>%
 df <- fread("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/2003/Ayu_Seccion_2003.csv", 
             encoding = "Latin-1")
 colnames(df) <- tolower(colnames(df))
-names(df) <- gsub("[^a-z0-9_]", "", names(df))
+names(df) <- gsub("[^a-zA-Z0-9_]", "", names(df))
 ################################################################################
 # 2) Rename columns, drop rows where municipality=="" & section==. (NA),
 #    and drop rows where total is missing or zero
@@ -305,7 +305,7 @@ names(df) <- gsub("[^a-z0-9_]", "", names(df))
 df <- df %>%
   rename(
     municipality = municipio,
-    section      = seccin
+    section      = sección
   ) %>%
   filter(!(municipality == "" & is.na(section))) %>%
   filter(!(is.na(total) | total == 0))
@@ -455,6 +455,7 @@ df <- read_excel(
   col_names = TRUE
 ) %>%
   as.data.frame()  # optional, for consistent data.frame behavior
+names(df) <- gsub("[^a-zA-Z0-9_]", "", names(df))
 ################################################################################
 # 2) Rename columns and convert municipality to uppercase without accents
 ################################################################################
@@ -470,7 +471,7 @@ df <- df %>%
   )
 
 df <- df %>%
-  rename(section = "SECCIÓN")
+  rename(section = SECCIÓN)
 
 ################################################################################
 # 3) Rename further columns:
@@ -485,12 +486,12 @@ df <- df %>%
 df <- df %>%
   rename(
     PRD_PT       = CPBT,
-    PANAL        = "NUEVA ALIANZA",
+    PANAL        = NUEVAALIANZA,
     PAS          = ALTERNATIVA,
-    noregistrados = "CANDIDATOS NO REGISTRADOS",
-    nulos        = "VOTOS NULOS"
+    noregistrados = CANDIDATOSNOREGISTRADOS,
+    nulos        = VOTOSNULOS
   ) %>%
-  rename(total = "VOTACIÓN TOTAL")
+  rename(total = VOTACIÓNTOTAL)
 
 ################################################################################
 # 4) Drop rows where municipality=="" AND section is missing, or total is missing/zero
@@ -594,7 +595,7 @@ df_2006 <- df_merged %>%
 # 1) Read CSV (Equivalent to: insheet using "Ayu_Seccion_2009.csv", clear)
 ###############################################################################
 df <- read_csv("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/2009/Ayu_Seccion_2009.csv", show_col_types = FALSE)
-names(df) <- gsub("[^a-z0-9_]", "", names(df))
+names(df) <- gsub("[^a-zA-Z0-9_]", "", names(df))
 colnames(df) <- tolower(colnames(df))
 ###############################################################################
 # 2) Rename columns, drop rows where municipality is "" & section is missing,
