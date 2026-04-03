@@ -305,7 +305,7 @@ names(df) <- gsub("[^a-zA-Z0-9_]", "", names(df))
 df <- df %>%
   rename(
     municipality = municipio,
-    section      = sección
+    section      = seccin
   ) %>%
   filter(!(municipality == "" & is.na(section))) %>%
   filter(!(is.na(total) | total == 0))
@@ -345,7 +345,7 @@ df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months
 
 df_merged <- df_collapsed %>%
   left_join(df_all, by = c("section")) %>%
-  filter(month == "September", year == 2003) %>%
+  filter(month == "December", year == 2000) %>%
   filter(!is.na(lista)) %>% 
   select(-state, -year, -month)
 
@@ -471,7 +471,7 @@ df <- df %>%
   )
 
 df <- df %>%
-  rename(section = SECCIÓN)
+  rename(section = SECCIN)
 
 ################################################################################
 # 3) Rename further columns:
@@ -491,7 +491,7 @@ df <- df %>%
     noregistrados = CANDIDATOSNOREGISTRADOS,
     nulos        = VOTOSNULOS
   ) %>%
-  rename(total = VOTACIÓNTOTAL)
+  rename(total = VOTACINTOTAL)
 
 ################################################################################
 # 4) Drop rows where municipality=="" AND section is missing, or total is missing/zero
@@ -571,7 +571,7 @@ df_all <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months
 
 df_merged <- df_collapsed %>%
   left_join(df_all, by = c("section")) %>%
-  filter(month == "September", year == 2006) %>%
+  filter(month == "December", year == 2000) %>%
   filter(!is.na(lista))  # drop if no match
 
 df_merged <- df_merged %>%
@@ -1157,7 +1157,7 @@ df_2018 <- df_collapsed %>%
 #####################################
 
 # Load the 2021 dataset from the excel
-data_2021 <- read_excel("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/21/ayu_resumen_general_casillas.xlsx", skip = 6)
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/2021/ayu_resumen_general_casillas.xlsx", skip = 6)
 
 # Rename columns
 data_2021 <- data_2021 %>%
@@ -1318,7 +1318,7 @@ collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>%
 #####################################
 
 # Load the 2024 dataset from the excel
-data_2024 <- read_excel("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/24/ayu_resumen_general_casillas.xlsx", skip = 7)
+data_2024 <- read_excel("../../../Data/Raw Electoral Data/Tabasco - 1997, 2000, 2003,2006, 2009, 2012,2015,2018,2021,2024/2024/ayu_resumen_general_casillas.xlsx", skip = 7)
 
 # Rename columns
 data_2024 <- data_2024 %>%

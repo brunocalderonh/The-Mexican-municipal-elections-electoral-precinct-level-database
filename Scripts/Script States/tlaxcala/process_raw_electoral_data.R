@@ -9,7 +9,8 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(dplyr, haven, readxl, tidyverse, data.table, stringr)
 
 # Set working directory
-setwd("D:/Dropbox/Incumbency Advantage/Data Analysis/Raw Data/Precinct/Tlaxcala 2001, 2004, 2007, 2010, 2013")
+script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+setwd(script_dir)
 
 ################################################################################
 ## Helper Functions
@@ -104,12 +105,13 @@ assign_tlaxcala_uniqueid <- function(municipality) {
 ## 2001
 ################################################################################
 
-df_2001 <- read_excel("2001/Ayu_Seccion_2001_No_LN.xlsx") %>%
+df_2001 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2001/Ayu_Seccion_2001_No_LN.xlsx") %>%
   rename_all(tolower)
 
 df_2001 <- df_2001 %>%
   rename(municipality = municipio,
-         section = seccion) %>%
+         section = seccion,
+         partidodemocrata = "partido democrata") %>%
   filter(!(is.na(municipality) | municipality == "") | !is.na(section)) %>%
   mutate(across(c(pri, pan, prd, pt, pvem, partidodemocrata, psn, pc, pas, pcdt, pjs, nulos), 
                 ~as.numeric(as.character(.))))
@@ -143,11 +145,10 @@ df_2001 <- df_2001 %>%
 
 # Drop duplicated section 150
 df_2001 <- df_2001 %>%
-  filter(section != 150 | is.na(section))
-
-# Merge lista nominal from all_months_years.dta
-all_months <- read_dta("../../all_months_years.dta") %>%
-  filter(ed == 29, month == 9, year == 2001) %>%
+  
+  # Merge lista nominal from all_months_years.dta
+  all_months <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter(state == "TLAXCALA", month == "September", year == 2001) %>%
   select(seccion, lista) %>%
   rename(section = seccion, listanominal = lista)
 
@@ -156,14 +157,8 @@ df_2001 <- df_2001 %>%
 
 # Calculate municipal aggregates
 df_2001 <- df_2001 %>%
-  group_by(uniqueid) %>%
-  mutate(mun_total = sum(total, na.rm = TRUE),
-         mun_valid = sum(valid, na.rm = TRUE),
-         mun_listanominal = sum(listanominal, na.rm = TRUE),
-         mun_turnout = mun_total / mun_listanominal) %>%
-  ungroup()
-
-df_2001 <- df_2001 %>%
+  
+  df_2001 <- df_2001 %>%
   mutate(year = 2001,
          month = "November",
          STATE = "TLAXCALA",
@@ -176,7 +171,7 @@ cat("2001 processed:", nrow(df_2001), "rows\n")
 ################################################################################
 
 # Read lista nominal
-ln_2004 <- read.csv("2004/Ayu_Seccion_2004_LN.csv", stringsAsFactors = FALSE)
+ln_2004 <- read.csv("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2004/Ayu_Seccion_2004_LN.csv", stringsAsFactors = FALSE)
 names(ln_2004) <- tolower(names(ln_2004))
 names(ln_2004) <- gsub("[^a-zA-Z0-9_]", "", names(ln_2004))
 if (!"listanominal" %in% names(ln_2004) && "lista_nominal" %in% names(ln_2004)) {
@@ -187,7 +182,7 @@ ln_2004 <- ln_2004 %>%
   select(section, listanominal)
 
 # Read main data
-df_2004 <- read.csv("2004/Ayu_Seccion_2004_No_LN.csv", stringsAsFactors = FALSE)
+df_2004 <- read.csv("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2004/Ayu_Seccion_2004_No_LN.csv", stringsAsFactors = FALSE)
 names(df_2004) <- tolower(names(df_2004))
 names(df_2004) <- gsub("[^a-zA-Z0-9_]", "", names(df_2004))
 
@@ -210,10 +205,9 @@ df_2004 <- df_2004 %>%
 
 # Also try merge from all_months_years
 # IMPORTANT: keep column as "lista" (NOT "listanominal") to avoid .x/.y collision
-all_months_2004 <- read_dta("../../all_months_years.dta") %>%
-  filter(ed == 29, month == 10, year == 2004) %>%
-  select(seccion, lista) %>%
-  rename(section = seccion)
+all_months_2004 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter(state == "TLAXCALA", month == "October", year == 2004) %>%
+  select(section, lista)
 
 df_2004 <- df_2004 %>%
   left_join(all_months_2004, by = "section") %>%
@@ -247,14 +241,6 @@ party_cols_2004 <- party_cols_2004[party_cols_2004 %in% names(df_2004)]
 df_2004 <- df_2004 %>%
   mutate(valid = rowSums(select(., all_of(party_cols_2004)), na.rm = TRUE))
 
-# Calculate municipal aggregates
-df_2004 <- df_2004 %>%
-  group_by(uniqueid) %>%
-  mutate(mun_total = sum(total, na.rm = TRUE),
-         mun_valid = sum(valid, na.rm = TRUE),
-         mun_listanominal = sum(listanominal, na.rm = TRUE),
-         mun_turnout = mun_total / mun_listanominal) %>%
-  ungroup()
 
 df_2004 <- df_2004 %>%
   mutate(year = 2004,
@@ -268,12 +254,12 @@ cat("2004 processed:", nrow(df_2004), "rows\n")
 ################################################################################
 
 # Read lista nominal 2007
-ln_2007 <- read_excel("2007/Listanominal2007.xlsx", sheet = "datos") %>%
+ln_2007 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2007/Listanominal2007.xlsx", sheet = "datos") %>%
   rename(section = section) %>%
   select(section, listanominal)
 
 # Read main data
-df_2007 <- read_excel("2007/Ayu_Seccion_2007.xlsx", sheet = "Sheet1")
+df_2007 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2007/Ayu_Seccion_2007.xlsx", sheet = "Sheet1")
 names(df_2007) <- tolower(names(df_2007))
 
 df_2007 <- df_2007 %>%
@@ -328,14 +314,8 @@ if ("VALIDOS" %in% names(df_2007)) {
 
 # Calculate municipal aggregates and turnout
 df_2007 <- df_2007 %>%
-  mutate(turnout = total / listanominal) %>%
-  group_by(uniqueid) %>%
-  mutate(mun_total = sum(total, na.rm = TRUE),
-         mun_valid = sum(valid, na.rm = TRUE),
-         mun_listanominal = sum(listanominal, na.rm = TRUE),
-         mun_turnout = mun_total / mun_listanominal) %>%
-  ungroup()
-
+  mutate(turnout = total / listanominal)
+  
 df_2007 <- df_2007 %>%
   mutate(year = 2007,
          month = "November",
@@ -347,7 +327,7 @@ cat("2007 processed:", nrow(df_2007), "rows\n")
 ## 2010
 ################################################################################
 
-df_2010 <- read.csv("2010/Ayu_Seccion_2010.csv", stringsAsFactors = FALSE)
+df_2010 <- read.csv("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2010/Ayu_Seccion_2010.csv", stringsAsFactors = FALSE)
 names(df_2010) <- tolower(names(df_2010))
 names(df_2010) <- gsub("[^a-zA-Z0-9_]", "", names(df_2010))
 
@@ -432,15 +412,6 @@ party_cols_2010 <- party_cols_2010[party_cols_2010 %in% names(df_2010)]
 df_2010 <- df_2010 %>%
   mutate(valid = rowSums(select(., all_of(party_cols_2010)), na.rm = TRUE))
 
-# Calculate municipal aggregates
-df_2010 <- df_2010 %>%
-  group_by(uniqueid) %>%
-  mutate(mun_total = sum(total, na.rm = TRUE),
-         mun_valid = sum(valid, na.rm = TRUE),
-         mun_listanominal = sum(listanominal, na.rm = TRUE),
-         mun_turnout = mun_total / mun_listanominal) %>%
-  ungroup()
-
 df_2010 <- df_2010 %>%
   mutate(year = 2010,
          month = "July",
@@ -453,12 +424,12 @@ cat("2010 processed:", nrow(df_2010), "rows\n")
 ################################################################################
 
 # Read lista nominal 2013
-ln_2013 <- read_excel("2013/Listanominal2013.xlsx", sheet = "datos") %>%
+ln_2013 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2013/Listanominal2013.xlsx", sheet = "datos") %>%
   rename(section = section) %>%
   select(section, listanominal)
 
 # Read main data
-df_2013 <- read_excel("2013/Ayu_Seccion_2013.xlsx", sheet = "Sheet1")
+df_2013 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2013/Ayu_Seccion_2013.xlsx", sheet = "Sheet1")
 names(df_2013) <- tolower(names(df_2013))
 
 df_2013 <- df_2013 %>%
@@ -502,8 +473,15 @@ df_2013 <- df_2013 %>%
 
 # Rename parties
 df_2013 <- df_2013 %>%
-  rename(PAN = pan, PRI = pri, PRD = prd, PT = pt, PVEM = pvem, 
-         MC = mc, PANAL = panal, PAC = pac, PS = ps, PC = pc)
+  rename(PAN = pan, PRI = pri, 
+         PRD = prd, 
+         PT = pt, 
+         PVEM = pvem, 
+         #MC = mc, 
+         PANAL = panal, 
+         PAC = pac, 
+         PS = ps, 
+         PC = pc)
 
 df_2013 <- df_2013 %>%
   mutate(turnout = total / listanominal)
@@ -522,15 +500,6 @@ party_cols_2013 <- party_cols_2013[party_cols_2013 %in% names(df_2013)]
 df_2013 <- df_2013 %>%
   mutate(valid = rowSums(select(., all_of(party_cols_2013)), na.rm = TRUE))
 
-# Calculate municipal aggregates
-df_2013 <- df_2013 %>%
-  group_by(uniqueid) %>%
-  mutate(mun_total = sum(total, na.rm = TRUE),
-         mun_valid = sum(valid, na.rm = TRUE),
-         mun_listanominal = sum(listanominal, na.rm = TRUE),
-         mun_turnout = mun_total / mun_listanominal) %>%
-  ungroup()
-
 df_2013 <- df_2013 %>%
   mutate(year = 2013,
          month = "July",
@@ -542,12 +511,12 @@ cat("2013 processed:", nrow(df_2013), "rows\n")
 ## 2013 Extraordinary (December) - APETATITLAN DE ANTONIO CARVAJAL
 ################################################################################
 
-df_2013_ext <- read_excel("2013/Resultados Extraordinaria 8 Diciembre 2013.xlsx", sheet = "Sheet1")
-
+df_2013_ext <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2013/Resultados Extraordinaria 8 Diciembre 2013.xlsx", sheet = "Sheet1")
+names(df_2013_ext)
 df_2013_ext <- df_2013_ext %>%
   rename(section = `Sección`,
-         total = EMIT,
-         valid = VALID,
+         total = EMITIDOS,
+         valid = VALIDOS,
          PVEM = VERDE) %>%
   mutate(uniqueid = 29002,
          municipality = "APETATITLAN DE ANTONIO CARVAJAL EXTRAORDINARIO")
@@ -565,23 +534,17 @@ df_2013_ext <- df_2013_ext %>%
   summarise(across(everything(), ~sum(., na.rm = TRUE)), .groups = "drop")
 
 # Merge lista nominal from all_months_years
-all_months_2013_ext <- read_dta("../../all_months_years.dta") %>%
-  filter(ed == 29, month == 11, year == 2013) %>%
-  select(seccion, lista) %>%
-  rename(section = seccion, listanominal = lista)
+all_months_2013_ext <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter(state == "TLAXCALA", month == "November", year == 2013) %>%
+  select(section, lista) %>%
+  rename(listanominal = lista)
 
 df_2013_ext <- df_2013_ext %>%
   left_join(all_months_2013_ext, by = "section")
 
 df_2013_ext <- df_2013_ext %>%
-  mutate(turnout = total / listanominal) %>%
-  group_by(uniqueid) %>%
-  mutate(mun_total = sum(total, na.rm = TRUE),
-         mun_valid = sum(valid, na.rm = TRUE),
-         mun_listanominal = sum(listanominal, na.rm = TRUE),
-         mun_turnout = mun_total / mun_listanominal) %>%
-  ungroup()
-
+  mutate(turnout = total / listanominal)
+  
 df_2013_ext <- df_2013_ext %>%
   mutate(year = 2013,
          month = "December",
@@ -593,13 +556,13 @@ cat("2013 Extraordinary processed:", nrow(df_2013_ext), "rows\n")
 ## 2014 Extraordinary (February) - ACUAMANALA DE MIGUEL HIDALGO
 ################################################################################
 
-df_2014_ext <- read_excel("2014/Resultados Extraordinaria 23 Febrero 2014.xlsx", 
+df_2014_ext <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2014/Resultados Extraordinaria 23 Febrero 2014.xlsx", 
                           sheet = "Hoja1", range = "A6:K13")
-
+names(df_2014_ext)
 df_2014_ext <- df_2014_ext %>%
   rename(section = `Sección`,
-         total = EMIT,
-         valid = VALID) %>%
+         total = EMITIDOS,
+         valid = VALIDOS) %>%
   mutate(uniqueid = 29022,
          municipality = "ACUAMANALA DE MIGUEL HIDALGO EXTRAORDINARIO")
 
@@ -616,23 +579,17 @@ df_2014_ext <- df_2014_ext %>%
   summarise(across(everything(), ~sum(., na.rm = TRUE)), .groups = "drop")
 
 # Merge lista nominal from all_months_years
-all_months_2014_ext <- read_dta("../../all_months_years.dta") %>%
-  filter(ed == 29, month == 1, year == 2014) %>%
-  select(seccion, lista) %>%
-  rename(section = seccion, listanominal = lista)
+all_months_2014_ext <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+  filter(state == "TLAXCALA", month == "January", year == 2014) %>%
+  select(section, lista) %>%
+  rename(listanominal = lista)
 
 df_2014_ext <- df_2014_ext %>%
   left_join(all_months_2014_ext, by = "section")
 
 df_2014_ext <- df_2014_ext %>%
-  mutate(turnout = total / listanominal) %>%
-  group_by(uniqueid) %>%
-  mutate(mun_total = sum(total, na.rm = TRUE),
-         mun_valid = sum(valid, na.rm = TRUE),
-         mun_listanominal = sum(listanominal, na.rm = TRUE),
-         mun_turnout = mun_total / mun_listanominal) %>%
-  ungroup()
-
+  mutate(turnout = total / listanominal)
+  
 df_2014_ext <- df_2014_ext %>%
   mutate(year = 2014,
          month = "February",
@@ -645,7 +602,7 @@ cat("2014 Extraordinary processed:", nrow(df_2014_ext), "rows\n")
 ################################################################################
 
 # Read all sheets from Excel file
-sheets_2016 <- excel_sheets("2016/Ayuntamientos_Tlaxcala_2016.xlsx")
+sheets_2016 <- excel_sheets("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2016/Ayuntamientos_Tlaxcala_2016.xlsx")
 
 # Table numbers to read (matching SALVADOR do-file)
 table_nums <- c(1,2,3,4,5,7,8,9,11,13,15,16,17,18,19,20,22,23,25,26,27,28,29,30,
@@ -657,7 +614,7 @@ table_sheets <- table_sheets[table_sheets %in% sheets_2016]
 
 df_2016_list <- lapply(table_sheets, function(sheet) {
   tryCatch({
-    df <- read_excel("2016/Ayuntamientos_Tlaxcala_2016.xlsx", sheet = sheet, 
+    df <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2016/Ayuntamientos_Tlaxcala_2016.xlsx", sheet = sheet, 
                      col_types = "text")
     names(df) <- tolower(names(df))
     df <- df %>% filter(!is.na(section) & section != "")
@@ -693,7 +650,7 @@ df_2016 <- df_2016 %>%
   summarise(across(everything(), ~sum(., na.rm = TRUE)), .groups = "drop")
 
 # Read uniqueids mapping
-uniqueids_2016 <- read_excel("2016/uniqueids16.xlsx") %>%
+uniqueids_2016 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2016/uniqueids16.xlsx") %>%
   rename_all(tolower) %>%
   select(municipality, uniqueid, municipio) %>%
   distinct()
@@ -732,11 +689,7 @@ df_2016 <- df_2016 %>%
 
 # Calculate municipal aggregates
 df_2016 <- df_2016 %>%
-  group_by(uniqueid) %>%
-  mutate(mun_total = sum(total, na.rm = TRUE),
-         mun_valid = sum(valid, na.rm = TRUE)) %>%
-  ungroup()
-#####################################
+  #####################################
 ### PROCESSING DATA FOR 2021 -------
 #####################################
 
@@ -923,7 +876,7 @@ collapsed_2024 <- process_coalitions(collapsed_2024, magar_coal) %>%
   select(-coal1, -coal2, -coal3, -coal4)
 
 # Merge lista nominal 2016
-ln_2016 <- read_dta("../Listas Nominales/LN 2012-2019/2016/LN2016.dta") %>%
+ln_2016 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/LN 2012-2019/2016/LN2016.dta") %>%
   filter(entidad == 29, month == 5) %>%
   mutate(uniqueid = entidad * 1000 + municipio) %>%
   filter(seccion != 0) %>%
@@ -934,11 +887,7 @@ df_2016 <- df_2016 %>%
   left_join(ln_2016, by = c("uniqueid", "section"))
 
 df_2016 <- df_2016 %>%
-  group_by(uniqueid) %>%
-  mutate(mun_listanominal = sum(listanominal, na.rm = TRUE)) %>%
-  ungroup() %>%
-  mutate(mun_turnout = mun_total / mun_listanominal,
-         turnout = total / listanominal)
+  mutate(turnout = total / listanominal)
 
 df_2016 <- df_2016 %>%
   mutate(year = 2016,
