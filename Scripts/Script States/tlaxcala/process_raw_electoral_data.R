@@ -110,8 +110,7 @@ df_2001 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 200
 
 df_2001 <- df_2001 %>%
   rename(municipality = municipio,
-         section = seccion,
-         partidodemocrata = "partido democrata") %>%
+         section = seccion) %>%
   filter(!(is.na(municipality) | municipality == "") | !is.na(section)) %>%
   mutate(across(c(pri, pan, prd, pt, pvem, partidodemocrata, psn, pc, pas, pcdt, pjs, nulos), 
                 ~as.numeric(as.character(.))))
@@ -144,10 +143,9 @@ df_2001 <- df_2001 %>%
   mutate(valid = rowSums(select(., PRI, PAN, PRD, PT, PVEM, Partido_Democrata, PSN, PC, PAS, PCDT, PJS), na.rm = TRUE))
 
 # Drop duplicated section 150
-df_2001 <- df_2001 %>%
-  
-  # Merge lista nominal from all_months_years.dta
-  all_months <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
+
+# Merge lista nominal from all_months_years.dta
+all_months <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
   filter(state == "TLAXCALA", month == "September", year == 2001) %>%
   select(seccion, lista) %>%
   rename(section = seccion, listanominal = lista)
@@ -156,9 +154,8 @@ df_2001 <- df_2001 %>%
   left_join(all_months, by = "section")
 
 # Calculate municipal aggregates
+
 df_2001 <- df_2001 %>%
-  
-  df_2001 <- df_2001 %>%
   mutate(year = 2001,
          month = "November",
          STATE = "TLAXCALA",
@@ -197,7 +194,8 @@ df_2004 <- df_2004 %>%
 df_2004 <- df_2004 %>%
   mutate(across(-c(municipality, section), ~as.numeric(as.character(.)))) %>%
   group_by(municipality, section) %>%
-  summarise(across(everything(), ~sum(., na.rm = TRUE)), .groups = "drop")
+  summarise(across(everything(), ~sum(., na.rm = TRUE)), .groups = "drop") %>%
+  select(-any_of(c("clave", "casilla", "tipo", "anulados", "validos")))
 
 # Merge lista nominal
 df_2004 <- df_2004 %>%
@@ -207,7 +205,8 @@ df_2004 <- df_2004 %>%
 # IMPORTANT: keep column as "lista" (NOT "listanominal") to avoid .x/.y collision
 all_months_2004 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
   filter(state == "TLAXCALA", month == "October", year == 2004) %>%
-  select(section, lista)
+  select(seccion, lista) %>%
+  rename(section = seccion)
 
 df_2004 <- df_2004 %>%
   left_join(all_months_2004, by = "section") %>%
@@ -241,6 +240,7 @@ party_cols_2004 <- party_cols_2004[party_cols_2004 %in% names(df_2004)]
 df_2004 <- df_2004 %>%
   mutate(valid = rowSums(select(., all_of(party_cols_2004)), na.rm = TRUE))
 
+# Calculate municipal aggregates
 
 df_2004 <- df_2004 %>%
   mutate(year = 2004,
@@ -275,10 +275,15 @@ if ("cc2_pri_pvem" %in% names(df_2007)) {
     mutate(pri_pvem = ifelse(is.na(pri_pvem) & !is.na(cc2_pri_pvem), cc2_pri_pvem, pri_pvem))
 }
 
+# Drop metadata and absorbed columns BEFORE collapse
+df_2007 <- df_2007 %>%
+  select(-any_of(c("type", "cc1_pri_pvem", "cc2_pri_pvem", 
+                    "no registrados", "noregistrados", "emitidos")))
+
 # Calculate total and filter
 df_2007 <- df_2007 %>%
   mutate(across(-c(municipality, section), ~as.numeric(as.character(.)))) %>%
-  mutate(total = rowSums(select(., matches("pri|pan|prd|pt|pvem|pc|pcdt|panal|pas|ps|noregistrados|emitidos|validos")), na.rm = TRUE)) %>%
+  mutate(total = rowSums(select(., matches("^pri$|^pan|^prd$|^pt$|^pvem$|^pc$|^pcdt$|^panal$|^pas$|^ps$|pri_pvem|pri_pvem_ps")), na.rm = TRUE)) %>%
   filter(total > 0)
 
 # Collapse
@@ -290,10 +295,11 @@ df_2007 <- df_2007 %>%
 df_2007 <- df_2007 %>%
   left_join(ln_2007, by = "section")
 
-# Rename columns
+# Rename columns to uppercase (only party columns remain)
 df_2007 <- df_2007 %>%
   rename_with(~toupper(.), -c(municipality, section, listanominal, total)) %>%
-  rename(PAN_PAC = PAN_PAC, PRI_PVEM = PRI_PVEM, PRI_PVEM_PS = PRI_PVEM_PS)
+  select(-any_of(c("NO_REGISTRADOS", "NOREGISTRADOS", "EMITIDOS", "TYPE",
+                    "CC1_PRI_PVEM", "CC2_PRI_PVEM")))
 
 # Assign uniqueid
 df_2007 <- df_2007 %>%
@@ -312,10 +318,10 @@ if ("VALIDOS" %in% names(df_2007)) {
     mutate(valid = rowSums(select(., all_of(party_cols_2007)), na.rm = TRUE))
 }
 
-# Calculate municipal aggregates and turnout
+# Turnout
 df_2007 <- df_2007 %>%
   mutate(turnout = total / listanominal)
-  
+
 df_2007 <- df_2007 %>%
   mutate(year = 2007,
          month = "November",
@@ -335,6 +341,12 @@ df_2010 <- df_2010 %>%
   rename(municipality = nombre_municipio,
          section = seccion,
          listanominal = lista_nominal) %>%
+  # Drop ALL metadata columns from the CSV (JOHN only collapses panpna-total range)
+  select(-any_of(c("id_entidad_electoral", "fecha_jornada", "id_cargo", "nombre_cargo",
+                    "id_estado", "id_distrito", "id_casilla", "tipo_casilla", "descripcion",
+                    "ext_contigua", "id_municipio", "estatus_casilla", "descripcion1",
+                    "resultados_obtenidos", "tipo_urna", "descripcion2",
+                    "cabecera", "circunscripcion"))) %>%
   filter(!(is.na(municipality) | municipality == "") | !is.na(section))
 
 # Convert to numeric
@@ -342,10 +354,14 @@ df_2010 <- df_2010 %>%
   mutate(across(-c(municipality, section), ~as.numeric(as.character(.)))) %>%
   filter(!is.na(total) & total > 0)
 
-# Collapse
+# Collapse (now only vote + LN columns, no metadata)
 df_2010 <- df_2010 %>%
   group_by(municipality, section) %>%
   summarise(across(everything(), ~sum(., na.rm = TRUE)), .groups = "drop")
+
+# JOHN: drop pripvemps (only shows votes for PRI in "Unidos por Ixtacuixtla")
+df_2010 <- df_2010 %>%
+  select(-any_of("pripvemps"))
 
 # Coalition corrections per do-file:
 # NATIVITAS: pvem = 0 when pripvem != 0
@@ -367,15 +383,17 @@ df_2010 <- df_2010 %>%
 df_2010 <- df_2010 %>%
   mutate(pt = ifelse(!is.na(ptpc) & ptpc != 0, 0, pt))
 
-# Merge prdpcpt2 into prdpcpt
+# JOHN: replace prdpcpt = prdpcpt2 if prdpcpt==0 & prdpcpt2!=0; drop prdpcpt2
 df_2010 <- df_2010 %>%
-  mutate(prdpcpt = ifelse(prdpcpt == 0 & !is.na(prdpcpt2) & prdpcpt2 != 0, prdpcpt2, prdpcpt))
+  mutate(prdpcpt = ifelse(prdpcpt == 0 & !is.na(prdpcpt2) & prdpcpt2 != 0, prdpcpt2, prdpcpt)) %>%
+  select(-any_of("prdpcpt2"))
 
-# Merge prdpt2 into prdpt
+# JOHN: replace prdpt = prdpt2 if prdpt==0 & prdpt2!=0; drop prdpt2
 df_2010 <- df_2010 %>%
-  mutate(prdpt = ifelse(!is.na(prdpt) & prdpt == 0 & !is.na(prdpt2) & prdpt2 != 0, prdpt2, prdpt))
+  mutate(prdpt = ifelse(!is.na(prdpt) & prdpt == 0 & !is.na(prdpt2) & prdpt2 != 0, prdpt2, prdpt)) %>%
+  select(-any_of("prdpt2"))
 
-# Rename parties
+# Rename parties + drop nulos (JOHN: drop nulos)
 df_2010 <- df_2010 %>%
   rename(PAN_PANAL = panpna,
          PRI = pri,
@@ -393,7 +411,8 @@ df_2010 <- df_2010 %>%
          PP = pp,
          PLT = plt,
          PPT = ppt,
-         PST = ps)
+         PST = ps) %>%
+  select(-any_of(c("nulos", "noregistrados")))
 
 df_2010 <- df_2010 %>%
   mutate(turnout = total / listanominal)
@@ -411,6 +430,8 @@ party_cols_2010 <- party_cols_2010[party_cols_2010 %in% names(df_2010)]
 
 df_2010 <- df_2010 %>%
   mutate(valid = rowSums(select(., all_of(party_cols_2010)), na.rm = TRUE))
+
+# Calculate municipal aggregates
 
 df_2010 <- df_2010 %>%
   mutate(year = 2010,
@@ -473,15 +494,8 @@ df_2013 <- df_2013 %>%
 
 # Rename parties
 df_2013 <- df_2013 %>%
-  rename(PAN = pan, PRI = pri, 
-         PRD = prd, 
-         PT = pt, 
-         PVEM = pvem, 
-         #MC = mc, 
-         PANAL = panal, 
-         PAC = pac, 
-         PS = ps, 
-         PC = pc)
+  rename(PAN = pan, PRI = pri, PRD = prd, PT = pt, PVEM = pvem, 
+         MC = mc, PANAL = panal, PAC = pac, PS = ps, PC = pc)
 
 df_2013 <- df_2013 %>%
   mutate(turnout = total / listanominal)
@@ -500,6 +514,8 @@ party_cols_2013 <- party_cols_2013[party_cols_2013 %in% names(df_2013)]
 df_2013 <- df_2013 %>%
   mutate(valid = rowSums(select(., all_of(party_cols_2013)), na.rm = TRUE))
 
+# Calculate municipal aggregates
+
 df_2013 <- df_2013 %>%
   mutate(year = 2013,
          month = "July",
@@ -512,11 +528,11 @@ cat("2013 processed:", nrow(df_2013), "rows\n")
 ################################################################################
 
 df_2013_ext <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2013/Resultados Extraordinaria 8 Diciembre 2013.xlsx", sheet = "Sheet1")
-names(df_2013_ext)
+
 df_2013_ext <- df_2013_ext %>%
   rename(section = `Sección`,
-         total = EMITIDOS,
-         valid = VALIDOS,
+         total = EMIT,
+         valid = VALID,
          PVEM = VERDE) %>%
   mutate(uniqueid = 29002,
          municipality = "APETATITLAN DE ANTONIO CARVAJAL EXTRAORDINARIO")
@@ -536,15 +552,15 @@ df_2013_ext <- df_2013_ext %>%
 # Merge lista nominal from all_months_years
 all_months_2013_ext <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
   filter(state == "TLAXCALA", month == "November", year == 2013) %>%
-  select(section, lista) %>%
-  rename(listanominal = lista)
+  select(seccion, lista) %>%
+  rename(section = seccion, listanominal = lista)
 
 df_2013_ext <- df_2013_ext %>%
   left_join(all_months_2013_ext, by = "section")
 
 df_2013_ext <- df_2013_ext %>%
   mutate(turnout = total / listanominal)
-  
+
 df_2013_ext <- df_2013_ext %>%
   mutate(year = 2013,
          month = "December",
@@ -558,11 +574,11 @@ cat("2013 Extraordinary processed:", nrow(df_2013_ext), "rows\n")
 
 df_2014_ext <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 2007, 2010, 2013,2016,2021,2024/2014/Resultados Extraordinaria 23 Febrero 2014.xlsx", 
                           sheet = "Hoja1", range = "A6:K13")
-names(df_2014_ext)
+
 df_2014_ext <- df_2014_ext %>%
   rename(section = `Sección`,
-         total = EMITIDOS,
-         valid = VALIDOS) %>%
+         total = EMIT,
+         valid = VALID) %>%
   mutate(uniqueid = 29022,
          municipality = "ACUAMANALA DE MIGUEL HIDALGO EXTRAORDINARIO")
 
@@ -581,15 +597,15 @@ df_2014_ext <- df_2014_ext %>%
 # Merge lista nominal from all_months_years
 all_months_2014_ext <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
   filter(state == "TLAXCALA", month == "January", year == 2014) %>%
-  select(section, lista) %>%
-  rename(listanominal = lista)
+  select(seccion, lista) %>%
+  rename(section = seccion, listanominal = lista)
 
 df_2014_ext <- df_2014_ext %>%
   left_join(all_months_2014_ext, by = "section")
 
 df_2014_ext <- df_2014_ext %>%
   mutate(turnout = total / listanominal)
-  
+
 df_2014_ext <- df_2014_ext %>%
   mutate(year = 2014,
          month = "February",
@@ -688,8 +704,7 @@ df_2016 <- df_2016 %>%
   select(-NO_REG, -NULO)
 
 # Calculate municipal aggregates
-df_2016 <- df_2016 %>%
-  #####################################
+#####################################
 ### PROCESSING DATA FOR 2021 -------
 #####################################
 
