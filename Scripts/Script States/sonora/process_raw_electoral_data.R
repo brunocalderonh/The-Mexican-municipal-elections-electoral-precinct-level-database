@@ -208,7 +208,7 @@ df_collapsed <- df_collapsed %>%
 #    in 'df_collapsed'.
 ###############################################################################
 # Read the external .dta file
-df_nationwide <- read_dta("../Nationwide Listanominal 1994.dta") %>%
+df_nationwide <- read_dta(".../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1994/Other/Nationwide Listanominal 1994.dta") %>%
   select(ed, sec, lista)  # keep only the needed columns
 
 # Perform the merge
