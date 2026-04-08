@@ -90,7 +90,8 @@ df_2001 <- df_2001 %>%
     PAN_PRD_PT_PVEM = panprdptpvem, PT_PC_PSN = ptcdppnpsn,
     PRD_PVEM = prdpvem, PT_PC_PBS = ptcdppnpbs
   ) %>%
-  select(-any_of(c("noregistrados", "nulos", "psd", "pmp"))) %>%
+  select(-any_of(c("noregistrados", "nulos", "psd", "pmp",
+                   "distrito", "casilla", "clave", "tipo", "ptpas"))) %>%
   mutate(
     uniqueid = assign_sinaloa_uniqueid(municipality),
     valid = rowSums(select(., any_of(c(
@@ -115,6 +116,13 @@ df_2004 <- read_csv(
 names(df_2004) <- tolower(names(df_2004))
 names(df_2004) <- gsub("[^a-zA-Z0-9_]", "", names(df_2004))
 
+df_2004 <- df_2004 %>%
+  rename(municipality = municipio, section = seccion) %>%
+  filter(!(municipality == "" & is.na(section)), !is.na(total), total != 0) %>%
+  mutate(across(where(is.numeric), as.numeric)) %>%
+  group_by(municipality, section) %>%
+  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop")
+
 # Recalculate total per JOHN (includes noregistrados + nulos)
 df_2004 <- df_2004 %>%
   mutate(total = rowSums(select(., any_of(c(
@@ -123,15 +131,6 @@ df_2004 <- df_2004 %>%
     "prdpt","prdptpbs","prdpbs","panprd","pripvempbs","prdptpc"))), na.rm = TRUE)) %>%
   filter(total > 0)
 
-df_2004 <- df_2004 %>%
-  rename(municipality = municipio, section = seccion) %>%
-  filter(!(municipality == "" & is.na(section)), !is.na(total), total != 0) %>%
-  mutate(across(where(is.numeric), as.numeric)) %>%
-  group_by(municipality, section) %>%
-  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop")
-
-
-
 # Rename per JOHN
 df_2004 <- df_2004 %>%
   rename(
@@ -139,7 +138,7 @@ df_2004 <- df_2004 %>%
     PAN_PRD = panprd, PRD_PT = prdpt, PRD_PT_PC = prdptpc,
     PRD_PT_PBS = prdptpbs, PRD_PBS = prdpbs, PRI_PVEM_PBS = pripvempbs
   ) %>%
-  select(-any_of(c("noregistrados", "nulos"))) %>%
+  select(-any_of(c("noregistrados", "nulos", "distrito", "casilla", "clave", "tipo"))) %>%
   mutate(
     uniqueid = assign_sinaloa_uniqueid(municipality),
     valid = rowSums(select(., any_of(c(
@@ -209,6 +208,7 @@ df_2007 <- df_2007 %>%
     PRI_PRD_PANAL = pripanalprd, PRD_PT_PC = prdptpc, PRD_PT = prdpt, 
     PRI_PC_PANAL = pripanalpc, PT_PAS = ptpas
   ) %>%
+  select(-any_of(c("noregistrados", "nulos", "distrito", "casilla", "clave", "tipo"))) %>%
   mutate(
     uniqueid = assign_sinaloa_uniqueid(municipality),
     valid = rowSums(select(., PAN, PRI_PANAL, PRD, PT, PVEM, PC, PAS, 
@@ -232,7 +232,8 @@ names(df_2010) <- tolower(names(df_2010))
 names(df_2010) <- gsub("[^a-zA-Z0-9_]", "", names(df_2010))
 
 df_2010 <- df_2010 %>%
-  rename(municipality = nombre_municipio, section = seccion, listanominal = lista_nominal) %>%
+  rename(municipality = municipio, section = seccion) %>%
+  select(-any_of(c("distrito", "casilla", "clave", "tipo"))) %>%
   filter(!(municipality == "" & is.na(section)), !is.na(total), total != 0) %>%
   mutate(across(c(listanominal, panprdptpc, pripvempanal, noregistrados, nulos, total), as.numeric))
 
@@ -279,7 +280,7 @@ if (file.exists(dta_path_2013)) {
       total = Total, listanominal = ListaNominal
     ) %>%
     select(-any_of(c("NoRegistrados", "Nulos")))
-  
+
 } else if (file.exists(xlsx_path_2013)) {
   # Fallback: read all 18 sheets from Excel
   cat("2013: Reading all sheets from Excel\n")
@@ -316,7 +317,7 @@ if (file.exists(dta_path_2013)) {
   
   # Convert vote columns to numeric
   party_and_meta <- c("PAN_PRD_PT", "PRI_PVEM_PANAL", "MC", "PAS", 
-                      "PRI_PVEM_PANAL_PAS", "NoRegistrados", "Nulos")
+                       "PRI_PVEM_PANAL_PAS", "NoRegistrados", "Nulos")
   df_2013 <- df_2013 %>%
     mutate(across(any_of(party_and_meta), ~suppressWarnings(as.numeric(.))))
   
@@ -596,7 +597,7 @@ cat("\n2001-2018 processing complete.\n")
 #####################################
 
 # Load the 2021 dataset from the excel
-data_2021 <- read_excel("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2021/AYUNTAMIENTOS_21.xlsx")
+data_2021 <- read_excel("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/21/AYUNTAMIENTOS_21.xlsx")
 
 # Rename columns
 data_2021 <- data_2021 %>%
@@ -769,7 +770,7 @@ collapsed_2021 <- process_coalitions(collapsed_2021, magar_coal) %>%
 #####################################
 
 # Load the 2024 dataset from the excel
-data_2024 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/2024/SIN_AYUNTAMIENTO_2024.csv")
+data_2024 <- read_csv("../../../Data/Raw Electoral Data/Sinaloa - 2001, 2004, 2007, 2010, 2013,2016,2018,2021,2024/24/SIN_AYUNTAMIENTO_2024.csv")
 
 # Rename columns
 data_2024 <- data_2024 %>%
