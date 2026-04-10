@@ -419,17 +419,23 @@ db80 <- read_excel("Data/municipal magar data splitcoal/mu-coalSplit1980s.xlsx")
 db90 <- read_excel("Data/municipal magar data splitcoal/mu-coalSplit1990s.xlsx")
 db00 <- read_excel("Data/municipal magar data splitcoal/mu-coalSplit2000s.xlsx")
 db10 <- read_excel("Data/municipal magar data splitcoal/mu-coalSplit2010s.xlsx")
-db20 <- read_excel("Data/municipal magar data splitcoal/mu-coalSplit2020s.xlsx")
-
+db20 <- read_csv("Data/municipal magar data splitcoal/aymu.coalAgg2020s.csv") %>% 
+  mutate(edon = inegi %/% 1000,
+         inegi = as.character(inegi),
+         ife = as.character(ife),
+         across(starts_with("v"), as.numeric))
 
 magar_mun_db <- rbind(db70,db80)
 magar_mun_db <- rbind(magar_mun_db, db90)
 magar_mun_db <- rbind(magar_mun_db,db00)
-magar_mun_db <- rbind(magar_mun_db,db10)
-magar_mun_db <- rbind(magar_mun_db,db20)
+magar_mun_db <- rbind(magar_mun_db,db10) %>% 
+  mutate(across(starts_with("l"), as.character),
+         lisnom = as.numeric(lisnom))
+magar_mun_db <- bind_rows(magar_mun_db,db20)
 
 magar_mun_db <- magar_mun_db %>% 
   select(-emm,-edon,-ife,-date,-ncand,-ncoal)
+
 
 # Define identifier variables
 id_vars <- c("yr", "mun", "inegi")
@@ -592,7 +598,13 @@ mun_db <- mun_db %>%
 replacements <- c("PNA" = "PANAL", 
                   "FUERCIUD" = "PFC", 
                   "CONVE" = "PC", 
-                  "PJ1" = "PJ"
+                  "PJ1" = "PJ",
+                  "^HAG$" = "HAGAMOS",
+                  "^FUT$" = "FUTURO",
+                  "PESM" = "PES",
+                  "PCHU" = "PCU",
+                  "PMCH" = "PMV",
+                  "RSPN" = "RSP"
 )
 
 # Replace occurrences in column names
@@ -602,7 +614,7 @@ colnames(mun_db) <- colnames(mun_db) %>%
 indep_columns <- c(
   "INDEP_IVONNE", "INDEP_ROSA_M", "JOSE_RODRIGO_ROBINSON_BOURS_CASTELO", 
   "JOSE_RAMON_GUTIERREZ_MORALES", "JOSE_CORTES_PEREZ", "ARMANDO_FLORES_LOPEZ", 
-  "INDEP_TAVO", "LUIS_FERNANDO_SERRANO_GARCIA", "AGUSTIN_TOLEDANO_AMARO", 
+  "INDEP_TAVO",
   "PEDRO_ANTONIO_MONTENEGRO_MORGADO", "CI_LUIS", "JOSE_RODRIGO_ROBINSON_BOURS",
   "INDEP_ELISA_PATRICIA_QUINTANILLA", "INDEP_HIRAM_PEÑA_GOMEZ", 
   "INDEP_CARLOS_LARA_MACIAS", "OMAR_GARCIA_ARAMBULA", "INDEP_DE_LA_TORRE", 
@@ -661,8 +673,73 @@ indep_columns <- c(
   "HILDE_SOSA", "RAUL_AVILA_GUILLEN", "MARCO_ANTONIO_VIZCARRA_CALDERON", 
   "CONCEPCION_TREJO_CARDOZA", "INDEP_HAAC", "CI_VICTOR", "CI_MANUEL", 
   "HECTOR_JUAN_SALCIDO_ALVAREZ", "CARLOS_ALBERTO_QUIROZ_ROMO", 
-  "INDEP_CARLOS_ALBERTO_GUERRERO", "INDEP_MARGGID_ANTONIO_RODRIGUEZ"
+  "INDEP_CARLOS_ALBERTO_GUERRERO", "INDEP_MARGGID_ANTONIO_RODRIGUEZ",
+  "INDEP_JORGE_A_LOZOYA_SANTILLAN", "INDEP_LOZOYA", "INDEP_HECTOR_CABADA_ALVIDREZ",
+  "INDEP_CABADA", "INDEP_OSCAR_DANIEL_CARRION", "INDEP_LUIS_RENE_RUELAS_ORTEGA",
+  "INDEP_CNE", "INDEP_MANUEL", "INDEP_RUFFO", "EDUARDO_QUIROGA_JIMENEZ", "JOSE_CORTES_TORRES",
+  "MIGUEL_ANGEL_SANABRIA_CHAVEZ", "ISAAC_GARCIA", "TAVO_PEREZ", "CHRISTIAN_ROMERO",
+  "JOSE_LUIS_MARES_MEDINA", "INDEP_MONTES", "INDEP_FRANCISCO_GANDARA_CARDENAS", 
+  "JOSE_ALFREDO_CASTRO", "INDEP_GUSTAVO_CASTANEDA_GONZALEZ", "INDEP_JSTG",
+  "INDEP_GMS", "INDEP_MCS", "CESAR_IVAN_SANCHEZ_ALVAREZ", "ROGELIO_CASTRO_SEGOVIA",
+  "EDMUNDO_GAMEZ_LOPEZ", "PARMEO", "BRAULIO_HERRERA_ALANIS", "INDEP_FLORES",
+  "INDEP_JORGE_DANIEL_GONZALEZ", "INDEP_LEO_RAMIREZ", "INDEP_MAYRA_AGUIRRE_MACIEL",
+  "INDEP_NAZARIO_NORBERTO_SANCHEZ", "JOSE_MAXIMO_PEREZ_ROMERO", "JUAN_CARLOS_MANRIQUEZ_NOVELO",
+  "INDEP_JOSE_ARTURO_ORTIZ", "INDEP_CARLOS_ALBERTO_ROMO", "INDEP_JOSE_NICOLAS_CERDA",
+  "INDEP_JOEL_RAZURA_PRECIADO", "ROSA_MARIA_OCHOA_REGALADO", "GUSTAVO_REMBERTO_CAMPOS",
+  "INDEP_GUSTAVO_DE_LA_TORRE_NAVARRO", "INDEP_MARIA_ISABEL_NOLASCO",
+  "INDEP_CNU", "INDEP_MATM", "INDEP_ZEUS", "INDEP_ARIEL_A", "INDEP5", "INDEP_ELIAZAR",
+  "INDEP_ALBERTO", "ROMAN_INFANTE_ROJAS", "ANTONIO_LIMA_FLORES", "ANDRES_MONDRAGON_RAMIREZ",
+  "INDEP_VEGA", "ELOY_PAVON",  "INDEP_RICARDO", "INDEP_ALMA", "DANTE_BATRES", 
+  "ARMANDO_LARA_DE_SANTIAGO", "IMELDA_ARAIZA_MARTINEZ", "ULTIMINIO_GONZALEZ_BAÑUELOS",
+  "INDEP_B", "GENARO_FRAUSTO_MACIAS", "INDEP_DOCTOR", "JESUS_ALFREDO_ROSALES_GREEN",
+  "MARIA_HERLINDA_TORREZ_GUTIERREZ", "NOE_SOTELO_CASILLAS","INDEP_ARMIJO", "JOAQUIN_GARDEAZABAL",
+  "INDEP_ANGEL_MARIO_SIX_GARCIA_SANCHEZ", "INDEP_ARNULFO_TRUJILLO_LOPEZ", "INDEP_LUIS_ALBERTO_ALCARAZ_LOPEZ",
+  "JOSE_BANALES_CASTRO", "INDEP_JDGG", "INDEP_AJZ", "INDEP_LCH", "INDEP_ZRMF", "INDEP_VMGM", "INDEP_PLCR",
+  "INDEP_ALDOLFO_J", "INDEP_JUAN_CARLOS_GARCIA_ARELLANO", "INDEP_VTN", "LUIS_TEMOLTZIN_DURANTE", 
+  "ARMANDO_MARTINEZ_LEZAMA", "INDEP_MONGE", "INDEP_BETO", "INDEP_JG", "ERIC_LARA", "IRVING_FDZ_PONCE",
+  "INDEP_IRMA", "JOSE_GRACIA_SANCHEZ_EL_SOLITO", "INDEP_LUIS_NEVAREZ_GUILLEN",
+  "INDEP_ROSARIO_ERICKA_GOMEZ_ROMERO", "HECTOR_MIRELES", "INDEP_FRANCISCO_JOSE_MARTINEZ",
+  "INDEP_AHG", "INDEP_MRL", "INDEP_SCC",  "INDEP_GERMAN", "INDEP_JOSE_CARLOS_LABORDE_VEGA",
+  "INDEP_ANDRES_SANCHEZ_SANCHEZ", "JOSE_FELIPE_HERNANDEZ_ROJAS", "GERARDO_CARRASCO_CANO",
+  "CRISOFORO_SANCHEZ_LUNA", "JOSE_TORRES_MARQUEZ", "INDEP_LCM", "MARCO_ANTONIO_GUAJARDO_RAMIREZ",
+  "INDEP_MOLINA", "CAROLINA_AUBADEL_RIEDEL", "FRANCISCO_DEL_CASTILLO", "JORGE_RIVERA_OLIVOS",
+  "MAXIMO_MARTINEZ_AGUIRRE", "INDEP_LGDLR", "INDEP4", "INDEP_SANTIAGO", "FLAVIO_FLORES_CERVANTES",
+  "XICOHTENCATL_DELGADO_SANTIAGO", "SALVADOR_LOPEZ_TACUBA", "INDEP_LDBG", "INDEP_EMC", "INDEP_JBLL" ,
+  "INDEP_MRGH", "JORGE_RIOS_CONTRERAS", "INDEP2", "INDEP_GUILLERMO_CIENFUEGOS_PEREZ",
+  "INDEP6", "LUIS_FLORES_BONILLA", "MATILDE_RIOS_BAUTISTA", "INDEP_CARLOS_ALBERTO_MAESTRO_OSEGUERA",
+  "INDEP_SMG", "INDEP_RHR", "INDEP_ATV", "INDEP_MAG","INDEP_ZELIDE_YOJAIRA_CORDOVA_VALENZUELA",
+  "INDEP_HECTOR_MANUEL_DELATORRE_VALENZUELA", "INDEP_ELEAZAR_CARREON_GONZALEZ", "INDEP", "INDEP1",
+  "INDEP_LUIS_E", "INDEP3", "ERNESTO_CARLOS_LOPEZ_VALERIO", "RODOLFO_RODRIGUEZ_NAVARRO",
+  "MARICELA_ARTEAGA_SOLIS","INDEP_ARCHER", "INDEP_PORFIRIO_CORREA_LOPEZ", "INDEP_CELSO_NIETO_ESTRADA", 
+  "INDEP_LUIS_ARMANDO_JAIME_MALDONADO", "INDEP_PERSEO_QUIROZ_RENDON", "INDEP_JOSE_A", "INDEP_PROSPERO",
+  "INDEP_FELIPE", "INDEP_IVAN_O", "INDEP_ULISES", "INDEP_JOSE_LUIS_GALLARDO_FLORES",
+  "INDEP_LUIS_FERNANDO_SERRANO_GARCIA", "INDEP_ALFREDO_AVINA_GALVAN", "INDEP_LEOBARDO_LOPEZ_MORALES", 
+  "INDEP_SILVERIO_DANAHE_PEREZ_PEREZ", "INDEP_FERNANDO_RODRIGUEZ_PEREZ", "INDEP_ANTONIO_DE_JESUS_OLVERA_MOTA",
+  "INDEP_JOSE_FRANCISCO_HERNANDEZ_HERNANDEZ", "INDEP_NOE_PAREDES_MEZA", "INDEP_DANIEL_JUAREZ_JUAREZ",
+  "INDEP_JUAN_ALVARADO_SOLIS", "INDEP_AGUSTIN_TOLEDANO_AMARO", "INDEP_PEDRO_ANTONIO_MONTENEGRO_MORGADO",
+  "INDEP_ANDRES_TAPIA_FRANCO", "INDEP_LUIS", "INDEP_REYNALDO_LUJAN_ALVAREZ", "INDEP_RAFAEL_ANGEL_GARCIA_CANO",
+  "INDEP_EVARISTO_HORACIO_ISLAS_DIAZ", "INDEP_KENIA_PATRICIA_TREJO_CHAVEZ", "INDEP_POMPEYO_AGUILAR_ORTIZ",
+  "INDEP_EVELYNSARAHICASTAÑEDACHAVEZ", "INDEP_JORGE_MARTINEZ_SANTIAGO", "INDEP_BEATRIZ_CHAVARRIA_COBOS",
+  "INDEP_ARMANDO_TRUJILLO_VALDIN", "INDEP_ESAU", "INDEP_AMELIO", "INDEP_JOSE_M",
+  "INDEP_FRANCISCO_ASTELLO_ZUÑIGA", "INDEP_YAIR_EMMANUEL_HERRERA_FLORES", "INDEP_CELSO_ARTURO_FIGUEROA_MENDEL",
+  "INDEP_CASTILLO_SEGOVIA", "INDEP_JULIO_CESAR_DE_LA_CRUZ_CORPUS", "INDEP_JAVIER_AGIS_CRUZ",
+  "INDEP_ARELI_LOPEZ_ALCANTARA", "INDEP_MARIO_PATRICIO_MARTINEZ", "INDEP_GUADALUPE_MONTIEL_CARBAJAL",
+  "INDEP_LUIS_FERNANDO_AMBROCIO_FLORES", "INDEP_JOSE_LUIS_OROZPE_LOPEZ", "INDEP_JOEL", "INDEP_GEONATAN",
+  "INDEP_LAURO", "INDEP_LENIN_VLADIMIR_CORONADO_POSADAS", "INDEP_ROGELIO_CASTRO_SEGOVIA",
+  "INDEP_MARCO_ANTONIO_VIZCARRA_CALDERON", "INDEP_CESAR_IVAN_SANCHEZ_ALVAREZ", "INDEP_SAUL_TRISTAN_DE_LA_CRUZ",
+  "INDEP_CONCEPCION_TREJO_CARDOZA", "INDEP_EVARISTO_HUMBERTO_ANAYA_OLVERA", "INDEP_EDUARDO_LOPEZ_HERNANDEZ",
+  "INDEP_RENE_ASSEF_SILAHUA_ABIRRACHED", "INDEP_OSCAR_JIMENEZ_TREJO", "INDEP_PEDRO_VEGA_CANALES",
+  "INDEP_MONICA_COREY_MORALES_TRUJILLO", "INDEP_OCTAVIO", "INDEP_JSLS", "INDEP_GTZ_TORRES",
+  "INDEP_ULISES_PEREZ_CRUZ", "INDEP_OLGA_MARGARITA_MONTOYA_BELTRAN", "INDEP_MELITON_CESAR_HURTADO_ALTAMIRANO",
+  "INDEP_LUIS_FELIPE_MEJIA_SANCHEZ", "INDEP_JUAN_REMIGIO_MEJIA_MARTINEZ",
+  "INDEP_XOCHITL_AMERICA_VARILLER_RAMIREZ", "INDEP_FERNANDO", "INDEP_INDIG_RUBEN",
+  "INDEP_INDIG_BERNARDO", "INDEP_INDIG_CESAR", "INDEP_MONICA_MARGOT_DE_LEON",
+  "INDEP_GUILLERMO_JIMENEZ_HERNANDEZ", "INDEP_DELIA_LEONARDA_PRECIADO_NUÑEZ", "INDEP_VMSA",
+  "INDEP_JOSE_MUÑOZ_PORRAS", "INDEP_VICTOR_MANUEL_VERGARA_", "INDEP_ROMAN_TARANGO_RODRIGUEZ",
+  "INDEP2", "INDEP_MANUEL"             
 )
+
+indep_columns <- existing_indep <- intersect(indep_columns, names(mun_db))
 
 # Make column names temporarily unique
 names(mun_db) <- make.unique(names(mun_db))
@@ -670,9 +747,12 @@ names(mun_db) <- make.unique(names(mun_db))
 mun_db <- mun_db %>%
   mutate(
     PFC = coalesce(PFC, `PFC.1`), # Combine the "PFC" columns
-    PJ = coalesce(PJ, `PJ.1`)     # Combine the "PJ" columns
+    PJ = coalesce(PJ, `PJ.1`),     # Combine the "PJ" columns
+    PES = coalesce(PES, "PES.1"),
+    FUTURO = coalesce(FUTURO, "FUTURO.1"),
+    HAGAMOS = coalesce(HAGAMOS, "HAGAMOS.1")
   ) %>%
-  select(-`PFC.1`, -`PJ.1`) # Remove the duplicate columns
+  select(-`PFC.1`, -`PJ.1`, -"PES.1", -"FUTURO.1", - "HAGAMOS.1") # Remove the duplicate columns
 
 any(duplicated(names(mun_db))) # Should return FALSE
 
@@ -680,41 +760,9 @@ mun_db <- mun_db %>%
   mutate(
     INDEP = coalesce(!!!syms(indep_columns))
   ) %>%
-  select(-all_of(indep_columns)) %>% 
-  filter(year < 2020)
+  select(-all_of(indep_columns))
 
-# Load new db20
-db20_new <- read_csv("Data/new magar data splitcoal/aymu1988-on-v7-coalSplit.csv") %>%
-  filter(yr >= 2020)
 
-db20_new_processed <- db20_new %>%
-  mutate(
-    PRI    = as.character(round(pri * efec)),
-    PAN    = as.character(round(pan * efec)),
-    PRD    = as.character(round(prd * efec)),
-    PVEM   = as.character(round(pvem * efec)),
-    PT     = as.character(round(pt * efec)),
-    MC     = as.character(round(mc * efec)),
-    MORENA = as.character(round(morena * efec)),
-    OTH    = as.character(round(oth * efec))
-  ) %>%
-  rename(year = yr, mun_code = inegi) %>%
-  select(mun_code, year, PRI, PAN, PRD, PVEM, PT, MC, MORENA, OTH)
-
-# Get incumbent/runnerup from final_df for 2020+ years
-mun_db_new <- final_df %>%
-  filter(year >= 2020) %>%
-  select(mun_code, year, incumbent_party, runnerup_party) %>%
-  group_by(mun_code, year) %>%
-  summarise(
-    incumbent_party = first(incumbent_party),
-    runnerup_party  = first(runnerup_party),
-    .groups = "drop"
-  ) %>%
-  left_join(db20_new_processed, by = c("mun_code", "year"))
-
-# Append
-mun_db <- bind_rows(mun_db, mun_db_new)
 
 assign_incumbent_vote <- function(data) {
   
@@ -894,17 +942,17 @@ mun_db <- assign_incumbent_vote(mun_db)
 mun_db <- correct_runnerup_vote(mun_db)
 mun_db <- mun_db %>% 
   select(                             
-          mun_code,                              
-          year,
-          mun_incumbent_vote,
-          mun_party_component,
-          mun_runnerup_vote,
-          mun_runnerup_party_component
+    mun_code,                              
+    year,
+    mun_incumbent_vote,
+    mun_party_component,
+    mun_runnerup_vote,
+    mun_runnerup_party_component
   ) %>% 
   mutate(
     mun_incumbent_vote = as.numeric(mun_incumbent_vote),
     mun_runnerup_vote = as.numeric(mun_incumbent_vote)
-    )
+  )
 
 final_data <- final_df %>% 
   left_join(mun_db, by = c("mun_code", "year")) 

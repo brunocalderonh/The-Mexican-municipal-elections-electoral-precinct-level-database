@@ -1294,7 +1294,8 @@ df_2012 <- df_collapsed %>%
       na.rm = TRUE
     ),
     year  = 2012,
-    month = "July"
+    month = "July",
+    section = as.numeric(section)
   ) %>%
   arrange(section)  # sort section
 
