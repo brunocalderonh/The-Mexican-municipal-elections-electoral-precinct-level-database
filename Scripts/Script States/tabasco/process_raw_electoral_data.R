@@ -70,7 +70,8 @@ df_collapsed <- df_collapsed %>%
     PVEM            = pvem,
     PartCardenista  = pc,
     PPS             = pps,
-    PDM             = pdm
+    PDM             = pdm,
+    no_reg          = "no registrados"
   ) %>%
   select(-any_of("nulos"))  # drop nulos if it exists
 

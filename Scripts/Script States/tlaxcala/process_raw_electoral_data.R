@@ -110,7 +110,8 @@ df_2001 <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004, 200
 
 df_2001 <- df_2001 %>%
   rename(municipality = municipio,
-         section = seccion) %>%
+         section = seccion,
+         partidodemocrata = "partido democrata") %>%
   filter(!(is.na(municipality) | municipality == "") | !is.na(section)) %>%
   mutate(across(c(pri, pan, prd, pt, pvem, partidodemocrata, psn, pc, pas, pcdt, pjs, nulos), 
                 ~as.numeric(as.character(.))))
@@ -147,8 +148,8 @@ df_2001 <- df_2001 %>%
 # Merge lista nominal from all_months_years.dta
 all_months <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
   filter(state == "TLAXCALA", month == "September", year == 2001) %>%
-  select(seccion, lista) %>%
-  rename(section = seccion, listanominal = lista)
+  select(section, lista) %>%
+  rename(listanominal = lista)
 
 df_2001 <- df_2001 %>%
   left_join(all_months, by = "section")
@@ -205,8 +206,7 @@ df_2004 <- df_2004 %>%
 # IMPORTANT: keep column as "lista" (NOT "listanominal") to avoid .x/.y collision
 all_months_2004 <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
   filter(state == "TLAXCALA", month == "October", year == 2004) %>%
-  select(seccion, lista) %>%
-  rename(section = seccion)
+  select(section, lista)
 
 df_2004 <- df_2004 %>%
   left_join(all_months_2004, by = "section") %>%
@@ -495,7 +495,7 @@ df_2013 <- df_2013 %>%
 # Rename parties
 df_2013 <- df_2013 %>%
   rename(PAN = pan, PRI = pri, PRD = prd, PT = pt, PVEM = pvem, 
-         MC = mc, PANAL = panal, PAC = pac, PS = ps, PC = pc)
+         MC = pc, PANAL = panal, PAC = pac, PS = ps)
 
 df_2013 <- df_2013 %>%
   mutate(turnout = total / listanominal)
@@ -531,8 +531,8 @@ df_2013_ext <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004,
 
 df_2013_ext <- df_2013_ext %>%
   rename(section = `Sección`,
-         total = EMIT,
-         valid = VALID,
+         total = EMITIDOS,
+         valid = VALIDOS,
          PVEM = VERDE) %>%
   mutate(uniqueid = 29002,
          municipality = "APETATITLAN DE ANTONIO CARVAJAL EXTRAORDINARIO")
@@ -552,8 +552,8 @@ df_2013_ext <- df_2013_ext %>%
 # Merge lista nominal from all_months_years
 all_months_2013_ext <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
   filter(state == "TLAXCALA", month == "November", year == 2013) %>%
-  select(seccion, lista) %>%
-  rename(section = seccion, listanominal = lista)
+  select(section, lista) %>%
+  rename(listanominal = lista)
 
 df_2013_ext <- df_2013_ext %>%
   left_join(all_months_2013_ext, by = "section")
@@ -577,8 +577,8 @@ df_2014_ext <- read_excel("../../../Data/Raw Electoral Data/Tlaxcala 2001, 2004,
 
 df_2014_ext <- df_2014_ext %>%
   rename(section = `Sección`,
-         total = EMIT,
-         valid = VALID) %>%
+         total = EMITIDOS,
+         valid = VALIDOS) %>%
   mutate(uniqueid = 29022,
          municipality = "ACUAMANALA DE MIGUEL HIDALGO EXTRAORDINARIO")
 
@@ -597,8 +597,8 @@ df_2014_ext <- df_2014_ext %>%
 # Merge lista nominal from all_months_years
 all_months_2014_ext <- read_dta("../../../Data/Raw Electoral Data/Listas Nominales/all_months_years.dta") %>%
   filter(state == "TLAXCALA", month == "January", year == 2014) %>%
-  select(seccion, lista) %>%
-  rename(section = seccion, listanominal = lista)
+  select(section, lista) %>%
+  rename(listanominal = lista)
 
 df_2014_ext <- df_2014_ext %>%
   left_join(all_months_2014_ext, by = "section")
