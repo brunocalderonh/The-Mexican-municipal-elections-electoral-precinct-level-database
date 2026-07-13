@@ -208,12 +208,12 @@ df_collapsed <- df_collapsed %>%
 #    in 'df_collapsed'.
 ###############################################################################
 # Read the external .dta file
-df_nationwide <- read_dta("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/1994/Other/Nationwide Listanominal 1994.dta") %>%
-  select(ed, sec, lista)  # keep only the needed columns
+df_nationwide <- read_dta("../../../Data/Raw Electoral Data/Sonora - 1994, 1997, 2000, 2003, 2006, 2009, 2012,2015,2018,2021,2024/Other/Nationwide Listanominal 1994.dta") %>%
+  select(sec, lista)  # keep only the needed columns
 
 # Perform the merge
 df_merged <- df_collapsed %>%
-  left_join(df_nationwide, by = c("ed", "sec"))
+  left_join(df_nationwide, by = c("sec"))
 
 df_merged <- df_merged %>% filter(!is.na(lista))
 
@@ -226,6 +226,7 @@ df_merged <- df_merged %>%
 ###############################################################################
 df_1994 <- df_merged %>%
   mutate(
+    section = as.numeric(section),
     turnout = total / listanominal,
     year    = 1994,
     month   = "August",
@@ -1426,6 +1427,7 @@ df_2012 <- df_collapsed %>%
              PAN_PANAL, PRI_PVEM, PRD_PT, PRD_PC, PRD_PT_PC),
       na.rm = TRUE
     ),
+    section = as.numeric(section),
     year  = 2012,
     month = "July",
     STATE = "SONORA"

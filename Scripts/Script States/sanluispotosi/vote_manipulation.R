@@ -15,7 +15,7 @@ script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(file.path(script_dir, "../../../"))
 
 # Now set the path to the CSV file relative to the root of the repository
-db <- read_csv("Processed Data/sanluispotosi/sanluispotosi_process_raw_data.csv")
+db <- read_csv("Processed Data/sanluispotosi/slp_process_raw_data.csv")
 
 # Select and remove unwanted variables
 db <- db %>%
