@@ -1323,11 +1323,10 @@ df_all <- df_all %>%
 # The code references columns up to "XICOTENCATLGONZALEZURESTI", plus "JOSEADAME" 
 # So adapt to your actual column set:
 
-keep_cols <- c("MUNICIPIO", "CASILLA","PAN","PRI","PRD","MC","PANAL","MORENA","PES",
+keep_cols <- c("MUNICIPIO", "CASILLA", "SECCION", "PAN","PRI","PRD","MC","PANAL","MORENA","PES",
                "PT_MORENA_ES","PT_MORENA","PT_ES","MORENA_ES","PAN_PRD_MC","PAN_PRD","PAN_MC","PRD_MC",
                "VotosNulos","CandidatosNoRegistrados","HECTORPEÑASALDAÑA","JOSEADAME","PABLOTORRESLARA",
-               "XICOTENCATLGONZALEZURESTI","NA","ES","PT","PTMC" # adapt as needed
-               # plus other columns if you have them
+               "XICOTENCATLGONZALEZURESTI","NA","ES","PT","PTMC"
 )
 df_all <- df_all %>%
   select(any_of(keep_cols)) %>% 
@@ -1381,11 +1380,7 @@ df_all <- df_all %>% select(-any_of(rm_cols))
 ################################################################################
 
 df_all <- df_all %>%
-  mutate(
-    section = str_sub(Casilla, 1, 4),
-    section = if_else(str_detect(section,"B|C|E"), str_sub(section,1,3), section)
-  ) %>%
-  mutate(section = suppressWarnings(as.numeric(section))) %>%
+  mutate(section = suppressWarnings(as.numeric(SECCION))) %>%
   filter(!is.na(section))
 
 ################################################################################
